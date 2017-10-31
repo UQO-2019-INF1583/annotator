@@ -8,25 +8,24 @@ Pour plus d'informations, vous pouvez consulter le wiki du projet qui contient u
 
 ## 1. Création d’un projet Firebase
 
-### 1.1. À partir de la console Firebase, créer un nouveau projet web en cliquant sur “New
+1.1. À partir de la console Firebase, créer un nouveau projet web en cliquant sur “New
 Project”, puis en cliquant sur “Add Firebase to your web app”. Ceci génère cinq variables de
 configuration (“apiKey”, “authDomain”, “databaseURL”, “projectId”, “storageBucket” et
 “messagingSenderId”) qui seront intégrés au projet Angular dans une étape ultérieure.
 
-### 1.2. Cliquer sur “Authentication” et choisir les modes d’authentification voulues. Pour
+1.2. Cliquer sur “Authentication” et choisir les modes d’authentification voulues. Pour
 cette première étape, vous pouvez utiliser le mode d’authentification anonyme.
 
-### 1.3. Cliquer sur l’onglet “Database”, puis sur “RULES” pour modifier les règles d’accès à la
+1.3. Cliquer sur l’onglet “Database”, puis sur “RULES” pour modifier les règles d’accès à la
 base de données. Dans cette première étape du projet, les règles sont un accès universel,
 soit donner la valeur “true” aux variables .read et .write. Ceci sera à modifier au fur et à
 mesure que des modules et des types d’utilisateurs seront spécifiés.
 
 ## 2. Initialisation du projet Angular
 
-## 2.1. À partir de la ligne de commande, exécuter la commande “npm install -g @angular/cli”
+2.1. À partir de la ligne de commande, exécuter la commande “npm install -g @angular/cli”
 pour installer la dernière publication stable de Angular CLI. Une fois le
-logiciel installé, exécuter ng new <<nom du projet>>, ​et accéder au projet (cd <<nom du
-projet>>).
+logiciel installé, exécuter ng new ```<<nom du projet>>```, ​et accéder au projet (cd ```<<nom du projet>>```).
 
 ## 3. Cloner le projet
 

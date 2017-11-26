@@ -13,12 +13,12 @@ export class AnnotationService {
 
   // Ajoute une nouvelle annotation.
   // Retourne false si une erreur est détectée.
-  addAnnotation(begin: int; end: int; cat: string): boolean {
+  addAnnotation(begin: number; end: number; cat: string): boolean {
   }
 
   // Supprime une annotation.
   // Retourne false si une erreur est détectée.
-  delAnnotation(begin: int; end: int; cat: string): boolean {
+  delAnnotation(begin: number; end: number; cat: string): boolean {
   }
 
   // Retourne toutes les annotations du document.

@@ -52,7 +52,7 @@ export class AnnotationService {
 
   // Associe une couleur avec une catégorie.
   // Retourne false si une erreur est détectée.
-  colorCategory(cat: string; color: string): boolean {
+  colorCategory(cat: string, color: string): boolean {
   }
 
   // Retourne les catégories du projet.

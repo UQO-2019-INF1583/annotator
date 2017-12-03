@@ -1,6 +1,6 @@
 // structure de données utilisée pour représenter un utilisateur
 
-class User {
+export class User {
   username: string;
   firstname: string;
   lastname: string;

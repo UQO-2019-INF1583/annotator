@@ -2,7 +2,7 @@
 // Il permet d’affecter la notion de catégorie à un texte et de le sauvegarder, supprimer une annotation, etc.
 
 import { Component, OnInit } from '@angular/core';
-import { AnnotationService} from 'annotation.service';
+import { AnnotationService } from './annotation.service';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -10,5 +10,8 @@ import { Observable } from 'rxjs/Observable';
 })
 
 export class AnnotationComponent implements OnInit {
+
+  ngOnInit() {
+  }
 
 }

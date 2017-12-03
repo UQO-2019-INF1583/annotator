@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 
 
-import { AuthService } from '../shared/auth.service';
+import { AuthService } from '../shared/security/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
   }
 
   setMessage() {
-    this.message = 'Logged ' + (this.authService.isLoggedIn ? 'in' : 'out');
+    //this.message = 'Logged ' + (this.authService.isLoggedIn ? 'in' : 'out');
   }
 
   login(e) {
@@ -35,9 +35,11 @@ export class LoginComponent implements OnInit {
   }
 
   get authenticated(): boolean {
+    return false;
   }
 
   get currentUserId(): string {
+    return '';
   }
 
   googleLogin() {

@@ -1,6 +1,6 @@
 // structure de données utilisée pour représenter un projet
 
-class Project {
+export class Project {
   projectId: string;
   admin: string;          // user id
   annotators: string[];   // array of user ids

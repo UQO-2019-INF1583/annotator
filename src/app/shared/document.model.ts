@@ -1,6 +1,6 @@
 // structure de données utilisée pour représenter un document
 
-class Document {
+export class Doc {
   documentId: string;
   text: string;
 

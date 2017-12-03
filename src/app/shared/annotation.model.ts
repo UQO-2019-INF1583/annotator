@@ -1,6 +1,6 @@
 // structure de données utilisée pour représenter une annotation
 
-class Annotation {
+export class Annotation {
 
   static cats: string[]; // all project categories
   static colors: string[] = // colors corresponding

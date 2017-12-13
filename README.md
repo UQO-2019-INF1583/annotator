@@ -73,11 +73,21 @@ Annotator/                        -- racine du projet
 ## Installation d'Angular :
 
 L'utilisation de l'application nécessite l'installation de Angular CLI. Voici la commande ```<npm install @angular/cli>```.
-Le projet a été généré avec Angular CLI version 1.4.7. [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Le projet a été généré avec Angular CLI version 1.5.2. [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+Remark: To solve the error
+Error: Can't resolve 'webpack-dev-server/client?http://localhost:4200'
+you can
+
+npm install yarn -g
+ng set --global packageManager=yarn
+yarn install
+
+ng serve
 
 ## Code scaffolding
 

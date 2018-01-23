@@ -22,9 +22,9 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     let active = false;
     if (localStorage.getItem('currentUser')) {
       // logged in so return true
-      active = true;
+      active = true;   /*
     } else if (this.checkLogin(url) || this.authService.authenticated) {
-      active = true;
+      active = true;  */
     }
     console.log(active, 'canAc');
     return active;
@@ -42,10 +42,10 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
   // détermine le status d'authentification d'un utilisateur donné
   checkLogin(url: string): boolean {
-    if (this.authService.isLoggedIn || this.authService.authenticated) { return true; }
+//    if (this.authService.isLoggedIn || this.authService.authenticated) { return true; }
 
     // Store the attempted URL for redirecting
-    this.authService.redirectUrl = url;
+//    this.authService.redirectUrl = url;
 
     // Create a dummy session id
     const sessionId = 123456789;

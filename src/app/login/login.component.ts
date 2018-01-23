@@ -2,10 +2,9 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AngularFireAuth } from 'angularfire2/auth';
-
 
 import { AuthService } from '../shared/security/auth.service';
+import { HeaderComponent } from '../shared/components/header/header.component';
 
 @Component({
   selector: 'app-login',
@@ -15,53 +14,65 @@ import { AuthService } from '../shared/security/auth.service';
 
 export class LoginComponent implements OnInit {
 
-  authState: any = null;
-  model: any = {};
+  userInfo: any = {};
+  private isNotLoggedIn: boolean;
 
-  constructor(public authService: AuthService, public router: Router, public afAuth: AngularFireAuth) {
-
-    this.afAuth.authState.subscribe((auth) => {
-      this.authState = auth;
-    });
+  constructor(public authService: AuthService,
+              public router: Router) {
+    localStorage.removeItem('errorAuth');
   }
 
   ngOnInit() {
     // reset login status
-    this.authService.logout();
+    this.isNotLoggedIn = this.authenticated();
+    localStorage.removeItem('currentProjet');
+    localStorage.removeItem('currentText');
   }
 
-  setMessage() {
-    // this.message = 'Logged ' + (this.authService.isLoggedIn ? 'in' : 'out');
-  }
-
-  login(e) {
-    this.authService.googleLogin().then((data) => {
-      this.router.navigate(['/home'])});
+  login() {
+    this.authService.signIn(this.userInfo.email, this.userInfo.password);
   }
 
   logout(e) {
-
+    this.authService.logout();
   }
 
-  get authenticated(): boolean {
-    return false;
+  authenticated() {
+    if (!this.authService.authenticated()) {
+      HeaderComponent.updateUserStatus.next(true);
+      return false;
+    }
+    else
+      return true;
   }
 
-  get currentUserId(): string {
-    return '';
+  /// Social Login
+
+  signInWithGithub() {
+    this.authService.githubLogin()
+      .then(() => this.afterSignIn());
   }
 
-  googleLogin() {
-
+  signInWithGoogle() {
+    this.authService.googleLogin()
+      .then((data) => this.afterSignIn());
   }
 
   facebookLogin() {
+    this.authService.facebookLogin()
+      .then((data) => this.afterSignIn());
   }
 
   twitterLogin() {
 
   }
 
-  getAuth() {
+  /// Shared
+
+  private afterSignIn() {
+   // Do after login stuff here, such router redirects, toast messages, etc.
+
+   this.isNotLoggedIn = this.authenticated();
+   this.router.navigate(['/']);
   }
 }

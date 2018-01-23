@@ -15,11 +15,13 @@ import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { AuthService } from './shared/security/auth.service';
+import { UserManagerService } from './adm/userManager.service';
 import { routing } from './app.routing';
 import { FooterComponent, HeaderComponent } from './shared';
 import { HomeComponent } from './home/home.component';
 import { HomeWelcomeComponent } from './home-welcome';
 import { LoginComponent } from './login';
+import { RegisterComponent } from './register';
 import { PageNotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
@@ -30,7 +32,8 @@ import { PageNotFoundComponent } from './not-found/not-found.component';
     HomeComponent,
     HomeWelcomeComponent,
     LoginComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +46,7 @@ import { PageNotFoundComponent } from './not-found/not-found.component';
     MatCardModule, MatGridListModule, MatInputModule, MatListModule, MatAutocompleteModule, MatDatepickerModule, MatProgressBarModule,
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
   ],
-  providers: [AuthService, AngularFireDatabaseModule],
+  providers: [AuthService, AngularFireDatabaseModule, UserManagerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

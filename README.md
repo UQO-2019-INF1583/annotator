@@ -79,15 +79,19 @@ Le projet a été généré avec Angular CLI version 1.5.2. [Angular CLI README]
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-Remark: To solve the error
-Error: Can't resolve 'webpack-dev-server/client?http://localhost:4200'
-you can
+Possible issues:
+1) To solve the error
+  Error: Can't resolve 'webpack-dev-server/client?http://localhost:4200'
+  you can
 
-npm install yarn -g
-ng set --global packageManager=yarn
-yarn install
+  npm install yarn -g
+  ng set --global packageManager=yarn
+  yarn install
 
-ng serve
+  ng serve
+
+2) To fix the error “npm ERR! Error: EPERM: operation not permitted”,
+  see https://www.nikhildevre.com/ColdFusion,Java,jQuery,JavaScript,Angular,TypeScript,Node,NPM/npm-err-please-try-running-this-command-again-as-rootadministrator/
 
 ## Code scaffolding
 

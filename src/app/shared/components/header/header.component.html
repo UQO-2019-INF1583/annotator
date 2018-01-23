@@ -9,7 +9,7 @@
         <button type="button" class="navbar-toggle">
           <span class="glyphicon glyphicon-user couleur-blanc medium" aria-hidden="true"></span>
         </button>
-        <a class="navbar-brand" [routerLink]="['']">UQO Annotator</a>
+        <a class="navbar-brand" [routerLink]="['/welcome']">UQO Annotator</a>
       </div>
 
       <div class="navbar-toggleable-xs navbar-collapse" id="bd-main-nav"
@@ -37,8 +37,9 @@
               <a [routerLink]="['/register']" routerLinkActive="active">
                 <span class="{{'glyphicon glyphicon-user'}}"></span>Sign Up</a>
             </li>
-            <li *ngIf="isUser()" (click)="isCollapsed = false">
-              <span class="username">Hi {{username}}!</span>
+            <li *ngIf="isUser()" (click)="isCollapsed = false" routerLinkActive="active">
+              <a [routerLink]="['profile']" routerLinkActive="active">
+                <span class="{{''}}"></span><i class="fa fa-user">Hi {{currUsername}}!</i></a>
             </li>
             <li *ngIf="isUser()" (click)="logout();isCollapsed = true" routerLinkActive="active">
               <a [routerLink]="['login']" routerLinkActive="active">

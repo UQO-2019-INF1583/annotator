@@ -150,3 +150,12 @@ $topnav-background-color: #222;
   top: 80px;
 }
 .facebook{}
+
+.socialIcon {
+  display:inline-block;
+  width:40px;
+  height:40px;
+  text-indent:-10000px;
+  border:4px solid #fff;
+  margin: 0 10px 0 0;
+}

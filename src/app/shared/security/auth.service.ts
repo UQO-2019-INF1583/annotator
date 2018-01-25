@@ -46,6 +46,7 @@ export class AuthService {
   signIn(email, password): any {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
     .then(credentials => {
+      console.log(credentials);
       //this.updateUserData(credentials);
       return this.user;
     });
@@ -67,7 +68,7 @@ export class AuthService {
     //this.token = null;
     localStorage.removeItem('currentUser');
     //this.isLoggedIn = false;
-    this.router.navigate(['/login'])
+    this.router.navigate(['/login']);
   }
 
   googleLogin() {
@@ -89,7 +90,7 @@ export class AuthService {
   authenticated() {
     this.afAuth.authState.subscribe(user => {
       if (user) {
-        this.router.navigateByUrl('');
+        //this.router.navigateByUrl('');
         return false;
       }
       else {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import * as firebase from 'firebase/app';
+import * as firebase from 'firebase';
 
 //import { AlertService, UserService } from '../_services/index';
 
@@ -18,14 +18,15 @@ export class RegisterComponent {
     private router: Router) { }
 
   register() {
-    firebase.auth().createUserWithEmailAndPassword('aaaaa', 'bbbb').catch(function(error) {
+    firebase.auth().createUserWithEmailAndPassword(this.userInfo.email, this.userInfo.password).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
+      console.log(errorMessage);
       // ...
     });
-    //console.log(error);
-    this.loading = true;/*
+    this.loading = true;
+    /*
     this.userService.create(this.model)
       .subscribe(
         data => {
@@ -35,6 +36,7 @@ export class RegisterComponent {
         error => {
           this.alertService.error(error);
           this.loading = false;
-        });*/
+        });
+    */
   }
 }

@@ -23,10 +23,13 @@ import { HomeWelcomeComponent } from './home-welcome';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { PageNotFoundComponent } from './not-found/not-found.component';
+import { CreateProjectComponent
+       } from './components/index';
 
 @NgModule({
   declarations: [
     AppComponent,
+    CreateProjectComponent,
     FooterComponent,
     HeaderComponent,
     HomeComponent,
@@ -40,7 +43,7 @@ import { PageNotFoundComponent } from './not-found/not-found.component';
     FormsModule,
     HttpClientModule,
     routing,
-    AngularFireModule.initializeApp(environment.firebase, 'first'),
+    AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     MatCardModule, MatGridListModule, MatInputModule, MatListModule, MatAutocompleteModule, MatDatepickerModule, MatProgressBarModule,

@@ -15,7 +15,6 @@ import { HeaderComponent } from '../shared/components/header/header.component';
 export class LoginComponent implements OnInit {
 
   userInfo: any = {};
-  private isNotLoggedIn: boolean;
 
   constructor(public authService: AuthService,
               public router: Router) {
@@ -24,26 +23,22 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     // reset login status
-    this.isNotLoggedIn = this.authenticated();
     localStorage.removeItem('currentProjet');
     localStorage.removeItem('currentText');
   }
 
   login() {
     this.authService.signIn(this.userInfo.email, this.userInfo.password);
+    this.afterSignIn()
   }
 
   logout(e) {
     this.authService.logout();
+    this.router.navigate(['/']);
   }
 
   authenticated() {
-    if (!this.authService.authenticated()) {
-      HeaderComponent.updateUserStatus.next(true);
-      return false;
-    }
-    else
-      return true;
+    return HeaderComponent.currUsername != '';
   }
 
   /// Social Login
@@ -71,8 +66,6 @@ export class LoginComponent implements OnInit {
 
   private afterSignIn() {
    // Do after login stuff here, such router redirects, toast messages, etc.
-
-   this.isNotLoggedIn = this.authenticated();
    this.router.navigate(['/']);
   }
 }

@@ -23,52 +23,45 @@ import 'rxjs/add/operator/delay';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
 
 import { User } from '../user.model';
-/*interface User {
-  uid: string;
-  email: string;
-  photoURL?: string;
-  displayName?: string;
-  favoriteColor?: string;
-}*/
 
 @Injectable()
 export class AuthService {
   username: string ="";
   user: Observable<User>;
+  authState: any = null;
   currentUser: string = null;
   email: string;
   private UserCollection : AngularFirestoreCollection<User>;
+
   constructor(private afAuth: AngularFireAuth,
               private afs: AngularFirestore,
               private router: Router) {
+
+    //// Get auth data, then get firestore user document || null
+    this.user = this.afAuth.authState
+      .switchMap(user => {
+        if (user) {
+          return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
+        } else {
+          return Observable.of(null)
+        }
+      })
   }
 
   signIn(email, password): any {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
     .then(credentials => {
-      console.log(credentials);
-      //this.updateUserData(credentials);
-      return this.user;
+      localStorage.setItem('currentUser', JSON.stringify(credentials.displayName));
+    })
+    .catch(function(error) {
+      console.log(error);
     });
-  }
-  login(user : User) {
-    this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password)
-    .then(value => {
-        localStorage.setItem('currentUser', JSON.stringify(value.displayName));
-        this.authenticated();
-      })
-      .catch(err => {
-        console.log('Something went wrong:',err.message);
-      });
   }
 
   logout(): void  {
     this.afAuth.auth.signOut();
     // clear token remove user from local storage to log user out
-    //this.token = null;
     localStorage.removeItem('currentUser');
-    //this.isLoggedIn = false;
-    this.router.navigate(['/login']);
   }
 
   googleLogin() {
@@ -86,28 +79,13 @@ export class AuthService {
     return this.oAuthLogin(provider);
   }
 
-  //Verifie si un utilisateur est connecté
-  authenticated() {
-    this.afAuth.authState.subscribe(user => {
-      if (user) {
-        //this.router.navigateByUrl('');
-        return false;
-      }
-      else {
-        return true;
-      }
-    });
-  }
-
   private oAuthLogin(provider: firebase.auth.AuthProvider) {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((result) => {
         this.username = result.user.displayName;
         this.email = result.user.email;
         let userContent: Array<Object> = [this.username,this.email];
-
         localStorage.setItem('currentUser', JSON.stringify(result.user.displayName));
-        this.authenticated();
       })
       .catch((error) =>  this.handleError(error) );
   }
@@ -127,7 +105,6 @@ export class AuthService {
 
   signOut() {
     this.afAuth.auth.signOut().then(() => {
-        this.router.navigate(['/']);
     });
   }
 

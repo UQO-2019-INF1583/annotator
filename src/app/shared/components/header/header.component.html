@@ -39,7 +39,7 @@
             </li>
             <li *ngIf="isUser()" (click)="isCollapsed = false" routerLinkActive="active">
               <a [routerLink]="['profile']" routerLinkActive="active">
-                <span class="{{''}}"></span><i class="fa fa-user">Hi {{currUsername}}!</i></a>
+                <span class="{{''}}"></span><i class="fa fa-user">Hi {{staticCurrUsername}}!</i></a>
             </li>
             <li *ngIf="isUser()" (click)="logout();isCollapsed = true" routerLinkActive="active">
               <a [routerLink]="['login']" routerLinkActive="active">

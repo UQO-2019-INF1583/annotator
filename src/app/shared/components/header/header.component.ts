@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { AuthService } from '../../security/auth.service';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   selector: 'app-header',
@@ -10,28 +11,34 @@ import { AuthService } from '../../security/auth.service';
 
 export class HeaderComponent implements OnInit {
   public static updateUserStatus: Subject<boolean> = new Subject();
-  public currUsername = '';
-  currentUser: string = null;
+  public static currUsername: string = '';
+  //currentUser: string = null;
+  authState: any = null;
 
-  constructor(private authService: AuthService) {
-    HeaderComponent.updateUserStatus.subscribe(res => {
-      var cU = localStorage.getItem('currentUser');
-      this.currUsername = cU == null ? '' : JSON.parse(cU);
-    })
+  constructor(private authService: AuthService, private afAuth: AngularFireAuth) {
+    // this should be done in auth.service; done here to avoid problems with getting displayName
+    this.afAuth.authState.subscribe((auth) => {
+      this.authState = auth;
+      HeaderComponent.currUsername = this.authState != null ? this.authState.displayName : '';
+    });
   }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    //this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  }
+
+  get staticCurrUsername(): string {
+    return HeaderComponent.currUsername;
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-    this.currUsername = '';
+    //localStorage.removeItem('currentUser');
+    HeaderComponent.currUsername = '';
     this.authService.logout();
   }
 
   isUser(){
-    return this.currUsername != '';
+    return HeaderComponent.currUsername != '';
   }
 
 }

@@ -9,13 +9,17 @@
         <button type="button" class="navbar-toggle">
           <span class="glyphicon glyphicon-user couleur-blanc medium" aria-hidden="true"></span>
         </button>
-        <a class="navbar-brand" [routerLink]="['/welcome']">UQO Annotator</a>
+        <a class="navbar-brand" [routerLink]="['/']">UQO Annotator</a>
       </div>
 
       <div class="navbar-toggleable-xs navbar-collapse" id="bd-main-nav"
         [attr.aria-expanded]="!isCollapsed" [ngClass]="{collapse: isCollapsed}">
         <div class=" navbar-left">
           <ul class="nav navbar-nav ml-auto">
+            <li *ngIf="isUser()" (click)="isCollapsed = true" routerLinkActive="active">
+              <a [routerLink]="['/createProject']" routerLinkActive="active">
+                <span class="{{''}}"></span>Create project</a>
+            </li>
             <li (click)="isCollapsed = true" routerLinkActive="active">
               <a class="navbar-left" [routerLink]="['/corpora']">{{'Projects'}}</a>
             </li>

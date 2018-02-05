@@ -7,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class CreateProjectComponent implements OnInit {
+  project: any = {};
 
-  ngOnInit() {
+  constructor(){  }
 
-  }
+  ngOnInit() {  }
+
   create(){
   }
 

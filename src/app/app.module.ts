@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {MatButtonModule, MatCheckboxModule, MatCardModule, MatGridListModule, MatListModule, MatTabsModule, MatInputModule,
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule, MatCheckboxModule, MatCardModule, MatGridListModule, MatListModule, MatTabsModule, MatInputModule,
   MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule, MatProgressBarModule, MatToolbarModule,
-  MatExpansionModule, MatStepperModule, MatMenuModule, MatTableModule, MatSelectModule, MatChipsModule} from '@angular/material';
-import { FormsModule } from '@angular/forms';
+  MatExpansionModule, MatStepperModule, MatMenuModule, MatTableModule, MatSelectModule, MatChipsModule, MatIconModule,
+  MatPaginator, MatSort, MatTableDataSource }
+  from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -13,7 +16,9 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestore} from 'angularfire2/firestore';
 import { environment } from '../environments/environment';
 
+import { AdminComponent } from './adm/admin.component';
 import { AppComponent } from './app.component';
+import { AuthGuard } from './shared/security/auth.guard';
 import { AuthService } from './shared/security/auth.service';
 import { UserManagerService } from './adm/userManager.service';
 import { routing } from './app.routing';
@@ -29,6 +34,7 @@ import { CreateProjectComponent
 @NgModule({
   declarations: [
     AppComponent,
+//    AdminComponent,
     CreateProjectComponent,
     FooterComponent,
     HeaderComponent,
@@ -40,16 +46,20 @@ import { CreateProjectComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
+    BrowserAnimationsModule,
+    FormsModule, ReactiveFormsModule,
     HttpClientModule,
     routing,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    MatCardModule, MatGridListModule, MatInputModule, MatListModule, MatAutocompleteModule, MatDatepickerModule, MatProgressBarModule,
+    MatButtonModule, MatCheckboxModule, MatCardModule, MatGridListModule, MatListModule, MatTabsModule, MatInputModule,
+    MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule, MatProgressBarModule, MatToolbarModule,
+    MatExpansionModule, MatStepperModule, MatMenuModule, MatTableModule, MatSelectModule, MatChipsModule, MatIconModule,
+    //MatPaginator, MatSort, MatTableDataSource,
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
   ],
-  providers: [AuthService, AngularFireDatabaseModule, UserManagerService],
+  providers: [AngularFireDatabaseModule, AuthGuard, AuthService, UserManagerService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

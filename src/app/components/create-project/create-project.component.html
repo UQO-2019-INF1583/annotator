@@ -1,17 +1,17 @@
 <mat-card>
   <div class="example-container">
     <mat-form-field class="example-full-width">
-      <input matInput type="text" class="form-control" name="titre" [(ngModel)]="projet.titre" #titre="ngModel" required placeholder="Titre du projet"/>
+      <input matInput type="text" class="form-control" name="titre" [(ngModel)]="project.title" #titre="ngModel" required placeholder="Titre du projet"/>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="text" class="form-control" name="Description" [(ngModel)]="projet.description" #Description="ngModel" required placeholder="Description"/>
+      <input matInput type="text" class="form-control" name="Description" [(ngModel)]="project.description" #Description="ngModel" required placeholder="Description"/>
     </mat-form-field>
-    <br>
+    <br/><br/>
     <div class="button-row">
       <button  [routerLink]="['/projet']" (click)="create()" mat-raised-button color="primary">
-        Ajouter
+        Add
       </button>
-      <a [routerLink]="['']" mat-raised-button class="btn btn-link" color="primary">Annuler</a>
+      <a [routerLink]="['']" mat-raised-button class="btn btn-link" color="primary">Cancel</a>
     </div>
   </div>
 </mat-card>

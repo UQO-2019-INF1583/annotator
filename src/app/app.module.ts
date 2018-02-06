@@ -28,7 +28,7 @@ import { HomeWelcomeComponent } from './home-welcome';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { PageNotFoundComponent } from './not-found/not-found.component';
-import { CreateProjectComponent
+import { CreateProjectComponent, ProjectComponent
        } from './components/index';
 
 @NgModule({
@@ -42,6 +42,7 @@ import { CreateProjectComponent
     HomeWelcomeComponent,
     LoginComponent,
     PageNotFoundComponent,
+    ProjectComponent,
     RegisterComponent
   ],
   imports: [

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-project',
@@ -7,13 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class CreateProjectComponent implements OnInit {
-  project: any = {};
+  project = {'title':'', 'description':''};
 
-  constructor(){  }
+  constructor(public router: Router){  }
 
-  ngOnInit() {  }
+  ngOnInit() {
+
+  }
 
   create(){
+    this.router.navigate(['project']);
   }
 
 }

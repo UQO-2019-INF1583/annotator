@@ -1,17 +1,22 @@
 <mat-card>
+  <h2>Create a new project</h2>
+  <form name="form" (ngSubmit)="f.form.valid && create()" #f="ngForm" novalidate>
   <div class="example-container">
     <mat-form-field class="example-full-width">
-      <input matInput type="text" class="form-control" name="titre" [(ngModel)]="project.title" #titre="ngModel" required placeholder="Titre du projet"/>
+      <input matInput type="text" class="form-control" name="title" [(ngModel)]="project.title" #title="ngModel" required placeholder="Project title"/>
+      <mat-error *ngIf="title.value == ''">Project title is required</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="text" class="form-control" name="Description" [(ngModel)]="project.description" #Description="ngModel" required placeholder="Description"/>
+      <input matInput type="text" class="form-control" name="Description" [(ngModel)]="project.description" #description="ngModel" required placeholder="Description"/>
+      <mat-error *ngIf="description.value == ''">Project description is required</mat-error>
     </mat-form-field>
-    <br/><br/>
+    <br/>
     <div class="button-row">
-      <button  [routerLink]="['/projet']" (click)="create()" mat-raised-button color="primary">
+      <button class="btn btn-primary" mat-raised-button color="primary">
         Add
       </button>
-      <a [routerLink]="['']" mat-raised-button class="btn btn-link" color="primary">Cancel</a>
+      <button class="btn btn-link" mat-raised-button color="primary" [routerLink]="['']">Cancel</button>
     </div>
   </div>
+  </form>
 </mat-card>

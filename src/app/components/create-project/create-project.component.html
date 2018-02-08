@@ -1,22 +1,44 @@
-<mat-card>
-  <h2>Create a new project</h2>
-  <form name="form" (ngSubmit)="f.form.valid && create()" #f="ngForm" novalidate>
-  <div class="example-container">
-    <mat-form-field class="example-full-width">
-      <input matInput type="text" class="form-control" name="title" [(ngModel)]="project.title" #title="ngModel" required placeholder="Project title"/>
-      <mat-error *ngIf="title.value == ''">Project title is required</mat-error>
+<main>
+
+  <div class="column">
+
+    <mat-form-field>
+      <input matInput placeholder="Titre du projet" [(ngModel)]="projet.titre" name="titre" #titre="ngModel" required/>
+      <mat-error *ngIf="titre.value == '' || titre.value == null">Titre du projet obligatoire</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="text" class="form-control" name="Description" [(ngModel)]="project.description" #description="ngModel" required placeholder="Description"/>
-      <mat-error *ngIf="description.value == ''">Project description is required</mat-error>
+      <textarea matInput placeholder="Description" [(ngModel)]="projet.description"name="description" #description="ngModel" required></textarea>
+      <mat-error *ngIf="description.value == '' || description.value == null">Description du projet obligatoire</mat-error>
     </mat-form-field>
-    <br/>
+
+    <!--Section pour les textes (corpus)-->
+    <div>
+      <mat-list role="list">
+        <h3 matLine>Corpus</h3>
+        <mat-list-item *ngFor="let item of corpusList">{{item.titre}}</mat-list-item>
+      </mat-list>
+      <button class="btn btn btn-primary" (click)="addCorpusDialogBox()">Ajouter un texte</button>
+    </div>
+
+    <br>
+    <mat-divider [inset]="true"></mat-divider>
+    <br>
+
+    <!--Button pour créer un projet-->
     <div class="button-row">
-      <button class="btn btn-primary" mat-raised-button color="primary">
-        Add
-      </button>
-      <button class="btn btn-link" mat-raised-button color="primary" [routerLink]="['']">Cancel</button>
+      <button [routerLink]="['/createProject']" (click)="create()" class="btn btn-primary">Créer</button>
     </div>
   </div>
-  </form>
-</mat-card>
+
+  <!--Section catégories-->
+  <div class="column">
+    <mat-list role="list">
+      <h3 matLine>Catégories</h3>
+      <mat-list-item *ngFor="let item of categorylist" [ngStyle]="{'background-color': item.couleur}">{{item.nom}}</mat-list-item>
+    </mat-list>
+
+    <br>
+    <button class="btn btn btn-primary" (click)="addCategorieDialogBox()">Ajouter une catégorie</button>
+  </div>
+
+</main>

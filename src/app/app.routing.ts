@@ -7,7 +7,7 @@ import { LoginComponent } from './login';
 import { PageNotFoundComponent } from './not-found/not-found.component';
 import { ProjectComponent } from './components/index';
 import { RegisterComponent } from './register';
-import { CreateProjectComponent  } from './components/index';
+import { CreateProjectComponent, AddCategorieComponent, AddCorpusComponent  } from './components/index';
 
 const appRoutes: Routes = [
   { path: '', component: HomeWelcomeComponent, pathMatch: 'full' },
@@ -15,6 +15,8 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent },
   { path: 'project', component: ProjectComponent },
+  { path: 'addcategorie', component: AddCategorieComponent },
+  { path: 'addCorpus', component: AddCorpusComponent },
 //  { path: 'admin', component: AdminComponent },
   { path: 'createProject', component: CreateProjectComponent, canActivate: [AuthGuard]},
   // otherwise page not found

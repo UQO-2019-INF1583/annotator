@@ -4,8 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatCardModule, MatGridListModule, MatListModule, MatTabsModule, MatInputModule,
   MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule, MatProgressBarModule, MatToolbarModule,
   MatExpansionModule, MatStepperModule, MatMenuModule, MatTableModule, MatSelectModule, MatChipsModule, MatIconModule,
-  MatPaginator, MatSort, MatTableDataSource }
-  from '@angular/material';
+  MatPaginator, MatSort, MatTableDataSource, MatDialogModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
@@ -15,7 +14,6 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestore} from 'angularfire2/firestore';
 import { environment } from '../environments/environment';
-
 import { AdminComponent } from './adm/admin.component';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared/security/auth.guard';
@@ -28,8 +26,9 @@ import { HomeWelcomeComponent } from './home-welcome';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { PageNotFoundComponent } from './not-found/not-found.component';
-import { CreateProjectComponent, ProjectComponent
-       } from './components/index';
+import { CreateProjectComponent, ProjectComponent, AddCategorieComponent, AddCorpusComponent 
+} from './components/index';
+import { FileDropModule } from 'ngx-file-drop'
 
 @NgModule({
   declarations: [
@@ -43,7 +42,9 @@ import { CreateProjectComponent, ProjectComponent
     LoginComponent,
     PageNotFoundComponent,
     ProjectComponent,
-    RegisterComponent
+    RegisterComponent,
+    AddCategorieComponent,
+    AddCorpusComponent, 
   ],
   imports: [
     BrowserModule,
@@ -57,6 +58,7 @@ import { CreateProjectComponent, ProjectComponent
     MatButtonModule, MatCheckboxModule, MatCardModule, MatGridListModule, MatListModule, MatTabsModule, MatInputModule,
     MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule, MatProgressBarModule, MatToolbarModule,
     MatExpansionModule, MatStepperModule, MatMenuModule, MatTableModule, MatSelectModule, MatChipsModule, MatIconModule,
+    MatDialogModule, FileDropModule,
     //MatPaginator, MatSort, MatTableDataSource,
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
   ],

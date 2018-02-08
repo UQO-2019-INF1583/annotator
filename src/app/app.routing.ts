@@ -11,12 +11,12 @@ import { CreateProjectComponent  } from './components/index';
 
 const appRoutes: Routes = [
   { path: '', component: HomeWelcomeComponent, pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'project', component: ProjectComponent },
-//  { path: 'admin', component: AdminComponent },
+  //{ path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
   { path: 'createProject', component: CreateProjectComponent, canActivate: [AuthGuard]},
+  { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'project', component: ProjectComponent },
+  { path: 'register', component: RegisterComponent },
   // otherwise page not found
   { path: '**', component: PageNotFoundComponent }
 ];

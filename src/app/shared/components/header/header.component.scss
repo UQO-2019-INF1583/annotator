@@ -94,3 +94,17 @@ $topnav-background-color: #222;
   padding: 15px 10px;
   margin-top: 10px;
 }
+
+.navbar-inverse .navbar-nav>li>button {
+  color: #9d9d9d;
+  background-color: transparent;
+  line-height: 20px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border: 0px;
+}
+
+.navbar-inverse .navbar-nav>li>button:hover {
+  color: #fff;
+  background-color: #080808;
+}

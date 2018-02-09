@@ -11,14 +11,19 @@ import { CreateProjectComponent, AddCategorieComponent, AddCorpusComponent  } fr
 
 const appRoutes: Routes = [
   { path: '', component: HomeWelcomeComponent, pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  //{ path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
+  { path: 'createProject', component: CreateProjectComponent, canActivate: [AuthGuard]},
   { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'project', component: ProjectComponent },
+<<<<<<< HEAD
   { path: 'addcategorie', component: AddCategorieComponent },
   { path: 'addCorpus', component: AddCorpusComponent },
 //  { path: 'admin', component: AdminComponent },
   { path: 'createProject', component: CreateProjectComponent, canActivate: [AuthGuard]},
+=======
+  { path: 'register', component: RegisterComponent },
+>>>>>>> master
   // otherwise page not found
   { path: '**', component: PageNotFoundComponent }
 ];

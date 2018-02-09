@@ -26,8 +26,16 @@
             <li (click)="isCollapsed = true" routerLinkActive="active">
               <a class="navbar-left" [routerLink]="['/heroes']">{{'Annotation'}}</a>
             </li>
-            <li (click)="isCollapsed = true" routerLinkActive="active">
-              <a class="navbar-left" [routerLink]="['/admin']">{{'Admin'}}</a>
+            <li (click)="isCollapsed = true">
+             <button [matMenuTriggerFor]="adminMenu">Admin</button>
+             <mat-menu #adminMenu="matMenu">
+               <button mat-menu-item>
+                 <a class="navbar-left" [routerLink]="['/admin']">{{'User management'}}</a>
+               </button>
+               <button mat-menu-item>
+                 <a class="navbar-left" [routerLink]="['/admin']">{{'Project management'}}</a>
+               </button>
+             </mat-menu>
             </li>
           </ul>
         </div>

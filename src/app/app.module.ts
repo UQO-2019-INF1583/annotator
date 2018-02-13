@@ -92,7 +92,7 @@ import { CreateProjectComponent, ProjectComponent
     MatButtonModule, MatCheckboxModule, MatCardModule, MatGridListModule, MatListModule, MatTabsModule, MatInputModule,
     MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule, MatProgressBarModule, MatToolbarModule,
     MatExpansionModule, MatStepperModule, MatMenuModule, MatTableModule, MatSelectModule, MatChipsModule, MatIconModule,
-    MatPaginatorModule, MatSortModule, MatTableDataSource,
+    MatPaginatorModule, MatSortModule, //MatTableDataSource,
     CdkTableModule,
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
   ],

@@ -7,6 +7,7 @@ import { LoginComponent } from './login';
 import { PageNotFoundComponent } from './not-found/not-found.component';
 import { ProjectComponent } from './components/index';
 import { RegisterComponent } from './register';
+import { UserManagerComponent } from './adm';
 import { CreateProjectComponent  } from './components/index';
 
 const appRoutes: Routes = [
@@ -17,6 +18,7 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'project', component: ProjectComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'userManager', component: UserManagerComponent, canActivate: [AuthGuard] },
   // otherwise page not found
   { path: '**', component: PageNotFoundComponent }
 ];

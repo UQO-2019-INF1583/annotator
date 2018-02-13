@@ -98,7 +98,8 @@ export class AuthService {
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
-      password: ""
+      password: ""//,
+      //lastname:"???"
     }
     return userRef.set(data)
   }

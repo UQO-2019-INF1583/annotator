@@ -3,7 +3,7 @@ import { Doc } from './document.model';
 import { Categorie } from './categorie.model';
 
 export class Project {
-  projectId: string;
+  id: string;
   titre: string; 
   description: string;
   admin: string;          // user id

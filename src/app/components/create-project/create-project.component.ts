@@ -14,7 +14,7 @@ import * as firebase from 'firebase';
 })
 
 export class CreateProjectComponent implements OnInit {
-  project = { 'title': '', 'description': '', 'admin': '' };
+  project = { 'id': '', 'titre': '', 'description': '', 'admin': '' };
 
   constructor(public router: Router, private afs: AngularFirestore) { }
 
@@ -23,13 +23,14 @@ export class CreateProjectComponent implements OnInit {
   }
 
   create() {
-    //this.router.navigate(['project']);
-    if (this.project.title != null && this.project.title != '' && this.project.description != null &&
+    if (this.project.titre != null && this.project.titre != '' && this.project.description != null &&
       this.project.description != '') {
 
       this.project.admin = firebase.auth().currentUser.uid;
+      this.project.id = this.afs.createId();
 
-      this.afs.collection('Projects/').ref.add({'titre': this.project.title, 'description': this.project.description, 'admin': this.project.admin });
+      this.afs.collection('Projects').doc(this.project.id).set(this.project);
+      //this.afs.collection('Projects/').ref.add({'titre': this.project.title, 'description': this.project.description, 'admin': this.project.admin });
 
       alert('Création d\' un nouveau projet réussi');
       this.router.navigate(['/']);

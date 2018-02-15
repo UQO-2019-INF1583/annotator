@@ -1,17 +1,25 @@
 import { Injectable } from '@angular/core';
+import {AngularFirestore,
+        //AngularFirestoreCollection,
+        AngularFirestoreDocument
+       } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 
-import { User } from '../shared/user.model';
-import { Project } from '../shared/project.model';
-import { Doc } from '../shared/document.model';
+import { User } from '../../shared/user.model';
+import { Project } from '../../shared/project.model';
+import { Doc } from '../../shared/document.model';
 
 // secret: structure de données utilisée pour représenter l'ensemble des projets
 // et en particulier, association entre projetId et l'emplacement du fichier correspondant
 
 @Injectable()
 export class ProjectManagerService {
+  currentProjet: any;
 
-  constructor() {
+  content:any;
+
+  constructor(private afs: AngularFirestore) {
+    this.updateId();
   }
 
   // Initialise un projet: détermine son emplacement et son administrateur.
@@ -73,10 +81,37 @@ export class ProjectManagerService {
     return false;
   }
 
+  getAnnotator(){
+    return this.afs
+           .collection('Annotateur', ref => ref
+            .where('titreProjet', '==', this.current().titreProjet))
+            .valueChanges();
+  }
+
+/*
   // Produit une liste des noms de tous les documents d'un projet.
   // Retourne false si projectId n'existe pas.
   getCorpus(projetId: string): string[] | boolean {
     return false;
+  }
+*/
+  getCorpus(){
+    return this.afs
+              .collection('Corpus', ref => ref
+              .where('titreProjet', '==', this.current().titreProjet))
+              .valueChanges();
+  }
+
+  getCategories(){
+    return this.afs
+           .collection('Categories', ref => ref
+           .where('titreProjet', '==', this.current().titreProjet))
+           .valueChanges();
+  }
+
+  //récupérer le titre du token du projet courant
+  current(){
+    return JSON.parse(localStorage.getItem('currentProjet'));
   }
 
   // Ajoute un nouveau document à un projet à partir d'un fichier texte.
@@ -97,4 +132,23 @@ export class ProjectManagerService {
     return false;
   }
 
+  //recuperer le nom du courant utilisateur
+  isAdmin(user: string){
+    if(user == this.current().admin)
+    return true;
+    else
+    return false;
+  }
+  //recuperer le nom du courant utilisateur
+  his(){
+    return JSON.parse(this.currentProjet).admin;
+  }
+
+  updateId(){
+    this.content=JSON.parse(localStorage.getItem('PkId'));
+      if(this.content){
+      this.afs.doc(`${this.content.database}/${this.content.id}`).update(this.content);
+      console.log(this.content.id);
+      }
+  }
 }

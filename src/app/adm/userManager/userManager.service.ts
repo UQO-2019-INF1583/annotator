@@ -1,18 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
+import { AngularFirestore,
+         //AngularFirestoreCollection,
+         //AngularFirestoreDocument
+       } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
-import { environment } from '../../environments/environment';
-import { User } from '../shared/user.model';
-import { AuthService } from '../shared/security/auth.service';
+import { environment } from '../../../environments/environment';
+import { User } from '../../shared/user.model';
+import { AuthService } from '../../shared/security/auth.service';
 
 // secret de la classe: structure de données utilisée pour représenter l'ensemble des utilisateurs
 
 @Injectable()
 export class UserManagerService {
   user: Observable<User>;
+  currentUser: any;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService,
+              private afs : AngularFirestore) {
     this.user = this.authService.user != null ? this.authService.user : null;
   }
 
@@ -69,6 +75,17 @@ export class UserManagerService {
   // Vérifie si username existe.
   checkUser(username: string): boolean {
     return false;
+  }
+
+  his(){
+    return JSON.parse(this.currentUser);
+  }
+
+  getAll(){
+    return this.afs
+               .collection('User', ref => ref
+               .orderBy('displayName'))
+               .valueChanges();
   }
 
 }

@@ -1,6 +1,6 @@
 <mat-card>
   <h2>Create a new project</h2>
-  <form name="form" (ngSubmit)="f.form.valid && create()" #f="ngForm" novalidate>
+  <form name="form" #f="ngForm">
   <div class="example-container">
     <mat-form-field class="example-full-width">
       <input matInput type="text" class="form-control" name="title" [(ngModel)]="project.title" #title="ngModel" required placeholder="Project title"/>
@@ -12,8 +12,8 @@
     </mat-form-field>
     <br/>
     <div class="button-row">
-      <button class="btn btn-primary" mat-raised-button color="primary">
-        Add
+      <button [disabled]="!f.form.valid" (click)="create()" class="btn btn-primary" mat-raised-button color="primary">
+        Create
       </button>
       <button class="btn btn-link" mat-raised-button color="primary" [routerLink]="['']">Cancel</button>
     </div>

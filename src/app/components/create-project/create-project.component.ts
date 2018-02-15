@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument
+} from 'angularfire2/firestore';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-create-project',
@@ -8,16 +14,25 @@ import { Router } from '@angular/router';
 })
 
 export class CreateProjectComponent implements OnInit {
-  project = {'title':'', 'description':''};
+  project = { 'title': '', 'description': '', 'admin': '' };
 
-  constructor(public router: Router){  }
+  constructor(public router: Router, private afs: AngularFirestore){ }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   create(){
-    this.router.navigate(['project']);
-  }
+    if (this.project.title != null && this.project.title != '' &&
+        this.project.description != null && this.project.description != '') {
 
+      this.project.admin = firebase.auth().currentUser.uid;
+
+      this.afs.collection('Projects/').ref.add({
+        'title': this.project.title,
+        'description': this.project.description,
+        'admin': this.project.admin });
+
+      this.router.navigate(['/']);
+      //this.router.navigate(['project']);
+    }
+  }
 }

@@ -29,7 +29,7 @@ export class CreateProjectComponent implements OnInit {
 
       this.project.admin = firebase.auth().currentUser.uid;
 
-      this.afs.collection('Projects/').ref.add({ 'titre': this.project.title, 'description': this.project.description, 'admin': this.project.admin });
+      this.afs.collection('Projects/').ref.add({'titre': this.project.title, 'description': this.project.description, 'admin': this.project.admin });
 
       alert('Création d\' un nouveau projet réussi');
       this.router.navigate(['/']);

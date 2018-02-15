@@ -38,16 +38,30 @@
 
 
 	<div class="example-container mat-elevation-z8">
-		<mat-table #table [dataSource]="datasource">
+    <mat-table #table [dataSource]="datasource">
 
-			<ng-container matColumnDef="titre">
-				<mat-header-cell *matHeaderCellDef> Titre </mat-header-cell>
-				<mat-cell *matCellDef="let project"> {{project.titre}} </mat-cell>
-			</ng-container>
+      <ng-container matColumnDef="titre">
+        <mat-header-cell *matHeaderCellDef> Titre </mat-header-cell>
+        <mat-cell *matCellDef="let project"> {{project.titre}} </mat-cell>
+      </ng-container>
 
-			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-			<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-		</mat-table>
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+        <mat-cell *matCellDef="let project"> {{project.description}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="modifier">
+        <mat-header-cell *matHeaderCellDef> Modifier / Supprimer </mat-header-cell>
+        <mat-cell *matCellDef="let project">
+          <button class="btn btn-primary" (click)="modifyProject(project)">Modifier</button>
+          <button class="btn btn-primary" (click)="deleteProject(project)">Supprimer</button>
+        </mat-cell>
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
 	</div>
 	<!--<div *ngIf="projets?.length < 1">
 	  <mat-progress-bar *ngIf="showSpinner" mode="indeterminate"></mat-progress-bar>

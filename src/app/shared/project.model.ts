@@ -3,7 +3,8 @@ import { Doc } from './document.model';
 import { Categorie } from './categorie.model';
 
 export class Project {
-  titre: string; //titre est unique
+  projectId: string;
+  titre: string; 
   description: string;
   admin: string;          // user id
   annotators: string[];   // array of user ids

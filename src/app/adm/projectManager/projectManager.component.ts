@@ -20,40 +20,25 @@ import 'rxjs/add/observable/of';
 
 
 export class ProjectManagerComponent implements OnInit {
-  displayedColumns = ['titre'];
-  projects: Project[] | null;
-  userId: string;
+  displayedColumns = ['titre', 'description', 'modifier'];
   datasource: ProjectDataSource | null;
 
   constructor(public router: Router, private afs: AngularFirestore) {
-    //this.userId = firebase.auth().currentUser.uid;
-    //this.getCurrentUserProjects();
-     //this.datasource = new ProjectDataSource(this.afs);
   }
 
   ngOnInit() {
     this.datasource = new ProjectDataSource(this.afs);
-    
-    //console.log(this.datasource.connect());
 
   }
 
-  getCurrentUserProjects() {
-
-    /*this.projects = [];
-    this.userId = firebase.auth().currentUser.uid;
-
-    this.afs.collection("Projects").ref.where("admin", "==", this.userId).get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-
-        this.projects.push({ admin: doc.data().admin, titre: doc.data().titre, description: doc.data().description, annotators: null, corpus: null, categories: null });
-
-        console.log(doc.id, " => ", doc.data().titre);
-      });
-
-    });*/
-
+  modifyProject(project: any) {
+    console.log(project);
   }
+
+  deleteProject(project: any) {
+    console.log(project);
+  }
+
 }
 
 export class ProjectDataSource extends DataSource<any> {
@@ -62,44 +47,11 @@ export class ProjectDataSource extends DataSource<any> {
     super();
   }
   userId: string;
-  projects: Project[] = [];
-  myObservable: Observable<Project[]>;
-   //this.userId = firebase.auth().currentUser.uid;
- // mycollection: AngularFirestoreCollection<Project>;
-
-  private subjects: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>([]);
 
   connect(): Observable<any[]> {
     this.userId = firebase.auth().currentUser.uid;
-    //this.mycollection = new AngularFirestoreCollection<Project>(null, null);
 
-    this.afs.collection("Projects").ref.where("admin", "==", this.userId).get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-
-        this.projects.push({ admin: doc.data().admin, titre: doc.data().titre, description: doc.data().description, annotators: null, corpus: null, categories: null });
-        //this.mycollection.add({ admin: doc.data().admin, titre: doc.data().titre, description: doc.data().description, annotators: null, corpus: null, categories: null });
-        console.log(doc.id, " => ", doc.data().titre);
-      });
-
-    });
-
-    this.subjects.next(this.projects);
-    console.log(this.subjects);
-
-
-    //console.log(this.projects);
-    /*console.log(Observable.of(this.projects));*/
-
-    //this.myObservable = Observable.of(this.projects);
-    //this.myObservable.subscribe((value) => { console.log(value); });
-
-    return this.subjects.asObservable();
-
-    //return this.myObservable; //this.subjects.asObservable();
-
-    //return this.afs.collection("Projects").valueChanges();//.ref.where("admin", "==", this.userId).get().then(()).
-    //return this.mycollection.valueChanges();
-
+    return this.afs.collection("Projects", ref => ref.where('admin', '==', this.userId)).valueChanges();
   }
   disconnect(collectionViewer: CollectionViewer): void {
 

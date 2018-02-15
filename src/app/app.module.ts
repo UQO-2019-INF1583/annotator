@@ -1,15 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-<<<<<<< HEAD
-import { MatButtonModule, MatCheckboxModule, MatCardModule, MatGridListModule, MatListModule, MatTabsModule, MatInputModule,
-  MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule, MatProgressBarModule, MatToolbarModule,
-  MatExpansionModule, MatStepperModule, MatMenuModule, MatTableModule, MatSelectModule, MatChipsModule, MatIconModule,
-  MatPaginator, MatSort, MatTableDataSource, MatDialogModule } from '@angular/material';
-=======
 import { CdkTableModule } from '@angular/cdk/table';
 import { DataSource } from '@angular/cdk/collections';
->>>>>>> master
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
@@ -48,7 +41,6 @@ import {
   MatToolbarModule,
   MatTooltipModule,
 } from '@angular/material';
-
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
@@ -67,15 +59,12 @@ import { HomeWelcomeComponent } from './home-welcome';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { PageNotFoundComponent } from './not-found/not-found.component';
-<<<<<<< HEAD
 import { CreateProjectComponent, ProjectComponent, AddCategorieComponent, AddCorpusComponent 
 } from './components/index';
 import { FileDropModule } from 'ngx-file-drop'
-=======
-import { UserManagerComponent } from './adm';
-import { CreateProjectComponent, ProjectComponent
-       } from './components/index';
->>>>>>> master
+import { UserManagerComponent, ProjectManagerComponent } from './adm';
+
+
 
 @NgModule({
   declarations: [
@@ -90,12 +79,10 @@ import { CreateProjectComponent, ProjectComponent
     PageNotFoundComponent,
     ProjectComponent,
     RegisterComponent,
-<<<<<<< HEAD
     AddCategorieComponent,
     AddCorpusComponent, 
-=======
-    UserManagerComponent
->>>>>>> master
+    UserManagerComponent,
+    ProjectManagerComponent,
   ],
   imports: [
     BrowserModule,
@@ -109,13 +96,10 @@ import { CreateProjectComponent, ProjectComponent
     MatButtonModule, MatCheckboxModule, MatCardModule, MatGridListModule, MatListModule, MatTabsModule, MatInputModule,
     MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule, MatProgressBarModule, MatToolbarModule,
     MatExpansionModule, MatStepperModule, MatMenuModule, MatTableModule, MatSelectModule, MatChipsModule, MatIconModule,
-<<<<<<< HEAD
     MatDialogModule, FileDropModule,
     //MatPaginator, MatSort, MatTableDataSource,
-=======
     MatPaginatorModule, MatSortModule, //MatTableDataSource,
     CdkTableModule,
->>>>>>> master
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
   ],
   providers: [AngularFireDatabaseModule, AuthGuard, AuthService, UserManagerService ],

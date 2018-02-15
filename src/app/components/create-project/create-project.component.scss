@@ -1,10 +1,29 @@
-.column {
-  float: left;
-  width: 50%;
-  height: 100%;
-  overflow-y: auto;
+example-container {
   display: flex;
   flex-direction: column;
-  padding-right: 20px;
-  padding-left: 20px;
+}
+
+.example-container > * {
+  width: 50%;
+}
+
+.mat-button {
+  margin-left: 5px;
+}
+
+.barre {
+  width: 30%;
+  margin-left: 5px;
+}
+
+.button {
+  padding: 10px 2px;
+}
+
+.mat-card {
+  transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
+  display: block;
+  position: relative;
+  border-radius: 2px;
+  width: 60%;
 }

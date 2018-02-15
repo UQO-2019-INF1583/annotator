@@ -7,32 +7,22 @@ import { LoginComponent } from './login';
 import { PageNotFoundComponent } from './not-found/not-found.component';
 import { ProjectComponent } from './components/index';
 import { RegisterComponent } from './register';
-<<<<<<< HEAD
 import { CreateProjectComponent, AddCategorieComponent, AddCorpusComponent  } from './components/index';
-=======
-import { UserManagerComponent } from './adm';
-import { CreateProjectComponent  } from './components/index';
->>>>>>> master
+import { UserManagerComponent, ProjectManagerComponent } from './adm';
+
 
 const appRoutes: Routes = [
   { path: '', component: HomeWelcomeComponent, pathMatch: 'full' },
   //{ path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
-  { path: 'createProject', component: CreateProjectComponent, canActivate: [AuthGuard]},
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'project', component: ProjectComponent },
-<<<<<<< HEAD
   { path: 'addcategorie', component: AddCategorieComponent },
   { path: 'addCorpus', component: AddCorpusComponent },
-//  { path: 'admin', component: AdminComponent },
   { path: 'createProject', component: CreateProjectComponent, canActivate: [AuthGuard]},
-=======
   { path: 'register', component: RegisterComponent },
-<<<<<<< HEAD
->>>>>>> master
-=======
   { path: 'userManager', component: UserManagerComponent, canActivate: [AuthGuard] },
->>>>>>> master
+  { path: 'projectManager', component: ProjectManagerComponent, canActivate: [AuthGuard] },
   // otherwise page not found
   { path: '**', component: PageNotFoundComponent }
 ];

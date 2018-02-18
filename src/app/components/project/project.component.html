@@ -1,24 +1,63 @@
 <main flex>
-  <div class="titre">
-  <h2>Vous êtes connectés au projet <strong>{{Cuprojet}}</strong> cree par {{Admprojet}}</h2>
+
+  <div style="padding-left: 10px; padding-right: 10px;">
+    <h3>Projet : {{currentProject.titre}}</h3>
   </div>
-<!-- Colonne associee au corpus-->
-<div class="column">
-  <mat-card >
-    <mat-toolbar><h3>Corpus</h3></mat-toolbar>
-    <mat-nav-list color="primary" >
-       <div *ngFor="let corpus of Cprojet | async">
-        <mat-list-item (click)="selectTitle(corpus)">
-        <a matLine [routerLink]="['/annotation']">{{corpus.title}}</a>
-           <mat-chip-list *ngIf="isAdmin()">
-             <mat-chip (click)="delete(corpus.id,corpus.database)" color="warn" selected="true">supprimer</mat-chip>
-           </mat-chip-list>
-     </mat-list-item>
-     <mat-divider></mat-divider>
-   </div>
-   </mat-nav-list>
-   <p *ngIf="isAdmin()">
-     <button mat-raised-button (click)="openCorpusDialog()">Ajouter un texte</button>
-   </p>
- </mat-card >
+
+  <!--<mat-form-field>
+    <input matInput placeholder="Titre du projet" [(ngModel)]="currentProject.titre" name="titre" #titre="ngModel" required />
+    <mat-error *ngIf="titre.value == '' || titre.value == null">Titre du projet obligatoire</mat-error>
+  </mat-form-field>-->
+
+  <div style="padding-left: 10px; padding-right: 10px;">
+      <h3 style="display:inline-block">Description : </h3>
+
+      <mat-form-field style="display:inline-block">
+        <textarea matInput [(ngModel)]="currentProject.description" name="description" #description="ngModel" required></textarea>
+        <mat-error *ngIf="description.value == '' || description.value == null">Description du projet obligatoire</mat-error>
+      </mat-form-field>
+  </div>
+
+  <!--Section pour les textes (corpus)-->
+  <div class="column">
+    <mat-card>
+      <mat-list role="list">
+        <mat-toolbar><h3>Corpus</h3></mat-toolbar>
+        <!--<h3 matLine>Corpus</h3>-->
+        <mat-list-item *ngFor="let item of corpusList">{{item.titre}}</mat-list-item>
+      </mat-list>
+      <mat-divider></mat-divider>
+      <br />
+      <button class="btn btn btn-primary" (click)="addCorpusDialogBox()">Ajouter un texte</button>
+    </mat-card>
+  </div>
+
+  <div class="column">
+    <!--Section catégories-->
+    <mat-card>
+      <mat-list role="list">
+        <mat-toolbar><h3>Catégories</h3></mat-toolbar>
+        <!--<h3 matLine>Catégories</h3>-->
+        <mat-list-item *ngFor="let item of categorylist" [ngStyle]="{'background-color': item.couleur}">{{item.nom}}</mat-list-item>
+      </mat-list>
+      <mat-divider></mat-divider>
+      <br />
+      <button class="btn btn btn-primary" (click)="addCategorieDialogBox()">Ajouter une catégorie</button>
+    </mat-card>
+  </div>
+
+  <div class="column">
+    <mat-card>
+      <mat-toolbar><h3>Annotateurs</h3></mat-toolbar>
+    </mat-card>
+  </div>
+
+  <!--Button pour créer un projet-->
+
+
+</main>
+
+<div class="button-row" style="padding-left: 10px; padding-right: 10px;">
+  <button class="btn btn-primary" (click)="saveProjectModification()">Sauvegarder</button>
+  <button class="btn btn btn-primary" [routerLink]="['']">Cancel</button>
 </div>

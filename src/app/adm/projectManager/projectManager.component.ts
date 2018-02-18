@@ -7,7 +7,7 @@ import {
   AngularFirestoreDocument
 } from 'angularfire2/firestore';
 import * as firebase from 'firebase';
-import { DataSource, CollectionViewer } from '@angular/cdk/collections';
+import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/observable/of';
@@ -31,11 +31,12 @@ export class ProjectManagerComponent implements OnInit {
   }
 
   modifyProject(project: any) {
-    console.log(project);
+    this.router.navigate(['/project', project]);
   }
 
   deleteProject(project: any) {
-    console.log(project);
+    //ajouter un pop up qui demande si l'utilisateur veut vraiment supprimer le projet
+    this.afs.collection('Projects').doc(project.id).delete();
   }
 
 }
@@ -49,11 +50,13 @@ export class ProjectDataSource extends DataSource<any> {
   }
 
   connect(): Observable<any[]> {
+    // trouve le id the l'utilisateur connecté
     this.userId = firebase.auth().currentUser.uid;
+    // trouve les projets où l'utilisateur connecté est l'administrateur
     return this.afs.collection("Projects", ref => ref.where('admin', '==', this.userId)).valueChanges();
   }
 
-  disconnect(collectionViewer: CollectionViewer): void {
+  disconnect(): void {
   }
 
 }

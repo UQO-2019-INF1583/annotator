@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 
 import * as firebase from 'firebase';
 import { AngularFireAuth } from 'angularfire2/auth';
+import {
+  AngularFirestore
+} from 'angularfire2/firestore';
 
 import { AuthService } from '../shared/security/auth.service';
 
@@ -13,8 +16,9 @@ import { AuthService } from '../shared/security/auth.service';
 
 export class RegisterComponent {
   userInfo: any = {};
+  errorMessage: string = '';
 
-  constructor(private router: Router, public authService: AuthService, public afAuth: AngularFireAuth) { }
+  constructor(private router: Router, public authService: AuthService, public afAuth: AngularFireAuth, private afs: AngularFirestore) { }
 
   register() {
     firebase.auth().createUserWithEmailAndPassword(this.userInfo.email, this.userInfo.password)
@@ -22,23 +26,31 @@ export class RegisterComponent {
       user.updateProfile({
         displayName: this.userInfo.firstName,
         photoURL: ""
-      }).then(function() {
-        // Update successful.
-
+      }).then(() => {
+        // Update successful. Add the user to ..
       }).catch(function(error) {
         console.log(error);
       });
       // added to get correctly the displayName
       this.authService.signIn(this.userInfo.email, this.userInfo.password);
+      // update Cloud Firestore
+      this.afs.collection('Users/').ref.add({
+        'email': this.userInfo.email,
+        'firstName': this.userInfo.firstName,
+        'lastName': this.userInfo.lastName });
       this.authService.logout();
     })
-    .catch(function(error) {
+    .catch((error) => {
       // Handle Errors here.
       var errorCode = error.code;
-      var errorMessage = error.message;
-      console.log(errorMessage);
+      this.errorMessage = error.message;
+      console.log(this.errorMessage);
       // ...
     });
 
+  }
+
+  emailInvalid(){
+    return this.errorMessage != '';
   }
 }

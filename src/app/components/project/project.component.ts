@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { ProjectManagerService } from 'app/adm/index';
-import { UserManagerService } from 'app/adm/index';
-import { AngularFirestore,
-         AngularFirestoreCollection,
-         AngularFirestoreDocument } from 'angularfire2/firestore';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { AddCategoryComponent } from '../add-category/add-category.component';
+import { AddCorpusComponent } from '../add-corpus/add-corpus.component';
+import {AngularFirestore,
+        AngularFirestoreCollection,
+        AngularFirestoreDocument
+} from 'angularfire2/firestore';
+import { Doc } from '../../shared/document.model';
+import { Category } from '../../shared/category.model';
+import { Project } from '../../shared/project.model';
 
 @Component({
   selector: 'app-project',
@@ -12,49 +17,97 @@ import { AngularFirestore,
   styleUrls: ['./project.component.scss']
 })
 
-export class ProjectComponent implements OnInit {
+export class ProjectComponent implements OnInit, OnDestroy  {
+  currentProject = { 'id': '', 'titre': '', 'description': '', 'admin': '' };
+  private sub: any;
+  categorylist: Category[] = [];
+  corpusList: Doc[] = [];
+  categoryExist: boolean;
 
-  Uprojet: any = {};
-  Cprojet: any = {};
-  Tprojet: any = {};
-  Cuprojet;
-  Admprojet;
-
-  constructor(public dialog: MatDialog,
-              private projects: ProjectManagerService,
-              private user: UserManagerService) {
-      this.load();
-      this.Cuprojet = this.projects.current().titreProjet;
-
-      if (localStorage.getItem("currentUser") != null) {
-        if(this.isAdmin(this.user.his().displayName))
-          this.Admprojet = "Vous";
-          else this.Admprojet = this.projects.current().admin;
-        }else {this.Admprojet = this.projects.current().admin};
-
-  }
+  constructor(private activeRouter: ActivatedRoute, public dialog: MatDialog, private afs: AngularFirestore, private router: Router) { }
 
   ngOnInit() {
-    this.projects.updateId();
+    this.sub = this.activeRouter.params.subscribe(params => {
+      this.currentProject.id = params.id;
+      this.currentProject.titre = params.titre;
+      this.currentProject.description = params.description;
+      this.currentProject.admin = params.admin;
+     /* this.currentProject.annotators = params.annotators;
+      this.currentProject.corpus = params.corpus;
+      this.currentProject.categories = params.categories;*/
+
+    });
   }
 
-  // Uprojet la liste des annotateurs du projet courant
-  // Cprojet la liste de corpus du projet courant
-  // Tprojet la liste de categories du projet courant
-  load() {
-    this.Uprojet = this.projects.getAnnotator();
-    this.Cprojet = this.projects.getCorpus();
-    this.Tprojet = this.projects.getCategories();
+  ngOnDestroy() {
+    this.sub.unsubscribe;
   }
 
-  isAdmin(user: string){
-    if (localStorage.getItem("currentUser") != null) {
-      return this.projects.isAdmin(this.user.his().displayName);
-    }else{return false;}
+  //Sauvegarde les modification apporté au projet
+  saveProjectModification() {
+    if (this.currentProject.titre != null && this.currentProject.titre != '' && this.currentProject.description != null &&
+      this.currentProject.description != '') {
+
+      this.afs.collection('Projects').doc(this.currentProject.id).set(this.currentProject);
+
+      alert('Modification Sauvegarder');
+      this.router.navigate(['/']);
+    }
+
   }
-  //verifie si l'utilisateur actuel est l'administrateur.  Prend "item" en parametre
-  //il s'agit de l'item cree par la boucle ngFor sur le modele dans le document html.
-  //Cette maniere de faire n'est pas du tout recommandee, mais je n'ai pas reussi a
-  //atteindre les elements internes de la collection d'une maniere plus directe.
+
+
+  //ouvre la boîte de dialogue pour ajouter un corpus
+  addCorpusDialogBox() {
+    let dialogRef = this.dialog.open(AddCorpusComponent, {
+      width: '250px',
+      data: { corpusTitle: undefined, corpusFile: undefined }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.corpusTitle != undefined && result.corpusFile != undefined) {
+        this.corpusList.push({ documentId: null, title: result.corpusTitle, file: result.corpusFile, text: "" });
+
+        console.log(this.corpusList);
+      }
+    });
+
+  }
+
+  //ouvre la boîte de dialogue pour ajouter une catégorie
+  addCategoryDialogBox() {
+    let dialogRef = this.dialog.open(AddCategoryComponent, {
+      width: '250px',
+      data: { categoryName: undefined, categoryColor: undefined }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result.categoryName != undefined && result.categoryColor != undefined) {
+
+        this.categoryExist = false;
+
+        //Vérifier si une catégorie possède le même nom oèu la même couleur
+        for (var i = 0; i < this.categorylist.length; i++) {
+
+          if (result.categoryName == this.categorylist[i].nom) {
+            this.categoryExist = true;
+            alert("Une catégorie possède déja le même nom");
+            return;
+
+          } else if (result.categoryColor == this.categorylist[i].couleur) {
+            this.categoryExist = true;
+            alert("Une catégorie utilise déjà cette couleur");
+            return;
+          }
+        }
+
+        if (this.categoryExist == false) {
+          this.categorylist.push({ nom: result.categoryName, couleur: result.categoryColor });
+
+        }
+      }
+    });
+  }
 
 }

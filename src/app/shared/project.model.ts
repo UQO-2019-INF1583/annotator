@@ -1,13 +1,15 @@
 // structure de données utilisée pour représenter un projet
+import { Doc } from './document.model';
+import { Category } from './category.model';
 
 export class Project {
-  projectId: string;
+  id: string;
   title: string;
   description: string;
-  admin: string;          // user id
-  annotators: string[];   // array of user ids
-  corpus: string[];       // array of document names
-  categories: any[];      // see ./annotation.model.ts
+  admin: string[]; // user ids
+  annotators: string[]; // user ids
+  corpus: Doc[];
+  categories: Category[];
 
   constructor() {
   }

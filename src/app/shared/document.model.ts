@@ -2,6 +2,8 @@
 
 export class Doc {
   documentId: string;
+  title: string;
+  file: any;
   text: string;
 
   constructor() { }

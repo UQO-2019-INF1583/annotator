@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy  } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AddCategorieComponent } from '../add-categorie/add-categorie.component';
@@ -7,9 +7,7 @@ import {AngularFirestore,
         AngularFirestoreCollection,
   AngularFirestoreDocument
 } from 'angularfire2/firestore';
-import { Doc } from '../../shared/document.model';
-import { Categorie } from '../../shared/categorie.model';
-import { Project } from '../../shared/project.model';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-project',
@@ -18,24 +16,20 @@ import { Project } from '../../shared/project.model';
 })
 
 export class ProjectComponent implements OnInit, OnDestroy  {
-  currentProject = { 'id': '', 'titre': '', 'description': '', 'admin': '' };
+  currentProject: any;
   private sub: any;
-  categorylist: Categorie[] = [];
-  corpusList: Doc[] = [];
   categoryExist: boolean;
+
+  corpusList: any[] = [];
 
   constructor(private activeRouter: ActivatedRoute, public dialog: MatDialog, private afs: AngularFirestore, private router: Router) { }
 
   ngOnInit() {
     this.sub = this.activeRouter.params.subscribe(params => {
-      this.currentProject.id = params.id;
-      this.currentProject.titre = params.titre;
-      this.currentProject.description = params.description;
-      this.currentProject.admin = params.admin;
-     /* this.currentProject.annotators = params.annotators;
-      this.currentProject.corpus = params.corpus;
-      this.currentProject.categories = params.categories;*/
 
+      this.currentProject = this.afs.collection("Projects/").doc(params.id).ref.get().then((doc) => {
+        this.currentProject = doc.data();
+      });
     });
   }
 
@@ -47,8 +41,16 @@ export class ProjectComponent implements OnInit, OnDestroy  {
   saveProjectModification() {
     if (this.currentProject.titre != null && this.currentProject.titre != '' && this.currentProject.description != null &&
       this.currentProject.description != '') {
-      
+
       this.afs.collection('Projects').doc(this.currentProject.id).set(this.currentProject);
+
+      if (this.corpusList.length > 0) {
+        //sauvegarde les documents texte
+        for (var i = 0; i < this.corpusList.length; i++) {
+
+          firebase.storage().ref().child('Projets/' + this.currentProject.id + '/' + this.corpusList[i].titre).put(this.corpusList[i].file);
+        }
+      }
 
       alert('Modification Sauvegarder');
       this.router.navigate(['/']);
@@ -66,7 +68,8 @@ export class ProjectComponent implements OnInit, OnDestroy  {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result.corpusTitle != undefined && result.corpusFile != undefined) {
-        this.corpusList.push({ documentId: null, titre: result.corpusTitle, file: result.corpusFile, text: "" });
+        this.currentProject.corpus.push({ titre: result.corpusTitle });
+        this.corpusList.push({ titre: result.corpusTitle, file: result.corpusFile });
 
         console.log(this.corpusList);
       }
@@ -87,15 +90,14 @@ export class ProjectComponent implements OnInit, OnDestroy  {
 
         this.categoryExist = false;
 
-        //Vérifier si une catégorie possède le même nom oèu la même couleur
-        for (var i = 0; i < this.categorylist.length; i++) {
+        for (var i = 0; i < this.currentProject.categories.length; i++) {
 
-          if (result.categoryName == this.categorylist[i].nom) {
+          if (result.categoryName == this.currentProject.categories[i].nom) {
             this.categoryExist = true;
             alert("Une catégorie possède déja le même nom");
             return;
 
-          } else if (result.categoryColor == this.categorylist[i].couleur) {
+          } else if (result.categoryColor == this.currentProject.categories[i].couleur) {
             this.categoryExist = true;
             alert("Une catégorie utilise déjà cette couleur");
             return;
@@ -103,8 +105,7 @@ export class ProjectComponent implements OnInit, OnDestroy  {
         }
 
         if (this.categoryExist == false) {
-          this.categorylist.push({ nom: result.categoryName, couleur: result.categoryColor });
-
+          this.currentProject.categories.push({ id: null, nom: result.categoryName, couleur: result.categoryColor});
         }
       }
     });

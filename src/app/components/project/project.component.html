@@ -10,54 +10,57 @@
   </mat-form-field>-->
 
   <div style="padding-left: 10px; padding-right: 10px;">
-      <h3 style="display:inline-block">Description : </h3>
+    <h3 style="display:inline-block">Description : </h3>
 
-      <mat-form-field style="display:inline-block">
-        <textarea matInput [(ngModel)]="currentProject.description" name="description" #description="ngModel" required></textarea>
-        <mat-error *ngIf="description.value == '' || description.value == null">Description du projet obligatoire</mat-error>
-      </mat-form-field>
+    <mat-form-field style="display:inline-block">
+      <textarea matInput [(ngModel)]="currentProject.description" name="description" #description="ngModel" required></textarea>
+      <mat-error *ngIf="description.value == '' || description.value == null">Description du projet obligatoire</mat-error>
+    </mat-form-field>
   </div>
 
   <!--Section pour les textes (corpus)-->
   <div class="column">
     <mat-card>
+      <mat-toolbar style="display: flex">
+        <span>Corpus</span>
+        <span class="example-fill-remaining-space"></span>
+        <span><button class="btn btn btn-primary" (click)="addCorpusDialogBox()">+</button></span>
+      </mat-toolbar>
       <mat-list role="list">
-        <mat-toolbar><h3>Corpus</h3></mat-toolbar>
-        <!--<h3 matLine>Corpus</h3>-->
-        <mat-list-item *ngFor="let item of corpusList">{{item.titre}}</mat-list-item>
+        <mat-list-item *ngFor="let item of currentProject.corpus">{{item.titre}}</mat-list-item>
       </mat-list>
-      <mat-divider></mat-divider>
-      <br />
-      <button class="btn btn btn-primary" (click)="addCorpusDialogBox()">Ajouter un texte</button>
     </mat-card>
   </div>
 
-  <div class="column">
-    <!--Section catégories-->
-    <mat-card>
-      <mat-list role="list">
-        <mat-toolbar><h3>Catégories</h3></mat-toolbar>
-        <!--<h3 matLine>Catégories</h3>-->
-        <mat-list-item *ngFor="let item of categorylist" [ngStyle]="{'background-color': item.couleur}">{{item.nom}}</mat-list-item>
-      </mat-list>
-      <mat-divider></mat-divider>
-      <br />
-      <button class="btn btn btn-primary" (click)="addCategorieDialogBox()">Ajouter une catégorie</button>
-    </mat-card>
-  </div>
-
+  <!--Section catégories-->
   <div class="column">
     <mat-card>
-      <mat-toolbar><h3>Annotateurs</h3></mat-toolbar>
+      <mat-toolbar style="display: flex">
+        <span>Catégories</span>
+        <span class="example-fill-remaining-space"></span>
+        <span><button class="btn btn btn-primary" (click)="addCategorieDialogBox()">+</button></span>
+      </mat-toolbar>
+      <mat-list role="list">
+        <mat-list-item *ngFor="let item of currentProject.categories" [ngStyle]="{'background-color': item.couleur}">{{item.nom}}</mat-list-item>
+      </mat-list>
+
     </mat-card>
   </div>
 
-  <!--Button pour créer un projet-->
+  <!--Section Annotateurs-->
+    <div class="column">
+      <mat-card>
+        <mat-toolbar style="display: flex">
+          <span>Annotateurs</span>
+          <span class="example-fill-remaining-space"></span>
+          <span><button class="btn btn btn-primary">+</button></span>
+        </mat-toolbar>
+      </mat-card>
+    </div>
+  </main>
 
-
-</main>
-
-<div class="button-row" style="padding-left: 10px; padding-right: 10px;">
-  <button class="btn btn-primary" (click)="saveProjectModification()">Sauvegarder</button>
-  <button class="btn btn btn-primary" [routerLink]="['']">Cancel</button>
-</div>
+  <!--Button pour sauvegarder on annuler les modification-->
+  <div class="button-row" style="padding-left: 10px; padding-right: 10px;">
+    <button class="btn btn-primary" (click)="saveProjectModification()">Sauvegarder</button>
+    <button class="btn btn btn-primary" [routerLink]="['']">Annuler</button>
+  </div>

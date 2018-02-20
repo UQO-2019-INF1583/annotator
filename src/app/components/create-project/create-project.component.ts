@@ -14,7 +14,7 @@ import * as firebase from 'firebase';
 })
 
 export class CreateProjectComponent implements OnInit {
-  project = { 'id': '', 'titre': '', 'description': '', 'admin': '' };
+  project = { 'id': '', 'titre': '', 'description': '', 'admin': '', 'categories': [], 'corpus': [] };
 
   constructor(public router: Router, private afs: AngularFirestore) { }
 
@@ -29,7 +29,6 @@ export class CreateProjectComponent implements OnInit {
       this.project.id = this.afs.createId();
 
       this.afs.collection('Projects').doc(this.project.id).set(this.project);
-      //this.afs.collection('Projects/').ref.add({'titre': this.project.title, 'description': this.project.description, 'admin': this.project.admin });
 
       alert('Création d\' un nouveau projet réussi');
       this.router.navigate(['/']);

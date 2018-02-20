@@ -40,3 +40,13 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+\.vs/Annotator/v15/\.suo
+
+\.vs/config/applicationhost\.config
+
+\.vs/ProjectSettings\.json
+
+\.vs/slnx\.sqlite
+
+\.vs/VSWorkspaceState\.json

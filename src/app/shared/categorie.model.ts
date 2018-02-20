@@ -1,6 +1,6 @@
 
 export class Categorie {
-  //categorieId: string;
+  id: string;
   couleur: string;
   nom: string;
 

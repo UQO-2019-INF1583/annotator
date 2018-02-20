@@ -39,6 +39,7 @@ export class RegisterComponent {
         'firstName': this.userInfo.firstName,
         'lastName': this.userInfo.lastName });
       this.authService.logout();
+      this.router.navigate(['/login']);
     })
     .catch((error) => {
       // Handle Errors here.

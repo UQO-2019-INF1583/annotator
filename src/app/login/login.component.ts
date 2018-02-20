@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
 
   signInWithGithub() {
     this.authService.githubLogin()
-      .then(() => this.afterSignIn());
+      .then((data) => this.afterSignIn());
   }
 
   signInWithGoogle() {

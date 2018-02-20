@@ -49,7 +49,6 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestore} from 'angularfire2/firestore';
 import { environment } from '../environments/environment';
 
-import { AdminComponent } from './adm/admin.component';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared/security/auth.guard';
 import { AuthService } from './shared/security/auth.service';
@@ -69,7 +68,6 @@ import { CreateProjectComponent, ProjectComponent
 @NgModule({
   declarations: [
     AppComponent,
-//    AdminComponent,
     CreateProjectComponent,
     FooterComponent,
     HeaderComponent,

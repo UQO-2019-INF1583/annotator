@@ -11,26 +11,6 @@ export class User {
   firstname?: string;
   lastname?: string;
 
-  constructor(username: string, firstname: string,
-  lastname: string,
-  password: string,
-  email: string) {this.username = username}
+  constructor() {}
 
 }
-/*
-
-export interface User {
-  uuid: string;
-  email: string;
-  photoURL?: string;
-  displayName?: string;
-  favoriteColor?: string;
-  password: string;
-
-  constructor(username: string,
-  firstname: string,
-  lastname: string,
-  password: string,
-  email: string): void;
-}
-*/

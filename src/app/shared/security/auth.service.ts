@@ -26,7 +26,6 @@ import { User } from '../user.model';
 
 @Injectable()
 export class AuthService {
-  username: string ="";
   user: Observable<User>;
   authState: any = null;
   currentUser: string = null;
@@ -82,9 +81,20 @@ export class AuthService {
   private oAuthLogin(provider: firebase.auth.AuthProvider) {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((result) => {
-        this.username = result.user.displayName;
         this.email = result.user.email;
-        let userContent: Array<Object> = [this.username,this.email];
+        this.afs.collection('Users').ref.where('email', '==', this.email).get()
+          .then((snapshot) => {
+            if (snapshot.size == 0){
+              this.afs.collection('Users').ref.add({
+              'email': this.email,
+              'firstName': '?',
+              'lastName': '?' });
+            }
+            else {
+            }
+        });
+
+        //let userContent: Array<Object> = [this.username,this.email];
         localStorage.setItem('currentUser', JSON.stringify(result.user.displayName));
       })
       .catch((error) =>  this.handleError(error) );

@@ -18,9 +18,11 @@ export class CreateProjectComponent implements OnInit {
 
   constructor(public router: Router, private afs: AngularFirestore) { }
 
-  ngOnInit() {
+  ngOnInit() { }
 
-  }
+  create(){
+    if (this.project.title != null && this.project.title != '' &&
+        this.project.description != null && this.project.description != '') {
 
   create() {
     if (this.project.titre != null && this.project.titre != '' && this.project.description != null &&

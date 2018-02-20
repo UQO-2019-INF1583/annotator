@@ -3,15 +3,13 @@ import { Doc } from './document.model';
 import { Categorie } from './categorie.model';
 
 export class Project {
-  id: string;
-  titre: string; 
+  projectId: string;
+  title: string;
   description: string;
   admin: string;          // user id
   annotators: string[];   // array of user ids
-  corpus: Doc[]; //array of document
-  categories: Categorie[]; //array of categorie
- // corpus: string[];       // array of document names
-  // categories; see ./annotation.model.ts
+  corpus: string[];       // array of document names
+  categories: any[];      // see ./annotation.model.ts
 
   constructor() {
   }

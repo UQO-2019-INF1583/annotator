@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserManagerService } from './userManager.service';
 
 @Component({
   selector: 'data-table',
@@ -24,9 +25,40 @@ export class UserManagerComponent implements OnInit {
       username: "njkbnj"}
     ];
 */
+  users: any;
+  all:any;
 
-  ngOnInit() {  }
+  ngOnInit() {
+    this.userService.getAll().subscribe((users) => {
+      //this.showSpinner = false;
+      this.all = users;
+      this.users = this.all;
+    })
+    console.log(this.users)
+    //listAllUsers();
+  }
 
+  constructor(private userService: UserManagerService) {
+
+  }
+ listAllUsers(nextPageToken) {
+  // List batch of users, 1000 at a time.
+/*
+  admin.auth().listUsers(1000, nextPageToken)
+    .then(function(listUsersResult) {
+      listUsersResult.users.forEach(function(userRecord) {
+        console.log("user", userRecord.toJSON());
+      });
+      if (listUsersResult.pageToken) {
+        // List next batch of users.
+        listAllUsers(listUsersResult.pageToken)
+      }
+    })
+    .catch(function(error) {
+      console.log("Error listing users:", error);
+    });
+*/
+  }
 }
 
 export interface Element {

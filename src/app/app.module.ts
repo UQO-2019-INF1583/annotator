@@ -51,13 +51,14 @@ import { AdminComponent } from './adm/admin.component';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared/security/auth.guard';
 import { AuthService } from './shared/security/auth.service';
-import { UserManagerService } from './adm/userManager.service';
+import { ProjectManagerService, UserManagerService } from './adm';
 import { routing } from './app.routing';
 import { FooterComponent, HeaderComponent } from './shared';
 import { HomeComponent } from './home/home.component';
 import { HomeWelcomeComponent } from './home-welcome';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
+import { ProjectManagerComponent } from './adm';
 import { PageNotFoundComponent } from './not-found/not-found.component';
 import { CreateProjectComponent, ProjectComponent, AddCategorieComponent, AddCorpusComponent 
 } from './components/index';
@@ -78,6 +79,7 @@ import { UserManagerComponent, ProjectManagerComponent } from './adm';
     LoginComponent,
     PageNotFoundComponent,
     ProjectComponent,
+    ProjectManagerComponent,
     RegisterComponent,
     AddCategorieComponent,
     AddCorpusComponent, 
@@ -102,7 +104,7 @@ import { UserManagerComponent, ProjectManagerComponent } from './adm';
     CdkTableModule,
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
   ],
-  providers: [AngularFireDatabaseModule, AuthGuard, AuthService, UserManagerService ],
+  providers: [AngularFireDatabaseModule, AuthGuard, AuthService, ProjectManagerService, UserManagerService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

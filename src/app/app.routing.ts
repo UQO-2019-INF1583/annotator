@@ -6,7 +6,6 @@ import { HomeWelcomeComponent } from './home-welcome/home-welcome.component';
 import { LoginComponent } from './login';
 import { PageNotFoundComponent } from './not-found/not-found.component';
 import { ProjectComponent } from './components/index';
-import { ProjectManagerComponent } from './adm';
 import { RegisterComponent } from './register';
 import { CreateProjectComponent, AddCategorieComponent, AddCorpusComponent  } from './components/index';
 import { UserManagerComponent, ProjectManagerComponent } from './adm';

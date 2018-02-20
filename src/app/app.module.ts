@@ -58,7 +58,6 @@ import { HomeComponent } from './home/home.component';
 import { HomeWelcomeComponent } from './home-welcome';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
-import { ProjectManagerComponent } from './adm';
 import { PageNotFoundComponent } from './not-found/not-found.component';
 import { CreateProjectComponent, ProjectComponent, AddCategorieComponent, AddCorpusComponent 
 } from './components/index';

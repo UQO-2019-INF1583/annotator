@@ -7,7 +7,7 @@ import { LoginComponent } from './login';
 import { PageNotFoundComponent } from './not-found/not-found.component';
 import { ProjectComponent } from './components/index';
 import { RegisterComponent } from './register';
-import { CreateProjectComponent, AddCategorieComponent, AddCorpusComponent  } from './components/index';
+import { CreateProjectComponent, AddCategorieComponent, AddCorpusComponent, AddAnnotateurComponent } from './components/index';
 import { UserManagerComponent, ProjectManagerComponent } from './adm';
 
 
@@ -19,6 +19,7 @@ const appRoutes: Routes = [
   { path: 'project', component: ProjectComponent },
   { path: 'addcategorie', component: AddCategorieComponent },
   { path: 'addCorpus', component: AddCorpusComponent },
+  { path: 'addannotateur', component: AddAnnotateurComponent },
   { path: 'createProject', component: CreateProjectComponent, canActivate: [AuthGuard]},
   { path: 'register', component: RegisterComponent },
   { path: 'userManager', component: UserManagerComponent, canActivate: [AuthGuard] },

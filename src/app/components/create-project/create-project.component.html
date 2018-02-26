@@ -3,7 +3,7 @@
   <form name="form" (ngSubmit)="f.form.valid && create()" #f="ngForm" novalidate>
     <div class="example-container">
       <mat-form-field class="example-full-width">
-        <input matInput type="text" class="form-control" name="title" [(ngModel)]="project.titre" #title="ngModel" required placeholder="Project title" />
+        <input matInput type="text" class="form-control" name="title" [(ngModel)]="project.title" #title="ngModel" required placeholder="Project title" />
         <mat-error *ngIf="title.value == ''">Project title is required</mat-error>
       </mat-form-field>
       <mat-form-field>

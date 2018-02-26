@@ -6,9 +6,9 @@
 	<div class="example-container mat-elevation-z8">
     <mat-table #table [dataSource]="datasource">
 
-      <ng-container matColumnDef="titre">
-        <mat-header-cell *matHeaderCellDef> Titre </mat-header-cell>
-        <mat-cell *matCellDef="let project"> {{project.titre}} </mat-cell>
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+        <mat-cell *matCellDef="let project"> {{project.title}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="description">
@@ -16,11 +16,11 @@
         <mat-cell *matCellDef="let project"> {{project.description}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="modifier">
-        <mat-header-cell *matHeaderCellDef> Modifier / Supprimer </mat-header-cell>
+      <ng-container matColumnDef="modify">
+        <mat-header-cell *matHeaderCellDef> Modify / Delete </mat-header-cell>
         <mat-cell *matCellDef="let project">
-          <button class="btn btn-primary" (click)="modifyProject(project)">Modifier</button>
-          <button class="btn btn-primary" (click)="deleteProject(project)">Supprimer</button>
+          <button class="btn btn-primary" (click)="modifyProject(project)">Modify</button>
+          <button class="btn btn-primary" (click)="deleteProject(project)">delete</button>
         </mat-cell>
       </ng-container>
 

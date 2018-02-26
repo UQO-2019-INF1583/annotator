@@ -1,14 +1,8 @@
-import { Component, OnInit, Injectable } from '@angular/core';
-import { Project } from '../../shared/project.model';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument
-} from 'angularfire2/firestore';
-import * as firebase from 'firebase';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
+import { ProjectManagerService } from './projectManager.service';
 
 @Component({
   selector: 'app-adm-projectManager',
@@ -18,15 +12,15 @@ import { Observable } from 'rxjs/Observable';
 
 
 export class ProjectManagerComponent implements OnInit {
-  displayedColumns = ['titre', 'description', 'modifier'];
+  displayedColumns = ['title', 'description', 'modify'];
   datasource: ProjectDataSource | null;
 
-  constructor(public router: Router, private afs: AngularFirestore) {
+  constructor(public router: Router, private pms: ProjectManagerService) {
   }
 
   ngOnInit() {
     //initialize la datasource pour la mat-table
-    this.datasource = new ProjectDataSource(this.afs);
+    this.datasource = new ProjectDataSource(this.pms);
 
   }
 
@@ -35,26 +29,23 @@ export class ProjectManagerComponent implements OnInit {
   }
 
   deleteProject(project: any) {
-    //ajouter un pop up qui demande si l'utilisateur veut vraiment supprimer le projet
-    this.afs.collection('Projects').doc(project.id).delete();
+      //ajouter un pop up qui demande si l'utilisateur veut vraiment supprimer le projet
+    //console.log(project);
+     this.pms.deleteProject(project.id);
   }
 
 }
 
 export class ProjectDataSource extends DataSource<any> {
 
-  constructor(private afs: AngularFirestore) {
+  constructor(private pms: ProjectManagerService) {
     super();
   }
-  userId: string;
 
   connect(): Observable<any[]> {
-    //trouve le id the l'utilisateur connecter
-    this.userId = firebase.auth().currentUser.uid;
-
-    //trouve les projets où l'utilisateur connecter est l'administrateur
-    return this.afs.collection("Projects", ref => ref.where('admin', '==', this.userId)).valueChanges();
+    return this.pms.getCurrentUserProject();
   }
+
   disconnect(): void {
 
   }

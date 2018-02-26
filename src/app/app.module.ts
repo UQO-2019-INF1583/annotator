@@ -59,8 +59,9 @@ import { HomeWelcomeComponent } from './home-welcome';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { PageNotFoundComponent } from './not-found/not-found.component';
-import { CreateProjectComponent, ProjectComponent, AddCategorieComponent, AddCorpusComponent 
-} from './components/index';
+import {
+  CreateProjectComponent, ProjectComponent, AddCategorieComponent, AddCorpusComponent, AddAnnotateurComponent, ProjectService
+} from './components';
 import { FileDropModule } from 'ngx-file-drop'
 import { UserManagerComponent, ProjectManagerComponent } from './adm';
 
@@ -84,6 +85,7 @@ import { UserManagerComponent, ProjectManagerComponent } from './adm';
     AddCorpusComponent, 
     UserManagerComponent,
     ProjectManagerComponent,
+    AddAnnotateurComponent,
   ],
   imports: [
     BrowserModule,
@@ -103,7 +105,7 @@ import { UserManagerComponent, ProjectManagerComponent } from './adm';
     CdkTableModule,
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
   ],
-  providers: [AngularFireDatabaseModule, AuthGuard, AuthService, ProjectManagerService, UserManagerService ],
+  providers: [AngularFireDatabaseModule, AuthGuard, AuthService, ProjectManagerService, UserManagerService, ProjectService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

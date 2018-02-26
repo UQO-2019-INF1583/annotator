@@ -1,8 +1,7 @@
 
-export class Categorie {
+export interface ICategorie {
   id: string;
-  couleur: string;
-  nom: string;
+  color: string;
+  name: string;
 
-  constructor() { }
 }

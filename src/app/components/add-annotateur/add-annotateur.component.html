@@ -1,0 +1,29 @@
+<div>
+  <h3>Choisir un Utilisateur</h3>
+  <div class="example-container mat-elevation-z8">
+    <mat-table #table [dataSource]="datasource">
+
+      <ng-container matColumnDef="firstName">
+        <mat-header-cell *matHeaderCellDef> Prénom </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.firstName}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="lastName">
+        <mat-header-cell *matHeaderCellDef> Nom de famille </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.lastName}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="add">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          <button class="btn btn-primary" [mat-dialog-close]="user">Add</button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+  <br />
+  <button class="btn btn-primary" [mat-dialog-close]>Close</button>
+</div>

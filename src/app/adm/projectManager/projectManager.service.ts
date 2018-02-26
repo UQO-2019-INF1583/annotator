@@ -1,20 +1,77 @@
 import { Injectable } from '@angular/core';
-import {AngularFirestore,
-        //AngularFirestoreCollection,
-        AngularFirestoreDocument
-       } from 'angularfire2/firestore';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument
+} from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
-
-import { User } from '../../shared/user.model';
-import { Project } from '../../shared/project.model';
-import { Doc } from '../../shared/document.model';
+import 'rxjs/Rx';
+import 'rxjs/add/operator/mergeMap';
+import * as firebase from 'firebase';
+import { IProject } from '../../shared/project.model'
 
 // secret: structure de données utilisée pour représenter l'ensemble des projets
 // et en particulier, association entre projetId et l'emplacement du fichier correspondant
 
 @Injectable()
 export class ProjectManagerService {
-  currentProjet: any;
+  userId: string;
+  annotateurCollection: AngularFirestoreCollection<any>;
+  userProjects: any;
+  projects: IProject[];
+
+  constructor(private afs: AngularFirestore) {
+    this.userId = firebase.auth().currentUser.uid;
+  }
+
+  //trouve les projets où l'utilisateur connecter est annotateur
+  getCurrentUserProject(): Observable<any[]> {
+
+    this.annotateurCollection = this.afs.collection("Annotateurs", ref => ref.where('id', '==', this.userId));
+
+    this.userProjects = this.annotateurCollection.snapshotChanges().map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data();
+
+        const projectId = data.projectId;
+
+        return this.afs.collection('Projects').doc(projectId).snapshotChanges().take(1).map(actions => {
+          return actions.payload.data();
+        }).map(signup => {
+          return { id: signup.id, title: signup.title, description: signup.description }
+        });
+
+      });
+    }).flatMap(projects => Observable.combineLatest(projects));
+
+    return this.userProjects;
+  }
+
+  //supprime le projet sélectionné
+  deleteProject(id: string) {
+
+    this.afs.collection('Annotateurs').ref.where('projectId', '==', id).get().then(querySnapshot => {
+      var batch = this.afs.firestore.batch();
+
+      querySnapshot.forEach(doc => {
+
+        batch.delete(doc.ref);
+
+      });
+
+      return batch.commit();
+
+    }).then(() => {
+
+      console.log("annotateurs deleted");
+
+    });
+
+    this.afs.collection('Projects').doc(id).delete();
+  }
+
+
+  /*currentProjet: any;
 
   content:any;
 
@@ -88,13 +145,13 @@ export class ProjectManagerService {
             .valueChanges();
   }
 
-/*
+
   // Produit une liste des noms de tous les documents d'un projet.
   // Retourne false si projectId n'existe pas.
   getCorpus(projetId: string): string[] | boolean {
     return false;
   }
-*/
+
   getCorpus(){
     return this.afs
               .collection('Corpus', ref => ref
@@ -150,5 +207,5 @@ export class ProjectManagerService {
       this.afs.doc(`${this.content.database}/${this.content.id}`).update(this.content);
       console.log(this.content.id);
       }
-  }
+  }*/
 }

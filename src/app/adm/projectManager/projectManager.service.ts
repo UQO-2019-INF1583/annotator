@@ -24,10 +24,10 @@ export class ProjectManagerService {
     this.userId = firebase.auth().currentUser.uid;
   }
 
-  //trouve les projets où l'utilisateur connecter est annotateur
+  // trouve les projets où l'utilisateur connecter est annotateur
   getCurrentUserProject(): Observable<any[]> {
 
-    this.annotateurCollection = this.afs.collection("Annotateurs", ref => ref.where('id', '==', this.userId));
+    this.annotateurCollection = this.afs.collection('Annotateurs', ref => ref.where('id', '==', this.userId));
 
     this.userProjects = this.annotateurCollection.snapshotChanges().map(changes => {
       return changes.map(a => {
@@ -47,11 +47,11 @@ export class ProjectManagerService {
     return this.userProjects;
   }
 
-  //supprime le projet sélectionné
+  // supprime le projet sélectionné
   deleteProject(id: string) {
 
     this.afs.collection('Annotateurs').ref.where('projectId', '==', id).get().then(querySnapshot => {
-      var batch = this.afs.firestore.batch();
+      const batch = this.afs.firestore.batch();
 
       querySnapshot.forEach(doc => {
 
@@ -63,7 +63,7 @@ export class ProjectManagerService {
 
     }).then(() => {
 
-      console.log("annotateurs deleted");
+      console.log('annotateurs deleted');
 
     });
 

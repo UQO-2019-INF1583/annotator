@@ -27,7 +27,7 @@
         <span><button class="btn btn btn-primary" (click)="addCorpusDialogBox()">+</button></span>
       </mat-toolbar>
       <mat-list role="list">
-        <mat-list-item *ngFor="let item of currentProject?.corpus">{{item?.titre}}</mat-list-item>
+        <mat-list-item *ngFor="let item of corpus | async">{{item?.title}}</mat-list-item>
       </mat-list>
     </mat-card>
   </div>
@@ -41,7 +41,7 @@
         <span><button class="btn btn btn-primary" (click)="addCategorieDialogBox()">+</button></span>
       </mat-toolbar>
       <mat-list role="list">
-        <mat-list-item *ngFor="let item of Categories | async" [ngStyle]="{'background-color': item?.color}">{{item?.name}}</mat-list-item>
+        <mat-list-item *ngFor="let item of categories | async" [ngStyle]="{'background-color': item?.color}">{{item?.name}}</mat-list-item>
       </mat-list>
 
     </mat-card>

@@ -21,12 +21,11 @@ export class CreateProjectComponent implements OnInit {
 
   ngOnInit() { }
 
-  create(){
+  create() {
 
-    if (this.project.title != null && this.project.title != '' && this.project.description != null &&
-      this.project.description != '') {
+    if (this.project.title != null && this.project.title !== '' && this.project.description != null &&
+      this.project.description !== '') {
 
-      //this.project.admin = firebase.auth().currentUser.uid;
       this.project.id = this.afs.createId();
       this.currentUserId = firebase.auth().currentUser.uid;
 

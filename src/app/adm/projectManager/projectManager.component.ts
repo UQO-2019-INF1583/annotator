@@ -19,7 +19,7 @@ export class ProjectManagerComponent implements OnInit {
   }
 
   ngOnInit() {
-    //initialize la datasource pour la mat-table
+    // initialize la datasource pour la mat-table
     this.datasource = new ProjectDataSource(this.pms);
 
   }
@@ -29,8 +29,7 @@ export class ProjectManagerComponent implements OnInit {
   }
 
   deleteProject(project: any) {
-      //ajouter un pop up qui demande si l'utilisateur veut vraiment supprimer le projet
-    //console.log(project);
+      // ajouter un pop up qui demande si l'utilisateur veut vraiment supprimer le projet
      this.pms.deleteProject(project.id);
   }
 

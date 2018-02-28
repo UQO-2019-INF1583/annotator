@@ -18,9 +18,6 @@ export class ProjectService {
 
   getProject(id: string): any {
 
-    this.afs.collection("Projects/").doc(id).ref.get().then((doc) => {
-      return doc.data();
-    });
   }
 
 }

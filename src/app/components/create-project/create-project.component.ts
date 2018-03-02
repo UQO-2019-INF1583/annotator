@@ -31,7 +31,10 @@ export class CreateProjectComponent implements OnInit {
 
       this.afs.collection('Projects').doc(this.project.id).set(this.project);
 
-      this.afs.collection('Annotateurs').add({ 'id': this.currentUserId, 'projectId': this.project.id });
+      const annotateurId = this.afs.createId();
+
+      this.afs.collection('Annotateurs').doc(annotateurId)
+      .set({'id': annotateurId, 'userId': this.currentUserId, 'projectId': this.project.id });
 
       alert('Création d\' un nouveau projet réussi');
       this.router.navigate(['/']);

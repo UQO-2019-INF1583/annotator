@@ -27,7 +27,7 @@ export class ProjectManagerService {
   // trouve les projets où l'utilisateur connecter est annotateur
   getCurrentUserProject(): Observable<any[]> {
 
-    this.annotateurCollection = this.afs.collection('Annotateurs', ref => ref.where('id', '==', this.userId));
+    this.annotateurCollection = this.afs.collection('Annotateurs', ref => ref.where('userId', '==', this.userId));
 
     this.userProjects = this.annotateurCollection.snapshotChanges().map(changes => {
       return changes.map(a => {
@@ -49,7 +49,7 @@ export class ProjectManagerService {
 
   // supprime le projet sélectionné
   deleteProject(id: string) {
-
+    // il manque les deletes catégories et corpus pour que le projet soit entièrement supprimé de la base de données.
     this.afs.collection('Annotateurs').ref.where('projectId', '==', id).get().then(querySnapshot => {
       const batch = this.afs.firestore.batch();
 

@@ -63,7 +63,43 @@ export class ProjectManagerService {
 
     }).then(() => {
 
-      console.log('annotateurs deleted');
+      console.log('annotateurs supprimé');
+
+    });
+
+    // Supprime tout les annotateurs
+    this.afs.collection('Categories').ref.where('projectId', '==', id).get().then(querySnapshot => {
+      const batch = this.afs.firestore.batch();
+
+      querySnapshot.forEach(doc => {
+
+        batch.delete(doc.ref);
+
+      });
+
+      return batch.commit();
+
+    }).then(() => {
+
+      console.log('Catégories supprimé');
+
+    });
+
+    this.afs.collection('Corpus').ref.where('projectId', '==', id).get().then(querySnapshot => {
+      const batch = this.afs.firestore.batch();
+
+      querySnapshot.forEach(doc => {
+
+        batch.delete(doc.ref);
+        firebase.storage().ref().child('Projets/' + doc.data().id + '/' + doc.data().title).delete();
+
+      });
+
+      return batch.commit();
+
+    }).then(() => {
+
+      console.log('Corpus supprimé');
 
     });
 

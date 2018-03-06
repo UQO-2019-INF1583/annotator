@@ -31,6 +31,8 @@ export class ProjectManagerComponent implements OnInit {
   deleteProject(project: any) {
       // ajouter un pop up qui demande si l'utilisateur veut vraiment supprimer le projet
      this.pms.deleteProject(project.id);
+     alert('Project Successfully deleted');
+     this.router.navigate(['/']);
   }
 
 }

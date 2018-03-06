@@ -11,7 +11,6 @@ import { Project } from '../../shared/project.class';
 
 @Injectable()
 export class ProjectService {
-  temp: any;
 
   constructor(private afs: AngularFirestore) {
 

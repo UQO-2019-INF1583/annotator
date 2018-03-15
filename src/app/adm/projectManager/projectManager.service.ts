@@ -85,6 +85,7 @@ export class ProjectManagerService {
 
     });
 
+    // supprime tous les corpus avec leur texte
     this.afs.collection('Corpus').ref.where('projectId', '==', id).get().then(querySnapshot => {
       const batch = this.afs.firestore.batch();
 

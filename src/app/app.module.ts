@@ -64,6 +64,7 @@ import {
 } from './components';
 import { FileDropModule } from 'ngx-file-drop'
 import { UserManagerComponent, ProjectManagerComponent } from './adm';
+import { AnnotationComponent } from './annotation/index';
 
 
 
@@ -82,10 +83,11 @@ import { UserManagerComponent, ProjectManagerComponent } from './adm';
     ProjectManagerComponent,
     RegisterComponent,
     AddCategorieComponent,
-    AddCorpusComponent, 
+    AddCorpusComponent,
     UserManagerComponent,
     ProjectManagerComponent,
     AddAnnotateurComponent,
+    AnnotationComponent,
   ],
   imports: [
     BrowserModule,
@@ -100,8 +102,8 @@ import { UserManagerComponent, ProjectManagerComponent } from './adm';
     MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule, MatProgressBarModule, MatToolbarModule,
     MatExpansionModule, MatStepperModule, MatMenuModule, MatTableModule, MatSelectModule, MatChipsModule, MatIconModule,
     MatDialogModule, FileDropModule,
-    //MatPaginator, MatSort, MatTableDataSource,
-    MatPaginatorModule, MatSortModule, //MatTableDataSource,
+    // MatPaginator, MatSort, MatTableDataSource,
+    MatPaginatorModule, MatSortModule, // MatTableDataSource,
     CdkTableModule,
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
   ],

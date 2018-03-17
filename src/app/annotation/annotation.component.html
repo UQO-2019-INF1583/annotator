@@ -1,22 +1,33 @@
 <main flex>
-    <!--Titre du texte-->
-    <div>
+    <!--Section du texts-->
+    <div style="padding-left: 10px; padding-right: 10px;">
         <h3>{{corpus?.title}}</h3>
+        <p>Surligner des mots avec la souris et choisisser une catégorie</p>
+        <mat-card>
+            <div id="myText">
+            </div>
+        </mat-card>
+        <br/>
     </div>
 
-    <!--Section du texts-->
-    <div>
-        <!--<textarea name="text">{{corpus?.text}}</textarea>-->
-        {{corpus?.text}}
-    </div>
-<br/>
-    <!--Section des boutons des catégories-->
-    <div>
-        <button (click)="Categoriser()">Catégorie test</button>
-    </div>
-<br/>
+    <mat-card>
+        <!--Section des boutons des catégories-->
+        <mat-toolbar>
+            <span>Catégories</span>
+        </mat-toolbar>
+        <div style="padding-left: 10px; padding-right: 10px;">
+            <button class="btn btn-primary" (click)="Categoriser('black')">Delete Annotation</button>
+            <div *ngFor="let item of categories | async" style="float: left;">
+                <button class="btn btn-primary" (click)="Categoriser(item?.color)" [ngStyle]="{'background-color': item?.color}">{{item?.name}}</button>
+                <br/>
+                <br/>
+            </div>
+            <br/>
+        </div>
+    </mat-card>
+    <br/>
     <!--Section des boutons save et cancel-->
-    <div>
+    <div style="padding-left: 10px; padding-right: 10px;">
         <button class="btn btn-primary" (click)="saveTextModification()">Save</button>
         <button class="btn btn btn-primary" [routerLink]="['']">Cancel</button>
     </div>

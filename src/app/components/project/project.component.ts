@@ -60,15 +60,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Événement lorsqu'un texte est sélectionné
   corpusSelected(corpus: any) {
-    console.log(corpus);
     this.router.navigate(['/annotation', corpus]);
   }
 
   // Supprime un texte
   deleteCorpus(corpus: any) {
-    console.log(corpus);
-    // pas implémenté pour le moment
-    // this.ps.deleteCorpus(corpus.id);
+    this.ps.deleteCorpus(corpus.id, corpus.title);
   }
 
   // Supprime une catégorie

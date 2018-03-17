@@ -3,7 +3,8 @@
   <div style="padding-left: 10px; padding-right: 10px;">
     <h3 style="display:inline-block">Project: </h3>
     <mat-form-field>
-      <input matInput [ngModel]="currentProject?.title" (ngModelChange)="currentProject.title = $event" name="titre" #titre="ngModel" required />
+      <input matInput [ngModel]="currentProject?.title" (ngModelChange)="currentProject.title = $event" name="titre" #titre="ngModel"
+        required />
       <mat-error *ngIf="titre.value == '' || titre.value == null">Project title is required</mat-error>
     </mat-form-field>
   </div>
@@ -13,7 +14,8 @@
     <h3 style="display:inline-block">Description: </h3>
 
     <mat-form-field style="display:inline-block">
-      <textarea matInput [ngModel]="currentProject?.description" (ngModelChange)="currentProject.description = $event" name="description" #description="ngModel" required></textarea>
+      <textarea matInput [ngModel]="currentProject?.description" (ngModelChange)="currentProject.description = $event" name="description"
+        #description="ngModel" required></textarea>
       <mat-error *ngIf="description.value == '' || description.value == null">Project description is required</mat-error>
     </mat-form-field>
   </div>
@@ -24,10 +26,18 @@
       <mat-toolbar style="display: flex">
         <span>Corpus</span>
         <span class="example-fill-remaining-space"></span>
-        <span><button class="btn btn btn-primary" (click)="addCorpusDialogBox()">+</button></span>
+        <span>
+          <button class="btn btn btn-primary" (click)="addCorpusDialogBox()">+</button>
+        </span>
       </mat-toolbar>
       <mat-list *ngFor="let item of corpus | async">
-        <mat-list-item class="matListItemHover" (click)="corpusSelected(item)">{{item?.title}}</mat-list-item>
+        <mat-list-item>
+          <span class="matListItemHover" (click)="corpusSelected(item)">{{item?.title}}</span>
+          <span class="example-fill-remaining-space"></span>
+          <span>
+            <button class="btn btn-primary" (click)="deleteCorpus(item)">Delete</button>
+          </span>
+        </mat-list-item>
       </mat-list>
     </mat-card>
   </div>
@@ -38,13 +48,17 @@
       <mat-toolbar style="display: flex">
         <span>Catégories</span>
         <span class="example-fill-remaining-space"></span>
-        <span><button class="btn btn btn-primary" (click)="addCategorieDialogBox()">+</button></span>
+        <span>
+          <button class="btn btn btn-primary" (click)="addCategorieDialogBox()">+</button>
+        </span>
       </mat-toolbar>
       <mat-list>
         <mat-list-item *ngFor="let item of categories | async" [ngStyle]="{'background-color': item?.color}">
           <span>{{item?.name}}</span>
           <span class="example-fill-remaining-space"></span>
-          <span><button class="btn btn-primary" (click)="deleteCategories(item)">Delete</button></span>
+          <span>
+            <button class="btn btn-primary" (click)="deleteCategories(item)">Delete</button>
+          </span>
         </mat-list-item>
       </mat-list>
     </mat-card>
@@ -56,21 +70,25 @@
       <mat-toolbar style="display: flex">
         <span>Annotateurs</span>
         <span class="example-fill-remaining-space"></span>
-        <span><button class="btn btn btn-primary" (click)="addAnnotateurDialogBox()">+</button></span>
+        <span>
+          <button class="btn btn btn-primary" (click)="addAnnotateurDialogBox()">+</button>
+        </span>
       </mat-toolbar>
       <mat-list role="list">
         <mat-list-item *ngFor="let item of annotateurs | async">
-            <span>{{item?.firstName}}</span>
-            <span class="example-fill-remaining-space"></span>
-            <span><button class="btn btn-primary" (click)="deleteAnnotateur(item)">Delete</button></span>
+          <span>{{item?.firstName}}</span>
+          <span class="example-fill-remaining-space"></span>
+          <span>
+            <button class="btn btn-primary" (click)="deleteAnnotateur(item)">Delete</button>
+          </span>
         </mat-list-item>
       </mat-list>
     </mat-card>
   </div>
 </main>
 
-  <!--Button pour sauvegarder on annuler les modification-->
-  <div class="button-row" style="padding-left: 10px; padding-right: 10px;">
-    <button class="btn btn-primary" (click)="saveProjectModification()">Save</button>
-    <button class="btn btn btn-primary" [routerLink]="['']">Cancel</button>
-  </div>
+<!--Button pour sauvegarder on annuler les modification-->
+<div class="button-row" style="padding-left: 10px; padding-right: 10px;">
+  <button class="btn btn-primary" (click)="saveProjectModification()">Save</button>
+  <button class="btn btn btn-primary" [routerLink]="['']">Cancel</button>
+</div>

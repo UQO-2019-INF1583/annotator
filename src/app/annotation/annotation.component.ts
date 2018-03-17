@@ -5,6 +5,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Doc } from '../shared/document.model'
 import { AnnotationService } from './annotation.service';
+import { ProjectService } from '../components/project/project.service'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -23,10 +24,10 @@ import * as firebase from 'firebase';
 export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
   corpus: Doc;
-
+  categories: Observable<any[]>;
 
   constructor(private activeRouter: ActivatedRoute, private router: Router,
-    /*private as: AnnotationService,*/ private afs: AngularFirestore) {
+    /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore) {
 
   }
 
@@ -37,69 +38,92 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
     });
 
+    // Charge les catégories du projet
+    this.categories = this.ps.getCategories(this.corpus.projectId);
+
+    // Télécharge le fichier choisie
     firebase.storage().ref().child('Projets/' + this.corpus.documentId + '/' + this.corpus.title).getDownloadURL().
-    then(url => {
+      then(url => {
 
         const xhr = new XMLHttpRequest();
         xhr.responseType = 'blob';
         xhr.onload = event => {
-          console.log('Loaded');
           this.corpus.file = xhr.response;
 
           const reader: FileReader = new FileReader();
           reader.onloadend = e => {
-            console.log('Read');
-            this.corpus.text = reader.result;
+            // this.corpus.text = reader.result;
+            const texthtml = document.getElementById('myText');
+            texthtml.innerHTML = reader.result;
           };
           reader.readAsText(this.corpus.file);
-         // this.corpus.file = new File([xhr.response], this.corpus.title);
+          // this.corpus.file = new File([xhr.response], this.corpus.title);
         };
         xhr.open('GET', url);
         xhr.send();
-    }).catch(error => {
-      console.log(error);
-    });
+      }).catch(error => {
+        console.log(error);
+      });
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe;
   }
 
-  Categoriser() {
-    /*let text = '';
-    text = window.getSelection().toString();
-    console.log('test' + text)*/
+  Categoriser(couleur: string) {
+    // trouver comment vérifier si le mot surligner est dans labonne balise html
 
     let sel, range, ceci;
     if (window.getSelection) {
       sel = window.getSelection();
-      if (sel.getRangeAt && sel.rangeCount) {
-          range = window.getSelection().getRangeAt(0);
 
-          // const html = '<span style="font-weight:bold;">' + range + '</span>'
-          const html = '<span style="color: red;">' + range + '</span>'
+      if (sel.getRangeAt && sel.rangeCount) {
+        if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id === 'myText') {
+          range = window.getSelection().getRangeAt(0);
+          const html = '<span style="color:' + couleur + '; font-weight: bold;">' + range + '</span>'
           range.deleteContents();
 
           const el = document.createElement('div');
           el.innerHTML = html;
           const frag = document.createDocumentFragment();
           let lastNode;
-          while ( (ceci = el.firstChild) ) {
-              lastNode = frag.appendChild(ceci);
+          while ((ceci = el.firstChild)) {
+            lastNode = frag.appendChild(ceci);
           }
           range.insertNode(frag);
+
+        } else if (sel.getRangeAt(0).commonAncestorContainer.parentNode.parentNode.id === 'myText') {
+
+          range = window.getSelection().getRangeAt(0);
+
+          const html = '<span style="color:' + couleur + '; font-weight: bold;">' + range.cloneContents().textContent + '</span>'
+          range.deleteContents();
+          // supprime le span qui était mis par l'ancienne annotation
+          range.commonAncestorContainer.parentNode.parentNode
+          .removeChild(range.commonAncestorContainer.parentNode);
+
+          const el = document.createElement('div');
+          el.innerHTML = html;
+          const frag = document.createDocumentFragment();
+          let lastNode;
+          while ((ceci = el.firstChild)) {
+            lastNode = frag.appendChild(ceci);
+          }
+          range.insertNode(frag);
+        }
       }
-    } /*else if (document.selection && document.selection.createRange) {
-      range = document.selection.createRange();
-      range.collapse(false);
-      range.pasteHTML(html);
-  }*/
+    }
 
 
   }
 
   saveTextModification() {
+    const data = document.getElementById('myText').innerHTML;
+    const thefile = new File([data], this.corpus.title)
 
+    firebase.storage().ref().child('Projets/' + this.corpus.documentId + '/' + this.corpus.title).put(thefile);
+
+    alert('Annotation saved');
   }
 
 }

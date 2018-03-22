@@ -71,50 +71,62 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   Categoriser(couleur: string) {
-    // trouver comment vérifier si le mot surligner est dans labonne balise html
 
     let sel, range, ceci;
     if (window.getSelection) {
       sel = window.getSelection();
 
       if (sel.getRangeAt && sel.rangeCount) {
-        if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id === 'myText') {
-          range = window.getSelection().getRangeAt(0);
-          const html = '<span style="color:' + couleur + '; font-weight: bold;">' + range + '</span>'
-          range.deleteContents();
+        if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id === 'myText' ||
+          sel.getRangeAt(0).commonAncestorContainer.parentNode.parentNode.id === 'myText'
+        || sel.getRangeAt(0).commonAncestorContainer.id === 'myText') {
 
-          const el = document.createElement('div');
-          el.innerHTML = html;
-          const frag = document.createDocumentFragment();
-          let lastNode;
-          while ((ceci = el.firstChild)) {
-            lastNode = frag.appendChild(ceci);
+          console.log('mytext');
+          if (couleur !== 'Delete') {
+            range = sel.getRangeAt(0);
+            console.log('1. new insert not removing old span...');
+
+            const newSpan = document.createElement('span');
+            newSpan.style.fontWeight = 'bold';
+            newSpan.style.color = couleur;
+            newSpan.innerText = range.cloneContents().textContent;
+
+            range.deleteContents();
+
+            if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id !== 'myText' &&
+            sel.getRangeAt(0).commonAncestorContainer.id !== 'myText') {
+              range.commonAncestorContainer.parentNode.parentNode
+                .removeChild(range.commonAncestorContainer.parentNode);
+            }
+
+            range.insertNode(newSpan);
+
+          } else if (couleur === 'Delete') {
+            range = window.getSelection().getRangeAt(0);
+            console.log('2. delete');
+
+            const html = range.cloneContents().textContent
+            range.deleteContents();
+
+            if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id !== 'myText' &&
+            sel.getRangeAt(0).commonAncestorContainer.id !== 'myText') {
+              range.commonAncestorContainer.parentNode.parentNode
+                .removeChild(range.commonAncestorContainer.parentNode);
+            }
+
+            const el = document.createElement('div');
+            el.innerHTML = html;
+            const frag = document.createDocumentFragment();
+            let lastNode;
+            while ((ceci = el.firstChild)) {
+              lastNode = frag.appendChild(ceci);
+            }
+            range.insertNode(frag);
+
           }
-          range.insertNode(frag);
-
-        } else if (sel.getRangeAt(0).commonAncestorContainer.parentNode.parentNode.id === 'myText') {
-
-          range = window.getSelection().getRangeAt(0);
-
-          const html = '<span style="color:' + couleur + '; font-weight: bold;">' + range.cloneContents().textContent + '</span>'
-          range.deleteContents();
-          // supprime le span qui était mis par l'ancienne annotation
-          range.commonAncestorContainer.parentNode.parentNode
-          .removeChild(range.commonAncestorContainer.parentNode);
-
-          const el = document.createElement('div');
-          el.innerHTML = html;
-          const frag = document.createDocumentFragment();
-          let lastNode;
-          while ((ceci = el.firstChild)) {
-            lastNode = frag.appendChild(ceci);
-          }
-          range.insertNode(frag);
         }
       }
     }
-
-
   }
 
   saveTextModification() {

@@ -16,7 +16,7 @@
             <span>Catégories</span>
         </mat-toolbar>
         <div style="padding-left: 10px; padding-right: 10px;">
-            <button class="btn btn-primary" (click)="Categoriser('black')">Delete Annotation</button>
+            <button class="btn btn-primary" (click)="Categoriser('Delete')">Delete Annotation</button>
             <div *ngFor="let item of categories | async" style="float: left;">
                 <button class="btn btn-primary" (click)="Categoriser(item?.color)" [ngStyle]="{'background-color': item?.color}">{{item?.name}}</button>
                 <br/>

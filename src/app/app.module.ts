@@ -48,6 +48,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestore} from 'angularfire2/firestore';
 import { environment } from '../environments/environment';
+import { FileDropModule } from 'ngx-file-drop';
 
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared/security/auth.guard';
@@ -59,15 +60,20 @@ import { HomeComponent } from './home/home.component';
 import { HomeWelcomeComponent } from './home-welcome';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
-import { ProjectManagerComponent } from './adm';
+import { ProjectDataSource } from './data-sources/projectDataSource';
+import { ProjectManagerComponent, UserManagerComponent } from './adm';
 import { PageNotFoundComponent } from './not-found/not-found.component';
-import { UserManagerComponent } from './adm';
-import { CreateProjectComponent, ProjectComponent
+import { UserComponent } from './adm';
+import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
+         AddCorpusComponent, AddAnnotatorComponent, ProjectService
        } from './components/index';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AddAnnotatorComponent,
+    AddCategoryComponent,
+    AddCorpusComponent,
     CreateProjectComponent,
     FooterComponent,
     HeaderComponent,
@@ -78,6 +84,7 @@ import { CreateProjectComponent, ProjectComponent
     ProjectComponent,
     ProjectManagerComponent,
     RegisterComponent,
+    UserComponent,
     UserManagerComponent
   ],
   imports: [
@@ -92,11 +99,14 @@ import { CreateProjectComponent, ProjectComponent
     MatButtonModule, MatCheckboxModule, MatCardModule, MatGridListModule, MatListModule, MatTabsModule, MatInputModule,
     MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule, MatProgressBarModule, MatToolbarModule,
     MatExpansionModule, MatStepperModule, MatMenuModule, MatTableModule, MatSelectModule, MatChipsModule, MatIconModule,
-    MatPaginatorModule, MatSortModule, //MatTableDataSource,
+    MatDialogModule, FileDropModule,
+    //MatPaginatorModule, MatSortModule, MatTableDataSource,
     CdkTableModule,
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
   ],
-  providers: [AngularFireDatabaseModule, AuthGuard, AuthService, ProjectManagerService, UserManagerService ],
+  providers: [
+    AngularFireDatabaseModule, AuthGuard, AuthService, ProjectDataSource, ProjectManagerService,
+    UserManagerService, ProjectService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

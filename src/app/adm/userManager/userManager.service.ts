@@ -61,9 +61,9 @@ export class UserManagerService {
   }
 
   // Supprime un utilisateur.
-  // Retourne false si username n'existe pas.
-  delUser(username: string): boolean {
-    return false;
+  deleteUser(userId: string) {
+    // todo: supprimer l'utilisateur comme admin ou annotateur
+    this.afs.collection('Users').doc(userId).delete();
   }
 
   // Modifie un utilisateur.

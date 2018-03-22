@@ -1,39 +1,32 @@
-
-  <h2>User management</h2>
-
-
+<h2>User management</h2>
 
 <div class="example-container mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource">
 
-      <ng-container matColumnDef="email">
-        <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
-        <mat-cell *matCellDef="let user"> {{user.email}} </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.email}} </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="firstName">
-        <mat-header-cell *matHeaderCellDef> First name </mat-header-cell>
-        <mat-cell *matCellDef="let user"> {{user.firstName}} </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="firstname">
+      <mat-header-cell *matHeaderCellDef> First name </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.firstname}} </mat-cell>
+    </ng-container>
 
-      <ng-container matColumnDef="lastName">
-        <mat-header-cell *matHeaderCellDef> Last name </mat-header-cell>
-        <mat-cell *matCellDef="let user"> {{user.lastName}} </mat-cell>
-      </ng-container>
+    <ng-container matColumnDef="lastname">
+      <mat-header-cell *matHeaderCellDef> Last name </mat-header-cell>
+      <mat-cell *matCellDef="let user"> {{user.lastname}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="modify">
+      <mat-header-cell *matHeaderCellDef> Modify / Delete </mat-header-cell>
+      <mat-cell *matCellDef="let user">
+        <button class="btn btn-primary" routerLink="/user/{{user.email}}">Modify</button>
+        <button class="btn btn-primary" (click)="deleteUser(user)">Delete</button>
+      </mat-cell>
+    </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
 </div>
-<!--
-    <mat-nav-list *ngFor="let user of users">
-    <mat-card *ngIf="true||searchB">
-      <mat-list-item >
-        <a matLine>
-        {{user.username}}
-      </a>
-      </mat-list-item>
-    </mat-card>
-    </mat-nav-list>
--->
-

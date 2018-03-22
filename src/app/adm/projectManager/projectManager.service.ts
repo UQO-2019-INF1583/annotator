@@ -14,53 +14,172 @@ import { Doc } from '../../shared/document.model';
 
 @Injectable()
 export class ProjectManagerService {
-  currentProjet: any;
 
-  content:any;
-
-  constructor(private afs: AngularFirestore) {
-    this.updateId();
-  }
-
-  // Initialise un projet: détermine son emplacement et son administrateur.
-  // Retourne false si projectId existe déjà.
-  creerProjet(projectId: string, title: string, admin: string): boolean {
-    return false;
-  }
+  constructor(private afs: AngularFirestore) { }
 
   // Supprime un projet avec toutes les données
-  // Retourne false si projectId n'existe pas.
-  delProject(projectId: string): boolean {
-    return false;
+  // Retourne false si project id n'existe pas.
+  deleteProject(projectId: string): boolean {
+    this.afs.collection('Annotateurs').ref.where('projectId', '==', projectId).get().then(querySnapshot => {
+      const batch = this.afs.firestore.batch();
+      querySnapshot.forEach(doc => {
+        batch.delete(doc.ref);
+      });
+      batch.commit();
+    }).then(() => {
+      console.log('annotateurs deleted');
+    },
+    function() {
+      return false;
+    });
+    this.afs.collection('Projects').doc(projectId).delete();
+    return true;
   }
 
   // Modifie le titre du projet.
-  // Retourne false si projectId n'existe pas.
-  modifyTitle(projetId: string, title: string): boolean {
+  modifyTitle(projectId: string, title: string): boolean {
+    this.afs.collection('Projects').doc(projectId).update({'title': title}).then(() => {
+      console.log('title updated');
+    },
+    (() => {return false}));
+    return true;
+  }
+
+  // Ajoute un administrateur du projet.
+  // Retourne false si adminId est déjà administrateur.
+  addAdmin(projectId: string, adminId: string): boolean {
+    var projectRef = this.afs.collection('Projects').doc(projectId);
+    projectRef.ref.get().then((doc) => {
+      var admin = doc.get('admin');
+      if (admin.indexOf(adminId) == -1){
+        admin.push(adminId);
+        projectRef.update({'admin': admin}).then(() => {
+          console.log('admin[] updated');
+          return true;
+        })
+      }
+    }).catch(function(error) {
+      console.log("Error getting project:", error);
+    });
     return false;
   }
 
-  // Remplace l'administrateur du projet.
-  // Retourne false si projectId ou adminId n'existe pas.
-  modifyAdmin(projetId: string, adminId: string): boolean {
-    return false;
-  }
-
-  // Produit une liste des ids de tous les projets.
-  getAll(): string[] {
-    return null;
+  // Supprime un administrateur du projet.
+  // Retourne false si adminId n'est pas administrateur.
+  delAdmin(projectId: string, adminId: string): boolean {
+    var projectRef = this.afs.collection('Projects').doc(projectId);
+    projectRef.ref.get().then((doc) => {
+      var admin = doc.get('admin');
+      if (admin.indexOf(adminId) == -1){
+        return false;
+      }
+      for (var i = admin.length - 1; i >= 0; i--) {
+        if (admin[i] === adminId) {
+          admin.splice(i, 1);
+        }
+      }
+      projectRef.update({'admin': admin}).then(() => {
+        console.log('admin[] updated');
+      },
+      (() => {return false}));
+    }).catch(function(error) {
+      console.log("Error getting project:", error);
+    });
+    return true;
   }
 
   // Ajoute un annotateur à un projet
   // Retourne false si projectId ou userId n'existe pas.
   addAnnotator(projectId: string, userId: string): boolean {
+    var projectRef = this.afs.collection('Projects').doc(projectId);
+    projectRef.ref.get().then((doc) => {
+      var annotators = doc.get('annotators');
+      if (annotators.indexOf(userId) == -1){
+        annotators.push(userId);
+        projectRef.update({'annotators': annotators}).then(() => {
+          console.log('annotators[] updated');
+          return true;
+        })
+      }
+    }).catch(function(error) {
+      console.log("Error getting project:", error);
+    });
     return false;
   }
 
-  // Supprime un annotateur d'un projet
-  // Retourne false si projectId ou userId n'existe pas.
+  // Supprime un annotateur du projet.
+  // Retourne false si userId n'est pas annotateur.
   delAnnotator(projectId: string, userId: string): boolean {
-    return false;
+    var projectRef = this.afs.collection('Projects').doc(projectId);
+    projectRef.ref.get().then((doc) => {
+      var annotators = doc.get('annotators');
+      if (annotators.indexOf(userId) == -1){
+        return false;
+      }
+      for (var i = annotators.length - 1; i >= 0; i--) {
+        if (annotators[i] === userId) {
+          annotators.splice(i, 1);
+        }
+      }
+      projectRef.update({'annotators': annotators}).then(() => {
+        console.log('annotators[] updated');
+      },
+      (() => {return false}));
+    }).catch(function(error) {
+      console.log("Error getting project:", error);
+    });
+    return true;
+  }
+/*
+  // Get project data.
+  async getProject(projectId: string): Promise<Project> {if (false||2>=2)return null;
+    console.log('getProject1')
+    var projectRef = this.afs.collection('Projects').doc(projectId);
+    var res: any;
+    projectRef.ref.get()
+      .then( (proj) => {res = proj.data();console.log('res',res);})
+      .catch(function(error) {
+        console.log("Error getting project:", error);
+    });
+    //projetCollection.valueChanges().subscribe((projs)=>{all = projs;});
+    console.log('res2',res);
+    return res;
+  }
+*/
+
+  getProject(projectId: string): Promise<any> {
+    return this.afs.collection("Projects/").doc(projectId).ref.get();
+    /*
+    this.afs.collection("Projects/").doc(projectId).ref.get().then((doc) => {console.log('data=',doc.data());
+      return doc.data();
+    });*/
+  }
+
+/*
+  // Get project data.
+  getProject(projectId: string): Project {
+    console.log('getProject1', projectId)
+    var projectRef = this.afs.collection('Projects').doc(projectId);
+    var res: any;
+  setTimeout(() => {
+    projectRef.ref.get()
+      .then( (proj) => {res = proj.data();console.log('res',res);})
+      .catch(function(error) {
+        console.log("Error getting project:", error);
+    });
+  }, 2000)
+  //projetCollection.valueChanges().subscribe((projs)=>{all = projs;});
+    console.log('res2',res);
+    return res;
+  }
+*/
+
+  // Produit une liste des ids de tous les projets.
+  getAll(projectId: string): Observable<Project>[] {
+    var projetCollection = this.afs.collection<Project>('Projects');
+    var all;
+    projetCollection.valueChanges().subscribe((projs)=>{all = projs;});
+    return all;
   }
 
   // Produit une liste des ids de tous les annotateurs d'un projet.
@@ -139,16 +258,18 @@ export class ProjectManagerService {
     else
     return false;
   }
+
+/*
   //recuperer le nom du courant utilisateur
   his(){
-    return JSON.parse(this.currentProjet).admin;
+    return JSON.parse(this.currentProject).admin;
   }
 
   updateId(){
     this.content=JSON.parse(localStorage.getItem('PkId'));
-      if(this.content){
+    if (this.content){
       this.afs.doc(`${this.content.database}/${this.content.id}`).update(this.content);
-      console.log(this.content.id);
-      }
+    }
   }
+*/
 }

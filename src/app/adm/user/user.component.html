@@ -1,6 +1,6 @@
 <div>
   <mat-card>
-    <h2>My projects</h2>
+    <h2>Projects of {{currentUser.email}} </h2>
   </mat-card>
 
   <div class="example-container mat-elevation-z8">
@@ -11,9 +11,22 @@
         <mat-cell *matCellDef="let project"> {{project.title}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="description">
-        <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
-        <mat-cell *matCellDef="let project"> {{project.description}} </mat-cell>
+      <ng-container matColumnDef="admin">
+        <mat-header-cell *matHeaderCellDef> Admin </mat-header-cell>
+        <mat-cell *matCellDef="let project">
+          <mat-checkbox matInput
+            (change)="$event ? changeAdmin(project.id, currentUser.uid, $event.checked) : null"
+            [checked]="isAdmin(project)"></mat-checkbox>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="annotator">
+        <mat-header-cell *matHeaderCellDef> Annotator </mat-header-cell>
+        <mat-cell *matCellDef="let project">
+          <mat-checkbox matInput
+            (change)="$event ? changeAnnotator(project.id, currentUser.uid, $event.checked) : null"
+            [checked]="isAnnotator(project)"></mat-checkbox>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="modify">
@@ -28,5 +41,3 @@
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
   </div>
-
-</div>

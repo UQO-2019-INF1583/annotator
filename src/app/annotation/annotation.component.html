@@ -1,0 +1,34 @@
+<main flex>
+    <!--Section du texts-->
+    <div style="padding-left: 10px; padding-right: 10px;">
+        <h3>{{corpus?.title}}</h3>
+        <p>Surligner des mots avec la souris et choisisser une catégorie</p>
+        <mat-card>
+            <div id="myText">
+            </div>
+        </mat-card>
+        <br/>
+    </div>
+
+    <mat-card>
+        <!--Section des boutons des catégories-->
+        <mat-toolbar>
+            <span>Catégories</span>
+        </mat-toolbar>
+        <div style="padding-left: 10px; padding-right: 10px;">
+            <button class="btn btn-primary" (click)="Categoriser('black')">Delete Annotation</button>
+            <div *ngFor="let item of categories | async" style="float: left;">
+                <button class="btn btn-primary" (click)="Categoriser(item?.color)" [ngStyle]="{'background-color': item?.color}">{{item?.name}}</button>
+                <br/>
+                <br/>
+            </div>
+            <br/>
+        </div>
+    </mat-card>
+    <br/>
+    <!--Section des boutons save et cancel-->
+    <div style="padding-left: 10px; padding-right: 10px;">
+        <button class="btn btn-primary" (click)="saveTextModification()">Save</button>
+        <button class="btn btn btn-primary" [routerLink]="['']">Cancel</button>
+    </div>
+</main>

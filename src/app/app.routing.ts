@@ -6,20 +6,25 @@ import { HomeWelcomeComponent } from './home-welcome/home-welcome.component';
 import { LoginComponent } from './login';
 import { PageNotFoundComponent } from './not-found/not-found.component';
 import { ProjectComponent } from './components/index';
-import { ProjectManagerComponent } from './adm';
 import { RegisterComponent } from './register';
-import { UserManagerComponent } from './adm';
-import { CreateProjectComponent  } from './components/index';
+import { CreateProjectComponent, AddCategoryComponent, AddCorpusComponent, AddAnnotatorComponent } from './components';
+import { ProjectManagerComponent, UserManagerComponent } from './adm';
+import { UserComponent } from './adm';
 
 const appRoutes: Routes = [
   { path: '', component: HomeWelcomeComponent, pathMatch: 'full' },
   //{ path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
+  { path: 'project', component: ProjectComponent },
+  { path: 'addcategory', component: AddCategoryComponent },
+  { path: 'addCorpus', component: AddCorpusComponent },
+  { path: 'addannotator', component: AddAnnotatorComponent },
   { path: 'createProject', component: CreateProjectComponent, canActivate: [AuthGuard]},
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'project', component: ProjectComponent },
   { path: 'projectManager', component: ProjectManagerComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent },
+  { path: 'user/:id', component: UserComponent },
   { path: 'userManager', component: UserManagerComponent, canActivate: [AuthGuard] },
   // otherwise page not found
   { path: '**', component: PageNotFoundComponent }

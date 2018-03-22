@@ -1,15 +1,25 @@
+// Rôle : Ce module a pour rôle de faire la liaison entre la vue du composant et les données envoyées par le service.
+// Dans le cas de ce module, il s'agit de permettre de visualiser les données du projet et de sauvegarder les
+// différents changements que l’utilisateur peut faire.
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Project } from '../../shared/project.model';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AddCategoryComponent } from '../add-category/add-category.component';
 import { AddCorpusComponent } from '../add-corpus/add-corpus.component';
-import {AngularFirestore,
-        AngularFirestoreCollection,
-        AngularFirestoreDocument
+import { AddAnnotatorComponent } from '../add-annotator/add-annotator.component';
+import { ProjectManagerService } from '../../adm/projectManager';
+import { ProjectService } from './project.service';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument
 } from 'angularfire2/firestore';
-import { Doc } from '../../shared/document.model';
-import { Category } from '../../shared/category.model';
-import { Project } from '../../shared/project.model';
+import * as firebase from 'firebase';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/Rx';
+import 'rxjs/add/operator/mergeMap';
 
 @Component({
   selector: 'app-project',
@@ -17,38 +27,74 @@ import { Project } from '../../shared/project.model';
   styleUrls: ['./project.component.scss']
 })
 
-export class ProjectComponent implements OnInit, OnDestroy  {
-  currentProject = { 'id': '', 'titre': '', 'description': '', 'admin': '' };
+export class ProjectComponent implements OnInit, OnDestroy {
+  currentProject: Project = { id: '', title: '', description: '', admin: [], annotators: [], corpus: [], categories: [] };
   private sub: any;
-  categorylist: Category[] = [];
-  corpusList: Doc[] = [];
   categoryExist: boolean;
+  isDataLoaded: boolean = false;
 
-  constructor(private activeRouter: ActivatedRoute, public dialog: MatDialog, private afs: AngularFirestore, private router: Router) { }
+  corpusList: any[] = [];
+  annotateurs: Observable<any[]>;
+  Categories: Observable<any[]>;
+
+  constructor(private activeRouter: ActivatedRoute, public dialog: MatDialog, private afs: AngularFirestore, private router: Router,
+              private pm: ProjectManagerService, private ps: ProjectService) { }
 
   ngOnInit() {
     this.sub = this.activeRouter.params.subscribe(params => {
-      this.currentProject.id = params.id;
-      this.currentProject.titre = params.titre;
-      this.currentProject.description = params.description;
-      this.currentProject.admin = params.admin;
-     /* this.currentProject.annotators = params.annotators;
-      this.currentProject.corpus = params.corpus;
-      this.currentProject.categories = params.categories;*/
-
+      this.pm.getProject(params.id).then((doc) => {
+        this.currentProject = doc.data();
+      })
     });
+    this.isDataLoaded = true;
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe;
   }
 
+  getCategories(projectId: string): Observable<any[]> {
+
+    return this.afs.collection('Categories', ref => ref.where('projectId', '==', projectId)).valueChanges();
+
+  }
+
+  //Trouve tous les annotateurs du projet
+  getAnnotator(projectId: string): Observable<any[]> {
+
+    var annotateursCollection = this.afs.collection('Annotateurs', ref => ref.where('projectId', '==', projectId));
+
+    var users = annotateursCollection.snapshotChanges().map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data();
+
+        const userId = data.id;
+
+        return this.afs.collection('Users').doc(userId).snapshotChanges().take(1).map(actions => {
+          return actions.payload.data();
+        }).map(signup => {
+          return { id: signup.id, firstname: signup.firstname, lastname: signup.lastname }
+        });
+
+      });
+    }).flatMap(user => Observable.combineLatest(user));
+
+    return users;
+  }
+
   //Sauvegarde les modification apporté au projet
   saveProjectModification() {
-    if (this.currentProject.titre != null && this.currentProject.titre != '' && this.currentProject.description != null &&
+    if (this.currentProject.title != null && this.currentProject.title != '' && this.currentProject.description != null &&
       this.currentProject.description != '') {
-
       this.afs.collection('Projects').doc(this.currentProject.id).set(this.currentProject);
+
+      if (this.corpusList.length > 0) {
+        //sauvegarde les documents texte
+        for (var i = 0; i < this.corpusList.length; i++) {
+
+          firebase.storage().ref().child('Projets/' + this.currentProject.id + '/' + this.corpusList[i].titre).put(this.corpusList[i].file);
+        }
+      }
 
       alert('Modification Sauvegarder');
       this.router.navigate(['/']);
@@ -66,7 +112,7 @@ export class ProjectComponent implements OnInit, OnDestroy  {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result.corpusTitle != undefined && result.corpusFile != undefined) {
-        this.corpusList.push({ documentId: null, title: result.corpusTitle, file: result.corpusFile, text: "" });
+        this.corpusList.push({ titre: result.corpusTitle, file: result.corpusFile });
 
         console.log(this.corpusList);
       }
@@ -75,7 +121,7 @@ export class ProjectComponent implements OnInit, OnDestroy  {
   }
 
   //ouvre la boîte de dialogue pour ajouter une catégorie
-  addCategoryDialogBox() {
+  addCategorieDialogBox() {
     let dialogRef = this.dialog.open(AddCategoryComponent, {
       width: '250px',
       data: { categoryName: undefined, categoryColor: undefined }
@@ -83,31 +129,73 @@ export class ProjectComponent implements OnInit, OnDestroy  {
 
     dialogRef.afterClosed().subscribe(result => {
 
-      if (result.categoryName != undefined && result.categoryColor != undefined) {
+      if (result != undefined) {
+        if (result.categoryName != undefined && result.categoryColor != undefined) {
+          this.categoryExist = false;
 
-        this.categoryExist = false;
+          this.Categories.subscribe((items) => {
 
-        //Vérifier si une catégorie possède le même nom oèu la même couleur
-        for (var i = 0; i < this.categorylist.length; i++) {
+            items.forEach((item) => {
 
-          if (result.categoryName == this.categorylist[i].nom) {
-            this.categoryExist = true;
-            alert("Une catégorie possède déja le même nom");
-            return;
+              this.categoryExist = true;
 
-          } else if (result.categoryColor == this.categorylist[i].couleur) {
-            this.categoryExist = true;
-            alert("Une catégorie utilise déjà cette couleur");
-            return;
+             /* if (item.name == result.categoryName) {
+                this.categoryExist = true;
+                alert("Une catégorie possède déja le même nom");
+                //return;
+              }
+              else if (item.color == result.categoryColor) {
+                this.categoryExist = true;
+                alert("Une catégorie utilise déjà cette couleur");
+                //return;
+              }*/
+            });
+          });
+
+          console.log(this.categoryExist);
+
+          if (this.categoryExist == false) {
+            //this.currentProject.categories.push({ id: null, nom: result.categoryName, couleur: result.categoryColor});
+            //var categorieId = this.afs.createId();
+            //this.afs.collection('Categories').add({ 'id': categorieId, 'projectId': this.currentProject.id, 'color': result.categoryColor, 'name': result.categoryName });
           }
-        }
-
-        if (this.categoryExist == false) {
-          this.categorylist.push({ nom: result.categoryName, couleur: result.categoryColor });
-
         }
       }
     });
+
+  }
+
+  //ouvre la boîte de dialogue pour ajouter un corpus
+  addAnnotateurDialogBox() {
+    const dialogRef = this.dialog.open(AddAnnotatorComponent, {
+      width: '250px',
+      data: { UserId: undefined }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+
+        this.ps.addAnnotator(result, this.currentProject.id);
+      }
+    });
+
+  }
+
+  //ouvre la boîte de dialogue pour ajouter un corpus
+  addAdminDialogBox() {
+/*
+    const dialogRef = this.dialog.open(AddAdminComponent, {
+      width: '250px',
+      data: { UserId: undefined }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+
+        this.ps.addAdmin(result, this.currentProject.id);
+      }
+    });
+*/
   }
 
 }

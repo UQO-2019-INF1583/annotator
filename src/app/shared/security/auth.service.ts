@@ -22,7 +22,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/delay';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
 
-import { User } from '../user.model';
+import { Role, User } from '../user.model';
 
 @Injectable()
 export class AuthService {
@@ -86,9 +86,10 @@ export class AuthService {
           .then((snapshot) => {
             if (snapshot.size == 0){
               this.afs.collection('Users').ref.add({
-              'email': this.email,
-              'firstName': '?',
-              'lastName': '?' });
+              id: firebase.auth().currentUser.uid,
+              email: this.email,
+              firstname: '?',
+              lastname: '?' });
             }
             else {
             }
@@ -107,8 +108,8 @@ export class AuthService {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
-      photoURL: user.photoURL,
-      password: ""//,
+      password: "",
+      role: Role.Visitor
       //lastname:"???"
     }
     return userRef.set(data)

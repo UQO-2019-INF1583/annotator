@@ -11,7 +11,13 @@ export class Project {
   corpus: Doc[];
   categories: Category[];
 
-  constructor() {
+  constructor(id: string = '', title: string = '', description: string = '') {
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.admin = [];
+    this.annotators = [];
+    this.corpus = [];
+    this.categories = [];
   }
-
 }

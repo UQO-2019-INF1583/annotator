@@ -1,7 +1,5 @@
-export class Category {
-  //categoryId: string;
-  couleur: string;
-  nom: string;
-
-  constructor() { }
+export interface Category {
+  id: string;
+  color: string;
+  name: string;
 }

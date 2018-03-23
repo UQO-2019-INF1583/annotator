@@ -5,7 +5,12 @@ export class Doc {
   title: string;
   file: any;
   text: string;
+  projectId: string;
 
-  constructor() { }
+  constructor(docId: string, title: string, projectId: string) {
+    this.documentId = docId;
+    this.title = title;
+    this.projectId = projectId;
+  }
 
 }

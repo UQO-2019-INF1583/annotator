@@ -113,7 +113,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result.corpusTitle != undefined && result.corpusFile != undefined) {
         this.corpusList.push({ titre: result.corpusTitle, file: result.corpusFile });
-
         console.log(this.corpusList);
       }
     });
@@ -126,43 +125,40 @@ export class ProjectComponent implements OnInit, OnDestroy {
       width: '250px',
       data: { categoryName: undefined, categoryColor: undefined }
     });
-
+    var categoryExist = false;
     dialogRef.afterClosed().subscribe(result => {
 
       if (result != undefined) {
         if (result.categoryName != undefined && result.categoryColor != undefined) {
-          this.categoryExist = false;
+          categoryExist = false;
 
-          this.Categories.subscribe((items) => {
-
-            items.forEach((item) => {
-
-              this.categoryExist = true;
-
-             /* if (item.name == result.categoryName) {
-                this.categoryExist = true;
-                alert("Une catégorie possède déja le même nom");
-                //return;
+          this.currentProject.categories.forEach((item) => {
+            if (item.name == result.categoryName) {
+              categoryExist = true;
+              if (item.color == result.categoryColor){
+                alert("The category already exists");
               }
-              else if (item.color == result.categoryColor) {
-                this.categoryExist = true;
-                alert("Une catégorie utilise déjà cette couleur");
-                //return;
-              }*/
-            });
+              else {
+                alert("Replacing color");
+                item.color = result.categoryColor;
+              }
+            }
           });
 
-          console.log(this.categoryExist);
-
-          if (this.categoryExist == false) {
-            //this.currentProject.categories.push({ id: null, nom: result.categoryName, couleur: result.categoryColor});
-            //var categorieId = this.afs.createId();
-            //this.afs.collection('Categories').add({ 'id': categorieId, 'projectId': this.currentProject.id, 'color': result.categoryColor, 'name': result.categoryName });
+          if (!categoryExist) {
+            this.currentProject.categories.push({ name: result.categoryName, color: result.categoryColor});
           }
         }
       }
     });
+  }
 
+  deleteCategory(catName: string){
+    this.currentProject.categories.forEach((item, index) => {
+      if (item.name == catName) {
+        this.currentProject.categories.splice(index, 1);
+      }
+    })
   }
 
   //ouvre la boîte de dialogue pour ajouter un corpus

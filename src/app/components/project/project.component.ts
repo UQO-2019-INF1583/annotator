@@ -8,6 +8,7 @@ import { Project } from '../../shared/project.model';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AddCategoryComponent } from '../add-category/add-category.component';
 import { AddCorpusComponent } from '../add-corpus/add-corpus.component';
+import { AddAdminComponent } from '../add-admin/add-admin.component';
 import { AddAnnotatorComponent } from '../add-annotator/add-annotator.component';
 import { ProjectManagerService } from '../../adm/projectManager';
 import { ProjectService } from './project.service';
@@ -30,12 +31,11 @@ import 'rxjs/add/operator/mergeMap';
 export class ProjectComponent implements OnInit, OnDestroy {
   currentProject: Project = { id: '', title: '', description: '', admin: [], annotators: [], corpus: [], categories: [] };
   private sub: any;
-  categoryExist: boolean;
   isDataLoaded: boolean = false;
 
-  corpusList: any[] = [];
-  annotateurs: Observable<any[]>;
-  Categories: Observable<any[]>;
+  //annotateurs: Observable<any[]>;
+  //categories: Observable<any[]>;
+  corpus: Observable<any[]>;
 
   constructor(private activeRouter: ActivatedRoute, public dialog: MatDialog, private afs: AngularFirestore, private router: Router,
               private pm: ProjectManagerService, private ps: ProjectService) { }
@@ -44,6 +44,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.sub = this.activeRouter.params.subscribe(params => {
       this.pm.getProject(params.id).then((doc) => {
         this.currentProject = doc.data();
+        this.corpus = this.ps.getCorpus(this.currentProject.id);
       })
     });
     this.isDataLoaded = true;
@@ -82,19 +83,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return users;
   }
 
-  //Sauvegarde les modification apporté au projet
+  // Sauvegarde les modifications apportées au projet.
   saveProjectModification() {
     if (this.currentProject.title != null && this.currentProject.title != '' && this.currentProject.description != null &&
       this.currentProject.description != '') {
       this.afs.collection('Projects').doc(this.currentProject.id).set(this.currentProject);
 
-      if (this.corpusList.length > 0) {
-        //sauvegarde les documents texte
-        for (var i = 0; i < this.corpusList.length; i++) {
-
-          firebase.storage().ref().child('Projets/' + this.currentProject.id + '/' + this.corpusList[i].titre).put(this.corpusList[i].file);
-        }
-      }
+      this.ps.saveProject(this.currentProject);
 
       alert('Modification Sauvegarder');
       this.router.navigate(['/']);
@@ -111,9 +106,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result.corpusTitle != undefined && result.corpusFile != undefined) {
-        this.corpusList.push({ titre: result.corpusTitle, file: result.corpusFile });
-        console.log(this.corpusList);
+      if (result !== undefined) {
+        if (result.corpusTitle !== undefined && result.corpusFile !== undefined) {
+
+          // est-ce qu'il y a une validation ici a faire? (titre du fichier déjà existant?)
+          this.ps.addCorpus(result, this.currentProject.id);
+        }
       }
     });
 
@@ -125,16 +123,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
       width: '250px',
       data: { categoryName: undefined, categoryColor: undefined }
     });
-    var categoryExist = false;
+    var categoryExists = false;
     dialogRef.afterClosed().subscribe(result => {
 
       if (result != undefined) {
         if (result.categoryName != undefined && result.categoryColor != undefined) {
-          categoryExist = false;
+          categoryExists = false;
 
           this.currentProject.categories.forEach((item) => {
             if (item.name == result.categoryName) {
-              categoryExist = true;
+              categoryExists = true;
               if (item.color == result.categoryColor){
                 alert("The category already exists");
               }
@@ -145,7 +143,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
             }
           });
 
-          if (!categoryExist) {
+          if (!categoryExists) {
             this.currentProject.categories.push({ name: result.categoryName, color: result.categoryColor});
           }
         }
@@ -153,6 +151,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Supprime la catégorie spécifiée dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteCategory(catName: string){
     this.currentProject.categories.forEach((item, index) => {
       if (item.name == catName) {
@@ -161,37 +160,72 @@ export class ProjectComponent implements OnInit, OnDestroy {
     })
   }
 
-  //ouvre la boîte de dialogue pour ajouter un corpus
-  addAnnotateurDialogBox() {
+  //ouvre la boîte de dialogue pour ajouter un annotateur
+  addAnnotatorDialogBox() {
     const dialogRef = this.dialog.open(AddAnnotatorComponent, {
       width: '250px',
       data: { UserId: undefined }
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      var annotatorExists = false;
       if (result !== undefined) {
-
-        this.ps.addAnnotator(result, this.currentProject.id);
+        this.currentProject.annotators.forEach((item) => {
+          if (item == result.uid) {
+            annotatorExists = true;
+          }
+        })
+        if (!annotatorExists){
+          this.currentProject.annotators.push(result.uid);
+        }
+        else {
+          alert('This annotator already exists');
+        }
       }
     });
-
   }
 
-  //ouvre la boîte de dialogue pour ajouter un corpus
+  // Supprime l'annotateur spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
+  deleteAnnotator(uid: string){
+    this.currentProject.annotators.forEach((item, index) => {
+      if (item == uid) {
+        this.currentProject.annotators.splice(index, 1);
+      }
+    })
+  }
+
+  //ouvre la boîte de dialogue pour ajouter un administrateur
   addAdminDialogBox() {
-/*
     const dialogRef = this.dialog.open(AddAdminComponent, {
       width: '250px',
       data: { UserId: undefined }
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      var adminExists = false;
       if (result !== undefined) {
-
-        this.ps.addAdmin(result, this.currentProject.id);
+        this.currentProject.admin.forEach((item) => {
+          if (item == result.uid) {
+            adminExists = true;
+          }
+        })
+        if (!adminExists){
+          this.currentProject.admin.push(result.uid);
+        }
+        else {
+          alert('This admin already exists');
+        }
       }
     });
-*/
   }
 
+  // Événement lorsqu'un texte est sélectionné
+  corpusSelected(corpus: any) {
+    this.router.navigate(['/annotation', corpus]);
+  }
+
+  // Supprime un texte
+  deleteCorpus(corpus: any) {
+    this.ps.deleteCorpus(corpus.id, corpus.title);
+  }
 }

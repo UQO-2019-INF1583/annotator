@@ -85,7 +85,7 @@ export class ProjectService {
         });
 
         return batch.commit();
-      }).then(() => console.log('Annotateur supprimmer'));
+      }).then(() => console.log('Annotator removed'));
   }
 
   // Ajoute un nouveau texte
@@ -95,7 +95,7 @@ export class ProjectService {
     this.afs.collection('Corpus').doc(corpusId)
       .set({ 'id': corpusId, 'projectId': projectId, 'title': corpus.corpusTitle });
 
-    firebase.storage().ref().child('Projets/' + corpusId + '/' + corpus.corpusTitle).put(corpus.corpusFile);
+    firebase.storage().ref().child('Projects/' + corpusId + '/' + corpus.corpusTitle).put(corpus.corpusFile);
   }
 
   // Ajoute un nouvel annotateur
@@ -152,7 +152,7 @@ export class ProjectService {
             'id': categorieId, 'projectId': projectId,
             'color': categorie.categoryColor, 'name': categorie.categoryName
           });
-        console.log('Catégorie Ajouté');
+        console.log('Category added');
       }
     });
   }

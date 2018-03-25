@@ -31,7 +31,7 @@
           <button class="btn btn btn-primary" (click)="addCorpusDialogBox()">+</button>
         </span>
       </mat-toolbar>
-      <mat-list *ngFor="let item of corpus">
+      <mat-list *ngFor="let item of corpus | async">
         <mat-list-item>
           <span class="matListItemHover" (click)="corpusSelected(item)">{{item?.title}}</span>
           <span class="example-fill-remaining-space"></span>
@@ -72,7 +72,7 @@
         <span>Annotators</span>
         <span class="example-fill-remaining-space"></span>
         <span>
-          <button class="btn btn btn-primary" (click)="addAnnotateurDialogBox()">+</button>
+          <button class="btn btn btn-primary" (click)="addAnnotatorDialogBox()">+</button>
         </span>
       </mat-toolbar>
       <mat-list role="list">
@@ -80,7 +80,7 @@
           <span>{{item}} {{item?.firstname}}</span>
           <span class="example-fill-remaining-space"></span>
           <span>
-            <button class="btn btn-primary" (click)="deleteAnnotateur(item)">Delete</button>
+            <button class="btn btn-primary" (click)="deleteAnnotator(item)">Delete</button>
           </span>
         </mat-list-item>
       </mat-list>

@@ -64,13 +64,15 @@ import { ProjectDataSource } from './data-sources/projectDataSource';
 import { ProjectManagerComponent, UserManagerComponent } from './adm';
 import { PageNotFoundComponent } from './not-found/not-found.component';
 import { UserComponent } from './adm';
+import { UsersDataSource } from './data-sources/usersDataSource';
 import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
-         AddCorpusComponent, AddAnnotatorComponent, ProjectService
+         AddCorpusComponent, AddAdminComponent, AddAnnotatorComponent, ProjectService
        } from './components/index';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AddAdminComponent,
     AddAnnotatorComponent,
     AddCategoryComponent,
     AddCorpusComponent,

@@ -65,6 +65,7 @@ import { ProjectManagerComponent, UserManagerComponent } from './adm';
 import { PageNotFoundComponent } from './not-found/not-found.component';
 import { UserComponent } from './adm';
 import { UsersDataSource } from './data-sources/usersDataSource';
+import { AnnotationComponent } from './annotation/annotation.component';
 import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
          AddCorpusComponent, AddAdminComponent, AddAnnotatorComponent, ProjectService
        } from './components/index';
@@ -76,6 +77,7 @@ import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
     AddAnnotatorComponent,
     AddCategoryComponent,
     AddCorpusComponent,
+    AnnotationComponent,
     CreateProjectComponent,
     FooterComponent,
     HeaderComponent,

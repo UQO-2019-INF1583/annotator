@@ -41,7 +41,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     this.categories = this.ps.getCategories(this.corpus.projectId);
 
     // Télécharge le fichier choisie
-    firebase.storage().ref().child('Projets/' + this.corpus.documentId + '/' + this.corpus.title).getDownloadURL().
+    firebase.storage().ref().child('Projects/' + this.corpus.documentId + '/' + this.corpus.title).getDownloadURL().
       then(url => {
 
         const xhr = new XMLHttpRequest();
@@ -132,7 +132,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     const data = document.getElementById('myText').innerHTML;
     const thefile = new File([data], this.corpus.title)
 
-    firebase.storage().ref().child('Projets/' + this.corpus.documentId + '/' + this.corpus.title).put(thefile);
+    firebase.storage().ref().child('Projects/' + this.corpus.documentId + '/' + this.corpus.title).put(thefile);
 
     alert('Annotation saved');
   }

@@ -65,7 +65,7 @@ export class ProjectService {
   // Supprime un texte
   deleteCorpus(corpusId: string, corpusTitle: string) {
     this.afs.collection('Corpus').doc(corpusId).delete();
-    firebase.storage().ref().child('Projets/' + corpusId + '/' + corpusTitle).delete();
+    firebase.storage().ref().child('Projects/' + corpusId + '/' + corpusTitle).delete();
   }
 
   // Supprime une catégorie

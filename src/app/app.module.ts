@@ -93,7 +93,8 @@ import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
   ],
   entryComponents: [
     AddAdminComponent,
-    AddAnnotatorComponent
+    AddAnnotatorComponent,
+    AddCategoryComponent
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,16 @@
   <div class="example-container mat-elevation-z8">
     <mat-table #table [dataSource]="datasource">
 
+      <ng-container matColumnDef="uid">
+        <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.uid}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.email}} </mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="firstname">
         <mat-header-cell *matHeaderCellDef> First name </mat-header-cell>
         <mat-cell *matCellDef="let user"> {{user.firstname}} </mat-cell>

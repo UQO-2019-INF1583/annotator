@@ -91,6 +91,10 @@ import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
     UserComponent,
     UserManagerComponent
   ],
+  entryComponents: [
+    AddAdminComponent,
+    AddAnnotatorComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

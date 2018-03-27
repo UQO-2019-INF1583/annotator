@@ -7,7 +7,7 @@ import {
 } from 'angularfire2/firestore';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs/Observable';
-import { DataSource } from '@angular/cdk/collections';
+import { UsersDataSource } from '../../data-sources/usersDataSource';
 
 @Component({
   selector: 'app-add-annotator',
@@ -16,7 +16,7 @@ import { DataSource } from '@angular/cdk/collections';
 })
 
 export class AddAnnotatorComponent implements OnInit {
-  displayedColumns = ['firstname', 'lastname', 'add'];
+  displayedColumns = ['uid', 'email', 'firstname', 'lastname', 'add'];
   datasource: UsersDataSource | null;
 
   constructor(
@@ -29,18 +29,3 @@ export class AddAnnotatorComponent implements OnInit {
   }
 }
 
-export class UsersDataSource extends DataSource<any> {
-
-  constructor(private afs: AngularFirestore) {
-    super();
-  }
-
-  connect(): Observable<any[]> {
-    return this.afs.collection('Users').valueChanges();
-  }
-
-  disconnect(): void {
-
-  }
-
-}

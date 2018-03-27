@@ -12,6 +12,7 @@ import { AddAdminComponent } from '../add-admin/add-admin.component';
 import { AddAnnotatorComponent } from '../add-annotator/add-annotator.component';
 import { ProjectManagerService } from '../../adm/projectManager';
 import { ProjectService } from './project.service';
+import { User } from './../../shared/user.model';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -33,9 +34,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
   private sub: any;
   isDataLoaded: boolean = false;
 
-  //annotateurs: Observable<any[]>;
-  //categories: Observable<any[]>;
+  users: Observable<User[]>;
   corpus: Observable<any[]>;
+  annotators: any[]; // {uid: v1, email: v2}[]
+  admin: any[]; // {uid: v1, email: v2}[]
 
   constructor(private activeRouter: ActivatedRoute, public dialog: MatDialog, private afs: AngularFirestore, private router: Router,
               private pm: ProjectManagerService, private ps: ProjectService) { }
@@ -45,6 +47,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.pm.getProject(params.id).then((doc) => {
         this.currentProject = doc.data();
         this.corpus = this.ps.getCorpus(this.currentProject.id);
+        this.users = this.afs.collection<User>('Users').valueChanges();
+        this.getAnnotatorEmail();
+        this.getAdminEmail();
       })
     });
     this.isDataLoaded = true;
@@ -54,10 +59,34 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe;
   }
 
+  getAnnotatorEmail() {
+    this.annotators = [];
+    this.currentProject.annotators.forEach((uid,i) => {
+      this.users.forEach((x) => {
+        x.forEach((u,j) => {
+          if (u.uid == uid) {
+            this.annotators.push({email: u.email, uid: u.uid});
+          }
+        })
+      });
+    });
+  }
+
+  getAdminEmail() {
+    this.admin = [];
+    this.currentProject.admin.forEach((uid,i) => {
+      this.users.forEach((x) => {
+        x.forEach((u,j) => {
+          if (u.uid == uid) {
+            this.admin.push({email: u.email, uid: u.uid});
+          }
+        })
+      });
+    });
+  }
+
   getCategories(projectId: string): Observable<any[]> {
-
     return this.afs.collection('Categories', ref => ref.where('projectId', '==', projectId)).valueChanges();
-
   }
 
   //Trouve tous les annotateurs du projet
@@ -163,7 +192,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   //ouvre la boîte de dialogue pour ajouter un annotateur
   addAnnotatorDialogBox() {
     const dialogRef = this.dialog.open(AddAnnotatorComponent, {
-      width: '250px',
+      width: '600px',
       data: { UserId: undefined }
     });
 
@@ -177,6 +206,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         })
         if (!annotatorExists){
           this.currentProject.annotators.push(result.uid);
+          this.annotators.push({uid: result.uid, email: result.email});
         }
         else {
           alert('This annotator already exists');
@@ -192,12 +222,17 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.currentProject.annotators.splice(index, 1);
       }
     })
+    this.annotators.forEach((item, index) => {
+      if (item.uid == uid) {
+        this.annotators.splice(index, 1);
+      }
+    })
   }
 
   //ouvre la boîte de dialogue pour ajouter un administrateur
   addAdminDialogBox() {
     const dialogRef = this.dialog.open(AddAdminComponent, {
-      width: '250px',
+      width: '600px',
       data: { UserId: undefined }
     });
 
@@ -211,12 +246,27 @@ export class ProjectComponent implements OnInit, OnDestroy {
         })
         if (!adminExists){
           this.currentProject.admin.push(result.uid);
+          this.admin.push({uid: result.uid, email: result.email});
         }
         else {
           alert('This admin already exists');
         }
       }
     });
+  }
+
+  // Supprime l'admin spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
+  deleteAdmin(uid: string){
+    this.currentProject.admin.forEach((item, index) => {
+      if (item == uid) {
+        this.currentProject.admin.splice(index, 1);
+      }
+    })
+    this.admin.forEach((item, index) => {
+      if (item.uid == uid) {
+        this.admin.splice(index, 1);
+      }
+    })
   }
 
   // Événement lorsqu'un texte est sélectionné

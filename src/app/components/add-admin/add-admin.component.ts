@@ -17,7 +17,7 @@ import { UsersDataSource } from '../../data-sources/usersDataSource';
 })
 
 export class AddAdminComponent implements OnInit {
-  displayedColumns = ['firstname', 'lastname', 'add'];
+  displayedColumns = ['uid', 'email', 'firstname', 'lastname', 'add'];
   datasource: UsersDataSource | null;
 
   constructor(

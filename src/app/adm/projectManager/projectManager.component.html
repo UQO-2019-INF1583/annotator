@@ -8,7 +8,7 @@
 
       <ng-container matColumnDef="title">
         <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-        <mat-cell *matCellDef="let project"> {{project.title}} </mat-cell>
+        <mat-cell *matCellDef="let project" [routerLink]="['/project', {id: project.id}]"> {{project.title}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="description">
@@ -16,7 +16,7 @@
         <mat-cell *matCellDef="let project"> {{project.description}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="modify">
+      <ng-container *ngIf="isConnected" matColumnDef="modify">
         <mat-header-cell *matHeaderCellDef> Modify / Delete </mat-header-cell>
         <mat-cell *matCellDef="let project">
           <button class="btn btn-primary" (click)="modifyProject(project)">Modify</button>

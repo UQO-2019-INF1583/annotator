@@ -3,6 +3,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Doc } from '../shared/document.model'
+import { Project } from '../shared/project.model'
 import { AnnotationService } from './annotation.service';
 import { ProjectService } from '../components/project/project.service'
 import {
@@ -22,7 +23,8 @@ import * as firebase from 'firebase';
 
 export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
-  corpus: Doc;
+  currentProject: Project;
+  currentDoc: Doc;
   categories: Observable<any[]>;
 
   constructor(private activeRouter: ActivatedRoute, private router: Router,
@@ -32,31 +34,29 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.activeRouter.params.subscribe(params => {
-
-      this.corpus = new Doc(params.id, params.title, params.projectId);
-
+      this.currentDoc = new Doc(params.id, params.title, params.projectId);
     });
 
     // Charge les catégories du projet
-    this.categories = this.ps.getCategories(this.corpus.projectId);
+    this.categories = this.ps.getCategories(this.currentDoc.projectId);
 
-    // Télécharge le fichier choisie
-    firebase.storage().ref().child('Projects/' + this.corpus.documentId + '/' + this.corpus.title).getDownloadURL().
+    // Télécharge le fichier choisi
+    firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).getDownloadURL().
       then(url => {
 
         const xhr = new XMLHttpRequest();
         xhr.responseType = 'blob';
         xhr.onload = event => {
-          this.corpus.file = xhr.response;
+          this.currentDoc.file = xhr.response;
 
           const reader: FileReader = new FileReader();
           reader.onloadend = e => {
-            // this.corpus.text = reader.result;
+            // this.currentDoc.text = reader.result;
             const texthtml = document.getElementById('myText');
             texthtml.innerHTML = reader.result;
           };
-          reader.readAsText(this.corpus.file);
-          // this.corpus.file = new File([xhr.response], this.corpus.title);
+          reader.readAsText(this.currentDoc.file);
+          // this.currentDoc.file = new File([xhr.response], this.currentDoc.title);
         };
         xhr.open('GET', url);
         xhr.send();
@@ -130,9 +130,9 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
   saveTextModification() {
     const data = document.getElementById('myText').innerHTML;
-    const thefile = new File([data], this.corpus.title)
+    const thefile = new File([data], this.currentDoc.title)
 
-    firebase.storage().ref().child('Projects/' + this.corpus.documentId + '/' + this.corpus.title).put(thefile);
+    firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).put(thefile);
 
     alert('Annotation saved');
   }

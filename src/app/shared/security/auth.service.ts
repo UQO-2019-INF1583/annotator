@@ -125,4 +125,7 @@ export class AuthService {
    console.error(error);
  }
 
+ isConnected(): boolean {
+   return firebase.auth().currentUser != null;
+ }
 }

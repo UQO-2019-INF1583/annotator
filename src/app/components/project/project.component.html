@@ -27,7 +27,7 @@
       <mat-toolbar style="display: flex">
         <span>Corpus</span>
         <span class="example-fill-remaining-space"></span>
-        <span>
+        <span *ngIf="isConnected">
           <button class="btn btn btn-primary" (click)="addCorpusDialogBox()">+</button>
         </span>
       </mat-toolbar>
@@ -35,7 +35,7 @@
         <mat-list-item>
           <span class="matListItemHover" (click)="corpusSelected(item)">{{item?.title}}</span>
           <span class="example-fill-remaining-space"></span>
-          <span>
+          <span *ngIf="isConnected">
             <button class="btn btn-primary" (click)="deleteCorpus(item)">Delete</button>
           </span>
         </mat-list-item>
@@ -44,12 +44,12 @@
   </div>
 
   <!--Section categories-->
-  <div class="column">
+  <div *ngIf="isConnected" class="column">
     <mat-card>
       <mat-toolbar style="display: flex">
         <span>Categories</span>
         <span class="example-fill-remaining-space"></span>
-        <span>
+        <span *ngIf="isConnected">
           <button class="btn btn btn-primary" (click)="addCategorieDialogBox()">+</button>
         </span>
       </mat-toolbar>
@@ -57,7 +57,7 @@
         <mat-list-item *ngFor="let item of currentProject.categories" [ngStyle]="{'background-color': item?.color}">
           <span>{{item?.name}}</span>
           <span class="example-fill-remaining-space"></span>
-          <span>
+          <span *ngIf="isConnected">
             <button class="btn btn-primary" (click)="deleteCategory(item.name)">Delete</button>
           </span>
         </mat-list-item>
@@ -66,7 +66,7 @@
   </div>
 
   <!--Section annotators-->
-  <div class="column">
+  <div *ngIf="isConnected" class="column">
     <mat-card>
       <mat-toolbar style="display: flex">
         <span>Annotators</span>
@@ -88,16 +88,16 @@
   </div>
 
   <!--Section admin-->
-  <div class="column">
+  <div *ngIf="isConnected" class="column">
     <mat-card>
       <mat-toolbar style="display: flex">
         <span>Administrators</span>
         <span class="example-fill-remaining-space"></span>
-        <span>
+        <span *ngIf="isConnected">
           <button class="btn btn btn-primary" (click)="addAdminDialogBox()">+</button>
         </span>
       </mat-toolbar>
-      <mat-list role="list">
+      <mat-list *ngIf="isConnected" role="list">
         <mat-list-item *ngFor="let item of admin">
           <span>{{item.email}}</span>
           <span class="example-fill-remaining-space"></span>
@@ -111,7 +111,7 @@
 </main>
 
 <!--Button pour sauvegarder on annuler les modifications-->
-<div class="button-row" style="padding-left: 10px; padding-right: 10px;">
+<div *ngIf="isConnected" class="button-row" style="padding-left: 10px; padding-right: 10px;">
   <button class="btn btn-primary" (click)="saveProjectModification()">Save</button>
   <button class="btn btn btn-primary" [routerLink]="['']">Cancel</button>
 </div>

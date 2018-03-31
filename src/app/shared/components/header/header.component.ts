@@ -54,7 +54,7 @@ export class HeaderComponent implements OnInit {
   }
 
   isAdmin(){
-    return HeaderComponent.currRole == Role.Adm;
+    return this.authService.isConnected() && HeaderComponent.currRole == Role.Adm;
   }
 
 }

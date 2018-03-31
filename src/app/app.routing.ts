@@ -23,7 +23,7 @@ const appRoutes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'project', component: ProjectComponent },
-  { path: 'projectManager', component: ProjectManagerComponent, canActivate: [AuthGuard] },
+  { path: 'projectManager', component: ProjectManagerComponent /*, canActivate: [AuthGuard]*/ },
   { path: 'register', component: RegisterComponent },
   { path: 'userManager', component: UserManagerComponent, canActivate: [AuthGuard] },
   // otherwise page not found

@@ -21,10 +21,10 @@
                 <span class="{{''}}"></span>Create project</a>
             </li>
             <li (click)="isCollapsed = true" routerLinkActive="active">
-              <a class="navbar-left" [routerLink]="['/corpora']">{{'Projects'}}</a>
+              <a class="navbar-left" [routerLink]="['/projectManager']">{{'Projects'}}</a>
             </li>
-            <li (click)="isCollapsed = true" routerLinkActive="active">
-              <a class="navbar-left" [routerLink]="['/heroes']">{{'Annotation'}}</a>
+            <li *ngIf="isUser()" (click)="isCollapsed = true" routerLinkActive="active">
+              <a class="navbar-left" [routerLink]="['/annotation']">{{'Annotation'}}</a>
             </li>
             <li *ngIf="isAdmin()" (click)="isCollapsed = true" routerLinkActive="active">
              <button [matMenuTriggerFor]="adminMenu">Admin</button>

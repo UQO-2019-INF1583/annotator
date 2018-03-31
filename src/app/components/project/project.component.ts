@@ -4,6 +4,7 @@
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../shared/security/auth.service';
 import { Project } from '../../shared/project.model';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AddCategoryComponent } from '../add-category/add-category.component';
@@ -38,18 +39,22 @@ export class ProjectComponent implements OnInit, OnDestroy {
   corpus: Observable<any[]>;
   annotators: any[]; // {uid: v1, email: v2}[]
   admin: any[]; // {uid: v1, email: v2}[]
+  isConnected: boolean = false;
 
-  constructor(private activeRouter: ActivatedRoute, public dialog: MatDialog, private afs: AngularFirestore, private router: Router,
+  constructor(private authService: AuthService, private activeRouter: ActivatedRoute, public dialog: MatDialog, private afs: AngularFirestore, private router: Router,
               private pm: ProjectManagerService, private ps: ProjectService) { }
 
   ngOnInit() {
+    this.isConnected = this.authService.isConnected();
     this.sub = this.activeRouter.params.subscribe(params => {
       this.pm.getProject(params.id).then((doc) => {
         this.currentProject = doc.data();
         this.corpus = this.ps.getCorpus(this.currentProject.id);
-        this.users = this.afs.collection<User>('Users').valueChanges();
-        this.getAnnotatorEmail();
-        this.getAdminEmail();
+        if (this.isConnected){
+          this.users = this.afs.collection<User>('Users').valueChanges();
+          this.getAnnotatorEmail();
+          this.getAdminEmail();
+        }
       })
     });
     this.isDataLoaded = true;

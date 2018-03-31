@@ -1,6 +1,7 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { Project } from '../../shared/project.model';
 import { Router } from '@angular/router';
+import { AuthService } from '../../shared/security/auth.service';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -20,12 +21,21 @@ import 'rxjs/add/observable/of';
 })
 
 export class ProjectManagerComponent implements OnInit {
-  displayedColumns = ['title', 'description', 'modify'];
+  displayedColumns = [];
   dataSource: ProjectDataSource | null;
+  isConnected: boolean = false;
 
-  constructor(public router: Router, private afs: AngularFirestore) { }
+  constructor(private authService: AuthService, public router: Router, private afs: AngularFirestore) {
+  }
 
   ngOnInit() {
+    this.isConnected = this.authService.isConnected();
+    if (this.isConnected){
+      this.displayedColumns = ['title', 'description', 'modify'];
+    }
+    else {
+      this.displayedColumns = ['title', 'description'];
+    }
     this.dataSource = new ProjectDataSource(this.afs);
   }
 

@@ -18,3 +18,7 @@ main {
      Every toolbar row uses a flexbox row layout. */
   flex: 1 1 auto;
 }
+
+.matListItemHover:hover {
+  background-color: darkcyan;
+}

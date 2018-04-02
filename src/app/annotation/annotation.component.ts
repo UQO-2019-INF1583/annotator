@@ -23,9 +23,9 @@ import * as firebase from 'firebase';
 
 export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
-  currentProject: Project;
   currentDoc: Doc;
-  categories: Observable<any[]>;
+  categories: string[];
+  currentProjectTitle: string;
 
   constructor(private activeRouter: ActivatedRoute, private router: Router,
     /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore) {
@@ -35,15 +35,21 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sub = this.activeRouter.params.subscribe(params => {
       this.currentDoc = new Doc(params.id, params.title, params.projectId);
+      this.currentProjectTitle = params.projectTitle;
+
+      // Charge les catégories du projet
+      var projectRef = this.afs.collection<Project>('Projects').doc(params.projectId);
+      projectRef.ref.get().then( (documentSnapshot) => {
+        this.categories = documentSnapshot.data().categories;
+      });
     });
 
     // Charge les catégories du projet
-    this.categories = this.ps.getCategories(this.currentDoc.projectId);
+    //this.categories = this.ps.getCategories(this.currentDoc.projectId);
 
     // Télécharge le fichier choisi
     firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).getDownloadURL().
       then(url => {
-
         const xhr = new XMLHttpRequest();
         xhr.responseType = 'blob';
         xhr.onload = event => {

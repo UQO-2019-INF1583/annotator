@@ -27,7 +27,7 @@
     "@ng-bootstrap/ng-bootstrap": "^1.0.0",
     "angularfire2": "^5.0.0-rc.4",
     "core-js": "^2.5.3",
-    "firebase": "^4.9.1",
+    "firebase": "^4.10.1",
     "hammerjs": "^2.0.8",
     "ngx-file-drop": "^2.0.5",
     "npm-check-updates": "^2.14.0",

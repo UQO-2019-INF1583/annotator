@@ -33,7 +33,7 @@
       </mat-toolbar>
       <mat-list *ngFor="let item of corpus | async">
         <mat-list-item>
-          <span class="matListItemHover" (click)="corpusSelected(item)">{{item?.title}}</span>
+          <span class="matListItemHover" (click)="documentSelected(item)">{{item?.title}}</span>
           <span class="example-fill-remaining-space"></span>
           <span *ngIf="isConnected">
             <button class="btn btn-primary" (click)="deleteCorpus(item)">Delete</button>

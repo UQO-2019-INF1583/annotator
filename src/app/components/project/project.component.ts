@@ -55,6 +55,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           this.getAnnotatorEmail();
           this.getAdminEmail();
         }
+        console.log(this.currentProject)
       })
     });
     this.isDataLoaded = true;
@@ -88,33 +89,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
         })
       });
     });
-  }
-
-  getCategories(projectId: string): Observable<any[]> {
-    return this.afs.collection('Categories', ref => ref.where('projectId', '==', projectId)).valueChanges();
-  }
-
-  //Trouve tous les annotateurs du projet
-  getAnnotator(projectId: string): Observable<any[]> {
-
-    var annotateursCollection = this.afs.collection('Annotateurs', ref => ref.where('projectId', '==', projectId));
-
-    var users = annotateursCollection.snapshotChanges().map(changes => {
-      return changes.map(a => {
-        const data = a.payload.doc.data();
-
-        const userId = data.id;
-
-        return this.afs.collection('Users').doc(userId).snapshotChanges().take(1).map(actions => {
-          return actions.payload.data();
-        }).map(signup => {
-          return { id: signup.id, firstname: signup.firstname, lastname: signup.lastname }
-        });
-
-      });
-    }).flatMap(user => Observable.combineLatest(user));
-
-    return users;
   }
 
   // Sauvegarde les modifications apportées au projet.
@@ -275,8 +249,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Événement lorsqu'un texte est sélectionné
-  corpusSelected(corpus: any) {
-    this.router.navigate(['/annotation', corpus]);
+  documentSelected(doc: any) { doc.projectTitle = this.currentProject.title;
+    this.router.navigate(['/annotation', doc ]);
   }
 
   // Supprime un texte

@@ -1,7 +1,7 @@
 <main flex>
     <!--Section du texts-->
     <div style="padding-left: 10px; padding-right: 10px;">
-        <h3>Project: {{currentProject?.title}}  Document: {{currentDoc?.title}}</h3>
+        <h3>Project: {{currentProjectTitle}}  Document: {{currentDoc?.title}}</h3>
         <p>Surligner des mots avec la souris et choisisser une catégorie</p>
         <mat-card>
             <div id="myText">
@@ -13,11 +13,11 @@
     <mat-card>
         <!--Section des boutons des catégories-->
         <mat-toolbar>
-            <span>Catégories</span>
+            <span>Categories</span>
         </mat-toolbar>
         <div style="padding-left: 10px; padding-right: 10px;">
             <button class="btn btn-primary" (click)="Categoriser('Delete')">Delete Annotation</button>
-            <div *ngFor="let item of categories | async" style="float: left;">
+            <div *ngFor="let item of categories" style="float: left;">
                 <button class="btn btn-primary" (click)="Categoriser(item?.color)" [ngStyle]="{'background-color': item?.color}">{{item?.name}}</button>
                 <br/>
                 <br/>

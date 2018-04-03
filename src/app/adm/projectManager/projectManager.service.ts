@@ -20,19 +20,6 @@ export class ProjectManagerService {
   // Supprime un projet avec toutes les données
   // Retourne false si project id n'existe pas.
   deleteProject(projectId: string): boolean {
-    this.afs.collection('Annotateurs').ref.where('projectId', '==', projectId).get().then(querySnapshot => {
-      const batch = this.afs.firestore.batch();
-      querySnapshot.forEach(doc => {
-        batch.delete(doc.ref);
-      });
-      batch.commit();
-    }).then(() => {
-      console.log('annotateurs deleted');
-    },
-    function() {
-      return false;
-    });
-    this.afs.collection('Projects').doc(projectId).delete();
     return true;
   }
 
@@ -130,49 +117,11 @@ export class ProjectManagerService {
     });
     return true;
   }
-/*
-  // Get project data.
-  async getProject(projectId: string): Promise<Project> {if (false||2>=2)return null;
-    console.log('getProject1')
-    var projectRef = this.afs.collection('Projects').doc(projectId);
-    var res: any;
-    projectRef.ref.get()
-      .then( (proj) => {res = proj.data();console.log('res',res);})
-      .catch(function(error) {
-        console.log("Error getting project:", error);
-    });
-    //projetCollection.valueChanges().subscribe((projs)=>{all = projs;});
-    console.log('res2',res);
-    return res;
-  }
-*/
 
   getProject(projectId: string): Promise<any> {
     return this.afs.collection("Projects/").doc(projectId).ref.get();
-    /*
-    this.afs.collection("Projects/").doc(projectId).ref.get().then((doc) => {console.log('data=',doc.data());
-      return doc.data();
-    });*/
   }
 
-/*
-  // Get project data.
-  getProject(projectId: string): Project {
-    console.log('getProject1', projectId)
-    var projectRef = this.afs.collection('Projects').doc(projectId);
-    var res: any;
-  setTimeout(() => {
-    projectRef.ref.get()
-      .then( (proj) => {res = proj.data();console.log('res',res);})
-      .catch(function(error) {
-        console.log("Error getting project:", error);
-    });
-  }, 2000)
-  //projetCollection.valueChanges().subscribe((projs)=>{all = projs;});
-    console.log('res2',res);
-    return res;
-  }
-*/
 
   // Produit une liste des ids de tous les projets.
   getAll(projectId: string): Observable<Project>[] {
@@ -201,10 +150,7 @@ export class ProjectManagerService {
   }
 
   getAnnotator(){
-    return this.afs
-           .collection('Annotateur', ref => ref
-            .where('titreProjet', '==', this.current().titreProjet))
-            .valueChanges();
+    return null;
   }
 
 /*

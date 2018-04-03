@@ -28,7 +28,6 @@ export class CreateProjectComponent implements OnInit {
       this.project.id = this.afs.createId();
       this.currentUserId = firebase.auth().currentUser.uid;
       this.afs.collection('Projects').doc(this.project.id).set(this.project);
-      this.afs.collection('Annotators').add({ 'id': this.currentUserId, 'projectId': this.project.id });
 
       alert('Création d\'un nouveau projet réussi');
       this.router.navigate(['/']);

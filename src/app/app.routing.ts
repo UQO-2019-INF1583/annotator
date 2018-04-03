@@ -15,7 +15,7 @@ import { UserComponent } from './adm';
 const appRoutes: Routes = [
   { path: '', component: HomeWelcomeComponent, pathMatch: 'full' },
   //{ path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
-  { path: 'annotation', component: AnnotationComponent, canActivate: [AuthGuard] },
+  { path: 'annotation', component: AnnotationComponent/*, canActivate: [AuthGuard]*/ },
   //{ path: 'addAnnotator', component: AddAnnotatorComponent },
   //{ path: 'addCategory', component: AddCategoryComponent },
   { path: 'addCorpus', component: AddCorpusComponent },

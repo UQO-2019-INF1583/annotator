@@ -2,6 +2,7 @@
 // Il permet d’affecter la notion de catégorie à un texte et de le sauvegarder, supprimer une annotation, etc.
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../shared/security/auth.service';
 import { Doc } from '../shared/document.model'
 import { Project } from '../shared/project.model'
 import { AnnotationService } from './annotation.service';
@@ -26,13 +27,15 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   currentDoc: Doc;
   categories: string[];
   currentProjectTitle: string;
+  isConnected: boolean = false;;
 
-  constructor(private activeRouter: ActivatedRoute, private router: Router,
+  constructor(private authService: AuthService, private activeRouter: ActivatedRoute, private router: Router,
     /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore) {
 
   }
 
   ngOnInit() {
+    this.isConnected = this.authService.isConnected();
     this.sub = this.activeRouter.params.subscribe(params => {
       this.currentDoc = new Doc(params.id, params.title, params.projectId);
       this.currentProjectTitle = params.projectTitle;

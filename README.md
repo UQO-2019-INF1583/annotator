@@ -4,36 +4,39 @@ Le projet Annotator est un projet réalisé par les étudiants de l'Université 
 
 Pour plus d'informations, vous pouvez consulter le wiki du projet qui contient un extrait du cahier des charges et permet de mieux comprendre l'enjeu du projet.
 
-# Installation
+# 1 Installation
 
-## 1. Création d’un projet Firebase
+## 1.1 Installation de Node.js et npm
+1.1.1 Vérifier que Node.js et npm sont installés dans votre environnement de travail :
+``` node -v ``` et ``` npm -v``` devraient vous retourner les versions de Node.js et npm si c'est le cas.
 
-1.1. À partir de la console Firebase, créer un nouveau projet web en cliquant sur “New
+1.1.2 Si Node.js et npm ne sont pas installés, suivre les instructions d'installation sur https://nodejs.org
+
+## 1.2 Création d’un projet Firebase (création d'une nouvelle base de données) - optionnel
+
+1.2.1 À partir de la console Firebase, créer un nouveau projet web en cliquant sur “New
 Project”, puis en cliquant sur “Add Firebase to your web app”. Ceci génère cinq variables de
 configuration (“apiKey”, “authDomain”, “databaseURL”, “projectId”, “storageBucket” et
-“messagingSenderId”) qui seront intégrés au projet Angular dans une étape ultérieure.
+“messagingSenderId”) qui seront intégrés au projet à l'étape [2.2](#22-mise-à-jour-des-fichiers-environnement)
 
-1.2. Cliquer sur “Authentication” et choisir les modes d’authentification voulues. Pour
+1.2.2 Cliquer sur “Authentication” et choisir les modes d’authentification voulues. Pour
 cette première étape, vous pouvez utiliser le mode d’authentification anonyme.
 
-1.3. Cliquer sur l’onglet “Database”, puis sur “RULES” pour modifier les règles d’accès à la
+1.2.3 Cliquer sur l’onglet “Database”, puis sur “RULES” pour modifier les règles d’accès à la
 base de données. Dans cette première étape du projet, les règles sont un accès universel,
 soit donner la valeur “true” aux variables .read et .write. Ceci sera à modifier au fur et à
 mesure que des modules et des types d’utilisateurs seront spécifiés.
 
-## 2. Initialisation du projet Angular
+## 1.3 Installation du projet 
 
-2.1. À partir de la ligne de commande, exécuter la commande “npm install -g @angular/cli”
-pour installer la dernière publication stable de Angular CLI. Une fois le
-logiciel installé, exécuter ng new ```<<nom du projet>>```, ​et accéder au projet (cd ```<<nom du projet>>```).
+1.3.1 Cloner ou télécharger le projet
 
-## 3. Cloner le projet
+1.3.2 Pour installer les dépendances du projet exécuter la commande ```npm install```
 
-# Usage
+# 2 Développement
 
-# Dévelopment
+##  2.1 Structure du projet
 
-##  Structure du projet
 ```
 Annotator/                        -- racine du projet
 ├── e2e/                          -- les tests fonctionnels (de type end-to-end)
@@ -41,14 +44,12 @@ Annotator/                        -- racine du projet
     ├── app/                      -- les sources du projet
     │ ├── guard/                -- reimportation de la session
     │ ├── components/
-    │       ├── admin
+    │       ├── adm
     │       ├── annotation        -- fonctionnalité de l'annotation
     │       ├── home
     │       ├── login
     │       ├── register
     │       └── ...
-    │ ├── directives/
-    │ ├── firebase/             -- serveur firebase
     │ ├── models/
     │ ├── services/
     │ └── shared/
@@ -69,11 +70,9 @@ Annotator/                        -- racine du projet
     ├── tsconfig.json           -- fichier de configuration de [TypeScript](http://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
     └── tslint.json             -- fichier de configuration de TSlint
 ```
-
-## Installation d'Angular :
-
-L'utilisation de l'application nécessite l'installation de Angular CLI. Voici la commande ```<npm install @angular/cli>```.
-Le projet a été généré avec Angular CLI version 1.5.2. [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+##  2.2 Mise à jour des fichiers environnement
+Au besoin, mettre à jour les cinq variables de configuration “apiKey”, “authDomain”, “databaseURL”, “projectId”, “storageBucket” et
+“messagingSenderId” de votre base de données firebase dans les fichiers environnement (src/environments/*.ts)
 
 ## Development server
 

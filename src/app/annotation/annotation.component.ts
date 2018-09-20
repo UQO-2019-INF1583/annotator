@@ -14,12 +14,14 @@ import {
 } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase';
+import { BratFrontendEditor } from './brat-frontend-editor';
 
 
 @Component({
   selector: 'app-annotation',
   templateUrl: './annotation.component.html',
-  styleUrls: ['./annotation.component.scss']
+  styleUrls: ['./annotation.component.scss',
+'brat-frontend-editor.min.css']
 })
 
 export class AnnotationComponent implements OnInit, OnDestroy {

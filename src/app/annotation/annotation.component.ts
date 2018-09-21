@@ -26,7 +26,7 @@ import BratFrontendEditor  from './brat-frontend-editor/brat-frontend-editor';
 './brat-frontend-editor/brat-frontend-editor.min.css']
 })
 
-export class AnnotationComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
   currentDoc: Doc;
   categories: string[];
@@ -76,12 +76,8 @@ export class AnnotationComponent implements OnInit, OnDestroy, AfterViewInit {
       }).catch(error => {
         console.log(error);
       });
-
-
-  }
-
-  ngAfterViewInit() {
-		      var collData = {
+		      
+			  var collData = {
           "messages": [],
           "items": [],
           "ui_names":{

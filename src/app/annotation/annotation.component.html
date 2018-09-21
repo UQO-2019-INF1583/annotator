@@ -1,5 +1,5 @@
 <main flex>
-    <!-- <!--Section du texts>
+    <!--Section du texts-->
     <div style="padding-left: 10px; padding-right: 10px;">
         <h3 style="display:inline-block">Project: </h3> {{currentProjectTitle}}<br/><h3 style="display:inline-block">Document: </h3> {{currentDoc?.title}}
         <p *ngIf="isConnected">To add an annotation, highlight the text and choose the category.</p>
@@ -13,7 +13,7 @@
    <div id="brat">Objectifs:Présenter les technologies de l’information (TI) du point de vue des gestionnaires responsables de diverses fonctions de l’entreprise. L'objectif principal est d’introduire les TI utilisés couramment dans les organisations aux étudiants en gestion n’ayant pas de formation préalable sur le sujet. Après ce cours, les étudiants devraient être en mesure de : (1) définir les divers concepts et outils TI utilisés par les organisations, tels que les infrastructures technologiques, les systèmes d’information, les technologies de bureautique, et les technologies de communication web ; (2) analyser l’alignement entre les besoins de l’organisation et les TI ; (3) maîtriser les divers outils TI disponibles aux gestionnaires et organisations ; (4) appliquer dans ses fonctions de gestionnaire les outils de communication web ouverts, surtout pour assurer la collaboration au sein d’équipes de travail distribuées ou virtuelles ; (5) identifier les divers systèmes intégrés de gestion et leur utilité pour intégrer les processus de l’organisation.
    </div>
     <mat-card>
-        <!--Section des boutons des catégories>
+        <!--Section des boutons des catégories-->
         <mat-toolbar>
             <span>Categories</span>
         </mat-toolbar>
@@ -28,100 +28,9 @@
         </div>
     </mat-card>
     <br/>
-    <!--Section des boutons save et cancel>
+    <!--Section des boutons save et cancel-->
     <div *ngIf="isConnected" style="padding-left: 10px; padding-right: 10px;">
         <button class="btn btn-primary" (click)="saveTextModification()">Save</button>
         <button class="btn btn btn-primary" [routerLink]="['']">Cancel</button>
-    </div> -->
-	
-	<script>
-			var bratLocation = './assets';
-			head.js(
-				// External libraries
-				bratLocation + '/client/lib/jquery.min.js',
-				bratLocation + '/client/lib/jquery.svg.min.js',
-				bratLocation + '/client/lib/jquery.svgdom.min.js',
-
-				// brat helper modules
-				bratLocation + '/client/src/configuration.js',
-				bratLocation + '/client/src/util.js',
-				bratLocation + '/client/src/annotation_log.js',
-				bratLocation + '/client/lib/webfont.js',
-
-				// brat modules
-				bratLocation + '/client/src/dispatcher.js',
-				bratLocation + '/client/src/url_monitor.js',
-				bratLocation + '/client/src/visualizer.js'
-			);
-			
-			var webFontURLs = [
-				bratLocation + '/static/fonts/Astloch-Bold.ttf',
-				bratLocation + '/static/fonts/PT_Sans-Caption-Web-Regular.ttf',
-				bratLocation + '/static/fonts/Liberation_Sans-Regular.ttf'
-			];
-			
-			collData = {
-				"entity_types": [
-					{
-						"type": "Person",
-						"labels": [ "Person", "Per" ],
-						"bgColor": "#7fa2ff",
-						"borderColor": "darken"
-					},
-					{
-						"type": "Location",
-						"labels": [ "Location", "loc" ],
-						"bgColor": "lightgreen",
-						"borderColor": "darken"
-					},{
-						"type": "Action",
-						"labels": [ "Action", "Act" ],
-						"bgColor": "red",
-						"borderColor": "darken"
-					}
-				]
-			}
-			
-			docData = {
-				"text": "Robert Ford was the man who shot Jesse James in Saint Joseph, Missouri, United States.",
-				"entities": [
-					["T1", "Person", [[ 0, 12 ]]],
-					["T2",  "Action",  [[ 29, 33 ]]],
-					["T3", "Person",  [[ 34, 45 ]]],
-					["T4", "Location", [[ 49, 86 ]]]
-				]
-			}
-			
-			var options = {
-				assetsPath: "assets/static/",
-				webFontURLs: [//
-					'fonts/Astloch-Bold.ttf',
-					'fonts/PT_Sans-Caption-Web-Regular.ttf',
-					'fonts/Liberation_Sans-Regular.ttf'
-				],
-				ajax: 'local',
-				overWriteModals: false,
-				maxFragmentLength: 30,
-				showTooltip: true
-			};
-			
-			head.ready(function() {
-				Util.embed(
-					// id of the div element where brat should embed the visualisations
-					document.getElementById("test"),
-					// object containing collection data
-					collData,
-					// object containing document data
-					docData,
-					// Array containing locations of the visualisation fonts
-					options
-					);
-			});
-		</script>
-		
-			<div id="myText">
-            </div>
-		
-		<div id="test"></div>
-	
+    </div>
 </main>

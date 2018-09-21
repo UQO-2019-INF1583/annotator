@@ -481,7 +481,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
           maxFragmentLength: 30,
           showTooltip: true
       };
-      var brat = new BratFrontendEditor.constructor(document.getElementById("brat"), collData, docData, options);
+      var brat = new BratFrontendEditor(document.getElementById("brat"), collData, docData, options);
   }
   
   

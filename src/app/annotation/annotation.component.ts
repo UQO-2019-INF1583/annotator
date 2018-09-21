@@ -14,17 +14,19 @@ import {
 } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase';
-import { BratFrontendEditor } from './brat-frontend-editor';
+import BratFrontendEditor  from './brat-frontend-editor/brat-frontend-editor';
+
+//var BratFrontendEditor = require('./brat-frontend-editor/brat-frontend-editor')
 
 
 @Component({
   selector: 'app-annotation',
   templateUrl: './annotation.component.html',
   styleUrls: ['./annotation.component.scss',
-'brat-frontend-editor.min.css']
+'./brat-frontend-editor/brat-frontend-editor.min.css']
 })
 
-export class AnnotationComponent implements OnInit, OnDestroy {
+export class AnnotationComponent implements OnInit, OnDestroy, AfterViewInit {
   private sub: any;
   currentDoc: Doc;
   categories: string[];
@@ -75,7 +77,11 @@ export class AnnotationComponent implements OnInit, OnDestroy {
         console.log(error);
       });
 
-      var collData = {
+
+  }
+
+  ngAfterViewInit() {
+		      var collData = {
           "messages": [],
           "items": [],
           "ui_names":{
@@ -475,13 +481,14 @@ export class AnnotationComponent implements OnInit, OnDestroy {
               'fonts/Liberation_Sans-Regular.ttf'
           ],
           ajax: 'local',
-          overWriteModals: false,
+          overWriteModals: false,	
           maxFragmentLength: 30,
           showTooltip: true
       };
-      var brat = new BratFrontendEditor(document.getElementById('brat'), collData, docData, options);
+      var brat = new BratFrontendEditor.constructor(document.getElementById("brat"), collData, docData, options);
   }
-
+  
+  
   ngOnDestroy() {
     this.sub.unsubscribe;
   }

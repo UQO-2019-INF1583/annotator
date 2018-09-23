@@ -14,10 +14,8 @@ import {
 } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase';
-import BratFrontendEditor  from './brat-frontend-editor/brat-frontend-editor';
-
-//var BratFrontendEditor = require('./brat-frontend-editor/brat-frontend-editor')
-
+import './brat-frontend-editor/brat-frontend-editor';
+declare var BratFrontendEditor: any;
 
 @Component({
   selector: 'app-annotation',
@@ -469,6 +467,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
           ]
       };
 
+      // À corriger pour charger correctement les polices (fonts)
       var options = {
           assetsPath: "static/",
           webFontURLs: [//
@@ -481,7 +480,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
           maxFragmentLength: 30,
           showTooltip: true
       };
-      var brat = new BratFrontendEditor(document.getElementById("brat"), collData, docData, options);
+      let brat = new BratFrontendEditor(document.getElementById("brat"), collData, docData, options);
   }
   
   

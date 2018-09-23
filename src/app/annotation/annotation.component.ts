@@ -75,7 +75,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
         console.log(error);
       });
 		      
-			  var collData = {
+        var collData = {
           "messages": [],
           "items": [],
           "ui_names":{
@@ -469,7 +469,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
       // À corriger pour charger correctement les polices (fonts)
       var options = {
-          assetsPath: "static/",
+          assetsPath: "assets/static/",
           webFontURLs: [//
               'fonts/Astloch-Bold.ttf',
               'fonts/PT_Sans-Caption-Web-Regular.ttf',

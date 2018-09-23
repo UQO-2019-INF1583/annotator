@@ -9,7 +9,8 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        "static"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -20,7 +21,8 @@
       "prefix": "app",
       "styles": [
         "styles.css",
-        "style-vis.css"
+        "style-vis.css",
+        "style-ui.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

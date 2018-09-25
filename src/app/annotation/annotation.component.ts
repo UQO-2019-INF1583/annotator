@@ -473,6 +473,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
             text = reader.result;
             texthtml.innerHTML = text;
           
+            docData.text = text;
             console.log(text);
          
 			//En ajoutant l'initialisation de Brat ici, on peut s'assurer que le texte aura été chargé avant.

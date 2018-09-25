@@ -6,7 +6,8 @@ import { AuthService } from '../shared/security/auth.service';
 import { Doc } from '../shared/document.model'
 import { Project } from '../shared/project.model'
 import { AnnotationService } from './annotation.service';
-import { ProjectService } from '../components/project/project.service'
+import { ProjectService } from '../components/project/project.service';
+import { CategoryService } from '../category.service';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -38,8 +39,8 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     let text = "Ed O'Kelley";
-    
-	//Données d'initialisation d'example (devront être remplacée par 
+
+	//Données d'initialisation d'example (devront être remplacée par
 	let collData = {
       "messages": [],
       "items": [],
@@ -475,7 +476,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
           
             docData.text = text;
             console.log(text);
-         
+
 			//En ajoutant l'initialisation de Brat ici, on peut s'assurer que le texte aura été chargé avant.
 			new BratFrontendEditor(document.getElementById("brat"), collData, docData, options);
           };
@@ -489,7 +490,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
 
       console.log(text);
-     
+
   }
 
 

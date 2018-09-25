@@ -38,7 +38,9 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     let text = "Ed O'Kelley";
-    let collData = {
+    
+	//Données d'initialisation d'example (devront être remplacée par 
+	let collData = {
       "messages": [],
       "items": [],
       "ui_names":{
@@ -430,7 +432,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       ]
     };
 
-    // À corriger pour charger correctement les polices (fonts)
+    // Corrigé pour charger correctement les polices (fonts) (Reste à revoir)
     let options = {
       assetsPath: "assets/static/",
       webFontURLs: [//
@@ -457,9 +459,6 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       });
     });
 
-    // Charge les catégories du projet
-    //this.categories = this.ps.getCategories(this.currentDoc.projectId);
-
     // Télécharge le fichier choisi
     firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).getDownloadURL().
       then(url => {
@@ -470,17 +469,16 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
           const reader: FileReader = new FileReader();
           reader.onloadend = e => {
-            // this.currentDoc.text = reader.result;
             const texthtml = document.getElementById('myText');
             text = reader.result;
             texthtml.innerHTML = text;
-            //texthtml.innerHTML = "said"//"Ed O'Kelley was the man who shot the man who shot Jesse James.\nJ'ai lancé une bombe nucléaire sur Simon, Gustav et Pavel... sans raison particulière. Nos trois comparses se ne pouvant se venger sont allés directement au Paradis. Cette histoire est vraie. Ceci est la fin du paragraphe.\n Ceci est le second paragraphe. C'est l'histoire du petit castor le plus petit, mais le plus fort.";
-            docData.text = text;
+          
             console.log(text);
-            new BratFrontendEditor(document.getElementById("brat"), collData, docData, options);
+         
+			//En ajoutant l'initialisation de Brat ici, on peut s'assurer que le texte aura été chargé avant.
+			new BratFrontendEditor(document.getElementById("brat"), collData, docData, options);
           };
           reader.readAsText(this.currentDoc.file);
-          // this.currentDoc.file = new File([xhr.response], this.currentDoc.title);
         };
         xhr.open('GET', url);
         xhr.send();
@@ -490,7 +488,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
 
       console.log(text);
-      //let brat = new BratFrontendEditor(document.getElementById("brat"), collData, docData, options);
+     
   }
 
 

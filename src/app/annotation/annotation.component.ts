@@ -7,7 +7,7 @@ import { Doc } from '../shared/document.model'
 import { Project } from '../shared/project.model'
 import { AnnotationService } from './annotation.service';
 import { ProjectService } from '../components/project/project.service';
-import { CategoryService } from '../category.service';
+import { CategoryService } from './category.service';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -18,22 +18,24 @@ import * as firebase from 'firebase';
 import './brat/brat-frontend-editor';
 declare var BratFrontendEditor: any;
 import {collData, docData, options} from './brat/brat-data-mock';
+import {Category} from './Category';
 
 @Component({
   selector: 'app-annotation',
   templateUrl: './annotation.component.html',
-  styleUrls: ['./annotation.component.scss']
+  styleUrls: ['./annotation.component.scss'],
+  providers: [CategoryService]
 })
 
 export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
   currentDoc: Doc;
-  categories: string[];
+  categories: Category[];
   currentProjectTitle: string;
   isConnected = false;
 
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute, private router: Router,
-    /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore) {
+    /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore, private categs: CategoryService) {
 
   }
 
@@ -44,11 +46,11 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       this.currentDoc = new Doc(params.id, params.title, params.projectId);
       this.currentProjectTitle = params.projectTitle;
 
-      // Charge les catégories du projet
-      let projectRef = this.afs.collection<Project>('Projects').doc(params.projectId);
-      projectRef.ref.get().then( (documentSnapshot) => {
-        this.categories = documentSnapshot.data().categories;
-      });
+      // Charge les catégories du projet de façon asynchrone à l'aide du service CategoryService
+      this.categs.getCategories(params.projectId)
+        .subscribe(categories => {
+          this.categories = categories as Category[]
+        });
     });
 
     // Télécharge le fichier choisi

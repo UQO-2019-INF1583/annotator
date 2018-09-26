@@ -1,4 +1,4 @@
-//Liste temporaire des catégories d' Annotator.
+// Liste temporaire des catégories d' Annotator.
 import { Category } from './Category';
 
 export const CATEGORIES: Category[] = [

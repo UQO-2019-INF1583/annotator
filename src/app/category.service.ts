@@ -1,3 +1,4 @@
+//Service permettant l'accès aux catégories.
 import { Injectable } from '@angular/core';
 import { Category } from './Category';
 import { CATEGORIES } from './CategoryList';

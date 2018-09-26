@@ -50,7 +50,7 @@
   position: fixed;
   bottom: 0;
   left: 0;
-  background: url('assets/static/img/Fugue-shadowless-information-balloon.png') center no-repeat;
+  background: url('./assets/brat-client/static/img/Fugue-shadowless-information-balloon.png') center no-repeat;
 }
 #brat-frontend-editor #messagepullup {
   max-height: 300px;
@@ -118,7 +118,7 @@
 #brat-frontend-editor #arc_notes_fieldset:disabled legend {
   background-color: #BBBBBB;
 }
-#brat-frontend-editor #clear_notes_button, #clear_norm_button {                   
+#brat-frontend-editor #clear_notes_button, #clear_norm_button {
   padding: 2px 5px;
   position: absolute;
   top: -2px;
@@ -173,10 +173,10 @@
     width: 16px;
     margin-top: 3px;
     cursor: hand;
-    background: url('assets/static/img/expand_icon.gif') no-repeat;
+    background: url('./assets/brat-client/static/img/expand_icon.gif') no-repeat;
 }
 #brat-frontend-editor #span_form .collapser.open {
-    background: url('assets/static/img/collapse_icon.gif') no-repeat;
+    background: url('./assets/brat-client/static/img/collapse_icon.gif') no-repeat;
 }
 #brat-frontend-editor #span_form .collapsible.open {
     display: block;
@@ -269,7 +269,7 @@
 /* special-case visual tweak; not sure why this is necessary */
 #brat-frontend-editor #span_search_fieldset {
   margin-bottom: 0.5em;
-} 
+}
 /* END new entity and event dialog style */
 
 #brat-frontend-editor .small-buttons .ui-button-text {
@@ -277,7 +277,7 @@
 }
 
 #brat-frontend-editor #document_ctime, #document_mtime {
-  vertical-align: bottom;                 
+  vertical-align: bottom;
   padding: 0 5px;
   float: left;
 }
@@ -443,7 +443,7 @@
   width: 8em;
 }
 #brat-frontend-editor #advanced_search_option_toggle {
-  float: right;                      
+  float: right;
   font-size: 80%;
   color: gray;
 }
@@ -504,5 +504,5 @@
   font-family: 'Astloch';
   font-style: normal;
   font-weight: bold;
-  src: local('Astloch Bold'), local('Astloch-Bold'), url('assets/static/fonts/Astloch-Bold.ttf') format('truetype');
+  src: local('Astloch Bold'), local('Astloch-Bold'), url('assets/brat-client/static/fonts/Astloch-Bold.ttf') format('truetype');
 }

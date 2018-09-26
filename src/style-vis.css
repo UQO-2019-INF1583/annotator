@@ -354,7 +354,7 @@ rect.Normalized {
   font-size: 90%;
   /* match jQuery UI .ui-widget-content color */
   color: #2e6e9e;
-}   
+}
 
 #brat-frontend-editor .accesskey {
   text-decoration: underline;
@@ -399,7 +399,7 @@ rect.Normalized {
 #brat-frontend-editor #readme_container {
   position: relative;
 }
-#brat-frontend-editor #more_readme_button {                   
+#brat-frontend-editor #more_readme_button {
   padding: 2px 5px;
   position: absolute;
   top: -2px;
@@ -477,13 +477,13 @@ rect.Normalized {
   font-family: 'Liberation Sans';
   font-style: normal;
   font-weight: normal;
-  src: local('Liberation Sans'), local('Liberation-Sans'), url('assets/static/fonts/Liberation_Sans-Regular.ttf') format('truetype');
+  src: local('Liberation Sans'), local('Liberation-Sans'), url('assets/brat-client/static/fonts/Liberation_Sans-Regular.ttf') format('truetype');
 }
 @font-face {
   font-family: 'PT Sans Caption';
   font-style: normal;
   font-weight: normal;
-  src: local('PT Sans Caption'), local('PTSans-Caption'), url('assets/static/fonts/PT_Sans-Caption-Web-Regular.ttf') format('truetype');
+  src: local('PT Sans Caption'), local('PTSans-Caption'), url('assets/brat-client/static/fonts/PT_Sans-Caption-Web-Regular.ttf') format('truetype');
 }
 
 /* Apple iPad, iPhone, iPod */

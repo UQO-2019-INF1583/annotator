@@ -72,6 +72,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
 			    // En ajoutant l'initialisation de Brat ici, on peut s'assurer que le texte aura été chargé avant.
 			    let brat = new BratFrontendEditor(document.getElementById('brat'), collData, docData, options);
+          console.log(brat.colData)
           };
           reader.readAsText(this.currentDoc.file);
         };

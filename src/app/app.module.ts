@@ -69,6 +69,7 @@ import { AnnotationComponent } from './annotation/annotation.component';
 import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
          AddCorpusComponent, AddAdminComponent, AddAnnotatorComponent, ProjectService
        } from './components/index';
+import { HomeWelcome1Component } from './home-welcome1/home-welcome1.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +90,8 @@ import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
     ProjectManagerComponent,
     RegisterComponent,
     UserComponent,
-    UserManagerComponent
+    UserManagerComponent,
+    HomeWelcome1Component
   ],
   entryComponents: [
     AddAdminComponent,

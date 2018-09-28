@@ -69,7 +69,6 @@ import { AnnotationComponent } from './annotation/annotation.component';
 import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
          AddCorpusComponent, AddAdminComponent, AddAnnotatorComponent, ProjectService
        } from './components/index';
-import { HomeWelcome1Component } from './home-welcome1/home-welcome1.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +90,6 @@ import { HomeWelcome1Component } from './home-welcome1/home-welcome1.component';
     RegisterComponent,
     UserComponent,
     UserManagerComponent,
-    HomeWelcome1Component
   ],
   entryComponents: [
     AddAdminComponent,
@@ -100,6 +98,8 @@ import { HomeWelcome1Component } from './home-welcome1/home-welcome1.component';
   ],
   imports: [
     BrowserModule,
+    MatCardModule,
+    MatToolbarModule,
     BrowserAnimationsModule,
     FormsModule, ReactiveFormsModule,
     HttpClientModule,
@@ -118,6 +118,7 @@ import { HomeWelcome1Component } from './home-welcome1/home-welcome1.component';
   providers: [
     AngularFireDatabaseModule, AuthGuard, AuthService, ProjectDataSource, ProjectManagerService,
     UserManagerService, ProjectService ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

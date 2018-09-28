@@ -14,11 +14,13 @@ import {
   AngularFirestoreDocument
 } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
+import {AngularFireStorage} from 'angularfire2/storage';
 import * as firebase from 'firebase';
 import './brat/brat-frontend-editor';
-declare var BratFrontendEditor: any;
 import {collData, docData, options} from './brat/brat-data-mock';
 import {Category} from './Category';
+import {HttpClient} from '@angular/common/http';
+declare var BratFrontendEditor: any;
 
 @Component({
   selector: 'app-annotation',
@@ -29,63 +31,48 @@ import {Category} from './Category';
 
 export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
+  private brat: any;
   currentDoc: Doc;
   categories: Category[];
   currentProjectTitle: string;
   isConnected = false;
+  projectId: string;
 
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute, private router: Router,
-    /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore, private categs: CategoryService) {
+              /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore,
+              private categs: CategoryService, private storage: AngularFireStorage, private http: HttpClient) {
 
+  }
+
+  /**
+   * Cette méthode, qui permet d'initialiser l'interface d'annotation, réunit des appels asynchrones qui doivent être exécutés
+   * les uns après les autres.
+   */
+  async getInterfaceData() {
+    // Aller chercher les paramètres passés par l'URL
+    this.sub = await this.activeRouter.params.subscribe(params => {
+      this.currentDoc = new Doc(params.id, params.title, params.projectId);
+      this.currentProjectTitle = params.projectTitle;
+      this.projectId = params.projectId;
+    });
+    // Lire le fichier stocké pour en extraire le texte
+    const URL = await firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).getDownloadURL();
+    let text = await this.http.get(URL, {responseType: 'text'}).toPromise();
+    // Interface d'annotation actuelle
+    const texthtml = document.getElementById('myText');
+    texthtml.innerHTML = text;
+    // Pour l'interface de brat
+    docData.text = text.replace(/<[^>]*>/g, '');
+    // Charge les catégories du projet de façon asynchrone à l'aide du service CategoryService
+    this.categories = await this.categs.getCategories(this.projectId).toPromise();
+    // Finalement initialiser brat
+    this.brat = new BratFrontendEditor(document.getElementById('brat'), collData, docData, options);
   }
 
   ngOnInit() {
-    let text = 'Ed O\'Kelley';
     this.isConnected = this.authService.isConnected();
-    this.sub = this.activeRouter.params.subscribe(params => {
-      this.currentDoc = new Doc(params.id, params.title, params.projectId);
-      this.currentProjectTitle = params.projectTitle;
-
-      // Charge les catégories du projet de façon asynchrone à l'aide du service CategoryService
-      this.categs.getCategories(params.projectId)
-        .subscribe(categories => {
-          this.categories = categories as Category[]
-        });
-    });
-
-    // Télécharge le fichier choisi
-    firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).getDownloadURL().
-      then(url => {
-        const xhr = new XMLHttpRequest();
-        xhr.responseType = 'blob';
-        xhr.onload = event => {
-          this.currentDoc.file = xhr.response;
-
-          const reader: FileReader = new FileReader();
-          reader.onloadend = e => {
-            const texthtml = document.getElementById('myText');
-            text = reader.result;
-            texthtml.innerHTML = text;
-
-            docData.text = text;
-            console.log(text);
-
-			    // En ajoutant l'initialisation de Brat ici, on peut s'assurer que le texte aura été chargé avant.
-			    let brat = new BratFrontendEditor(document.getElementById('brat'), collData, docData, options);
-          };
-          reader.readAsText(this.currentDoc.file);
-        };
-        xhr.open('GET', url);
-        xhr.send();
-      }).catch(error => {
-        console.log(error);
-      });
-
-
-      console.log(text);
-
+    this.getInterfaceData();
   }
-
 
   ngOnDestroy() {
     this.sub.unsubscribe;

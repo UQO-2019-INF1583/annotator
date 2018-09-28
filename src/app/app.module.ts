@@ -44,6 +44,7 @@ import {
 
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireModule } from 'angularfire2';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestore} from 'angularfire2/firestore';
@@ -105,6 +106,7 @@ import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    AngularFireStorageModule,
     MatButtonModule, MatCheckboxModule, MatCardModule, MatGridListModule, MatListModule, MatTabsModule, MatInputModule,
     MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, MatSlideToggleModule, MatProgressBarModule, MatToolbarModule,
     MatExpansionModule, MatStepperModule, MatMenuModule, MatTableModule, MatSelectModule, MatChipsModule, MatIconModule,

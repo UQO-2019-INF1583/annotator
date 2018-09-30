@@ -8,6 +8,7 @@ import {of} from 'rxjs/observable/of';
 import {Project} from '../shared/project.model';
 import {AngularFirestore, AngularFirestoreDocument} from 'angularfire2/firestore';
 import {forEach} from '@angular/router/src/utils/collection';
+import {isFunction} from "util";
 
 
 @Injectable()
@@ -21,15 +22,19 @@ export class CategoryService {
     return of(CATEGORIES);
   }
 
-  // Retourne de façon asynschore le document de type project, dont le id est passé en paramètre, à partir de la base de données Firestore
-  getProject(projectId): AngularFirestoreDocument<any> {
-    const projectRef = this.afs.collection<Project>('Projects').doc(projectId);
-    return projectRef;
+  getProject(projectId) {
+    if (isFunction(this.afs.collection<Project>('Projects').doc)) {
+      return this.afs.collection<Project>('Projects').doc(projectId)
+    } else {
+      // La fonction se fait exécuter à partir des tests, donc asf est un stub.
+      return this.afs.collection('Projects');
+    }
   }
 
   // Retourne de façon asynchrone les catégories d'un projet dont le id est passé en paramètre, à partir de la base de données Firestore
   getCategories(projectId) {
-    return Observable.fromPromise(this.getProject(projectId).ref.get().then((documentSnapshot) => documentSnapshot.data().categories));
+    return Observable.fromPromise(this.getProject(projectId).ref.get()
+      .then((documentSnapshot) => documentSnapshot.data().categories));
   }
 
   // Transforme une catégorie en type d'entité

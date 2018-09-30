@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed} from '@angular/core/testing';
 import { MatMenuModule} from '@angular/material/menu';
 import { AnnotationComponent } from './annotation.component';
 import { MatCardModule } from '@angular/material/card';
@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '../components/project/project.service';
 import { CategoryService } from './category.service';
 import { DebugElement } from '@angular/core';
-
+import {By} from '@angular/platform-browser';
 
 let AngularFirestoreStub : Partial<AngularFirestore>;
 let AuthServiceStub : Partial<AuthService>;
@@ -21,11 +21,13 @@ let CategoryServiceStub : Partial<CategoryService>;
 
 
 
-  let debugElement: DebugElement;
+let debugElement: DebugElement;
 
 describe('AnnotationComponent', () => {
   let component: AnnotationComponent;
   let fixture: ComponentFixture<AnnotationComponent>;
+  let debugComponent : DebugElement;
+  let htmlComponent : HTMLElement;
 
   beforeEach(async(() => {
     
@@ -67,14 +69,22 @@ describe('AnnotationComponent', () => {
   
   beforeEach(() => {
     fixture = TestBed.createComponent(AnnotationComponent);
+    //fixture.detectChanges();
     component = fixture.componentInstance;
+    debugComponent = fixture.debugElement;
+    htmlComponent = debugComponent.nativeElement;
   });
 
   it('should create', () => {
     expect(component).toBeDefined();
   });
-
-  it('check brat', () => {
-    expect(component).toBeTruthy();
+//"brat-frontend-editor"
+  it('check if brat div exist in dom', () => {
+    expect(debugComponent.query(By.css("#brat"))).toBeTruthy();
   });
+
+  it('check if brat front end editor is loaded into dom', ()=> {
+    fixture.detectChanges();
+    //expect(component).toBeTruthy();
+  })
 });

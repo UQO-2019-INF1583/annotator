@@ -30,7 +30,7 @@ describe('AnnotationComponent', () => {
   let htmlComponent : HTMLElement;
 
   beforeEach(async(() => {
-    
+
     AngularFirestoreStub = {
     };
 
@@ -49,7 +49,7 @@ describe('AnnotationComponent', () => {
 
     CategoryServiceStub = {
     };
-    
+
     TestBed.configureTestingModule({
       declarations: [ AnnotationComponent ],
       imports: [
@@ -66,7 +66,7 @@ describe('AnnotationComponent', () => {
     })
     .compileComponents();
   }));
-  
+
   beforeEach(() => {
     fixture = TestBed.createComponent(AnnotationComponent);
     //fixture.detectChanges();
@@ -88,3 +88,15 @@ describe('AnnotationComponent', () => {
     //expect(component).toBeTruthy();
   })
 });
+it('should create the annotation', async(() => {
+    const fixture = TestBed.createComponent(AnnotationComponent);
+    const annotation = fixture.debugElement.componentInstance;
+    expect(annotation).toBeTruthy();
+  }));
+
+  it('should have a paragraph in a p tag', async(() => {
+    const fixture = TestBed.createComponent(AnnotationComponent);
+    fixture.detectChanges();
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('p').textContent).toContain('To add an annotation, highlight the text and choose the category.');
+  }));

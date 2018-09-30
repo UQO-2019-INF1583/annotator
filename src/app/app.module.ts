@@ -89,7 +89,7 @@ import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
     ProjectManagerComponent,
     RegisterComponent,
     UserComponent,
-    UserManagerComponent
+    UserManagerComponent,
   ],
   entryComponents: [
     AddAdminComponent,
@@ -98,6 +98,8 @@ import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
   ],
   imports: [
     BrowserModule,
+    MatCardModule,
+    MatToolbarModule,
     BrowserAnimationsModule,
     FormsModule, ReactiveFormsModule,
     HttpClientModule,
@@ -116,6 +118,7 @@ import { CreateProjectComponent, ProjectComponent, AddCategoryComponent,
   providers: [
     AngularFireDatabaseModule, AuthGuard, AuthService, ProjectDataSource, ProjectManagerService,
     UserManagerService, ProjectService ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

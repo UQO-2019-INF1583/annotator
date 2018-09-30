@@ -33,7 +33,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   categories: Category[];
   currentProjectTitle: string;
   isConnected = false;
-
+  brat;
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute, private router: Router,
     /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore, private categs: CategoryService) {
 

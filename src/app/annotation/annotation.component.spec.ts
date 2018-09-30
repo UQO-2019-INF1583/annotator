@@ -11,39 +11,43 @@ import { ProjectService } from '../components/project/project.service';
 import { CategoryService } from './category.service';
 import { DebugElement } from '@angular/core';
 
-const AngularFirestoreStub = {
-    collection: (someString) => {
-    }
-  };
 
-  const AuthServiceStub = {
-    collection: (some) => {}
-  };
+let AngularFirestoreStub : Partial<AngularFirestore>;
+let AuthServiceStub : Partial<AuthService>;
+let ActivatedRouteStub : Partial<ActivatedRoute>;
+let RouterStub : Partial<Router>;
+let ProjectServiceStub : Partial<ProjectService>;
+let CategoryServiceStub : Partial<CategoryService>;
 
-  const ActivatedRouteStub = {
-    collection: (some) => {}
-  };
 
-  const RouterStub = {
-    collection: (some) => {}
-  }
-
-  const ProjectServiceStub = {
-    collection: (some) => {}
-  }
-
-  const CategoryServiceStub = {
-    collection: (some) => {}
-  }
 
   let debugElement: DebugElement;
-  let authServ: AuthService;
 
 describe('AnnotationComponent', () => {
   let component: AnnotationComponent;
   let fixture: ComponentFixture<AnnotationComponent>;
 
   beforeEach(async(() => {
+    
+    AngularFirestoreStub = {
+    };
+
+    AuthServiceStub = {
+    isConnected: function() {return true;},
+    };
+
+    ActivatedRouteStub = {
+    };
+
+    RouterStub = {
+    };
+
+    ProjectServiceStub = {
+    };
+
+    CategoryServiceStub = {
+    };
+    
     TestBed.configureTestingModule({
       declarations: [ AnnotationComponent ],
       imports: [
@@ -51,7 +55,7 @@ describe('AnnotationComponent', () => {
         MatCardModule,
         MatToolbarModule
       ],
-      providers: [{provide: AngularFirestore, useValue: AngularFirestoreStub},
+      providers: [AnnotationComponent,{provide: AngularFirestore, useValue: AngularFirestoreStub},
          {provide: AuthService, useValue: AuthServiceStub},
          {provide: ActivatedRoute, useValue:ActivatedRouteStub},
          {provide: Router, useValue: RouterStub},
@@ -60,20 +64,17 @@ describe('AnnotationComponent', () => {
     })
     .compileComponents();
   }));
+  
   beforeEach(() => {
     fixture = TestBed.createComponent(AnnotationComponent);
-    fixture.detectChanges();
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    authServ = debugElement.injector.get(AuthService);
-    authServ.isConnected = () => { return true };
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).toBeDefined();
   });
 
-  it('', () => {
-
+  it('check brat', () => {
+    expect(component).toBeTruthy();
   });
 });

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed} from '@angular/core/testing';
 import { MatMenuModule} from '@angular/material/menu';
 import { AnnotationComponent } from './annotation.component';
 import { MatCardModule } from '@angular/material/card';
@@ -10,40 +10,63 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '../components/project/project.service';
 import { CategoryService } from './category.service';
 import { DebugElement } from '@angular/core';
+import {By} from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
+import {Project} from '../shared/project.model';
+import {Doc} from '../shared/document.model';
+import { Category } from '../shared/category.model';
 
-const AngularFirestoreStub = {
-    collection: (someString) => {
-    }
-  };
 
-  const AuthServiceStub = {
-    collection: (some) => {}
-  };
 
-  const ActivatedRouteStub = {
-    collection: (some) => {}
-  };
+let AngularFirestoreStub : Partial<AngularFirestore>;
+let AuthServiceStub : Partial<AuthService>;
+let ActivatedRouteStub : Partial<ActivatedRoute>;
+let RouterStub : Partial<Router>;
+let ProjectServiceStub : Partial<ProjectService>;
+let CategoryServiceStub : Partial<CategoryService>;
 
-  const RouterStub = {
-    collection: (some) => {}
-  }
 
-  const ProjectServiceStub = {
-    collection: (some) => {}
-  }
+let debugElement: DebugElement;
 
-  const CategoryServiceStub = {
-    collection: (some) => {}
-  }
+/*
+Prochaines étapes: Doit créer les stubs pour mocker les interactions entre le component et ses services injectés
+ressources : 
+https://stackoverflow.com/questions/48760093/how-to-provide-mock-angularfirestore-module-inside-angular-component-for-default
 
-  let debugElement: DebugElement;
-  let authServ: AuthService;
+
+*/
 
 describe('AnnotationComponent', () => {
   let component: AnnotationComponent;
   let fixture: ComponentFixture<AnnotationComponent>;
+  let debugComponent : DebugElement;
+  let htmlComponent : HTMLElement;
 
   beforeEach(async(() => {
+   
+
+    AngularFirestoreStub = {
+    };
+
+    AuthServiceStub = {
+    isConnected: function() {return true;},
+    };
+
+    ActivatedRouteStub = {
+      params: Observable.of({id:"1234", title:"1234", projectId: "1234", projectTitle: "1234"}),
+    };
+
+    RouterStub = {
+    };
+
+    ProjectServiceStub = {
+    };
+
+    CategoryServiceStub = {
+      getCategories: function(projectId){return Observable.of([])},
+      
+    };
+    
     TestBed.configureTestingModule({
       declarations: [ AnnotationComponent ],
       imports: [
@@ -51,7 +74,7 @@ describe('AnnotationComponent', () => {
         MatCardModule,
         MatToolbarModule
       ],
-      providers: [{provide: AngularFirestore, useValue: AngularFirestoreStub},
+      providers: [AnnotationComponent,{provide: AngularFirestore, useValue: AngularFirestoreStub},
          {provide: AuthService, useValue: AuthServiceStub},
          {provide: ActivatedRoute, useValue:ActivatedRouteStub},
          {provide: Router, useValue: RouterStub},
@@ -60,20 +83,25 @@ describe('AnnotationComponent', () => {
     })
     .compileComponents();
   }));
+  
   beforeEach(() => {
     fixture = TestBed.createComponent(AnnotationComponent);
-    fixture.detectChanges();
+    //fixture.detectChanges();
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    authServ = debugElement.injector.get(AuthService);
-    authServ.isConnected = () => { return true };
+    debugComponent = fixture.debugElement;
+    htmlComponent = debugComponent.nativeElement;
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).toBeDefined();
+  });
+//"brat-frontend-editor"
+  it('check if brat div exist in dom', () => {
+    expect(debugComponent.query(By.css("#brat"))).toBeTruthy();
   });
 
-  it('', () => {
-
-  });
+  it('check if brat front end editor is loaded into dom', ()=> {
+    //fixture.detectChanges();
+    //expect(component).toBeTruthy();
+  })
 });

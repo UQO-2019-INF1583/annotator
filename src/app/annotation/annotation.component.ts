@@ -45,6 +45,24 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Cette méthode permet de charger les catégories, de les transformer en types d'entités
+   * et de les ajouter aux types d'entités existants dans collData
+   */
+  private addEntityTypes () {
+    let newTypes = this.categs.getCategoriesAsEntityTypes(this.categories);
+    let newType: any;
+    newTypes.forEach(function (entity) {
+      newType = {};
+      for ( let property in entity) {
+        if (entity.hasOwnProperty(property)) {
+          newType[property] = entity[property];
+        }
+      };
+      collData.entity_types.push(newType);
+    });
+  }
+
+  /**
    * Cette méthode, qui permet d'initialiser l'interface d'annotation, réunit des appels asynchrones qui doivent être exécutés
    * les uns après les autres.
    */
@@ -65,6 +83,8 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     docData.text = text.replace(/<[^>]*>/g, '');
     // Charge les catégories du projet de façon asynchrone à l'aide du service CategoryService
     this.categories = await this.categs.getCategories(this.projectId).toPromise();
+    // Ajouter les catégories comme des types d'entités
+    await this.addEntityTypes ();
     // Finalement initialiser brat
     this.brat = new BratFrontendEditor(document.getElementById('brat'), collData, docData, options);
   }

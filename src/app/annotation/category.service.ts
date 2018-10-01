@@ -31,7 +31,7 @@ export class CategoryService {
   }
 
   // Transforme une catégorie en type d'entité
-  getCategoriesAsEntityTypes(categories: Category[]): any {
+  getCategoriesAsEntityTypes(categories: Category[]): EntityType[] {
     let newTypes = new Array <EntityType>() ;
     let newType: EntityType;
     categories.forEach(function (category) {

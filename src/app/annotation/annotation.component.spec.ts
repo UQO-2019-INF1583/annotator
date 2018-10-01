@@ -11,6 +11,12 @@ import { ProjectService } from '../components/project/project.service';
 import { CategoryService } from './category.service';
 import { DebugElement } from '@angular/core';
 import {By} from '@angular/platform-browser';
+import { Observable } from 'rxjs/Observable';
+import {Project} from '../shared/project.model';
+import {Doc} from '../shared/document.model';
+import { Category } from '../shared/category.model';
+
+
 
 let AngularFirestoreStub : Partial<AngularFirestore>;
 let AuthServiceStub : Partial<AuthService>;
@@ -20,25 +26,38 @@ let ProjectServiceStub : Partial<ProjectService>;
 let CategoryServiceStub : Partial<CategoryService>;
 
 
-
 let debugElement: DebugElement;
+
+/*
+Prochaines étapes: Doit créer les stubs pour mocker les interactions entre le component et ses services injectés
+ressources : 
+https://stackoverflow.com/questions/48760093/how-to-provide-mock-angularfirestore-module-inside-angular-component-for-default
+
+
+*/
 
 describe('AnnotationComponent', () => {
   let component: AnnotationComponent;
   let fixture: ComponentFixture<AnnotationComponent>;
   let debugComponent : DebugElement;
   let htmlComponent : HTMLElement;
-
+  const fauxService = jasmine.createSpyObj('CategoryService', ['getCategories'])
+  
   beforeEach(async(() => {
-    
-    AngularFirestoreStub = {
-    };
+   
 
+   /* AngularFirestoreStub = {
+      collection: (somestring) => {return collection: (path) => {
+        return {get: ()}
+      }}  
+    };
+*/
     AuthServiceStub = {
     isConnected: function() {return true;},
     };
 
     ActivatedRouteStub = {
+      params: Observable.of({id:"1234", title:"1234", projectId: "1234", projectTitle: "1234"}),
     };
 
     RouterStub = {
@@ -48,6 +67,8 @@ describe('AnnotationComponent', () => {
     };
 
     CategoryServiceStub = {
+      getCategories: function(projectId){return Observable.of([])},
+      
     };
     
     TestBed.configureTestingModule({
@@ -62,7 +83,7 @@ describe('AnnotationComponent', () => {
          {provide: ActivatedRoute, useValue:ActivatedRouteStub},
          {provide: Router, useValue: RouterStub},
          {provide: ProjectService, useValue: ProjectServiceStub},
-         {provide: CategoryService, useValue: CategoryServiceStub}]
+         {provide: CategoryService, useValue: fauxService}]
     })
     .compileComponents();
   }));
@@ -85,6 +106,7 @@ describe('AnnotationComponent', () => {
 
   it('check if brat front end editor is loaded into dom', ()=> {
     fixture.detectChanges();
+    component.
     //expect(component).toBeTruthy();
   })
 });

@@ -24,6 +24,7 @@ export class CategoryService {
   // Retourne de façon asynschore le document de type project, dont le id est passé en paramètre, à partir de la base de données Firestore
   getProject(projectId): AngularFirestoreDocument<any> {
     const projectRef = this.afs.collection<Project>('Projects').doc(projectId);
+    
     return projectRef;
   }
 

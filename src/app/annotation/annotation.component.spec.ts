@@ -41,17 +41,14 @@ describe('AnnotationComponent', () => {
   let fixture: ComponentFixture<AnnotationComponent>;
   let debugComponent : DebugElement;
   let htmlComponent : HTMLElement;
-  const fauxService = jasmine.createSpyObj('CategoryService', ['getCategories'])
-  
+
   beforeEach(async(() => {
    
 
-   /* AngularFirestoreStub = {
-      collection: (somestring) => {return collection: (path) => {
-        return {get: ()}
-      }}  
+    AngularFirestoreStub = {
+      // collection:  
     };
-*/
+
     AuthServiceStub = {
     isConnected: function() {return true;},
     };
@@ -83,7 +80,7 @@ describe('AnnotationComponent', () => {
          {provide: ActivatedRoute, useValue:ActivatedRouteStub},
          {provide: Router, useValue: RouterStub},
          {provide: ProjectService, useValue: ProjectServiceStub},
-         {provide: CategoryService, useValue: fauxService}]
+         {provide: CategoryService, useValue: CategoryServiceStub}]
     })
     .compileComponents();
   }));
@@ -105,8 +102,7 @@ describe('AnnotationComponent', () => {
   });
 
   it('check if brat front end editor is loaded into dom', ()=> {
-    fixture.detectChanges();
-    component.
+    //fixture.detectChanges();
     //expect(component).toBeTruthy();
   })
 });

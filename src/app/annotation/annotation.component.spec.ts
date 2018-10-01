@@ -18,7 +18,7 @@ import { Category } from '../shared/category.model';
 
 
 
-//let AngularFirestoreStub : Partial<AngularFirestore>;
+let AngularFirestoreStub : Partial<AngularFirestore>;
 let AuthServiceStub : Partial<AuthService>;
 let ActivatedRouteStub : Partial<ActivatedRoute>;
 let RouterStub : Partial<Router>;
@@ -45,21 +45,8 @@ describe('AnnotationComponent', () => {
   beforeEach(async(() => {
    
 
-  const AngularFirestoreStub = {
-      collection: (collectionName) => {
-      return {
-        ref: {
-          get: () => {
-            return {
-              then: () => {
-                return {}
-              }
-            }
-          }
-        }
-      };
-    }
-};
+    AngularFirestoreStub = {
+    };
 
     AuthServiceStub = {
     isConnected: function() {return true;},

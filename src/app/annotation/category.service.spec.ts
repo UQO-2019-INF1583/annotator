@@ -54,6 +54,7 @@ describe('CategoryService', () => {
   ));
 
 });
+    // TODO Vérifier si la catégorie à été bien transformée en EntityTypes
     // TODO Convert categories into entities.
     // TODO Check old values are kept after conversion.
     // TODO Check if they're shown properly when loading categories.

@@ -51,7 +51,7 @@ describe('CategoryService', () => {
   }));
 
   it('should allow to get categories for a certain project ID', inject([CategoryService], (service: CategoryService) => {
-      expect(CATEGORIES == service.getCategories(1));
+      //expect(CATEGORIES == service.getCategories(1));
   }));
 
   xit('should only allow authenticated users to call the categories service',

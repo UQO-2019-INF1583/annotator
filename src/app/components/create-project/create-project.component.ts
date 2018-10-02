@@ -12,22 +12,35 @@ import * as firebase from 'firebase';
   templateUrl: './create-project.component.html',
   styleUrls: ['./create-project.component.scss']
 })
-
 export class CreateProjectComponent implements OnInit {
-  project = { id: '', title: '', description: '', admin: [], annotators: [], categories: [], corpus: [] };
+  project = {
+    id: '',
+    title: '',
+    description: '',
+    admin: [],
+    annotators: [],
+    categories: [],
+    corpus: []
+  };
   currentUserId: string;
 
-  constructor(public router: Router, private afs: AngularFirestore){ }
+  constructor(public router: Router, private afs: AngularFirestore) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
-  create(){
-    if (this.project.title != null && this.project.title != '' &&
-        this.project.description != null && this.project.description != '') {
-
+  create() {
+    if (
+      this.project.title != null &&
+      this.project.title !== '' &&
+      this.project.description != null &&
+      this.project.description !== ''
+    ) {
       this.project.id = this.afs.createId();
       this.currentUserId = firebase.auth().currentUser.uid;
-      this.afs.collection('Projects').doc(this.project.id).set(this.project);
+      this.afs
+        .collection('Projects')
+        .doc(this.project.id)
+        .set(this.project);
 
       alert('Création d\'un nouveau projet réussi');
       this.router.navigate(['/']);

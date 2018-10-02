@@ -12,5 +12,4 @@ export class Doc {
     this.title = title;
     this.projectId = projectId;
   }
-
 }

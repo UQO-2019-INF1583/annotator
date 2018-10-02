@@ -7,18 +7,16 @@ import {
   AngularFirestoreDocument
 } from 'angularfire2/firestore';
 
-
 export class UserDataSource extends DataSource<User> {
-
   constructor(private afs: AngularFirestore) {
     super();
   }
 
   connect(): Observable<User[]> {
-    return this.afs.collection<User>("Users", ref => ref.orderBy('email')).valueChanges();
+    return this.afs
+      .collection<User>('Users', ref => ref.orderBy('email'))
+      .valueChanges();
   }
 
-  disconnect(): void {
-  }
-
+  disconnect(): void {}
 }

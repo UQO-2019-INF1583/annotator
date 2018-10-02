@@ -10,13 +10,14 @@ import {
 
 @Injectable()
 export class ProjectDataSource extends DataSource<Project> {
-
   constructor(private afs: AngularFirestore) {
     super();
   }
 
   connect(): Observable<Project[]> {
-    return this.afs.collection<Project>("Projects", ref => ref.orderBy('title')).valueChanges();
+    return this.afs
+      .collection<Project>('Projects', ref => ref.orderBy('title'))
+      .valueChanges();
   }
 
   disconnect() {}

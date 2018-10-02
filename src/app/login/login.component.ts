@@ -1,4 +1,4 @@
-﻿// Rôle : contrôleur principal du module login (de la vue login.component.html).
+// Rôle : contrôleur principal du module login (de la vue login.component.html).
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -11,13 +11,10 @@ import { HeaderComponent } from '../shared/components/header/header.component';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-
 export class LoginComponent implements OnInit {
-
   userInfo: any = {};
 
-  constructor(public authService: AuthService,
-              public router: Router) {
+  constructor(public authService: AuthService, public router: Router) {
     localStorage.removeItem('errorAuth');
   }
 
@@ -29,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.authService.signIn(this.userInfo.email, this.userInfo.password);
-    this.afterSignIn()
+    this.afterSignIn();
   }
 
   logout(e) {
@@ -38,34 +35,29 @@ export class LoginComponent implements OnInit {
   }
 
   authenticated() {
-    return HeaderComponent.currUsername != '';
+    return HeaderComponent.currUsername !== '';
   }
 
   /// Social Login
 
   signInWithGithub() {
-    this.authService.githubLogin()
-      .then((data) => this.afterSignIn());
+    this.authService.githubLogin().then(data => this.afterSignIn());
   }
 
   signInWithGoogle() {
-    this.authService.googleLogin()
-      .then((data) => this.afterSignIn());
+    this.authService.googleLogin().then(data => this.afterSignIn());
   }
 
   facebookLogin() {
-    this.authService.facebookLogin()
-      .then((data) => this.afterSignIn());
+    this.authService.facebookLogin().then(data => this.afterSignIn());
   }
 
-  twitterLogin() {
-
-  }
+  twitterLogin() {}
 
   /// Shared
 
   private afterSignIn() {
-   // Do after login stuff here, such router redirects, toast messages, etc.
-   this.router.navigate(['/']);
+    // Do after login stuff here, such router redirects, toast messages, etc.
+    this.router.navigate(['/']);
   }
 }

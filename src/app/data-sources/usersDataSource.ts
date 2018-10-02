@@ -7,7 +7,6 @@ import {
 import { Observable } from 'rxjs/Observable';
 
 export class UsersDataSource extends DataSource<any> {
-
   constructor(private afs: AngularFirestore) {
     super();
   }
@@ -16,8 +15,5 @@ export class UsersDataSource extends DataSource<any> {
     return this.afs.collection('Users').valueChanges();
   }
 
-  disconnect(): void {
-
-  }
-
+  disconnect(): void {}
 }

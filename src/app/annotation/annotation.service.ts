@@ -9,7 +9,7 @@ import { Annotation } from '../shared/annotation.model';
 export class AnnotationService {
   static currentDoc: Document = null;
 
-  constructor() { }
+  constructor() {}
 
   // Ajoute une nouvelle annotation.
   // Retourne false si une erreur est détectée.
@@ -75,5 +75,4 @@ export class AnnotationService {
   getCategoryColor(cat: string): string | boolean {
     return false;
   }
-
 }

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { AngularFirestore,
-         //AngularFirestoreCollection,
-         //AngularFirestoreDocument
-       } from 'angularfire2/firestore';
+import {
+  AngularFirestore
+  // AngularFirestoreCollection,
+  // AngularFirestoreDocument
+} from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
 import { environment } from '../../../environments/environment';
 import { User } from '../../shared/user.model';
@@ -17,13 +18,12 @@ export class UserManagerService {
   user: Observable<User>;
   currentUser: any;
 
-  constructor(private authService: AuthService,
-              private afs : AngularFirestore) {
+  constructor(private authService: AuthService, private afs: AngularFirestore) {
     this.user = this.authService.user != null ? this.authService.user : null;
   }
 
   displayName(): string {
-    //this.user != null ? this.user.email : null;
+    // this.user != null ? this.user.email : null;
     return '';
   }
 
@@ -35,27 +35,25 @@ export class UserManagerService {
 
   // Affiche le profile de l'utilisateur
   setCurrentUser(user: firebase.User): boolean {
-
-    //this.currentUser.email = user.email;
+    // this.currentUser.email = user.email;
     return false;
   }
 
   // Affiche le profile de l'utilisateur
   displayUser(): boolean {
     firebase.initializeApp(environment.firebase, 'first');
-    var user = firebase.auth().currentUser;
+    const user = firebase.auth().currentUser;
 
     if (user != null) {
-      user.providerData.forEach(function (profile) {
-        console.log("Sign-in provider: " + profile.providerId);
-        console.log("  Provider-specific UID: " + profile.uid);
-        console.log("  Name: " + profile.displayName);
-        console.log("  Email: " + profile.email);
-        console.log("  Photo URL: " + profile.photoURL);
+      user.providerData.forEach(function(profile) {
+        console.log('Sign-in provider: ' + profile.providerId);
+        console.log('  Provider-specific UID: ' + profile.uid);
+        console.log('  Name: ' + profile.displayName);
+        console.log('  Email: ' + profile.email);
+        console.log('  Photo URL: ' + profile.photoURL);
       });
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -63,7 +61,10 @@ export class UserManagerService {
   // Supprime un utilisateur.
   deleteUser(userId: string) {
     // todo: supprimer l'utilisateur comme admin ou annotateur
-    this.afs.collection('Users').doc(userId).delete();
+    this.afs
+      .collection('Users')
+      .doc(userId)
+      .delete();
   }
 
   // Modifie un utilisateur.
@@ -77,15 +78,13 @@ export class UserManagerService {
     return false;
   }
 
-  his(){
+  his() {
     return JSON.parse(this.currentUser);
   }
 
-  getAll(){
+  getAll() {
     return this.afs
-               .collection('User', ref => ref
-               .orderBy('displayName'))
-               .valueChanges();
+      .collection('User', ref => ref.orderBy('displayName'))
+      .valueChanges();
   }
-
 }

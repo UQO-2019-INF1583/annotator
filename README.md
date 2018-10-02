@@ -31,7 +31,7 @@ mesure que des modules et des types d’utilisateurs seront spécifiés.
 
 1.3.1 Cloner ou télécharger le projet
 
-1.3.2 Pour installer les dépendances du projet exécuter la commande ```npm install```
+1.3.2 Pour installer les dépendances du projet exécuter la commande ```npm install```. Si l'installation échoue, exécuter ```rm -rf node_modules && npm install```
 
 # 2 Développement
 

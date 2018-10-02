@@ -43,6 +43,16 @@ describe('CategoryService', () => {
       expect(convertedAsEntities[i].bgColor === MOCK_CATEGORIES[i].color);
     }
   }));
+  
+  it('should transform entity type categories', inject(
+    [CategoryService],
+    (categoriesService: CategoryService) => {
+      const transform = categoriesService.getCategoriesAsEntityTypes(
+        MOCK_CATEGORIES
+      );
+      expect(MOCK_CATEGORIES === transform).toBe(false);
+    }
+  ));
 
   it('getCategory should return CATEGORIES', inject([CategoryService], (service: CategoryService) => {
     service.getCategory().subscribe(categories => {

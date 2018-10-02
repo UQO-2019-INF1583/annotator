@@ -7,7 +7,8 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "ng lint && prettier -l \"**/*.ts\"",
+    "lint-fix": "ng lint --fix && prettier \"**/*.ts\" --write",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -51,6 +52,8 @@
     "karma-coverage-istanbul-reporter": "^1.4.1",
     "karma-jasmine": "^1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "prettier": "1.14.3",
+    "prettier-eslint": "^8.8.2",
     "protractor": "^5.4.0",
     "ts-node": "^3.3.0",
     "tslint": "^5.9.1",

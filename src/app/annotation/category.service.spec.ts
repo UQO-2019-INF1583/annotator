@@ -4,6 +4,7 @@ import {AngularFirestore, AngularFirestoreDocument} from 'angularfire2/firestore
 import {} from 'jasmine';
 import { CategoryService } from './category.service';
 import { MOCK_CATEGORIES, CATEGORIES } from './category.service.MOCKDATA';
+import { EntityType } from './EntityType';
 describe('CategoryService', () => {
 
   const AngularFirestoreStub = {
@@ -41,6 +42,16 @@ describe('CategoryService', () => {
    });
 
   }));
+
+  it('should transform entity type categories', inject(
+    [CategoryService],
+    (categoriesService: CategoryService) => {
+      const transform = categoriesService.getCategoriesAsEntityTypes(
+        MOCK_CATEGORIES
+      );
+      expect(MOCK_CATEGORIES === transform).toBe(false);
+    }
+  ));
 
 });
     // TODO Convert categories into entities.

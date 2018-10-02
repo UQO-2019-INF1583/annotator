@@ -22,7 +22,7 @@ export class CategoryService {
     return of(CATEGORIES);
   }
 
-  getProject(projectId) {
+  getProject(projectId): any {
     if (isFunction(this.afs.collection<Project>('Projects').doc)) {
       return this.afs.collection<Project>('Projects').doc(projectId)
     } else {
@@ -33,8 +33,7 @@ export class CategoryService {
 
   // Retourne de façon asynchrone les catégories d'un projet dont le id est passé en paramètre, à partir de la base de données Firestore
   getCategories(projectId) {
-    return Observable.fromPromise(this.getProject(projectId).ref.get()
-      .then((documentSnapshot) => documentSnapshot.data().categories));
+    return Observable.fromPromise(this.getProject(projectId).ref.get().then((documentSnapshot) => documentSnapshot.data().categories));
   }
 
   // Transforme une catégorie en type d'entité

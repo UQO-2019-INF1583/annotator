@@ -10,14 +10,16 @@ import * as firebase from 'firebase/app';
   styleUrls: ['./app.component.css'],
   providers: [AngularFireAuth]
 })
-
 export class AppComponent {
   title = 'Annotateur';
   user: Observable<firebase.User>;
   items: AngularFireList<any[]>;
   msgVal = '';
 
-  constructor(public afAuth: AngularFireAuth, public afDb: AngularFireDatabase) {
+  constructor(
+    public afAuth: AngularFireAuth,
+    public afDb: AngularFireDatabase
+  ) {
     this.user = this.afAuth.authState;
     this.items = afDb.list('items');
   }

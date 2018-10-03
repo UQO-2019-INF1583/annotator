@@ -1,4 +1,13 @@
-import { Routes, RouterModule } from '@angular/router';
+import {
+  AddAnnotatorComponent,
+  AddCategoryComponent,
+  AddCorpusComponent,
+  CreateProjectComponent
+} from './components';
+import { ProjectManagerComponent, UserManagerComponent } from './adm';
+import { RouterModule, Routes } from '@angular/router';
+
+import { AnnotationComponent } from './annotation/index';
 import { AuthGuard } from './shared/security/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { HomeWelcomeComponent } from './home-welcome/home-welcome.component';
@@ -7,14 +16,6 @@ import { LoginComponent } from './login';
 import { PageNotFoundComponent } from './not-found/not-found.component';
 import { ProjectComponent } from './components/index';
 import { RegisterComponent } from './register';
-import { AnnotationComponent } from './annotation/index';
-import {
-  CreateProjectComponent,
-  AddCategoryComponent,
-  AddCorpusComponent,
-  AddAnnotatorComponent
-} from './components';
-import { ProjectManagerComponent, UserManagerComponent } from './adm';
 import { UserComponent } from './adm';
 
 const appRoutes: Routes = [
@@ -50,5 +51,5 @@ const appRoutes: Routes = [
 ];
 
 export const routing = RouterModule.forRoot(
-  appRoutes /*, { enableTracing: true }*/
+  appRoutes, { useHash: false } /*, { enableTracing: true }*/
 );

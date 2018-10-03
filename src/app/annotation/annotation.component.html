@@ -4,12 +4,15 @@
         <h3 style="display:inline-block">Project: </h3> {{currentProjectTitle}}<br/><h3 style="display:inline-block">Document: </h3> {{currentDoc?.title}}
         <p *ngIf="isConnected">To add an annotation, highlight the text and choose the category.</p>
         <mat-card>
+            <div id="brat">
+            </div>
             <div id="myText">
             </div>
         </mat-card>
         <br/>
     </div>
-   <div id="brat"></div>
+
+
     <mat-card>
         <!--Section des boutons des catégories-->
         <mat-toolbar>

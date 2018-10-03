@@ -8,9 +8,8 @@ describe('HomeWelcomeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HomeWelcomeComponent ]
-    })
-    .compileComponents();
+      declarations: [HomeWelcomeComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -26,5 +25,5 @@ describe('HomeWelcomeComponent', () => {
   it('should have title as UQO Annotator', () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector('h1').textContent).toContain('UQO Annotator');
-  })
+  });
 });

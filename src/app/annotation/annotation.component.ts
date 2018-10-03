@@ -3,8 +3,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../shared/security/auth.service';
-import { Doc } from '../shared/document.model'
-import { Project } from '../shared/project.model'
+import { Doc } from '../shared/document.model';
+import { Project } from '../shared/project.model';
 import { AnnotationService } from './annotation.service';
 import { ProjectService } from '../components/project/project.service';
 import { CategoryService } from './category.service';
@@ -17,8 +17,8 @@ import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase';
 import './brat/brat-frontend-editor';
 declare var BratFrontendEditor: any;
-import {collData, docData, options} from './brat/brat-data-mock';
-import {Category} from './Category';
+import { collData, docData, options } from './brat/brat-data-mock';
+import { Category } from './Category';
 
 @Component({
   selector: 'app-annotation',
@@ -26,7 +26,6 @@ import {Category} from './Category';
   styleUrls: ['./annotation.component.scss'],
   providers: [CategoryService]
 })
-
 export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
   currentDoc: Doc;
@@ -34,10 +33,14 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   currentProjectTitle: string;
   isConnected = false;
 
-  constructor(private authService: AuthService, private activeRouter: ActivatedRoute, private router: Router,
-    /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore, private categs: CategoryService) {
-
-  }
+  constructor(
+    private authService: AuthService,
+    private activeRouter: ActivatedRoute,
+    private router: Router,
+    /*private as: AnnotationService,*/ private ps: ProjectService,
+    private afs: AngularFirestore,
+    private categs: CategoryService
+  ) {}
 
   ngOnInit() {
     let text = 'Ed O\'Kelley';
@@ -47,15 +50,20 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       this.currentProjectTitle = params.projectTitle;
 
       // Charge les catégories du projet de façon asynchrone à l'aide du service CategoryService
-      this.categs.getCategories(params.projectId)
-        .subscribe(categories => {
-          this.categories = categories as Category[]
-        });
+      this.categs.getCategories(params.projectId).subscribe(categories => {
+        this.categories = categories as Category[];
+      });
     });
 
     // Télécharge le fichier choisi
-    firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).getDownloadURL().
-      then(url => {
+    firebase
+      .storage()
+      .ref()
+      .child(
+        'Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title
+      )
+      .getDownloadURL()
+      .then(url => {
         const xhr = new XMLHttpRequest();
         xhr.responseType = 'blob';
         xhr.onload = event => {
@@ -70,39 +78,44 @@ export class AnnotationComponent implements OnInit, OnDestroy {
             docData.text = text;
             console.log(text);
 
-			    // En ajoutant l'initialisation de Brat ici, on peut s'assurer que le texte aura été chargé avant.
-			    let brat = new BratFrontendEditor(document.getElementById('brat'), collData, docData, options);
-          console.log(brat.colData)
+            // En ajoutant l'initialisation de Brat ici, on peut s'assurer que le texte aura été chargé avant.
+            const brat = new BratFrontendEditor(
+              document.getElementById('brat'),
+              collData,
+              docData,
+              options
+            );
+            console.log(brat.colData);
           };
           reader.readAsText(this.currentDoc.file);
         };
         xhr.open('GET', url);
         xhr.send();
-      }).catch(error => {
+      })
+      .catch(error => {
         console.log(error);
       });
 
-
-      console.log(text);
-
+    console.log(text);
   }
 
-
   ngOnDestroy() {
-    this.sub.unsubscribe;
+    this.sub.unsubscribe();
   }
 
   Categoriser(couleur: string) {
-
     let sel, range, ceci;
     if (window.getSelection) {
       sel = window.getSelection();
 
       if (sel.getRangeAt && sel.rangeCount) {
-        if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id === 'myText' ||
-          sel.getRangeAt(0).commonAncestorContainer.parentNode.parentNode.id === 'myText'
-        || sel.getRangeAt(0).commonAncestorContainer.id === 'myText') {
-
+        if (
+          sel.getRangeAt(0).commonAncestorContainer.parentNode.id ===
+            'myText' ||
+          sel.getRangeAt(0).commonAncestorContainer.parentNode.parentNode.id ===
+            'myText' ||
+          sel.getRangeAt(0).commonAncestorContainer.id === 'myText'
+        ) {
           console.log('mytext');
           if (couleur !== 'Delete') {
             range = sel.getRangeAt(0);
@@ -115,25 +128,32 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
             range.deleteContents();
 
-            if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id !== 'myText' &&
-            sel.getRangeAt(0).commonAncestorContainer.id !== 'myText') {
-              range.commonAncestorContainer.parentNode.parentNode
-                .removeChild(range.commonAncestorContainer.parentNode);
+            if (
+              sel.getRangeAt(0).commonAncestorContainer.parentNode.id !==
+                'myText' &&
+              sel.getRangeAt(0).commonAncestorContainer.id !== 'myText'
+            ) {
+              range.commonAncestorContainer.parentNode.parentNode.removeChild(
+                range.commonAncestorContainer.parentNode
+              );
             }
 
             range.insertNode(newSpan);
-
           } else if (couleur === 'Delete') {
             range = window.getSelection().getRangeAt(0);
             console.log('2. delete');
 
-            const html = range.cloneContents().textContent
+            const html = range.cloneContents().textContent;
             range.deleteContents();
 
-            if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id !== 'myText' &&
-            sel.getRangeAt(0).commonAncestorContainer.id !== 'myText') {
-              range.commonAncestorContainer.parentNode.parentNode
-                .removeChild(range.commonAncestorContainer.parentNode);
+            if (
+              sel.getRangeAt(0).commonAncestorContainer.parentNode.id !==
+                'myText' &&
+              sel.getRangeAt(0).commonAncestorContainer.id !== 'myText'
+            ) {
+              range.commonAncestorContainer.parentNode.parentNode.removeChild(
+                range.commonAncestorContainer.parentNode
+              );
             }
 
             const el = document.createElement('div');
@@ -144,7 +164,6 @@ export class AnnotationComponent implements OnInit, OnDestroy {
               lastNode = frag.appendChild(ceci);
             }
             range.insertNode(frag);
-
           }
         }
       }
@@ -153,11 +172,16 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
   saveTextModification() {
     const data = document.getElementById('myText').innerHTML;
-    const thefile = new File([data], this.currentDoc.title)
+    const thefile = new File([data], this.currentDoc.title);
 
-    firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).put(thefile);
+    firebase
+      .storage()
+      .ref()
+      .child(
+        'Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title
+      )
+      .put(thefile);
 
     alert('Annotation saved');
   }
-
 }

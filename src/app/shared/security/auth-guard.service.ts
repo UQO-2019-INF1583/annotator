@@ -3,12 +3,14 @@
 
 import { Injectable } from '@angular/core';
 import {
-  CanActivate, Router,
+  CanActivate,
+  Router,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
   CanActivateChild,
   NavigationExtras,
-  CanLoad, Route
+  CanLoad,
+  Route
 } from '@angular/router';
 import { AuthService } from './auth.service';
 
@@ -17,12 +19,15 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   constructor(private authService: AuthService, private router: Router) {}
 
   // détermine si la navigation vers une route donnée est autorisée.
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
     const url: string = state.url;
     let active = false;
     if (localStorage.getItem('currentUser')) {
       // logged in so return true
-      active = true;   /*
+      active = true; /*
     } else if (this.checkLogin(url) || this.authService.authenticated) {
       active = true;  */
     }
@@ -30,7 +35,10 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     return active;
   }
 
-  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivateChild(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean {
     return this.canActivate(route, state);
   }
 
@@ -42,10 +50,10 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
   // détermine le status d'authentification d'un utilisateur donné
   checkLogin(url: string): boolean {
-//    if (this.authService.isLoggedIn || this.authService.authenticated) { return true; }
+    //    if (this.authService.isLoggedIn || this.authService.authenticated) { return true; }
 
     // Store the attempted URL for redirecting
-//    this.authService.redirectUrl = url;
+    //    this.authService.redirectUrl = url;
 
     // Create a dummy session id
     const sessionId = 123456789;
@@ -53,7 +61,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     // Set our navigation extras object
     // that contains our global query params and fragment
     const navigationExtras: NavigationExtras = {
-      queryParams: { 'session_id': sessionId },
+      queryParams: { session_id: sessionId },
       fragment: 'anchor'
     };
 

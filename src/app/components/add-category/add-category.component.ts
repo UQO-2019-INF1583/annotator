@@ -6,13 +6,13 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   templateUrl: './add-category.component.html',
   styleUrls: ['./add-category.component.scss']
 })
-
 export class AddCategoryComponent implements OnInit {
   availableColors: object[];
 
   constructor(
     public dialogRef: MatDialogRef<AddCategoryComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
   ngOnInit() {
     this.availableColors = [

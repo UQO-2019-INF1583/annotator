@@ -1,5 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from '@angular/material';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -15,17 +19,18 @@ import { UsersDataSource } from '../../data-sources/usersDataSource';
   templateUrl: './add-admin.component.html',
   styleUrls: ['./add-admin.component.scss']
 })
-
 export class AddAdminComponent implements OnInit {
   displayedColumns = ['uid', 'email', 'firstname', 'lastname', 'add'];
   datasource: UsersDataSource | null;
 
   constructor(
     public dialogRef: MatDialogRef<AddAdminComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private afs: AngularFirestore ) { }
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private afs: AngularFirestore
+  ) {}
 
   ngOnInit() {
-    //initialize la datasource pour la mat-table
+    // initialize la datasource pour la mat-table
     this.datasource = new UsersDataSource(this.afs);
   }
 }

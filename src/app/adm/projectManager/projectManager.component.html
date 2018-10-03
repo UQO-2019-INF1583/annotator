@@ -1,4 +1,4 @@
-<div>
+<div class="container">
   <mat-card>
     <h2>List of projects</h2>
   </mat-card>
@@ -8,12 +8,15 @@
 
       <ng-container matColumnDef="title">
         <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-        <mat-cell class="select" *matCellDef="let project" [routerLink]="['/project', {id: project.id}]"> {{project.title}} </mat-cell>
+        <mat-cell *matCellDef="let project" [routerLink]="['/project', {id: project.id}]">
+          {{project.title}}
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="description">
         <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
-        <mat-cell *matCellDef="let project"> {{project.description}} </mat-cell>
+        <mat-cell *matCellDef="let project" [routerLink]="['/project', {id: project.id}]"> {{project.description}}
+        </mat-cell>
       </ng-container>
 
       <ng-container *ngIf="isConnected" matColumnDef="modify">

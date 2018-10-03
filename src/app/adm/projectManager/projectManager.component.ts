@@ -47,7 +47,7 @@ export class ProjectManagerComponent implements OnInit {
     this.manage
       .loadAllproject()
       .valueChanges()
-      .subscribe(data => {
+      .subscribe((data: Project[]) => {
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.paginator = this.paginator;
       });

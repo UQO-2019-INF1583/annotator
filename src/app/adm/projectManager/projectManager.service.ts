@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
   // AngularFirestoreCollection,
-  AngularFirestoreDocument
+  AngularFirestoreDocument,
+  AngularFirestoreCollection
 } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 
@@ -18,7 +19,7 @@ export class ProjectManagerService {
   constructor(private afs: AngularFirestore) {}
 
   // load all project
-  public loadAllproject() {
+  public loadAllproject(): AngularFirestoreCollection<Project> {
     return this.afs.collection<Project>('Projects', ref =>
       ref.orderBy('title')
     );

@@ -63,10 +63,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
           const reader: FileReader = new FileReader();
           reader.onloadend = e => {
-            const texthtml = document.getElementById('myText');
             text = String(reader.result);
-            texthtml.innerHTML = text;
-
             docData.text = text;
             console.log(text);
 

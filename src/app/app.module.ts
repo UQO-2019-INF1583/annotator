@@ -1,46 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CdkTableModule } from '@angular/cdk/table';
 import { DataSource } from '@angular/cdk/collections';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
-import {
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatButtonToggleModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatDividerModule,
-  MatExpansionModule,
-  MatGridListModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
-  MatRippleModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
-  MatSortModule,
-  MatStepperModule,
-  MatTableDataSource,
-  MatTableModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatTooltipModule
-} from '@angular/material';
 
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireModule } from 'angularfire2';
@@ -76,7 +40,7 @@ import {
   AddAnnotatorComponent,
   ProjectService
 } from './components/index';
-
+import { MaterialModule } from './material.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -113,32 +77,8 @@ import {
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatCardModule,
-    MatGridListModule,
-    MatListModule,
-    MatTabsModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSlideToggleModule,
-    MatProgressBarModule,
-    MatToolbarModule,
-    MatExpansionModule,
-    MatStepperModule,
-    MatMenuModule,
-    MatTableModule,
-    MatSelectModule,
-    MatChipsModule,
-    MatIconModule,
-    MatDialogModule,
-    FileDropModule,
-    MatPaginatorModule,
-    MatSortModule, // MatTableDataSource,
+    MaterialModule,
     AngularFireStorageModule,
-    CdkTableModule,
     AngularFirestoreModule // imports firebase/firestore, only needed for database features
   ],
   providers: [

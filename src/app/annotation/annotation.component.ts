@@ -36,6 +36,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   categories: Category[];
   currentProjectTitle: string;
   isConnected = false;
+  brat;
   projectId: string;
 
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute, private router: Router,

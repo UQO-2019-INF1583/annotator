@@ -36,13 +36,20 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   categories: Category[];
   currentProjectTitle: string;
   isConnected = false;
-  brat;
   projectId: string;
 
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute, private router: Router,
               /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore,
               private categs: CategoryService, private storage: AngularFireStorage, private http: HttpClient) {
 
+  }
+
+  /**
+   * Méthode qui retourne l'interface d'annotation brat, si et seulement si elle a été initialisée
+   * @returns {any} brat si brat a été initialisé, null sinon
+   */
+  public getBrat(): any {
+    return (this.brat instanceof BratFrontendEditor ? this.brat : null);
   }
 
   /**
@@ -96,7 +103,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe;
+    this.sub.unsubscribe();
   }
 
   Categoriser(couleur: string) {

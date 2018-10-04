@@ -7,8 +7,6 @@ import {Observable} from 'rxjs/Observable';
 import {of} from 'rxjs/observable/of';
 import {Project} from '../shared/project.model';
 import {AngularFirestore, AngularFirestoreDocument} from 'angularfire2/firestore';
-import {forEach} from '@angular/router/src/utils/collection';
-
 
 @Injectable()
 export class CategoryService {
@@ -33,7 +31,7 @@ export class CategoryService {
   }
 
   // Transforme une catégorie en type d'entité
-  getCategoriesAsEntityTypes(categories: Category[]): any {
+  getCategoriesAsEntityTypes(categories: Category[]): EntityType[] {
     let newTypes = new Array <EntityType>() ;
     let newType: EntityType;
     categories.forEach(function (category) {

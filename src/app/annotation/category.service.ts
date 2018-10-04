@@ -7,9 +7,6 @@ import {Observable} from 'rxjs/Observable';
 import {of} from 'rxjs/observable/of';
 import {Project} from '../shared/project.model';
 import {AngularFirestore, AngularFirestoreDocument} from 'angularfire2/firestore';
-import {forEach} from '@angular/router/src/utils/collection';
-import {isFunction} from "util";
-
 
 @Injectable()
 export class CategoryService {
@@ -22,13 +19,10 @@ export class CategoryService {
     return of(CATEGORIES);
   }
 
-  getProject(projectId): any {
-    if (isFunction(this.afs.collection<Project>('Projects').doc)) {
-      return this.afs.collection<Project>('Projects').doc(projectId)
-    } else {
-      // La fonction se fait exécuter à partir des tests, donc asf est un stub.
-      return this.afs.collection('Projects');
-    }
+  // Retourne de façon asynschore le document de type project, dont le id est passé en paramètre, à partir de la base de données Firestore
+  getProject(projectId): AngularFirestoreDocument<any> {
+    const projectRef = this.afs.collection<Project>('Projects').doc(projectId);
+    return projectRef;
   }
 
   // Retourne de façon asynchrone les catégories d'un projet dont le id est passé en paramètre, à partir de la base de données Firestore
@@ -37,7 +31,7 @@ export class CategoryService {
   }
 
   // Transforme une catégorie en type d'entité
-  getCategoriesAsEntityTypes(categories: Category[]): any {
+  getCategoriesAsEntityTypes(categories: Category[]): EntityType[] {
     let newTypes = new Array <EntityType>() ;
     let newType: EntityType;
     categories.forEach(function (category) {

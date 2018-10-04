@@ -8,7 +8,7 @@ export class EntityType {
   labels: string[];
   bgColor: string;
   borderColor = 'darken';
-  children: EntityType[];
+  children = [];
   unused = false;
   attributes = [];
 }

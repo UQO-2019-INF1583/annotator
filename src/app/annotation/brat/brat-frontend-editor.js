@@ -573,7 +573,7 @@
       };
       if (!c.offset.setOffset) {
         c.offset.setOffset = function (b, a) {
-          if (static.test(c.curCSS(b, "position"))) b.style.position = "relative";
+          if (/(static)/.test(c.curCSS(b, "position"))) b.style.position = "relative";
           var d = c(b),
             g = d.offset(), e = parseInt(c.curCSS(b, "top", true), 10) || 0,
             h = parseInt(c.curCSS(b, "left", true), 10) || 0;
@@ -1789,7 +1789,7 @@
           var a = e(this).data("resizable"), c = a.options, d = a.containerOffset, f = a.position;
           b = a._aspectRatio || b.shiftKey;
           var g = {top: 0, left: 0}, h = a.containerElement;
-          if (h[0] != document && static.test(h.css("position"))) g = d;
+          if (h[0] != document && /(static)/.test(h.css("position"))) g = d;
           if (f.left < (a._helper ? d.left : 0)) {
             a.size.width += a._helper ? a.position.left - d.left :
               a.position.left - g.left;
@@ -1826,7 +1826,7 @@
             width: i,
             height: g
           });
-          b._helper && !a.animate && static.test(f.css("position")) && e(this).css({
+          b._helper && !a.animate && /(static)/.test(f.css("position")) && e(this).css({
             left: h.left - d.left - c.left,
             width: i,
             height: g

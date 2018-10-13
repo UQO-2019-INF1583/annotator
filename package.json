@@ -10,7 +10,8 @@
     "lint": "ng lint \"**/*.ts\"",
     "lint-fix": "ng lint --fix \"**/*.ts\" --write",
     "prettier-fix": "prettier \"**/*.ts\" --write",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "coverage": "ng test --code-coverage=true"
   },
   "private": true,
   "dependencies": {

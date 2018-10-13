@@ -7,8 +7,9 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint && prettier -l \"**/*.ts\"",
-    "lint-fix": "ng lint --fix && prettier \"**/*.ts\" --write",
+    "lint": "ng lint \"**/*.ts\"",
+    "lint-fix": "ng lint --fix \"**/*.ts\" --write",
+    "prettier-fix": "prettier \"**/*.ts\" --write",
     "e2e": "ng e2e"
   },
   "private": true,

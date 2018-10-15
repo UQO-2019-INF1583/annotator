@@ -12,7 +12,7 @@
     "prettier-fix": "prettier \"**/*.ts\" --write",
     "e2e": "ng e2e",
     "coverage": "ng test --code-coverage=true",
-    "compodoc": "./node_modules/.bin/compodoc -p src/tsconfig.app.json",
+    "docs": "./node_modules/.bin/compodoc -p src/tsconfig.app.json -d docs",
     "docs:serve": "compodoc -p src/tsconfig.app.json -d docs -s"
   },
   "private": true,

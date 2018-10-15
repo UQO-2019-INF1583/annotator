@@ -12,8 +12,8 @@
     "prettier-fix": "prettier \"**/*.ts\" --write",
     "e2e": "ng e2e",
     "coverage": "ng test --code-coverage=true",
-    "docs": "./node_modules/.bin/compodoc -p src/tsconfig.app.json -d docs",
-    "docs:serve": "compodoc -p src/tsconfig.app.json -d docs -s"
+    "docs": "./node_modules/.bin/compodoc -p src/tsconfig.app.json -d documentation",
+    "docs:serve": "compodoc -p src/tsconfig.app.json -d documentation -s"
   },
   "private": true,
   "dependencies": {

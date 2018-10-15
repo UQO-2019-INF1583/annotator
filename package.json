@@ -11,7 +11,9 @@
     "lint-fix": "ng lint --fix \"**/*.ts\" --write",
     "prettier-fix": "prettier \"**/*.ts\" --write",
     "e2e": "ng e2e",
-    "coverage": "ng test --code-coverage=true"
+    "coverage": "ng test --code-coverage=true",
+    "compodoc": "./node_modules/.bin/compodoc -p src/tsconfig.app.json",
+    "docs:serve": "compodoc -p src/tsconfig.app.json -d docs -s"
   },
   "private": true,
   "dependencies": {
@@ -42,6 +44,7 @@
     "@angular/cli": "^1.7.1",
     "@angular/compiler-cli": "^5.2.9",
     "@angular/language-service": "^5.2.9",
+    "@compodoc/compodoc": "^1.1.5",
     "@types/jasmine": "^2.8.6",
     "@types/jasminewd2": "^2.0.2",
     "@types/node": "^8.9.4",

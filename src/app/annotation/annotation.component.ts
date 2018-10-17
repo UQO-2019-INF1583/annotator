@@ -61,7 +61,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     let newType: any;
     newTypes.forEach(function (entity) {
       newType = {};
-      for ( let property in entity) {
+      for (let property in entity) {
         if (entity.hasOwnProperty(property)) {
           newType[property] = entity[property];
         }
@@ -84,15 +84,17 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     // Lire le fichier stocké pour en extraire le texte
     const URL = await firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).getDownloadURL();
     let text = await this.http.get(URL, {responseType: 'text'}).toPromise();
-    // Interface d'annotation actuelle
-    const texthtml = document.getElementById('myText');
-    texthtml.innerHTML = text;
-    // Pour l'interface de brat
+    let bratParams : string[] = text.split("-----");
+    text = bratParams[0];
+    let docData = JSON.parse(bratParams[1]);
+    let collData = JSON.parse(bratParams[2]);
+    //const texthtml = document.getElementById('myText');
+   //texthtml.innerText = text.replace(/<[^>]*>/g, '');
     docData.text = text.replace(/<[^>]*>/g, '');
     // Charge les catégories du projet de façon asynchrone à l'aide du service CategoryService
     this.categories = await this.categs.getCategories(this.projectId).toPromise();
     // Ajouter les catégories comme des types d'entités
-    await this.addEntityTypes ();
+    await this.addEntityTypes();
     // Finalement initialiser brat
     this.brat = new BratFrontendEditor(document.getElementById('brat'), collData, docData, options);
   }
@@ -166,8 +168,11 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   saveTextModification() {
-    const data = document.getElementById('myText').innerHTML;
-    const thefile = new File([data], this.currentDoc.title)
+    let data = this.brat.docData.text;
+    const docData = JSON.stringify(this.brat.docData);
+    const collData = JSON.stringify(this.brat.collData)
+    data = data + "-----" + docData + "-----" + collData;
+    const thefile = new File([data], this.currentDoc.title);
 
     firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).put(thefile);
 

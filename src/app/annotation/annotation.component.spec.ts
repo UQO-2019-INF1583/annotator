@@ -22,7 +22,7 @@ let AngularFireStorageStub: Partial<AngularFireStorage>;
 let AuthServiceStub: Partial<AuthService>;
 let ProjectServiceStub: Partial<ProjectService>;
 let CategoryServiceStub: Partial<CategoryService>;
-let debugElement: DebugElement;
+
 
 /*
 Prochaines étapes: Doit créer les stubs pour mocker les interactions entre le component et ses services injectés
@@ -49,18 +49,18 @@ describe('AnnotationComponent', () => {
     };
 
     AuthServiceStub = {
-    isConnected: function() { return true; } ,
+      isConnected: function () { return true; },
     };
 
     ProjectServiceStub = {
     };
 
     CategoryServiceStub = {
-      getCategories: function(projectId) { return Observable.of([])},
+      getCategories: function (projectId) { return Observable.of([]) },
     };
 
     TestBed.configureTestingModule({
-      declarations: [ AnnotationComponent ],
+      declarations: [AnnotationComponent],
       imports: [
         RouterTestingModule,
         MatCardModule,
@@ -70,13 +70,13 @@ describe('AnnotationComponent', () => {
         AngularFireModule.initializeApp(environment.firebase),
       ],
       providers: [
-        {provide: AngularFirestore, useValue: AngularFirestoreStub},
-        {provide: AngularFireStorage, useValue: AngularFireStorageStub},
-        {provide: AuthService, useValue: AuthServiceStub},
-        {provide: ProjectService, useValue: ProjectServiceStub},
-        {provide: CategoryService, useValue: CategoryServiceStub}]
+        { provide: AngularFirestore, useValue: AngularFirestoreStub },
+        { provide: AngularFireStorage, useValue: AngularFireStorageStub },
+        { provide: AuthService, useValue: AuthServiceStub },
+        { provide: ProjectService, useValue: ProjectServiceStub },
+        { provide: CategoryService, useValue: CategoryServiceStub }]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -98,7 +98,7 @@ describe('AnnotationComponent', () => {
   });
 
   it('check if brat div exist in dom', () => {
-    expect(debugComponent.query(By.css("#brat"))).toBeTruthy();
+    expect(debugComponent.query(By.css('#brat'))).toBeTruthy();
   });
 
   it('check if brat front end editor is loaded', () => {

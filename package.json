@@ -7,11 +7,11 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint && prettier -l \"**/*.ts\"",
+    "lint": "ng lint",
+    "lint:prettier": "ng lint && prettier -l \"**/*.ts\"",
     "lint-fix": "ng lint --fix && prettier \"**/*.ts\" --write",
     "e2e": "ng e2e",
-    "format:fix": "pretty-quick --staged",
-    "prepush" : "run-s format:fix lint"
+    "prepush" : "run-s lint-fix lint"
   },
   "private": true,
   "dependencies": {

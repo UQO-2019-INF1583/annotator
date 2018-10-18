@@ -10,6 +10,9 @@ export class Project {
   annotators: string[]; // user ids
   corpus: Doc[];
   categories: Category[];
+  attributes: string[];
+  events: string[];
+  relations: string[];
 
   constructor(id: string = '', title: string = '', description: string = '') {
     this.id = id;
@@ -19,5 +22,8 @@ export class Project {
     this.annotators = [];
     this.corpus = [];
     this.categories = [];
+    this.attributes = [];
+    this.events = [];
+    this.relations = [];
   }
 }

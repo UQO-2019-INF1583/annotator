@@ -76,6 +76,9 @@ import {
   AddAnnotatorComponent,
   ProjectService
 } from './components/index';
+import { AddRelationComponent } from './components/add-relation/add-relation.component';
+import { AddEventComponent } from './components/add-event/add-event.component';
+import { AddAttributeComponent } from './components/add-attribute/add-attribute.component';
 
 @NgModule({
   declarations: [
@@ -96,12 +99,18 @@ import {
     ProjectManagerComponent,
     RegisterComponent,
     UserComponent,
-    UserManagerComponent
+    UserManagerComponent,
+    AddRelationComponent,
+    AddEventComponent,
+    AddAttributeComponent
   ],
   entryComponents: [
     AddAdminComponent,
     AddAnnotatorComponent,
-    AddCategoryComponent
+    AddCategoryComponent,
+    AddRelationComponent,
+    AddEventComponent,
+    AddAttributeComponent
   ],
   imports: [
     BrowserModule,

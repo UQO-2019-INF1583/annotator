@@ -184,6 +184,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addAnnotatorDialogBox() {
     const dialogRef = this.dialog.open(AddAnnotatorComponent, {
       width: '600px',
+      height: '600px',
       data: { UserId: undefined }
     });
 
@@ -224,6 +225,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addAdminDialogBox() {
     const dialogRef = this.dialog.open(AddAdminComponent, {
       width: '600px',
+      height: '600px',
       data: { UserId: undefined }
     });
 

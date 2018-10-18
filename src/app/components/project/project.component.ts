@@ -11,6 +11,9 @@ import { AddCategoryComponent } from '../add-category/add-category.component';
 import { AddCorpusComponent } from '../add-corpus/add-corpus.component';
 import { AddAdminComponent } from '../add-admin/add-admin.component';
 import { AddAnnotatorComponent } from '../add-annotator/add-annotator.component';
+import { AddAttributeComponent } from '../add-attribute/add-attribute.component';
+import { AddEventComponent } from '../add-event/add-event.component';
+import { AddRelationComponent } from '../add-relation/add-relation.component';
 import { ProjectManagerService } from '../../adm/projectManager';
 import { ProjectService } from './project.service';
 import { User } from './../../shared/user.model';
@@ -247,6 +250,135 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }
     })
   }
+
+  //ouvre la boîte de dialogue pour ajouter un attribut
+  addAttributesDialogBox() {
+    const dialogRef = this.dialog.open(AddAttributeComponent, {
+      width: '400px',
+      data: { UserId: undefined }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      var adminExists = false;
+      if (result !== undefined) {
+        this.currentProject.admin.forEach((item) => {
+          if (item == result.uid) {
+            adminExists = true;
+          }
+        })
+        if (!adminExists){
+          this.currentProject.admin.push(result.uid);
+          this.admin.push({uid: result.uid, email: result.email});
+        }
+        else {
+          alert('This attribute already exists');
+        }
+      }
+    });
+  }
+
+  // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
+  deleteAttribute(uid: string){
+    this.currentProject.admin.forEach((item, index) => {
+      if (item == uid) {
+        this.currentProject.admin.splice(index, 1);
+      }
+    })
+    this.admin.forEach((item, index) => {
+      if (item.uid == uid) {
+        this.admin.splice(index, 1);
+      }
+    })
+  }
+
+
+  addRelationDialogBox() {
+    const dialogRef = this.dialog.open(AddRelationComponent, {
+      width: '400px',
+      data: { UserId: undefined }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      var adminExists = false;
+      if (result !== undefined) {
+        this.currentProject.admin.forEach((item) => {
+          if (item == result.uid) {
+            adminExists = true;
+          }
+        })
+        if (!adminExists){
+          this.currentProject.admin.push(result.uid);
+          this.admin.push({uid: result.uid, email: result.email});
+        }
+        else {
+          alert('This relation already exists');
+        }
+      }
+    });
+  }
+
+  // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
+  deleteRelation(uid: string){
+    this.currentProject.admin.forEach((item, index) => {
+      if (item == uid) {
+        this.currentProject.admin.splice(index, 1);
+      }
+    })
+    this.admin.forEach((item, index) => {
+      if (item.uid == uid) {
+        this.admin.splice(index, 1);
+      }
+    })
+  }
+
+
+  addEventDialogBox() {
+    const dialogRef = this.dialog.open(AddEventComponent, {
+      width: '400px',
+      data: { UserId: undefined }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      var adminExists = false;
+      if (result !== undefined) {
+        this.currentProject.admin.forEach((item) => {
+          if (item == result.uid) {
+            adminExists = true;
+          }
+        })
+        if (!adminExists){
+          this.currentProject.admin.push(result.uid);
+          this.admin.push({uid: result.uid, email: result.email});
+        }
+        else {
+          alert('This event already exists');
+        }
+      }
+    });
+  }
+
+  // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
+  deleteEvent(uid: string){
+    this.currentProject.admin.forEach((item, index) => {
+      if (item == uid) {
+        this.currentProject.admin.splice(index, 1);
+      }
+    })
+    this.admin.forEach((item, index) => {
+      if (item.uid == uid) {
+        this.admin.splice(index, 1);
+      }
+    })
+  }
+
+
+
+
+
+
+
+
+
 
   // Événement lorsqu'un texte est sélectionné
   documentSelected(doc: any) { doc.projectTitle = this.currentProject.title;

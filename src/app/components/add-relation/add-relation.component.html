@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Relation</h2>
+<mat-form-field>
+  <input matInput placeholder="Name" [(ngModel)]="data.relationName" name="nom" #nom="ngModel" required/>
+  <mat-error *ngIf="nom.value == '' || nom.value == null">Nom obligatoire</mat-error>
+</mat-form-field>
+
+<mat-dialog-actions>
+  <button class="btn btn btn-primary" [mat-dialog-close]="data">Add</button>
+  <div style="width: 10px"></div>
+  <button class="btn btn btn-primary" mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

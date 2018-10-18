@@ -3,6 +3,7 @@ import {AngularFirestore} from 'angularfire2/firestore';
 import {} from 'jasmine';
 import {CategoryService} from './category.service';
 import {MOCK_CATEGORIES, CATEGORIES} from './category.service.MOCKDATA';
+import {EntityType} from './EntityType';
 
 describe('CategoryService', () => {
 
@@ -50,7 +51,9 @@ describe('CategoryService', () => {
       const transform = categoriesService.getCategoriesAsEntityTypes(
         MOCK_CATEGORIES
       );
-      expect(MOCK_CATEGORIES === transform).toBe(false);
+	  for (let i = 0; i < transform.length; i++) {
+        expect(transform[i]).toEqual(jasmine.any(EntityType));
+	  }
     }
   ));
 

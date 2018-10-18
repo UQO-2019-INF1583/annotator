@@ -288,17 +288,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteAttribute(target: string){
+  deleteAttribute(target: string) {
     this.currentProject.attributes.forEach((item, index) => {
       if (item === target) {
         this.currentProject.attributes.splice(index, 1);
       }
     });
-    this.admin.forEach((item, index) => {
-      if (item.name === uid) {
-        this.attributes.splice(index, 1);
-      }
-    })
   }
 
   addRelationDialogBox() {
@@ -332,11 +327,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.currentProject.relations.splice(index, 1);
       }
     });
-    this.relations.forEach((item, index) => {
-      if (item.name === name) {
-        this.relations.splice(index, 1);
-      }
-    })
   }
 
 
@@ -370,11 +360,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.currentProject.events.forEach((item, index) => {
       if (item === target) {
         this.currentProject.events.splice(index, 1);
-      }
-    })
-    this.admin.forEach((item, index) => {
-      if (item.name === name) {
-        this.events.splice(index, 1);
       }
     })
   }

@@ -34,7 +34,7 @@ import 'rxjs/add/operator/mergeMap';
 })
 
 export class ProjectComponent implements OnInit, OnDestroy {
-  currentProject: Project = { id: '', title: '', description: '', admin: [], annotators: [], corpus: [], categories: [] };
+  currentProject: Project = {id: '', title: '', description: '', admin: [], annotators: [], corpus: [], categories: [], attributes: [], events: [], relations: [] };
   private sub: any;
   isDataLoaded: boolean = false;
 
@@ -42,6 +42,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   corpus: Observable<any[]>;
   annotators: any[]; // {uid: v1, email: v2}[]
   admin: any[]; // {uid: v1, email: v2}[]
+  attributes: any[];
+  events: any[];
+  relations: any[];
   isConnected: boolean = false;
 
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute, public dialog: MatDialog, private afs: AngularFirestore, private router: Router,
@@ -53,6 +56,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.pm.getProject(params.id).then((doc) => {
         this.currentProject = doc.data();
         this.corpus = this.ps.getCorpus(this.currentProject.id);
+
+        // Initialisation de variables vides, puisqu'on ne les prend pas de FireStore
+        this.currentProject.attributes = [];
+        this.currentProject.events = [];
+        this.currentProject.relations = [];
+
         if (this.isConnected){
           this.users = this.afs.collection<User>('Users').valueChanges();
           this.getAnnotatorEmail();
@@ -259,16 +268,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      var adminExists = false;
+      let attributeExists = false;
       if (result !== undefined) {
-        this.currentProject.admin.forEach((item) => {
-          if (item == result.uid) {
-            adminExists = true;
+        this.currentProject.attributes.forEach((item) => {
+          if (item === result.attributeName) {
+            attributeExists = true;
           }
-        })
-        if (!adminExists){
-          this.currentProject.admin.push(result.uid);
-          this.admin.push({uid: result.uid, email: result.email});
+        });
+        if (!attributeExists){
+          this.currentProject.attributes.push(result.attributeName);
         }
         else {
           alert('This attribute already exists');
@@ -280,17 +288,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAttribute(uid: string){
     this.currentProject.admin.forEach((item, index) => {
-      if (item == uid) {
+      if (item === uid) {
         this.currentProject.admin.splice(index, 1);
       }
-    })
+    });
     this.admin.forEach((item, index) => {
-      if (item.uid == uid) {
+      if (item.uid === uid) {
         this.admin.splice(index, 1);
       }
     })
   }
-
 
   addRelationDialogBox() {
     const dialogRef = this.dialog.open(AddRelationComponent, {
@@ -299,16 +306,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      var adminExists = false;
+      let relationsExists = false;
       if (result !== undefined) {
-        this.currentProject.admin.forEach((item) => {
-          if (item == result.uid) {
-            adminExists = true;
+        this.currentProject.relations.forEach((item) => {
+          if (item === result.relationName) {
+            relationsExists = true;
           }
-        })
-        if (!adminExists){
-          this.currentProject.admin.push(result.uid);
-          this.admin.push({uid: result.uid, email: result.email});
+        });
+        if (!relationsExists) {
+          this.currentProject.relations.push(result.relationName);
         }
         else {
           alert('This relation already exists');
@@ -319,14 +325,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteRelation(uid: string){
-    this.currentProject.admin.forEach((item, index) => {
-      if (item == uid) {
-        this.currentProject.admin.splice(index, 1);
+    this.currentProject.relations.forEach((item, index) => {
+      if (item === uid) {
+        this.currentProject.relations.splice(index, 1);
       }
-    })
-    this.admin.forEach((item, index) => {
-      if (item.uid == uid) {
-        this.admin.splice(index, 1);
+    });
+    this.relations.forEach((item, index) => {
+      if (item.name === name) {
+        this.relations.splice(index, 1);
       }
     })
   }
@@ -339,16 +345,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      var adminExists = false;
+      let eventExists = false;
       if (result !== undefined) {
-        this.currentProject.admin.forEach((item) => {
-          if (item == result.uid) {
-            adminExists = true;
+        this.currentProject.events.forEach((item) => {
+          if (item === result.eventName) {
+            eventExists = true;
           }
-        })
-        if (!adminExists){
-          this.currentProject.admin.push(result.uid);
-          this.admin.push({uid: result.uid, email: result.email});
+        });
+        if (!eventExists) {
+          this.currentProject.events.push(result.eventName);
         }
         else {
           alert('This event already exists');
@@ -359,20 +364,17 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteEvent(uid: string){
-    this.currentProject.admin.forEach((item, index) => {
-      if (item == uid) {
-        this.currentProject.admin.splice(index, 1);
+    this.currentProject.events.forEach((item, index) => {
+      if (item === uid) {
+        this.currentProject.events.splice(index, 1);
       }
     })
     this.admin.forEach((item, index) => {
-      if (item.uid == uid) {
-        this.admin.splice(index, 1);
+      if (item.name === name) {
+        this.events.splice(index, 1);
       }
     })
   }
-
-
-
 
 
 

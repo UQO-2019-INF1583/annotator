@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Add Event</h2>
 <mat-form-field>
-  <input matInput placeholder="Name" [(ngModel)]="data.attributeName" name="nom" #nom="ngModel" required/>
+  <input matInput placeholder="Name" [(ngModel)]="data.eventName" name="nom" #nom="ngModel" required/>
   <mat-error *ngIf="nom.value == '' || nom.value == null">nom obligatoire</mat-error>
 </mat-form-field>
 

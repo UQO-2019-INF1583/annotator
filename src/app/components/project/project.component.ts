@@ -286,15 +286,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteAttribute(uid: string){
-    this.currentProject.admin.forEach((item, index) => {
-      if (item === uid) {
-        this.currentProject.admin.splice(index, 1);
+  deleteAttribute(target: string){
+    this.currentProject.attributes.forEach((item, index) => {
+      if (item === target) {
+        this.currentProject.attributes.splice(index, 1);
       }
     });
     this.admin.forEach((item, index) => {
-      if (item.uid === uid) {
-        this.admin.splice(index, 1);
+      if (item.name === uid) {
+        this.attributes.splice(index, 1);
       }
     })
   }
@@ -324,9 +324,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteRelation(uid: string){
+  deleteRelation(target: string){
     this.currentProject.relations.forEach((item, index) => {
-      if (item === uid) {
+      if (item === target) {
         this.currentProject.relations.splice(index, 1);
       }
     });
@@ -363,9 +363,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteEvent(uid: string){
+  deleteEvent(target: string) {
+
     this.currentProject.events.forEach((item, index) => {
-      if (item === uid) {
+      if (item === target) {
         this.currentProject.events.splice(index, 1);
       }
     })
@@ -375,12 +376,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }
     })
   }
-
-
-
-
-
-
 
   // Événement lorsqu'un texte est sélectionné
   documentSelected(doc: any) { doc.projectTitle = this.currentProject.title;

@@ -11,7 +11,7 @@
     "lint-fix": "ng lint --fix && prettier \"**/*.ts\" --write",
     "e2e": "ng e2e",
     "format:fix": "pretty-quick --staged",
-    "precommit": "run-s format:fix lint"
+    "prepush" : "run-s format:fix lint"
   },
   "private": true,
   "dependencies": {

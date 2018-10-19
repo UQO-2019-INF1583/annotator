@@ -141,19 +141,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addCategorieDialogBox() {
     let dialogRef = this.dialog.open(AddCategoryComponent, {
       width: '250px',
-      data: { categoryName: undefined, categoryColor: undefined }
+      data: { categoryName: undefined, type: undefined, etiquettes: undefined, categoryColor: undefined }
     });
     var categoryExists = false;
     dialogRef.afterClosed().subscribe(result => {
 
       if (result != undefined) {
-        if (result.categoryName != undefined && result.categoryColor != undefined) {
-          categoryExists = false;
+        if (result.categoryName != undefined && result.categoryColor != undefined && result.type != undefined && result.etiquettes != undefined) {
 
           this.currentProject.categories.forEach((item) => {
-            if (item.name == result.categoryName) {
+            if (item.name === result.categoryName) {
               categoryExists = true;
-              if (item.color == result.categoryColor){
+              if (item.color === result.categoryColor){
                 alert("The category already exists");
               }
               else {
@@ -164,7 +163,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
           });
 
           if (!categoryExists) {
-            this.currentProject.categories.push({ name: result.categoryName, color: result.categoryColor});
+            var etiquettesArray :string[];
+            etiquettesArray = result.etiquettes.split(",");
+            this.currentProject.categories.push({ name: result.categoryName, type : result.type, color: result.categoryColor, labels: etiquettesArray});
           }
         }
       }

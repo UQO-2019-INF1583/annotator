@@ -37,7 +37,8 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   currentProjectTitle: string;
   isConnected = false;
   projectId: string;
-
+  private dData:any;
+  private cData:any;
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute, private router: Router,
               /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore,
               private categs: CategoryService, private storage: AngularFireStorage, private http: HttpClient) {
@@ -84,19 +85,39 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     // Lire le fichier stocké pour en extraire le texte
     const URL = await firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).getDownloadURL();
     let text = await this.http.get(URL, {responseType: 'text'}).toPromise();
+    //split the data
     let bratParams : string[] = text.split("-----");
     text = bratParams[0];
-    let docData = JSON.parse(bratParams[1]);
-    let collData = JSON.parse(bratParams[2]);
-    //const texthtml = document.getElementById('myText');
-   //texthtml.innerText = text.replace(/<[^>]*>/g, '');
-    docData.text = text.replace(/<[^>]*>/g, '');
-    // Charge les catégories du projet de façon asynchrone à l'aide du service CategoryService
+    
+    /*console.log("doc " + JSON.stringify(docData))
+    console.log("col " + JSON.stringify(collData))
+    console.log("opt " + JSON.stringify(options))
+*/
+    
+    //Load mock coll and doc if undefined, else, load what has already been saved
+    if(typeof (bratParams[1]) === 'undefined' && typeof(bratParams[1]) === 'undefined'){
+         this.dData = docData;
+         this.cData = collData;
+      } else {
+         this.dData = JSON.parse(bratParams[1]);
+         this.cData = JSON.parse(bratParams[2]);
+      }
+
+      console.log("debug cData")
+      console.log(this.cData)
+      console.log("debug colData")
+      console.log(collData)
+
+    this.dData.text = text.replace(/<[^>]*>/g, '');
+
     this.categories = await this.categs.getCategories(this.projectId).toPromise();
+
+    console.log(this.categories);
     // Ajouter les catégories comme des types d'entités
     await this.addEntityTypes();
-    // Finalement initialiser brat
-    this.brat = new BratFrontendEditor(document.getElementById('brat'), collData, docData, options);
+
+
+    this.brat = new BratFrontendEditor(document.getElementById('brat'), this.cData, this.dData, options);
   }
 
   ngOnInit() {
@@ -106,6 +127,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+    this.brat = null;
   }
 
   Categoriser(couleur: string) {

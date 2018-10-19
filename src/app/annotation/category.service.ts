@@ -42,8 +42,6 @@ export class CategoryService {
       newType.bgColor = category.color;
       newTypes.push(newType);
     });
-    console.log("conversion log")
-    console.log(newTypes)
     return newTypes;
   }
 }

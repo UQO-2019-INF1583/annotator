@@ -89,10 +89,6 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     let bratParams : string[] = text.split("-----");
     text = bratParams[0];
     
-    /*console.log("doc " + JSON.stringify(docData))
-    console.log("col " + JSON.stringify(collData))
-    console.log("opt " + JSON.stringify(options))
-*/
     
     //Load mock coll and doc if undefined, else, load what has already been saved
     if(typeof (bratParams[1]) === 'undefined' && typeof(bratParams[1]) === 'undefined'){
@@ -103,16 +99,11 @@ export class AnnotationComponent implements OnInit, OnDestroy {
          this.cData = JSON.parse(bratParams[2]);
       }
 
-      console.log("debug cData")
-      console.log(this.cData)
-      console.log("debug colData")
-      console.log(collData)
-
+    
     this.dData.text = text.replace(/<[^>]*>/g, '');
 
     this.categories = await this.categs.getCategories(this.projectId).toPromise();
 
-    console.log(this.categories);
     // Ajouter les catégories comme des types d'entités
     await this.addEntityTypes();
 
@@ -141,10 +132,8 @@ export class AnnotationComponent implements OnInit, OnDestroy {
           sel.getRangeAt(0).commonAncestorContainer.parentNode.parentNode.id === 'myText'
         || sel.getRangeAt(0).commonAncestorContainer.id === 'myText') {
 
-          console.log('mytext');
           if (couleur !== 'Delete') {
             range = sel.getRangeAt(0);
-            console.log('1. new insert not removing old span...');
 
             const newSpan = document.createElement('span');
             newSpan.style.fontWeight = 'bold';
@@ -163,7 +152,6 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
           } else if (couleur === 'Delete') {
             range = window.getSelection().getRangeAt(0);
-            console.log('2. delete');
 
             const html = range.cloneContents().textContent
             range.deleteContents();

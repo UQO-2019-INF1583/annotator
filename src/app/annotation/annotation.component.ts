@@ -101,7 +101,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
     
     this.dData.text = text.replace(/<[^>]*>/g, '');
-
+    console.log(this.dData.text);
     this.categories = await this.categs.getCategories(this.projectId).toPromise();
 
     // Ajouter les catégories comme des types d'entités

@@ -271,7 +271,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       let attributeExists = false;
-      if (result !== undefined) {
+      if (result !== undefined && result !== '') {
         this.currentProject.attributes.forEach((item) => {
           if (item === result.attributeName) {
             attributeExists = true;
@@ -304,7 +304,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       let relationsExists = false;
-      if (result !== undefined) {
+      if (result !== undefined && result !== '') {
         this.currentProject.relations.forEach((item) => {
           if (item === result.relationName) {
             relationsExists = true;
@@ -338,7 +338,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       let eventExists = false;
-      if (result !== undefined) {
+      if (result !== undefined && result !== '') {
         this.currentProject.events.forEach((item) => {
           if (item === result.eventName) {
             eventExists = true;

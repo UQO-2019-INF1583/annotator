@@ -1,6 +1,6 @@
 // Service permettant l'accès aux catégories.
 import {Injectable} from '@angular/core';
-import {Category} from './Category';
+import {Category} from '../shared/category.model';
 import {CATEGORIES} from './CategoryList';
 import {EntityType} from './EntityType';
 import {Observable} from 'rxjs/Observable';

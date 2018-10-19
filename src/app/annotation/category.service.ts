@@ -31,14 +31,16 @@ export class CategoryService {
   }
 
   // Transforme une catégorie en type d'entité
+  //Note par J.F: Classe Category est maintenant identique à Entité. Par contre, on doit garder
+  //la fonction de conversion sinon il faut changer tout les noms et débugger.
   getCategoriesAsEntityTypes(categories: Category[]): EntityType[] {
     let newTypes = new Array <EntityType>() ;
     let newType: EntityType;
     categories.forEach(function (category) {
       newType = new EntityType();
       newType.name = category.name;
-      newType.type = category.name;
-      newType.labels = [category.name, category.name];
+      newType.type = category.type;
+      newType.labels = category.labels;
       newType.bgColor = category.color;
       newTypes.push(newType);
     });

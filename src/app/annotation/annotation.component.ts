@@ -107,7 +107,6 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     // Ajouter les catégories comme des types d'entités
     await this.addEntityTypes();
 
-
     this.brat = new BratFrontendEditor(document.getElementById('brat'), this.cData, this.dData, options);
   }
 

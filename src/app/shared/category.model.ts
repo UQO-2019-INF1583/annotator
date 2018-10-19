@@ -1,8 +1,5 @@
-export class Category {
-  //id: string;
-  name: string;
-  type: string;
-  labels: string[];
-  color: string;
- 
+import {Entite} from './entite.model'
+
+export class Category extends Entite {
+  
 }

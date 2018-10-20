@@ -26,6 +26,7 @@ import * as firebase from 'firebase';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/mergeMap';
+import {Attribute} from '../../shared/attribute.model'
 
 @Component({
   selector: 'app-project',
@@ -42,7 +43,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   corpus: Observable<any[]>;
   annotators: any[]; // {uid: v1, email: v2}[]
   admin: any[]; // {uid: v1, email: v2}[]
-  attributes: any[];
+  attributes: Attribute[];
   events: any[];
   relations: any[];
   isConnected: boolean = false;
@@ -279,7 +280,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         });
         if (!attributeExists){
-          this.currentProject.attributes.push(result.attributeName);
+          let array = result.valeurs.split(',');
+          this.currentProject.attributes.push({name: result.attributeName, type:result.type,valeurs: array});
         }
         else {
           alert('This attribute already exists');
@@ -291,7 +293,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAttribute(target: string) {
     this.currentProject.attributes.forEach((item, index) => {
-      if (item === target) {
+      if (item.name === target) {
         this.currentProject.attributes.splice(index, 1);
       }
     });

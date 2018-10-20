@@ -67,7 +67,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           this.getAnnotatorEmail();
           this.getAdminEmail();
         }
-        console.log(this.currentProject)
+        //console.log(this.currentProject)
       })
     });
     this.isDataLoaded = true;
@@ -111,8 +111,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
       this.ps.saveProject(this.currentProject);
 
-      alert('Modification Sauvegarder');
-      this.router.navigate(['/']);
+      alert('Modification sauvegardé');
+      //this.router.navigate(['/']);
     }
 
   }

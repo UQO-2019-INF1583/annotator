@@ -4,6 +4,16 @@
   <mat-error *ngIf="nom.value == '' || nom.value == null">nom obligatoire</mat-error>
 </mat-form-field>
 
+<mat-form-field>
+  <input matInput placeholder="Type" [(ngModel)]="data.type" name="type" #type="ngModel" required/>
+  <mat-error *ngIf="type.value == '' || type.value == null">type obligatoire</mat-error>
+</mat-form-field>
+
+<mat-form-field>
+  <input matInput placeholder="valeurs" [(ngModel)]="data.valeurs" name="valeurs" #valeurs="ngModel" required/>
+  <mat-error *ngIf="valeurs.value == '' || valeurs.value == null">Valeur obligatoire</mat-error>
+</mat-form-field>
+
 <mat-dialog-actions>
   <button class="btn btn btn-primary" [mat-dialog-close]="data">Add</button>
   <div style="width: 10px"></div>

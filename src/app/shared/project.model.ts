@@ -2,6 +2,7 @@
 import { Doc } from './document.model';
 import { Category } from './category.model';
 import {Attribute} from './attribute.model'
+import { Relation } from './relation.model';
 
 export class Project {
   id: string;
@@ -13,7 +14,7 @@ export class Project {
   categories: Category[];
   attributes: Attribute[];
   events: string[];
-  relations: string[];
+  relations: Relation[];
 
   constructor(id: string = '', title: string = '', description: string = '') {
     this.id = id;

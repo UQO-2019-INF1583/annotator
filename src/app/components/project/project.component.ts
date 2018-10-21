@@ -275,7 +275,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       let attributeExists = false;
       if (result !== undefined && result !== '') {
         this.currentProject.attributes.forEach((item) => {
-          if (item === result.attributeName) {
+          if (item.name === result.attributeName) {
             attributeExists = true;
           }
         });
@@ -291,9 +291,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteAttribute(target: string) {
+  deleteAttribute(target: Attribute) {
     this.currentProject.attributes.forEach((item, index) => {
-      if (item.name === target) {
+      if (item.name === target.name) {
         this.currentProject.attributes.splice(index, 1);
       }
     });
@@ -309,12 +309,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
       let relationsExists = false;
       if (result !== undefined && result !== '') {
         this.currentProject.relations.forEach((item) => {
-          if (item === result.relationName) {
+          if (item.name === result.relationName) {
             relationsExists = true;
           }
         });
         if (!relationsExists) {
-          this.currentProject.relations.push(result.relationName);
+          this.currentProject.relations.push({name: result.relationName, color: result.relationColor});
         }
         else {
           alert('This relation already exists');
@@ -324,9 +324,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteRelation(target: string){
+  deleteRelation(target: string) {
     this.currentProject.relations.forEach((item, index) => {
-      if (item === target) {
+      if (item.name === target.name) {
         this.currentProject.relations.splice(index, 1);
       }
     });
@@ -343,12 +343,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
       let eventExists = false;
       if (result !== undefined && result !== '') {
         this.currentProject.events.forEach((item) => {
-          if (item === result.eventName) {
+          if (item.name === result.eventName) {
             eventExists = true;
           }
         });
         if (!eventExists) {
-          this.currentProject.events.push(result.eventName);
+          this.currentProject.events.push({name: result.eventName, color: result.eventColor});
         }
         else {
           alert('This event already exists');
@@ -359,9 +359,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteEvent(target: string) {
-
     this.currentProject.events.forEach((item, index) => {
-      if (item === target) {
+
+      if (item.name === target.name) {
         this.currentProject.events.splice(index, 1);
       }
     })

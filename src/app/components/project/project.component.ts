@@ -302,7 +302,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addRelationDialogBox() {
     const dialogRef = this.dialog.open(AddRelationComponent, {
       width: '400px',
-      data: { UserId: undefined }
+      data: {relationName: undefined, type: undefined, etiquettes: undefined, relationColor: undefined}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -314,7 +314,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         });
         if (!relationsExists) {
-          this.currentProject.relations.push(result.relationName);
+          var array = result.etiquettes.split(",");
+          this.currentProject.relations.push({name:result.relationName, type: result.type, etiquettes : array, color: result.relationColor});
         }
         else {
           alert('This relation already exists');
@@ -326,7 +327,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteRelation(target: string){
     this.currentProject.relations.forEach((item, index) => {
-      if (item === target) {
+      if (item.name === target) {
         this.currentProject.relations.splice(index, 1);
       }
     });
@@ -336,7 +337,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addEventDialogBox() {
     const dialogRef = this.dialog.open(AddEventComponent, {
       width: '400px',
-      data: { UserId: undefined }
+      data: {eventName: undefined, type: undefined, etiquettes: undefined, attributs: undefined, eventColor: undefined}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -348,7 +349,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         });
         if (!eventExists) {
-          this.currentProject.events.push(result.eventName);
+          let attrArray = result.attributs.split(",");
+          let etiArray = result.etiquettes.split(",");
+          this.currentProject.events.push({name: result.eventName,type: result.type, etiquettes : etiArray, attributs: attrArray,color: result.eventColor});
         }
         else {
           alert('This event already exists');
@@ -361,7 +364,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   deleteEvent(target: string) {
 
     this.currentProject.events.forEach((item, index) => {
-      if (item === target) {
+      if (item.name === target) {
         this.currentProject.events.splice(index, 1);
       }
     })

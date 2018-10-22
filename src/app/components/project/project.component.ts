@@ -27,6 +27,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/mergeMap';
 import {Attribute} from '../../shared/attribute.model'
+import {Relation} from '../../shared/relation.model';
 
 @Component({
   selector: 'app-project',
@@ -275,7 +276,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       let attributeExists = false;
       if (result !== undefined && result !== '') {
         this.currentProject.attributes.forEach((item) => {
-          if (item === result.attributeName) {
+          if (item.name === result.attributeName) {
             attributeExists = true;
           }
         });
@@ -291,9 +292,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteAttribute(target: string) {
+  deleteAttribute(target: Attribute) {
     this.currentProject.attributes.forEach((item, index) => {
-      if (item.name === target) {
+      if (item.name === target.name) {
         this.currentProject.attributes.splice(index, 1);
       }
     });
@@ -309,13 +310,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
       let relationsExists = false;
       if (result !== undefined && result !== '') {
         this.currentProject.relations.forEach((item) => {
-          if (item === result.relationName) {
+          if (item.name === result.relationName) {
             relationsExists = true;
           }
         });
         if (!relationsExists) {
           var array = result.etiquettes.split(",");
-          this.currentProject.relations.push({name:result.relationName, type: result.type, etiquettes : array, color: result.relationColor});
+         this.currentProject.relations.push(new Relation(result.relationName, result.relationColor));
         }
         else {
           alert('This relation already exists');
@@ -325,7 +326,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteRelation(target: string){
+  deleteRelation(target: string) {
     this.currentProject.relations.forEach((item, index) => {
       if (item.name === target) {
         this.currentProject.relations.splice(index, 1);
@@ -344,7 +345,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       let eventExists = false;
       if (result !== undefined && result !== '') {
         this.currentProject.events.forEach((item) => {
-          if (item === result.eventName) {
+          if (item.name === result.eventName) {
             eventExists = true;
           }
         });
@@ -362,7 +363,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteEvent(target: string) {
-
     this.currentProject.events.forEach((item, index) => {
       if (item.name === target) {
         this.currentProject.events.splice(index, 1);

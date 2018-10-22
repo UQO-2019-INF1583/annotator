@@ -506,3 +506,44 @@
   font-weight: bold;
   src: local('Astloch Bold'), local('Astloch-Bold'), url('assets/brat-client/static/fonts/Astloch-Bold.ttf') format('truetype');
 }
+
+legend {
+  width: auto;
+  padding: 4px 15px;
+  border: none;
+  border-radius: 3px;
+  background-color: #6699cc;
+  color: white;
+  font-size: 12px;
+  margin-bottom: 0;
+}
+
+fieldset{
+  border: 1px solid #6699cc;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  padding: 10px;
+
+}
+
+#span_entity_section{
+  float : left;
+  width : 50%;
+}
+
+
+#span_event_section{
+  float : right;
+  width : 50%;
+}
+
+.label-like{
+  border-bottom: 1px solid #6699cc;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  color: #6699cc;
+}
+
+.span_type_label{
+  margin-left: 5px;
+}

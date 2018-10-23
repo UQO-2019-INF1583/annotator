@@ -1,5 +1,5 @@
-export interface Category {
-  //id: string;
-  name: string;
-  color: string;
+import {Entite} from './entite.model'
+
+export class Category extends Entite {
+  
 }

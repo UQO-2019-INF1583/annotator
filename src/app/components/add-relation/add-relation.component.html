@@ -4,6 +4,34 @@
   <mat-error *ngIf="nom.value == '' || nom.value == null">Nom obligatoire</mat-error>
 </mat-form-field>
 
+<mat-form-field>
+  <input matInput placeholder="Type" [(ngModel)]="data.type" name="type" #type="ngModel" required/>
+  <mat-error *ngIf="type.value == '' || type.value == null">type obligatoire</mat-error>
+</mat-form-field>
+
+<mat-form-field>
+  <input matInput placeholder="Étiquettes" [(ngModel)]="data.etiquettes" name="etiquettes" #etiquettes="ngModel" required/>
+  <mat-error *ngIf="etiquettes.value == '' || etiquettes.value == null">Étiquette obligatoire</mat-error>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-select placeholder="Color" [(ngModel)]="data.relationColor" name="couleur" #couleur="ngModel" required>
+    <mat-option *ngFor="let item of availableColors" [value]="item.couleur">
+      {{item?.nom}}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="couleur.value == null">couleur obligatoire</mat-error>
+</mat-form-field>
+
+<!--
+<mat-form-field>
+  <mat-select placeholder="Entity" [(ngModel)]="data.relationEntity" name="entity" ng-reflect-ng-switch="false" required>
+    <mat-option *ngFor="let item of data.projectEntities">
+      {{item.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+-->
 <mat-dialog-actions>
   <button class="btn btn btn-primary" [mat-dialog-close]="data">Add</button>
   <div style="width: 10px"></div>

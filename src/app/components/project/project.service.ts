@@ -7,7 +7,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase';
 import { Project } from '../../shared/project.model';
-
+import {Category} from '../../shared/category.model';
 
 @Injectable()
 export class ProjectService {
@@ -18,6 +18,8 @@ export class ProjectService {
 
   getProject(id: string): any {
     this.afs.collection("Projects/").doc(id).ref.get().then((doc) => {
+      console.log("doc.data()")
+      console.log(doc.data())
       return doc.data();
     });
   }
@@ -30,6 +32,11 @@ export class ProjectService {
   // Trouve les catégories du projet sélectionné
   getCategories(projectId: string): string[] {
     return null;
+  }
+
+  saveCategories(projectId: string, categs: Category[]) {
+   /* this.afs.collection('Categories').doc(projectId)
+      .set({})*/
   }
 
   saveProject(project: Project) {

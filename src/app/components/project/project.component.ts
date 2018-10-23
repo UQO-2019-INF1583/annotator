@@ -26,6 +26,8 @@ import * as firebase from 'firebase';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/mergeMap';
+import {Attribute} from '../../shared/attribute.model'
+import {Relation} from '../../shared/relation.model';
 
 @Component({
   selector: 'app-project',
@@ -42,7 +44,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   corpus: Observable<any[]>;
   annotators: any[]; // {uid: v1, email: v2}[]
   admin: any[]; // {uid: v1, email: v2}[]
-  attributes: any[];
+  attributes: Attribute[];
   events: any[];
   relations: any[];
   isConnected: boolean = false;
@@ -67,7 +69,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           this.getAnnotatorEmail();
           this.getAdminEmail();
         }
-        console.log(this.currentProject)
+        //console.log(this.currentProject)
       })
     });
     this.isDataLoaded = true;
@@ -111,8 +113,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
       this.ps.saveProject(this.currentProject);
 
-      alert('Modification Sauvegarder');
-      this.router.navigate(['/']);
+      alert('Modification sauvegardé');
+      //this.router.navigate(['/']);
     }
 
   }
@@ -141,19 +143,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addCategorieDialogBox() {
     let dialogRef = this.dialog.open(AddCategoryComponent, {
       width: '250px',
-      data: { categoryName: undefined, categoryColor: undefined }
+      data: { categoryName: undefined, type: undefined, etiquettes: undefined, categoryColor: undefined }
     });
     var categoryExists = false;
     dialogRef.afterClosed().subscribe(result => {
 
       if (result != undefined) {
-        if (result.categoryName != undefined && result.categoryColor != undefined) {
-          categoryExists = false;
+        if (result.categoryName != undefined && result.categoryColor != undefined && result.type != undefined && result.etiquettes != undefined) {
 
           this.currentProject.categories.forEach((item) => {
-            if (item.name == result.categoryName) {
+            if (item.name === result.categoryName) {
               categoryExists = true;
-              if (item.color == result.categoryColor){
+              if (item.color === result.categoryColor){
                 alert("The category already exists");
               }
               else {
@@ -164,7 +165,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
           });
 
           if (!categoryExists) {
-            this.currentProject.categories.push({ name: result.categoryName, color: result.categoryColor});
+            var etiquettesArray :string[];
+            etiquettesArray = result.etiquettes.split(",");
+            this.currentProject.categories.push({ name: result.categoryName, type : result.type, color: result.categoryColor, labels: etiquettesArray});
           }
         }
       }
@@ -271,14 +274,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       let attributeExists = false;
-      if (result !== undefined) {
+      if (result !== undefined && result !== '') {
         this.currentProject.attributes.forEach((item) => {
-          if (item === result.attributeName) {
+          if (item.name === result.attributeName) {
             attributeExists = true;
           }
         });
         if (!attributeExists){
-          this.currentProject.attributes.push(result.attributeName);
+          let array = result.valeurs.split(',');
+          this.currentProject.attributes.push({name: result.attributeName, type:result.type,valeurs: array});
         }
         else {
           alert('This attribute already exists');
@@ -288,9 +292,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteAttribute(target: string) {
+  deleteAttribute(target: Attribute) {
     this.currentProject.attributes.forEach((item, index) => {
-      if (item === target) {
+      if (item.name === target.name) {
         this.currentProject.attributes.splice(index, 1);
       }
     });
@@ -299,19 +303,20 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addRelationDialogBox() {
     const dialogRef = this.dialog.open(AddRelationComponent, {
       width: '400px',
-      data: { UserId: undefined }
+      data: {relationName: undefined, type: undefined, etiquettes: undefined, relationColor: undefined}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       let relationsExists = false;
-      if (result !== undefined) {
+      if (result !== undefined && result !== '') {
         this.currentProject.relations.forEach((item) => {
-          if (item === result.relationName) {
+          if (item.name === result.relationName) {
             relationsExists = true;
           }
         });
         if (!relationsExists) {
-          this.currentProject.relations.push(result.relationName);
+          var array = result.etiquettes.split(",");
+         this.currentProject.relations.push(new Relation(result.relationName, result.relationColor));
         }
         else {
           alert('This relation already exists');
@@ -321,9 +326,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteRelation(target: string){
+  deleteRelation(target: string) {
     this.currentProject.relations.forEach((item, index) => {
-      if (item === target) {
+      if (item.name === target) {
         this.currentProject.relations.splice(index, 1);
       }
     });
@@ -333,19 +338,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addEventDialogBox() {
     const dialogRef = this.dialog.open(AddEventComponent, {
       width: '400px',
-      data: { UserId: undefined }
+      data: {eventName: undefined, type: undefined, etiquettes: undefined, attributs: undefined, eventColor: undefined}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       let eventExists = false;
-      if (result !== undefined) {
+      if (result !== undefined && result !== '') {
         this.currentProject.events.forEach((item) => {
-          if (item === result.eventName) {
+          if (item.name === result.eventName) {
             eventExists = true;
           }
         });
         if (!eventExists) {
-          this.currentProject.events.push(result.eventName);
+          let attrArray = result.attributs.split(",");
+          let etiArray = result.etiquettes.split(",");
+          this.currentProject.events.push({name: result.eventName,type: result.type, etiquettes : etiArray, attributs: attrArray,color: result.eventColor});
         }
         else {
           alert('This event already exists');
@@ -356,9 +363,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteEvent(target: string) {
-
     this.currentProject.events.forEach((item, index) => {
-      if (item === target) {
+      if (item.name === target) {
         this.currentProject.events.splice(index, 1);
       }
     })

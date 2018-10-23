@@ -121,7 +121,7 @@
       </mat-toolbar>
       <mat-list role="list">
         <mat-list-item *ngFor="let item of currentProject.attributes">
-          <span>{{item}}</span>
+          <span>{{item?.name}}</span>
           <span class="example-fill-remaining-space"></span>
           <span>
             <button class="btn btn-primary" (click)="deleteAttribute(item)">Delete</button>
@@ -143,8 +143,8 @@
         </span>
       </mat-toolbar>
       <mat-list role="list">
-        <mat-list-item *ngFor="let item of currentProject.relations">
-          <span>{{item}}</span>
+        <mat-list-item *ngFor="let item of currentProject.relations" [ngStyle]="{'background-color': item?.color}">
+          <span>{{item?.name}}</span>
           <span class="example-fill-remaining-space"></span>
           <span>
             <button class="btn btn-primary" (click)="deleteRelation(item)">Delete</button>
@@ -166,8 +166,8 @@
         </span>
       </mat-toolbar>
       <mat-list role="list">
-        <mat-list-item *ngFor="let item of currentProject.events">
-          <span>{{item}}</span>
+        <mat-list-item *ngFor="let item of currentProject.events" [ngStyle]="{'background-color': item?.color}">
+          <span>{{item?.name}}</span>
           <span class="example-fill-remaining-space"></span>
           <span>
             <button class="btn btn-primary" (click)="deleteEvent(item)">Delete</button>

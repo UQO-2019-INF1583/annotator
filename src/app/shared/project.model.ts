@@ -1,6 +1,9 @@
 // structure de données utilisée pour représenter un projet
 import { Doc } from './document.model';
 import { Category } from './category.model';
+import {Event} from './event.model';
+import {Attribute} from './attribute.model'
+import { Relation } from './relation.model';
 
 export class Project {
   id: string;
@@ -10,9 +13,9 @@ export class Project {
   annotators: string[]; // user ids
   corpus: Doc[];
   categories: Category[];
-  attributes: string[];
-  events: string[];
-  relations: string[];
+  attributes: Attribute[];
+  events: Event[];
+  relations: Relation[];
 
   constructor(id: string = '', title: string = '', description: string = '') {
     this.id = id;

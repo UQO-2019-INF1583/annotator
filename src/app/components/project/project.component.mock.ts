@@ -35,7 +35,7 @@ const projectManagerMock: Partial<ProjectManagerService> = {
   }
 }
 
-export const projectServiceMocks: IProjectMocks = {
+export const projectMocks: IProjectMocks = {
   authService: authServiceMock,
   angularFirestore: angularFirestoreMock,
   projectService: projectServiceMock,

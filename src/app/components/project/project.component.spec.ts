@@ -8,7 +8,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { ProjectService } from './project.service';
 import { ProjectManagerService } from '../../adm';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { projectServiceMocks } from './project.component.mock';
+import { projectMocks } from './project.component.mock';
 
 // TODO: Replace fdescribe with describe once the iteration is done
 fdescribe('Projet', () => {
@@ -31,10 +31,10 @@ fdescribe('Projet', () => {
         ProjectComponent
       ],
       providers: [
-        { provide: AngularFirestore, useValue: projectServiceMocks.angularFirestore },
-        { provide: AuthService, useValue: projectServiceMocks.authService },
-        { provide: ProjectService, useValue: projectServiceMocks.projectService },
-        { provide: ProjectManagerService, useValue: projectServiceMocks.projectManagerService }
+        { provide: AngularFirestore, useValue: projectMocks.angularFirestore },
+        { provide: AuthService, useValue: projectMocks.authService },
+        { provide: ProjectService, useValue: projectMocks.projectService },
+        { provide: ProjectManagerService, useValue: projectMocks.projectManagerService }
       ]
     }).compileComponents();
 

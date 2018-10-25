@@ -342,22 +342,34 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      let eventExists = false;
-      if (result !== undefined && result !== '') {
-        this.currentProject.events.forEach((item) => {
-          if (item.name === result.eventName) {
-            eventExists = true;
-          }
-        });
-        if (!eventExists) {
-          const attrArray = result.attributs.split(",");
-          const etiArray = result.etiquettes.split(',');
-          this.currentProject.events.push({ name: result.eventName, type: result.type, etiquettes: etiArray, attributs: attrArray, color: result.eventColor });
-        } else {
-          alert('This event already exists');
-        }
-      }
+      this.addEventAfterClosedHandler(result);
     });
+  }
+
+  addEventAfterClosedHandler(result: any) {
+    let eventExists = false;
+    if (result !== undefined && result !== '') {
+      this.currentProject.events.forEach((item) => {
+        if (item.name === result.eventName) {
+          eventExists = true;
+        }
+      });
+      if (!eventExists) {
+        this.currentProject.events.push(this.mapValidResultToEvent(result));
+      } else {
+        alert('This event already exists');
+      }
+    }
+  }
+
+  mapValidResultToEvent(result: any): Event {
+    return {
+      name: result.eventName,
+      type: result.type,
+      etiquettes: result.etiquettes.split(','),
+      attributs: result.attributs.split(','),
+      color: result.eventColor
+    }
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).

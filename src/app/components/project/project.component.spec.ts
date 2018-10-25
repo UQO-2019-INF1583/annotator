@@ -61,7 +61,45 @@ fdescribe('Projet', () => {
   });
 
   describe('Events', () => {
-    // TODO: Insert tests related to events here
+    const validResult = {
+      eventName: 'event',
+      attributs: 'a',
+      etiquettes: 'a',
+      type: 'a',
+      eventColor: '#ffffff'
+    }
+
+    it('should throw an error if the closing payload is null', () => {
+      const closedHandlerPayload = null;
+      expect(() => {
+        projectComponent.addEventAfterClosedHandler(closedHandlerPayload)
+      }).toThrow();
+    });
+
+    it('should map result to event properly', () => {
+      expect(projectComponent.mapValidResultToEvent(validResult))
+        .toEqual({
+          name: validResult.eventName,
+          attributs: validResult.attributs.split(','),
+          etiquettes: validResult.etiquettes.split(','),
+          type: validResult.type,
+          color: validResult.eventColor
+        })
+    })
+
+    it('should add the event to the current project\'s events if provided with a valid result', () => {
+      projectComponent.addEventAfterClosedHandler(validResult);
+      expect(projectComponent.currentProject.events)
+        .toContain(projectComponent.mapValidResultToEvent(validResult));
+    });
+
+    it('should alert the user when trying to add an event that already exists', () => {
+      spyOn(window, 'alert');
+      projectComponent.addEventAfterClosedHandler(validResult);
+      projectComponent.addEventAfterClosedHandler(validResult);
+      expect(window.alert)
+        .toHaveBeenCalledWith('This event already exists');
+    });
   });
 });
 

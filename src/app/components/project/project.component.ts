@@ -28,6 +28,7 @@ import 'rxjs/Rx';
 import 'rxjs/add/operator/mergeMap';
 import { Attribute } from '../../shared/attribute.model'
 import { Relation } from '../../shared/relation.model';
+import { Event } from '../../shared/event.model';
 
 @Component({
   selector: 'app-project',

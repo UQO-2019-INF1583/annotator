@@ -47,6 +47,22 @@ fdescribe('Projet', () => {
   it('Should create component', () => {
     expect(projectComponent).toBeDefined();
   });
+
+  describe('Entities', () => {
+    // TODO: Insert tests related to entities here
+  });
+
+  describe('Attributs', () => {
+    // TODO: Insert tests related to attributs here
+  });
+
+  describe('Relations', () => {
+    // TODO: Insert tests related to relations here
+  });
+
+  describe('Events', () => {
+    // TODO: Insert tests related to events here
+  });
 });
 
 

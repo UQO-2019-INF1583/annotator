@@ -3,6 +3,10 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { ProjectService } from './project.service';
 import { ProjectManagerService } from '../../adm/projectManager/projectManager.service';
 
+// data mocks
+
+
+// service mocks
 interface IProjectMocks {
     authService: Partial<AuthService>;
     angularFirestore: Partial<AngularFirestore>;
@@ -25,8 +29,7 @@ const projectServiceMock: Partial<ProjectService> = {
 
 const projectManagerMock: Partial<ProjectManagerService> = {
     getProject: (id: string) => {
-        // tslint:disable-next-line:no-shadowed-variable
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             resolve('test');
         })
     }

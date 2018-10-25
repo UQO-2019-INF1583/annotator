@@ -8,7 +8,9 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { ProjectService } from './project.service';
 import { ProjectManagerService } from '../../adm';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { projectMocks } from './project.component.mock';
+import { projectMocks, TestAddCategoryModule } from './project.component.mock';
+import { AddCategoryComponent } from '../add-category/add-category.component';
+import { MatSelectModule } from '@angular/material/select';
 
 // TODO: Replace fdescribe with describe once the iteration is done
 fdescribe('Projet', () => {
@@ -25,10 +27,13 @@ fdescribe('Projet', () => {
         MatCardModule,
         RouterTestingModule,
         MatDialogModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        MatSelectModule,
+        TestAddCategoryModule,
       ],
       declarations: [
-        ProjectComponent
+        ProjectComponent,
+        // AddCategoryComponent
       ],
       providers: [
         { provide: AngularFirestore, useValue: projectMocks.angularFirestore },
@@ -50,6 +55,9 @@ fdescribe('Projet', () => {
 
   describe('Entities', () => {
     // TODO: Insert tests related to entities here
+    it('Should not be able to use the same color more than once', () => {
+      projectComponent.addCategorieDialogBox();
+    });
   });
 
   describe('Attributs', () => {

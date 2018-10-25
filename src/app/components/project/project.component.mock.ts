@@ -2,9 +2,28 @@ import { AuthService } from '../../shared/security/auth.service';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { ProjectService } from './project.service';
 import { ProjectManagerService } from '../../adm/projectManager/projectManager.service';
+import { AddCategoryComponent } from '../add-category/add-category.component';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { CommonModule } from '@angular/common';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material';
 
 // data mocks
-
+@NgModule({
+    imports: [
+        FormsModule,
+        MatFormFieldModule,
+        CommonModule,
+        MatSelectModule,
+        MatDialogModule],
+    declarations: [AddCategoryComponent],
+    entryComponents: [
+        AddCategoryComponent,
+    ]
+})
+export class TestAddCategoryModule { }
 
 // service mocks
 interface IProjectMocks {

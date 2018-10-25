@@ -1,0 +1,41 @@
+import { AuthService } from '../../shared/security/auth.service';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { ProjectService } from './project.service';
+import { ProjectManagerService } from '../../adm/projectManager/projectManager.service';
+
+interface IProjectMocks {
+    authService: Partial<AuthService>;
+    angularFirestore: Partial<AngularFirestore>;
+    projectService: Partial<ProjectService>;
+    projectManagerService: Partial<ProjectManagerService>
+}
+
+const authServiceMock: Partial<AuthService> = {
+    isConnected: () => {
+        return true;
+    }
+}
+
+const angularFirestoreMock: Partial<AngularFirestore> = {
+}
+
+const projectServiceMock: Partial<ProjectService> = {
+    getProject: (id: string) => { }
+}
+
+const projectManagerMock: Partial<ProjectManagerService> = {
+    getProject: (id: string) => {
+        // tslint:disable-next-line:no-shadowed-variable
+        return new Promise((resolve, reject) => {
+            resolve('test');
+        })
+    }
+}
+
+export const projectServiceMocks: IProjectMocks = {
+    authService: authServiceMock,
+    angularFirestore: angularFirestoreMock,
+    projectService: projectServiceMock,
+    projectManagerService: projectManagerMock
+}
+

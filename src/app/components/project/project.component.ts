@@ -26,8 +26,8 @@ import * as firebase from 'firebase';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/mergeMap';
-import {Attribute} from '../../shared/attribute.model'
-import {Relation} from '../../shared/relation.model';
+import { Attribute } from '../../shared/attribute.model'
+import { Relation } from '../../shared/relation.model';
 
 @Component({
   selector: 'app-project',
@@ -36,7 +36,7 @@ import {Relation} from '../../shared/relation.model';
 })
 
 export class ProjectComponent implements OnInit, OnDestroy {
-  currentProject: Project = {id: '', title: '', description: '', admin: [], annotators: [], corpus: [], categories: [], attributes: [], events: [], relations: [] };
+  currentProject: Project = { id: '', title: '', description: '', admin: [], annotators: [], corpus: [], categories: [], attributes: [], events: [], relations: [] };
   private sub: any;
   isDataLoaded: boolean = false;
 
@@ -50,7 +50,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   isConnected: boolean = false;
 
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute, public dialog: MatDialog, private afs: AngularFirestore, private router: Router,
-              private pm: ProjectManagerService, private ps: ProjectService) { }
+    private pm: ProjectManagerService, private ps: ProjectService) { }
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
@@ -64,7 +64,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.currentProject.events = [];
         this.currentProject.relations = [];
 
-        if (this.isConnected){
+        if (this.isConnected) {
           this.users = this.afs.collection<User>('Users').valueChanges();
           this.getAnnotatorEmail();
           this.getAdminEmail();
@@ -81,11 +81,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   getAnnotatorEmail() {
     this.annotators = [];
-    this.currentProject.annotators.forEach((uid,i) => {
+    this.currentProject.annotators.forEach((uid, i) => {
       this.users.forEach((x) => {
-        x.forEach((u,j) => {
+        x.forEach((u, j) => {
           if (u.uid == uid) {
-            this.annotators.push({email: u.email, uid: u.uid});
+            this.annotators.push({ email: u.email, uid: u.uid });
           }
         })
       });
@@ -94,11 +94,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   getAdminEmail() {
     this.admin = [];
-    this.currentProject.admin.forEach((uid,i) => {
+    this.currentProject.admin.forEach((uid, i) => {
       this.users.forEach((x) => {
-        x.forEach((u,j) => {
+        x.forEach((u, j) => {
           if (u.uid == uid) {
-            this.admin.push({email: u.email, uid: u.uid});
+            this.admin.push({ email: u.email, uid: u.uid });
           }
         })
       });
@@ -154,7 +154,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           this.currentProject.categories.forEach((item) => {
             if (item.name === result.categoryName) {
               categoryExists = true;
-              if (item.color === result.categoryColor){
+              if (item.color === result.categoryColor) {
                 alert("The category already exists");
               }
               else {
@@ -165,9 +165,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
           });
 
           if (!categoryExists) {
-            var etiquettesArray :string[];
+            var etiquettesArray: string[];
             etiquettesArray = result.etiquettes.split(",");
-            this.currentProject.categories.push({ name: result.categoryName, type : result.type, color: result.categoryColor, labels: etiquettesArray});
+            this.currentProject.categories.push({ name: result.categoryName, type: result.type, color: result.categoryColor, labels: etiquettesArray });
           }
         }
       }
@@ -175,7 +175,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime la catégorie spécifiée dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteCategory(catName: string){
+  deleteCategory(catName: string) {
     this.currentProject.categories.forEach((item, index) => {
       if (item.name == catName) {
         this.currentProject.categories.splice(index, 1);
@@ -199,9 +199,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
             annotatorExists = true;
           }
         })
-        if (!annotatorExists){
+        if (!annotatorExists) {
           this.currentProject.annotators.push(result.uid);
-          this.annotators.push({uid: result.uid, email: result.email});
+          this.annotators.push({ uid: result.uid, email: result.email });
         }
         else {
           alert('This annotator already exists');
@@ -211,7 +211,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'annotateur spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteAnnotator(uid: string){
+  deleteAnnotator(uid: string) {
     this.currentProject.annotators.forEach((item, index) => {
       if (item == uid) {
         this.currentProject.annotators.splice(index, 1);
@@ -240,9 +240,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
             adminExists = true;
           }
         })
-        if (!adminExists){
+        if (!adminExists) {
           this.currentProject.admin.push(result.uid);
-          this.admin.push({uid: result.uid, email: result.email});
+          this.admin.push({ uid: result.uid, email: result.email });
         }
         else {
           alert('This admin already exists');
@@ -252,7 +252,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'admin spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteAdmin(uid: string){
+  deleteAdmin(uid: string) {
     this.currentProject.admin.forEach((item, index) => {
       if (item == uid) {
         this.currentProject.admin.splice(index, 1);
@@ -280,9 +280,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
             attributeExists = true;
           }
         });
-        if (!attributeExists){
+        if (!attributeExists) {
           let array = result.valeurs.split(',');
-          this.currentProject.attributes.push({name: result.attributeName, type:result.type,valeurs: array});
+          this.currentProject.attributes.push({ name: result.attributeName, type: result.type, valeurs: array });
         }
         else {
           alert('This attribute already exists');
@@ -303,7 +303,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addRelationDialogBox() {
     const dialogRef = this.dialog.open(AddRelationComponent, {
       width: '400px',
-      data: {relationName: undefined, type: undefined, etiquettes: undefined, relationColor: undefined}
+      data: { relationName: undefined, type: undefined, etiquettes: undefined, relationColor: undefined }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -316,7 +316,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         });
         if (!relationsExists) {
           var array = result.etiquettes.split(",");
-         this.currentProject.relations.push(new Relation(result.relationName, result.relationColor));
+          this.currentProject.relations.push(new Relation(result.relationName, result.relationColor));
         }
         else {
           alert('This relation already exists');
@@ -338,7 +338,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addEventDialogBox() {
     const dialogRef = this.dialog.open(AddEventComponent, {
       width: '400px',
-      data: {eventName: undefined, type: undefined, etiquettes: undefined, attributs: undefined, eventColor: undefined}
+      data: { eventName: undefined, type: undefined, etiquettes: undefined, attributs: undefined, eventColor: undefined }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -350,11 +350,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         });
         if (!eventExists) {
-          let attrArray = result.attributs.split(",");
-          let etiArray = result.etiquettes.split(",");
-          this.currentProject.events.push({name: result.eventName,type: result.type, etiquettes : etiArray, attributs: attrArray,color: result.eventColor});
-        }
-        else {
+          const attrArray = result.attributs.split(",");
+          const etiArray = result.etiquettes.split(',');
+          this.currentProject.events.push({ name: result.eventName, type: result.type, etiquettes: etiArray, attributs: attrArray, color: result.eventColor });
+        } else {
           alert('This event already exists');
         }
       }
@@ -371,8 +370,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Événement lorsqu'un texte est sélectionné
-  documentSelected(doc: any) { doc.projectTitle = this.currentProject.title;
-    this.router.navigate(['/annotation', doc ]);
+  documentSelected(doc: any) {
+  doc.projectTitle = this.currentProject.title;
+    this.router.navigate(['/annotation', doc]);
   }
 
   // Supprime un texte

@@ -8,37 +8,37 @@ import { ProjectManagerService } from '../../adm/projectManager/projectManager.s
 
 // service mocks
 interface IProjectMocks {
-    authService: Partial<AuthService>;
-    angularFirestore: Partial<AngularFirestore>;
-    projectService: Partial<ProjectService>;
-    projectManagerService: Partial<ProjectManagerService>
+  authService: Partial<AuthService>;
+  angularFirestore: Partial<AngularFirestore>;
+  projectService: Partial<ProjectService>;
+  projectManagerService: Partial<ProjectManagerService>
 }
 
 const authServiceMock: Partial<AuthService> = {
-    isConnected: () => {
-        return true;
-    }
+  isConnected: () => {
+    return true;
+  }
 }
 
 const angularFirestoreMock: Partial<AngularFirestore> = {
 }
 
 const projectServiceMock: Partial<ProjectService> = {
-    getProject: (id: string) => { }
+  getProject: (id: string) => { }
 }
 
 const projectManagerMock: Partial<ProjectManagerService> = {
-    getProject: (id: string) => {
-        return new Promise((resolve) => {
-            resolve('test');
-        })
-    }
+  getProject: (id: string) => {
+    return new Promise((resolve) => {
+      resolve('test');
+    })
+  }
 }
 
 export const projectServiceMocks: IProjectMocks = {
-    authService: authServiceMock,
-    angularFirestore: angularFirestoreMock,
-    projectService: projectServiceMock,
-    projectManagerService: projectManagerMock
+  authService: authServiceMock,
+  angularFirestore: angularFirestoreMock,
+  projectService: projectServiceMock,
+  projectManagerService: projectManagerMock
 }
 

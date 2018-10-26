@@ -37,9 +37,12 @@ import { Event } from '../../shared/event.model';
 })
 
 export class ProjectComponent implements OnInit, OnDestroy {
-  currentProject: Project = { id: '', title: '', description: '', admin: [], annotators: [], corpus: [], categories: [], attributes: [], events: [], relations: [] };
+  currentProject: Project = {
+    id: '', title: '', description: '', admin: [],
+    annotators: [], corpus: [], categories: [], attributes: [], events: [], relations: []
+  };
   private sub: any;
-  isDataLoaded: boolean = false;
+  isDataLoaded = false;
 
   users: Observable<User[]>;
   corpus: Observable<any[]>;
@@ -48,9 +51,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
   attributes: Attribute[];
   events: any[];
   relations: any[];
-  isConnected: boolean = false;
+  isConnected = false;
 
-  constructor(private authService: AuthService, private activeRouter: ActivatedRoute, public dialog: MatDialog, private afs: AngularFirestore, private router: Router,
+  constructor(private authService: AuthService, private activeRouter: ActivatedRoute,
+    public dialog: MatDialog, private afs: AngularFirestore, private router: Router,
     private pm: ProjectManagerService, private ps: ProjectService) { }
 
   ngOnInit() {
@@ -70,7 +74,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           this.getAnnotatorEmail();
           this.getAdminEmail();
         }
-        //console.log(this.currentProject)
+        // console.log(this.currentProject)
       })
     });
     this.isDataLoaded = true;
@@ -85,7 +89,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.currentProject.annotators.forEach((uid, i) => {
       this.users.forEach((x) => {
         x.forEach((u, j) => {
-          if (u.uid == uid) {
+          if (u.uid === uid) {
             this.annotators.push({ email: u.email, uid: u.uid });
           }
         })
@@ -98,7 +102,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.currentProject.admin.forEach((uid, i) => {
       this.users.forEach((x) => {
         x.forEach((u, j) => {
-          if (u.uid == uid) {
+          if (u.uid === uid) {
             this.admin.push({ email: u.email, uid: u.uid });
           }
         })
@@ -108,22 +112,22 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Sauvegarde les modifications apportées au projet.
   saveProjectModification() {
-    if (this.currentProject.title != null && this.currentProject.title != '' && this.currentProject.description != null &&
-      this.currentProject.description != '') {
+    if (this.currentProject.title != null && this.currentProject.title !== '' && this.currentProject.description != null &&
+      this.currentProject.description !== '') {
       this.afs.collection('Projects').doc(this.currentProject.id).set(this.currentProject);
 
       this.ps.saveProject(this.currentProject);
 
       alert('Modification sauvegardé');
-      //this.router.navigate(['/']);
+      // this.router.navigate(['/']);
     }
 
   }
 
 
-  //ouvre la boîte de dialogue pour ajouter un corpus
+  // ouvre la boîte de dialogue pour ajouter un corpus
   addCorpusDialogBox() {
-    let dialogRef = this.dialog.open(AddCorpusComponent, {
+    const dialogRef = this.dialog.open(AddCorpusComponent, {
       width: '250px',
       data: { corpusTitle: undefined, corpusFile: undefined }
     });
@@ -140,51 +144,63 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   }
 
-  //ouvre la boîte de dialogue pour ajouter une catégorie
+  // ouvre la boîte de dialogue pour ajouter une catégorie
   addCategorieDialogBox() {
-    let dialogRef = this.dialog.open(AddCategoryComponent, {
+    const dialogRef = this.dialog.open(AddCategoryComponent, {
       width: '250px',
       data: { categoryName: undefined, type: undefined, etiquettes: undefined, categoryColor: undefined }
     });
-    var categoryExists = false;
+
     dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      this.addEntitiesAfterClosedHandler(result);
+    });
+  }
 
-      if (result != undefined) {
-        if (result.categoryName != undefined && result.categoryColor != undefined && result.type != undefined && result.etiquettes != undefined) {
+  addEntitiesAfterClosedHandler(result: any) {
+    let categoryExists = false;
+    if (result !== undefined) {
+      if (result.categoryName !== undefined && result.categoryColor !== undefined
+        && result.type !== undefined && result.etiquettes !== undefined) {
 
-          this.currentProject.categories.forEach((item) => {
-            if (item.name === result.categoryName) {
-              categoryExists = true;
-              if (item.color === result.categoryColor) {
-                alert("The category already exists");
-              }
-              else {
-                alert("Replacing color");
-                item.color = result.categoryColor;
-              }
+        this.currentProject.categories.forEach((item) => {
+          if (item.name === result.categoryName) {
+            categoryExists = true;
+            if (item.color === result.categoryColor) {
+              alert('The category already exists');
+            } else {
+              alert('Replacing color');
+              item.color = result.categoryColor;
             }
-          });
-
-          if (!categoryExists) {
-            var etiquettesArray: string[];
-            etiquettesArray = result.etiquettes.split(",");
-            this.currentProject.categories.push({ name: result.categoryName, type: result.type, color: result.categoryColor, labels: etiquettesArray });
+          } else if (item.color === result.categoryColor) {
+            categoryExists = true;
+            alert('The chosen color is already used');
           }
+
+        });
+
+        if (!categoryExists) {
+          let etiquettesArray: string[];
+          etiquettesArray = result.etiquettes.split(',');
+          this.currentProject.categories.push({
+            name: result.categoryName, type: result.type,
+            color: result.categoryColor, labels: etiquettesArray
+          });
         }
       }
-    });
+    }
   }
 
   // Supprime la catégorie spécifiée dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteCategory(catName: string) {
     this.currentProject.categories.forEach((item, index) => {
-      if (item.name == catName) {
+      if (item.name === catName) {
         this.currentProject.categories.splice(index, 1);
       }
     })
   }
 
-  //ouvre la boîte de dialogue pour ajouter un annotateur
+  // ouvre la boîte de dialogue pour ajouter un annotateur
   addAnnotatorDialogBox() {
     const dialogRef = this.dialog.open(AddAnnotatorComponent, {
       width: '600px',
@@ -193,18 +209,17 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      var annotatorExists = false;
+      let annotatorExists = false;
       if (result !== undefined) {
         this.currentProject.annotators.forEach((item) => {
-          if (item == result.uid) {
+          if (item === result.uid) {
             annotatorExists = true;
           }
         })
         if (!annotatorExists) {
           this.currentProject.annotators.push(result.uid);
           this.annotators.push({ uid: result.uid, email: result.email });
-        }
-        else {
+        } else {
           alert('This annotator already exists');
         }
       }
@@ -214,18 +229,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // Supprime l'annotateur spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAnnotator(uid: string) {
     this.currentProject.annotators.forEach((item, index) => {
-      if (item == uid) {
+      if (item === uid) {
         this.currentProject.annotators.splice(index, 1);
       }
     })
     this.annotators.forEach((item, index) => {
-      if (item.uid == uid) {
+      if (item.uid === uid) {
         this.annotators.splice(index, 1);
       }
     })
   }
 
-  //ouvre la boîte de dialogue pour ajouter un administrateur
+  // ouvre la boîte de dialogue pour ajouter un administrateur
   addAdminDialogBox() {
     const dialogRef = this.dialog.open(AddAdminComponent, {
       width: '600px',
@@ -234,18 +249,17 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      var adminExists = false;
+      let adminExists = false;
       if (result !== undefined) {
         this.currentProject.admin.forEach((item) => {
-          if (item == result.uid) {
+          if (item === result.uid) {
             adminExists = true;
           }
         })
         if (!adminExists) {
           this.currentProject.admin.push(result.uid);
           this.admin.push({ uid: result.uid, email: result.email });
-        }
-        else {
+        } else {
           alert('This admin already exists');
         }
       }
@@ -255,18 +269,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // Supprime l'admin spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAdmin(uid: string) {
     this.currentProject.admin.forEach((item, index) => {
-      if (item == uid) {
+      if (item === uid) {
         this.currentProject.admin.splice(index, 1);
       }
     })
     this.admin.forEach((item, index) => {
-      if (item.uid == uid) {
+      if (item.uid === uid) {
         this.admin.splice(index, 1);
       }
     })
   }
 
-  //ouvre la boîte de dialogue pour ajouter un attribut
+  // ouvre la boîte de dialogue pour ajouter un attribut
   addAttributesDialogBox() {
     const dialogRef = this.dialog.open(AddAttributeComponent, {
       width: '400px',
@@ -282,10 +296,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         });
         if (!attributeExists) {
-          let array = result.valeurs.split(',');
+          const array = result.valeurs.split(',');
           this.currentProject.attributes.push({ name: result.attributeName, type: result.type, valeurs: array });
-        }
-        else {
+        } else {
           alert('This attribute already exists');
         }
       }
@@ -316,10 +329,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         });
         if (!relationsExists) {
-          var array = result.etiquettes.split(",");
+          const array = result.etiquettes.split(',');
           this.currentProject.relations.push(new Relation(result.relationName, result.relationColor));
-        }
-        else {
+        } else {
           alert('This relation already exists');
         }
       }
@@ -384,7 +396,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Événement lorsqu'un texte est sélectionné
   documentSelected(doc: any) {
-  doc.projectTitle = this.currentProject.title;
+    doc.projectTitle = this.currentProject.title;
     this.router.navigate(['/annotation', doc]);
   }
 

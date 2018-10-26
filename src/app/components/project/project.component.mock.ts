@@ -2,30 +2,43 @@ import { AuthService } from '../../shared/security/auth.service';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { ProjectService } from './project.service';
 import { ProjectManagerService } from '../../adm/projectManager/projectManager.service';
-import { AddCategoryComponent } from '../add-category/add-category.component';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { CommonModule } from '@angular/common';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDialogModule, MatInputModule } from '@angular/material';
+import { Entite } from '../../shared/entite.model';
 
 // data mocks
-@NgModule({
-    imports: [
-        FormsModule,
-        MatFormFieldModule,
-        CommonModule,
-        MatSelectModule,
-        MatDialogModule,
-        MatInputModule],
-    declarations: [AddCategoryComponent],
-    entryComponents: [
-        AddCategoryComponent,
-    ]
-})
-export class TestAddCategoryModule { }
+export const validEntiteResult = {
+    categoryName: 'Test',
+    type: 'Test',
+    etiquettes: 'Test',
+    categoryColor: '#F44336'
+}
 
+export const validEntiteResult2 = {
+    categoryName: 'Test',
+    type: 'Test',
+    etiquettes: 'Test',
+    categoryColor: '#2196F3'
+}
+
+export const validEntiteResult3 = {
+    categoryName: 'Test3',
+    type: 'Test3',
+    etiquettes: 'Test3',
+    categoryColor: '#F44336'
+}
+
+export const validEntities2: Entite = {
+    name: 'Test',
+    type: 'Test',
+    color: '#2196F3',
+    labels: ['Test']
+}
+
+export const validEntities3: Entite = {
+    name: 'Test3',
+    type: 'Test3',
+    color: '#F44336',
+    labels: ['Test3']
+}
 // service mocks
 interface IProjectMocks {
     authService: Partial<AuthService>;

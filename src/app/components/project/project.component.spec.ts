@@ -1,16 +1,21 @@
 import { ProjectComponent } from './project.component';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick, fakeAsync, async } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatInputModule, MatToolbarModule, MatListModule, MatCardModule, MatDialogModule } from '@angular/material';
+import {
+  MatInputModule, MatToolbarModule, MatListModule, MatCardModule, MatDialogModule
+} from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AuthService } from '../../shared/security/auth.service';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { ProjectService } from './project.service';
 import { ProjectManagerService } from '../../adm';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { projectMocks, TestAddCategoryModule } from './project.component.mock';
-import { AddCategoryComponent } from '../add-category/add-category.component';
+import {
+  projectMocks, validEntiteResult, validEntiteResult2,
+  validEntiteResult3, validEntities2, validEntities3
+} from './project.component.mock';
 import { MatSelectModule } from '@angular/material/select';
+import { Entite } from '../../shared/entite.model';
 
 // TODO: Replace fdescribe with describe once the iteration is done
 fdescribe('Projet', () => {
@@ -28,12 +33,10 @@ fdescribe('Projet', () => {
         RouterTestingModule,
         MatDialogModule,
         BrowserAnimationsModule,
-        MatSelectModule,
-        TestAddCategoryModule,
+        MatSelectModule
       ],
       declarations: [
-        ProjectComponent,
-        // AddCategoryComponent
+        ProjectComponent
       ],
       providers: [
         { provide: AngularFirestore, useValue: projectMocks.angularFirestore },
@@ -46,17 +49,39 @@ fdescribe('Projet', () => {
     projectFixture = TestBed.createComponent(ProjectComponent);
     projectFixture.detectChanges();
     projectComponent = projectFixture.componentInstance;
-
   });
 
   it('Should create component', () => {
     expect(projectComponent).toBeDefined();
   });
 
-  describe('Entities', () => {
+  fdescribe('Entities', () => {
+
     // TODO: Insert tests related to entities here
-    it('Should not be able to use the same color more than once', () => {
-      projectComponent.addCategorieDialogBox();
+    it('should alert the user when trying to add an entities using an already used name', () => {
+      spyOn(window, 'alert');
+      projectComponent.addEntitiesAfterClosedHandler(validEntiteResult);
+      projectComponent.addEntitiesAfterClosedHandler(validEntiteResult);
+      expect(window.alert)
+        .toHaveBeenCalledWith('The category already exists');
+    });
+
+    it('should alert the user when trying to add an entities using an already used color', () => {
+      spyOn(window, 'alert');
+      projectComponent.addEntitiesAfterClosedHandler(validEntiteResult);
+      projectComponent.addEntitiesAfterClosedHandler(validEntiteResult3);
+      expect(window.alert)
+        .toHaveBeenCalledWith('The chosen color is already used');
+      expect(projectComponent.currentProject.categories).not.toContain(jasmine.objectContaining(validEntities3));
+    });
+
+    it('should alert the user when trying to add an entities using an already used name and change the color if it\'s different', () => {
+      spyOn(window, 'alert');
+      projectComponent.addEntitiesAfterClosedHandler(validEntiteResult);
+      projectComponent.addEntitiesAfterClosedHandler(validEntiteResult2);
+      expect(window.alert)
+        .toHaveBeenCalledWith('Replacing color');
+      expect(projectComponent.currentProject.categories).toContain(jasmine.objectContaining(validEntities2));
     });
   });
 

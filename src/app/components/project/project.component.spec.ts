@@ -58,6 +58,11 @@ fdescribe('Projet', () => {
   fdescribe('Entities', () => {
 
     // TODO: Insert tests related to entities here
+    it('should add the entite to the current project\'s entities if provided with a valid result', () => {
+      projectComponent.addEntitiesAfterClosedHandler(validEntiteResult3);
+      expect(projectComponent.currentProject.categories).toContain(jasmine.objectContaining(validEntities3));
+    });
+
     it('should alert the user when trying to add an entities using an already used name', () => {
       spyOn(window, 'alert');
       projectComponent.addEntitiesAfterClosedHandler(validEntiteResult);

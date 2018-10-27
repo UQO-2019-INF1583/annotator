@@ -57,7 +57,6 @@ fdescribe('Projet', () => {
 
   describe('Entities', () => {
 
-    // TODO: Insert tests related to entities here
     it('should add the entite to the current project\'s entities if provided with a valid result', () => {
       projectComponent.addEntitiesAfterClosedHandler(validEntiteResult3);
       expect(projectComponent.currentProject.categories).toContain(jasmine.objectContaining(validEntities3));
@@ -98,7 +97,7 @@ fdescribe('Projet', () => {
   });
 
   describe('Attributs', () => {
-    // TODO: Insert tests related to attributs here
+
     it('should add the attribute to the current project\'s attributes if provided with a valid result', () => {
       projectComponent.addAttributesAfterClosedHandler(validAttResult);
       expect(projectComponent.currentProject.attributes).toContain(jasmine.objectContaining(validAtt));
@@ -171,7 +170,7 @@ fdescribe('Projet', () => {
       uid: '1234',
       email: 'test@UQOAnnotator.ca'
     }
-    // TODO: Insert tests related to Annotators here
+
     it('Should be able to add an annotator', () => {
       projectComponent.addAnnotatorAfterClosedHandler(validAnnResult);
       expect(projectComponent.currentProject.annotators).toContain(validAnnResult.uid);
@@ -196,12 +195,12 @@ fdescribe('Projet', () => {
     });
   });
 
-  fdescribe('Administrators', () => {
+  describe('Administrators', () => {
     const validAdminResult = {
       uid: '1234',
       email: 'test@UQOAnnotator.ca'
     }
-    // TODO: Insert tests related to Administrators here
+
     it('Should be able to add an admin', () => {
       projectComponent.addAdminAfterClosedHandler(validAdminResult);
       expect(projectComponent.currentProject.admin).toContain(validAdminResult.uid);

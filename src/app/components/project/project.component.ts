@@ -46,8 +46,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   users: Observable<User[]>;
   corpus: Observable<any[]>;
-  annotators: any[]; // {uid: v1, email: v2}[]
-  admin: any[]; // {uid: v1, email: v2}[]
+  annotators: any[] = []; // {uid: v1, email: v2}[]
+  admin: any[] = []; // {uid: v1, email: v2}[]
   attributes: Attribute[];
   events: any[];
   relations: any[];

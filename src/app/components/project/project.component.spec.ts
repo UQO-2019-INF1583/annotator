@@ -167,11 +167,63 @@ fdescribe('Projet', () => {
   });
 
   describe('Annotators', () => {
+    const validAnnResult = {
+      uid: '1234',
+      email: 'test@UQOAnnotator.ca'
+    }
     // TODO: Insert tests related to Annotators here
+    it('Should be able to add an annotator', () => {
+      projectComponent.addAnnotatorAfterClosedHandler(validAnnResult);
+      expect(projectComponent.currentProject.annotators).toContain(validAnnResult.uid);
+      expect(projectComponent.annotators).toContain(validAnnResult);
+    });
+
+    it('Should be able to delete an annotator', () => {
+      projectComponent.addAnnotatorAfterClosedHandler(validAnnResult);
+      expect(projectComponent.currentProject.annotators).toContain(validAnnResult.uid);
+      expect(projectComponent.annotators).toContain(validAnnResult);
+      projectComponent.deleteAnnotator(validAnnResult.uid);
+      expect(projectComponent.currentProject.annotators).not.toContain(validAnnResult.uid);
+      expect(projectComponent.annotators).not.toContain(validAnnResult);
+    });
+
+    it('Should not be able to add an already added annotator', () => {
+      spyOn(window, 'alert');
+      projectComponent.addAnnotatorAfterClosedHandler(validAnnResult);
+      projectComponent.addAnnotatorAfterClosedHandler(validAnnResult);
+      expect(window.alert)
+        .toHaveBeenCalledWith('This annotator already exists');
+    });
   });
 
-  describe('Administrators', () => {
+  fdescribe('Administrators', () => {
+    const validAdminResult = {
+      uid: '1234',
+      email: 'test@UQOAnnotator.ca'
+    }
     // TODO: Insert tests related to Administrators here
+    it('Should be able to add an admin', () => {
+      projectComponent.addAdminAfterClosedHandler(validAdminResult);
+      expect(projectComponent.currentProject.admin).toContain(validAdminResult.uid);
+      expect(projectComponent.admin).toContain(validAdminResult);
+    });
+
+    it('Should be able to delete an admin', () => {
+      projectComponent.addAdminAfterClosedHandler(validAdminResult);
+      expect(projectComponent.currentProject.admin).toContain(validAdminResult.uid);
+      expect(projectComponent.admin).toContain(validAdminResult);
+      projectComponent.deleteAdmin(validAdminResult.uid);
+      expect(projectComponent.currentProject.admin).not.toContain(validAdminResult.uid);
+      expect(projectComponent.admin).not.toContain(validAdminResult);
+    });
+
+    it('Should not be able to add an already added admin', () => {
+      spyOn(window, 'alert');
+      projectComponent.addAdminAfterClosedHandler(validAdminResult);
+      projectComponent.addAdminAfterClosedHandler(validAdminResult);
+      expect(window.alert)
+        .toHaveBeenCalledWith('This admin already exists');
+    });
   });
 
 });

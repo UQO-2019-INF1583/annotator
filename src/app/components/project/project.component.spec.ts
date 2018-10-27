@@ -1,5 +1,5 @@
 import { ProjectComponent } from './project.component';
-import { ComponentFixture, TestBed, tick, fakeAsync, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import {
   MatInputModule, MatToolbarModule, MatListModule, MatCardModule, MatDialogModule
@@ -16,8 +16,6 @@ import {
   validAttResult, validAtt
 } from './project.component.mock';
 import { MatSelectModule } from '@angular/material/select';
-import { Entite } from '../../shared/entite.model';
-import { Attribute } from '../../shared/attribute.model';
 
 // TODO: Replace fdescribe with describe once the iteration is done
 fdescribe('Projet', () => {
@@ -90,6 +88,13 @@ fdescribe('Projet', () => {
         .toHaveBeenCalledWith('Replacing color');
       expect(projectComponent.currentProject.categories).toContain(jasmine.objectContaining(validEntities2));
     });
+
+    it('Should be able to delete an entity', () => {
+      projectComponent.addEntitiesAfterClosedHandler(validEntiteResult3);
+      expect(projectComponent.currentProject.categories).toContain(jasmine.objectContaining(validEntities3));
+      projectComponent.deleteCategory(validEntities3.name);
+      expect(projectComponent.currentProject.categories).not.toContain(jasmine.objectContaining(validEntities3));
+    });
   });
 
   describe('Attributs', () => {
@@ -105,6 +110,13 @@ fdescribe('Projet', () => {
       projectComponent.addAttributesAfterClosedHandler(validAttResult);
       expect(window.alert)
         .toHaveBeenCalledWith('This attribute already exists');
+    });
+
+    it('Should be able to delete an attribut', () => {
+      projectComponent.addAttributesAfterClosedHandler(validAttResult);
+      expect(projectComponent.currentProject.attributes).toContain(jasmine.objectContaining(validAtt));
+      projectComponent.deleteAttribute(validAtt);
+      expect(projectComponent.currentProject.attributes).not.toContain(jasmine.objectContaining(validAtt));
     });
   });
 
@@ -153,6 +165,15 @@ fdescribe('Projet', () => {
         .toHaveBeenCalledWith('This event already exists');
     });
   });
+
+  describe('Annotators', () => {
+    // TODO: Insert tests related to Annotators here
+  });
+
+  describe('Administrators', () => {
+    // TODO: Insert tests related to Administrators here
+  });
+
 });
 
 

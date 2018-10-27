@@ -209,21 +209,25 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      let annotatorExists = false;
-      if (result !== undefined) {
-        this.currentProject.annotators.forEach((item) => {
-          if (item === result.uid) {
-            annotatorExists = true;
-          }
-        })
-        if (!annotatorExists) {
-          this.currentProject.annotators.push(result.uid);
-          this.annotators.push({ uid: result.uid, email: result.email });
-        } else {
-          alert('This annotator already exists');
-        }
-      }
+      this.addAnnotatorAfterClosedHandler(result);
     });
+  }
+
+  addAnnotatorAfterClosedHandler(result: any) {
+    let annotatorExists = false;
+    if (result !== undefined) {
+      this.currentProject.annotators.forEach((item) => {
+        if (item === result.uid) {
+          annotatorExists = true;
+        }
+      })
+      if (!annotatorExists) {
+        this.currentProject.annotators.push(result.uid);
+        this.annotators.push({ uid: result.uid, email: result.email });
+      } else {
+        alert('This annotator already exists');
+      }
+    }
   }
 
   // Supprime l'annotateur spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
@@ -249,21 +253,25 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      let adminExists = false;
-      if (result !== undefined) {
-        this.currentProject.admin.forEach((item) => {
-          if (item === result.uid) {
-            adminExists = true;
-          }
-        })
-        if (!adminExists) {
-          this.currentProject.admin.push(result.uid);
-          this.admin.push({ uid: result.uid, email: result.email });
-        } else {
-          alert('This admin already exists');
-        }
-      }
+      this.addAdminAfterClosedHandler(result);
     });
+  }
+
+  addAdminAfterClosedHandler(result: any) {
+    let adminExists = false;
+    if (result !== undefined) {
+      this.currentProject.admin.forEach((item) => {
+        if (item === result.uid) {
+          adminExists = true;
+        }
+      })
+      if (!adminExists) {
+        this.currentProject.admin.push(result.uid);
+        this.admin.push({ uid: result.uid, email: result.email });
+      } else {
+        alert('This admin already exists');
+      }
+    }
   }
 
   // Supprime l'admin spécifié dans l'écran du projet (pas de sauvegarde dans firestore).

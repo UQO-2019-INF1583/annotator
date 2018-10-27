@@ -12,10 +12,12 @@ import { ProjectManagerService } from '../../adm';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   projectMocks, validEntiteResult, validEntiteResult2,
-  validEntiteResult3, validEntities2, validEntities3
+  validEntiteResult3, validEntities2, validEntities3,
+  validAttResult, validAtt
 } from './project.component.mock';
 import { MatSelectModule } from '@angular/material/select';
 import { Entite } from '../../shared/entite.model';
+import { Attribute } from '../../shared/attribute.model';
 
 // TODO: Replace fdescribe with describe once the iteration is done
 fdescribe('Projet', () => {
@@ -55,7 +57,7 @@ fdescribe('Projet', () => {
     expect(projectComponent).toBeDefined();
   });
 
-  fdescribe('Entities', () => {
+  describe('Entities', () => {
 
     // TODO: Insert tests related to entities here
     it('should add the entite to the current project\'s entities if provided with a valid result', () => {
@@ -92,6 +94,18 @@ fdescribe('Projet', () => {
 
   describe('Attributs', () => {
     // TODO: Insert tests related to attributs here
+    it('should add the attribute to the current project\'s attributes if provided with a valid result', () => {
+      projectComponent.addAttributesAfterClosedHandler(validAttResult);
+      expect(projectComponent.currentProject.attributes).toContain(jasmine.objectContaining(validAtt));
+    });
+
+    it('should alert the user when trying to add an entities using an already used name', () => {
+      spyOn(window, 'alert');
+      projectComponent.addAttributesAfterClosedHandler(validAttResult);
+      projectComponent.addAttributesAfterClosedHandler(validAttResult);
+      expect(window.alert)
+        .toHaveBeenCalledWith('This attribute already exists');
+    });
   });
 
   describe('Relations', () => {

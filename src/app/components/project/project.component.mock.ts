@@ -3,6 +3,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { ProjectService } from './project.service';
 import { ProjectManagerService } from '../../adm/projectManager/projectManager.service';
 import { Entite } from '../../shared/entite.model';
+import { Attribute } from '../../shared/attribute.model';
 
 // data mocks
 export const validEntiteResult = {
@@ -39,6 +40,20 @@ export const validEntities3: Entite = {
     color: '#F44336',
     labels: ['Test3']
 }
+
+
+export const validAttResult = {
+    attributeName: 'Test',
+    type: 'Test',
+    valeurs: 'Test'
+};
+
+export const validAtt: Attribute = {
+    name: 'Test',
+    type: 'Test',
+    valeurs: ['Test']
+};
+
 // service mocks
 interface IProjectMocks {
     authService: Partial<AuthService>;

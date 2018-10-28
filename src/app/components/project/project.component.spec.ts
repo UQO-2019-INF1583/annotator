@@ -61,7 +61,7 @@ fdescribe('Projet', () => {
     projectComponent = projectFixture.componentInstance;
   });
 
-  it('Should create component', () => {
+  it('should create component', () => {
     expect(projectComponent).toBeDefined();
   });
 
@@ -102,7 +102,7 @@ fdescribe('Projet', () => {
       );
     });
 
-    it('Should be able to delete an entity', () => {
+    it('should be able to delete an entity', () => {
       projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid3);
       expect(projectComponent.currentProject.categories).toContain(
         jasmine.objectContaining(entiteMock.valid3)
@@ -131,7 +131,7 @@ fdescribe('Projet', () => {
       );
     });
 
-    it('Should be able to delete an attribut', () => {
+    it('should be able to delete an attribut', () => {
       projectComponent.addAttributesAfterClosedHandler(attributMock.result.valid1);
       expect(projectComponent.currentProject.attributes).toContain(
         jasmine.objectContaining(attributMock.valid1)
@@ -144,52 +144,35 @@ fdescribe('Projet', () => {
   });
 
   describe('Relations', () => {
-    it('affiche le message d\'erreur quand on ajoute deux fois la meme relation', () => {
+    it('should alert the user when trying to add a relation that already exists', () => {
       spyOn(window, 'alert');
       projectComponent.addRelation(relationMock.valid1);
       projectComponent.addRelation(relationMock.valid1);
       expect(window.alert).toHaveBeenCalledWith('This relation already exists');
     });
 
-    it('verifier si la relation ajouter existe dans la liste', () => {
+    it('should add the relation to the current project\'s relation', () => {
       projectComponent.addRelation(relationMock.valid1);
-      projectComponent.addRelation(relationMock.valid2);
-      projectComponent.addRelation(relationMock.valid3);
-      expect(projectComponent.currentProject.relations).toContain(relationMock.valid2);
-      expect(projectComponent.currentProject.relations).toContain(relationMock.valid3);
+      expect(projectComponent.currentProject.relations).toContain(relationMock.valid1);
     });
 
-    it('verifier si la relation ajouter n\'existe pas dans la liste', () => {
+    it('should be able to delete a relation', () => {
+      // Adding valid1
       projectComponent.addRelation(relationMock.valid1);
-      projectComponent.addRelation(relationMock.valid3);
-      // valider avec jasmine
-      expect(projectComponent.currentProject.relations).not.toContain(
-        relationMock.valid2
+      expect(projectComponent.currentProject.relations).toContain(
+        relationMock.valid1
       );
-      // valider avec la fonction
-      expect(projectComponent.isExist(relationMock.valid2)).toBe(false);
-    });
 
-    it('verifier si la relation a été supprimer de la liste', () => {
-      projectComponent.addRelation(relationMock.valid1);
-      projectComponent.addRelation(relationMock.valid2);
-      projectComponent.addRelation(relationMock.valid3);
-      // on supprime relation 2
-      projectComponent.deleteRelation(relationMock.valid2);
-      // valider avec jasmine
+      // Removing valid1
+      projectComponent.deleteRelation(relationMock.valid1);
       expect(projectComponent.currentProject.relations).not.toContain(
-        relationMock.valid2
+        relationMock.valid1
       );
-      // valider avec la fonction
-      expect(projectComponent.isExist(relationMock.valid2)).toBe(false);
     });
 
-    it('verifier si la relation null ne peut pas etre ajouter dans la liste', () => {
-      projectComponent.addRelation(relationMock.valid1);
-      projectComponent.addRelation(relationMock.valid2);
+    it('should not add a null relation to the current project\'s relation', () => {
       projectComponent.addRelation(null);
-      // valider avec jasmine
-      expect(projectComponent.currentProject.relations).not.toContain(null);
+      expect(projectComponent.currentProject.relations.length).toBe(0);
     });
   });
 
@@ -211,7 +194,7 @@ fdescribe('Projet', () => {
       });
     });
 
-    it('should add the event to the current project\'s events if provided { with a valid } result', () => {
+    it('should add the event to the current project\'s events if provided with a valid result', () => {
       projectComponent.addEventAfterClosedHandler(eventMock.result.valid1);
       expect(projectComponent.currentProject.events).toContain(
         projectComponent.mapValidResultToEvent(eventMock.result.valid1)
@@ -227,7 +210,7 @@ fdescribe('Projet', () => {
   });
 
   describe('Annotators', () => {
-    it('Should be able to add an annotator', () => {
+    it('should be able to add an annotator', () => {
       projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
       expect(projectComponent.currentProject.annotators).toContain(
         annotatorMock.result.valid1.uid
@@ -235,7 +218,7 @@ fdescribe('Projet', () => {
       expect(projectComponent.annotators).toContain(annotatorMock.result.valid1);
     });
 
-    it('Should be able to delete an annotator', () => {
+    it('should be able to delete an annotator', () => {
       projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
       expect(projectComponent.currentProject.annotators).toContain(
         annotatorMock.result.valid1.uid
@@ -248,7 +231,7 @@ fdescribe('Projet', () => {
       expect(projectComponent.annotators).not.toContain(annotatorMock.result.valid1);
     });
 
-    it('Should not be able to add an already added annotator', () => {
+    it('should alert the user when trying to add an annotator that already exists', () => {
       spyOn(window, 'alert');
       projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
       projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
@@ -259,7 +242,7 @@ fdescribe('Projet', () => {
   });
 
   describe('Administrators', () => {
-    it('Should be able to add an admin', () => {
+    it('should be able to add an admin', () => {
       projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
       expect(projectComponent.currentProject.admin).toContain(
         adminMock.result.valid1.uid
@@ -267,7 +250,7 @@ fdescribe('Projet', () => {
       expect(projectComponent.admin).toContain(adminMock.result.valid1);
     });
 
-    it('Should be able to delete an admin', () => {
+    it('should be able to delete an admin', () => {
       projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
       expect(projectComponent.currentProject.admin).toContain(
         adminMock.result.valid1.uid
@@ -280,7 +263,7 @@ fdescribe('Projet', () => {
       expect(projectComponent.admin).not.toContain(adminMock.result.valid1);
     });
 
-    it('Should not be able to add an already added admin', () => {
+    it('should alert the user when trying to add an admin that already exists', () => {
       spyOn(window, 'alert');
       projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
       projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);

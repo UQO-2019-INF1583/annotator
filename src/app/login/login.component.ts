@@ -1,4 +1,4 @@
-﻿// Rôle : contrôleur principal du module login (de la vue login.component.html).
+// Rôle : contrôleur principal du module login (de la vue login.component.html).
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';

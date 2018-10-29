@@ -1,4 +1,5 @@
-// Rôle : contient les fonctionnalités pour téléverser un fichier, valider son format et rattacher les informations de téléversement.
+// Rôle : contient les fonctionnalités pour téléverser un fichier, valider
+// son format et rattacher les informations de téléversement.
 
 import { Component, OnInit } from '@angular/core';
 

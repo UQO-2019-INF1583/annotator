@@ -1,15 +1,12 @@
-import {TestBed, inject} from '@angular/core/testing';
-import {AngularFirestore} from 'angularfire2/firestore';
-import {} from 'jasmine';
-import {CategoryService} from './category.service';
-import {MOCK_CATEGORIES, CATEGORIES} from './category.service.MOCKDATA';
-import {EntityType} from './EntityType';
+import { TestBed, inject } from '@angular/core/testing';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { } from 'jasmine';
+import { CategoryService } from './category.service';
+import { MOCK_CATEGORIES, CATEGORIES } from './category.service.MOCKDATA';
+import { EntityType } from './EntityType';
 
 describe('CategoryService', () => {
 
-  /*const AngularFirestoreStub = {
-    collection: jasmine.createSpy('collection').and.returnValue(MOCK_CATEGORIES)
-  };*/
   const AngularFirestoreStub = {
     collection: (collectionName) => {
       return {
@@ -29,7 +26,7 @@ describe('CategoryService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CategoryService, {provide: AngularFirestore, useValue: AngularFirestoreStub}]
+      providers: [CategoryService, { provide: AngularFirestore, useValue: AngularFirestoreStub }]
     });
   });
 
@@ -44,16 +41,16 @@ describe('CategoryService', () => {
       expect(convertedAsEntities[i].bgColor === MOCK_CATEGORIES[i].color);
     }
   }));
-  
+
   it('should transform entity type categories', inject(
     [CategoryService],
     (categoriesService: CategoryService) => {
       const transform = categoriesService.getCategoriesAsEntityTypes(
         MOCK_CATEGORIES
       );
-	  for (let i = 0; i < transform.length; i++) {
+      for (let i = 0; i < transform.length; i++) {
         expect(transform[i]).toEqual(jasmine.any(EntityType));
-	  }
+      }
     }
   ));
 
@@ -64,7 +61,7 @@ describe('CategoryService', () => {
   }));
 
   it('should allow to get categories for a certain project ID', inject([CategoryService], (service: CategoryService) => {
-      //expect(CATEGORIES == service.getCategories(1));
+    // expect(CATEGORIES == service.getCategories(1));
   }));
 
   xit('should only allow authenticated users to call the categories service',

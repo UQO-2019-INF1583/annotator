@@ -20,17 +20,15 @@ import {
   AngularFirestoreDocument
 } from 'angularfire2/firestore';
 import { AuthService } from './shared/security/auth.service';
-// private authService: AuthService, private afAuth: AngularFireAuth, private afs: AngularFirestore
 
 describe('AppComponent', () => {
-  // let debugElement: DebugElement; not use
-  // let authServ: AuthService; not use
+
   const AngularFirestoreStub = {
-    collection: someString => {}
+    collection: someString => { }
   };
 
   const AuthServiceStub = {
-    collection: some => {}
+    collection: some => { }
   };
 
   beforeEach(async(() => {
@@ -63,14 +61,4 @@ describe('AppComponent', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual('Annotateur');
   });
-
-  /*  it('should render title in a h1 tag', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    debugElement = fixture.debugElement;
-    authServ = debugElement.injector.get(AuthService);
-    authServ.isConnected = () =>{ return true};
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('UQO Annotator');
-  }));*/
 });

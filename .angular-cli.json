@@ -52,6 +52,11 @@
     }
   ],
   "test": {
+    "codeCoverage": {
+      "exclude": [
+        "src/app/annotation/brat/**/*"
+      ]
+    },
     "karma": {
       "config": "./karma.conf.js"
     }

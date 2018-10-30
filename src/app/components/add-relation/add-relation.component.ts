@@ -1,17 +1,18 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-add-relation',
   templateUrl: './add-relation.component.html',
-  styleUrls: ['./add-relation.component.css']
+  styleUrls: ['./add-relation.component.css'],
 })
 export class AddRelationComponent implements OnInit {
-availableColors: object[];
+  availableColors: object[];
 
   constructor(
     public dialogRef: MatDialogRef<AddRelationComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
   ngOnInit() {
     this.availableColors = [
@@ -20,7 +21,7 @@ availableColors: object[];
       { nom: 'jaune', couleur: '#FFEB3B' },
       { nom: 'vert', couleur: '#4CAF50' },
       { nom: 'violet', couleur: '#673AB7' },
-      { nom: 'orange', couleur: '#FF5722' }
+      { nom: 'orange', couleur: '#FF5722' },
     ];
   }
 }

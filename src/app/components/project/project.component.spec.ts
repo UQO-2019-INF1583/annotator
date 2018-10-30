@@ -26,8 +26,7 @@ import { ProjectManagerService } from '../../adm';
 import { ProjectService } from './project.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
-// TODO: Replace fdescribe with describe once the iteration is done
-fdescribe('Projet', () => {
+describe('Projet', () => {
   let projectComponent: ProjectComponent;
   let projectFixture: ComponentFixture<ProjectComponent>;
 

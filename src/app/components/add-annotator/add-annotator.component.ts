@@ -21,10 +21,10 @@ export class AddAnnotatorComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddAnnotatorComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private afs: AngularFirestore ) { }
+    @Inject(MAT_DIALOG_DATA) public data: any, private afs: AngularFirestore) { }
 
   ngOnInit() {
-    //initialize la datasource pour la mat-table
+    // initialize la datasource pour la mat-table
     this.datasource = new UsersDataSource(this.afs);
   }
 }

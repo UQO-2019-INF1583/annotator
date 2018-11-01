@@ -162,4 +162,4 @@ import { AddAttributeComponent } from './components/add-attribute/add-attribute.
 
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

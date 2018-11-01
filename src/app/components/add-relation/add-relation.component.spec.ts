@@ -8,9 +8,9 @@ describe('AddRelationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddRelationComponent ]
+      declarations: [AddRelationComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

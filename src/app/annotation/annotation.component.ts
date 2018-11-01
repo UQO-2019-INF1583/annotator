@@ -14,12 +14,12 @@ import {
   AngularFirestoreDocument
 } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
-import {AngularFireStorage} from 'angularfire2/storage';
+import { AngularFireStorage } from 'angularfire2/storage';
 import * as firebase from 'firebase';
 import './brat/brat-frontend-editor';
-import {collData, docData, options} from './brat/brat-data-mock';
-import {Category} from '../shared/category.model';
-import {HttpClient} from '@angular/common/http';
+import { collData, docData, options } from './brat/brat-data-mock';
+import { Category } from '../shared/category.model';
+import { HttpClient } from '@angular/common/http';
 declare var BratFrontendEditor: any;
 
 @Component({
@@ -37,11 +37,11 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   currentProjectTitle: string;
   isConnected = false;
   projectId: string;
-  private dData:any;
-  private cData:any;
+  private dData: any;
+  private cData: any;
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute, private router: Router,
               /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore,
-              private categs: CategoryService, private storage: AngularFireStorage, private http: HttpClient) {
+    private categs: CategoryService, private storage: AngularFireStorage, private http: HttpClient) {
 
   }
 
@@ -57,12 +57,12 @@ export class AnnotationComponent implements OnInit, OnDestroy {
    * Cette méthode permet de charger les catégories, de les transformer en types d'entités
    * et de les ajouter aux types d'entités existants dans collData
    */
-  private addEntityTypes () {
-    let newTypes = this.categs.getCategoriesAsEntityTypes(this.categories);
+  private addEntityTypes() {
+    const newTypes = this.categs.getCategoriesAsEntityTypes(this.categories);
     let newType: any;
     newTypes.forEach(function (entity) {
       newType = {};
-      for (let property in entity) {
+      for (const property in entity) {
         if (entity.hasOwnProperty(property)) {
           newType[property] = entity[property];
         }
@@ -83,23 +83,27 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       this.projectId = params.projectId;
     });
     // Lire le fichier stocké pour en extraire le texte
-    const URL = await firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).getDownloadURL();
-    let text = await this.http.get(URL, {responseType: 'text'}).toPromise();
-    //split the data
-    let bratParams : string[] = text.split("-----");
+    const URL = await firebase
+      .storage()
+      .ref()
+      .child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title)
+      .getDownloadURL();
+    let text = await this.http.get(URL, { responseType: 'text' }).toPromise();
+    // split the data
+    const bratParams: string[] = text.split('-----');
     text = bratParams[0];
-    
-    
-    //Load mock coll and doc if undefined, else, load what has already been saved
-    if(typeof (bratParams[1]) === 'undefined' && typeof(bratParams[1]) === 'undefined'){
-         this.dData = docData;
-         this.cData = collData;
-      } else {
-         this.dData = JSON.parse(bratParams[1]);
-         this.cData = JSON.parse(bratParams[2]);
-      }
 
-    
+
+    // Load mock coll and doc if undefined, else, load what has already been saved
+    if (typeof (bratParams[1]) === 'undefined' && typeof (bratParams[1]) === 'undefined') {
+      this.dData = docData;
+      this.cData = collData;
+    } else {
+      this.dData = JSON.parse(bratParams[1]);
+      this.cData = JSON.parse(bratParams[2]);
+    }
+
+
     this.dData.text = text.replace(/<[^>]*>/g, '');
     console.log(this.dData.text);
     this.categories = await this.categs.getCategories(this.projectId).toPromise();
@@ -129,7 +133,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       if (sel.getRangeAt && sel.rangeCount) {
         if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id === 'myText' ||
           sel.getRangeAt(0).commonAncestorContainer.parentNode.parentNode.id === 'myText'
-        || sel.getRangeAt(0).commonAncestorContainer.id === 'myText') {
+          || sel.getRangeAt(0).commonAncestorContainer.id === 'myText') {
 
           if (couleur !== 'Delete') {
             range = sel.getRangeAt(0);
@@ -142,7 +146,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
             range.deleteContents();
 
             if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id !== 'myText' &&
-            sel.getRangeAt(0).commonAncestorContainer.id !== 'myText') {
+              sel.getRangeAt(0).commonAncestorContainer.id !== 'myText') {
               range.commonAncestorContainer.parentNode.parentNode
                 .removeChild(range.commonAncestorContainer.parentNode);
             }
@@ -156,7 +160,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
             range.deleteContents();
 
             if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id !== 'myText' &&
-            sel.getRangeAt(0).commonAncestorContainer.id !== 'myText') {
+              sel.getRangeAt(0).commonAncestorContainer.id !== 'myText') {
               range.commonAncestorContainer.parentNode.parentNode
                 .removeChild(range.commonAncestorContainer.parentNode);
             }
@@ -178,9 +182,9 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
   saveTextModification() {
     let data = this.brat.docData.text;
-    const docData = JSON.stringify(this.brat.docData);
-    const collData = JSON.stringify(this.brat.collData)
-    data = data + "-----" + docData + "-----" + collData;
+    const _docData = JSON.stringify(this.brat.docData);
+    const _collData = JSON.stringify(this.brat.collData)
+    data = data + '-----' + _docData + '-----' + _collData;
     const thefile = new File([data], this.currentDoc.title);
 
     firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).put(thefile);

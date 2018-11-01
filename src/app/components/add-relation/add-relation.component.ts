@@ -12,7 +12,7 @@ export class AddRelationComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddRelationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.availableColors = [

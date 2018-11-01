@@ -71,7 +71,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     private router: Router,
     private pm: ProjectManagerService,
     private ps: ProjectService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();

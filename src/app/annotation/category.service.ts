@@ -1,12 +1,12 @@
 // Service permettant l'accès aux catégories.
-import {Injectable} from '@angular/core';
-import {Category} from '../shared/category.model';
-import {CATEGORIES} from './CategoryList';
-import {EntityType} from './EntityType';
-import {Observable} from 'rxjs/Observable';
-import {of} from 'rxjs/observable/of';
-import {Project} from '../shared/project.model';
-import {AngularFirestore, AngularFirestoreDocument} from 'angularfire2/firestore';
+import { Injectable } from '@angular/core';
+import { Category } from '../shared/category.model';
+import { CATEGORIES } from './CategoryList';
+import { EntityType } from './EntityType';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { Project } from '../shared/project.model';
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 
 @Injectable()
 export class CategoryService {
@@ -31,10 +31,10 @@ export class CategoryService {
   }
 
   // Transforme une catégorie en type d'entité
-  //Note par J.F: Classe Category est maintenant identique à Entité. Par contre, on doit garder
-  //la fonction de conversion sinon il faut changer tout les noms et débugger.
+  // Note par J.F: Classe Category est maintenant identique à Entité. Par contre, on doit garder
+  // la fonction de conversion sinon il faut changer tout les noms et débugger.
   getCategoriesAsEntityTypes(categories: Category[]): EntityType[] {
-    let newTypes = new Array <EntityType>() ;
+    const newTypes = new Array<EntityType>();
     let newType: EntityType;
     categories.forEach(function (category) {
       newType = new EntityType();

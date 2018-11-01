@@ -1,8 +1,7 @@
 export class Entite {
-  //id: string;
+  // id: string;
   name: string;
   type: string;
   labels: string[];
   color: string;
- 
 }

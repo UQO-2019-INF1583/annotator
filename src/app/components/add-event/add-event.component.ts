@@ -7,7 +7,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./add-event.component.css']
 })
 export class AddEventComponent implements OnInit {
-availableColors: object[];
+  availableColors: object[];
 
   constructor(
     public dialogRef: MatDialogRef<AddEventComponent>,

@@ -15,7 +15,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/observable/of';
 
 @Component({
-  selector: 'app-adm-projectManager',
+  selector: 'app-adm-project-manager',
   templateUrl: './projectManager.component.html',
   styleUrls: ['./projectManager.component.scss']
 })
@@ -23,28 +23,27 @@ import 'rxjs/add/observable/of';
 export class ProjectManagerComponent implements OnInit {
   displayedColumns = [];
   dataSource: ProjectDataSource | null;
-  isConnected: boolean = false;
+  isConnected = false;
 
   constructor(private authService: AuthService, public router: Router, private afs: AngularFirestore) {
   }
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
-    if (this.isConnected){
+    if (this.isConnected) {
       this.displayedColumns = ['title', 'description', 'modify'];
-    }
-    else {
+    } else {
       this.displayedColumns = ['title', 'description'];
     }
     this.dataSource = new ProjectDataSource(this.afs);
   }
 
   modifyProject(project: any) {
-    this.router.navigate(['/project', {id: project.id}]);
+    this.router.navigate(['/project', { id: project.id }]);
   }
 
   deleteProject(project: any) {
-    //ajouter un pop up qui demande si l'utilisateur veut vraiment supprimer le projet
+    // ajouter un pop up qui demande si l'utilisateur veut vraiment supprimer le projet
     this.afs.collection('Projects').doc(project.id).delete();
   }
 

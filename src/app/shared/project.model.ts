@@ -1,8 +1,8 @@
 // structure de données utilisée pour représenter un projet
 import { Doc } from './document.model';
 import { Category } from './category.model';
-import {Event} from './event.model';
-import {Attribute} from './attribute.model'
+import { Event } from './event.model';
+import { Attribute } from './attribute.model'
 import { Relation } from './relation.model';
 
 export class Project {

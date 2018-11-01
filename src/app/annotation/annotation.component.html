@@ -1,7 +1,8 @@
 <main flex>
     <!--Section du texts-->
     <div style="padding-left: 10px; padding-right: 10px;">
-        <h3 style="display:inline-block">Project: </h3> {{currentProjectTitle}}<br/><h3 style="display:inline-block">Document: </h3> {{currentDoc?.title}}
+        <h3 style="display:inline-block">Project: </h3> {{currentProjectTitle}}<br />
+        <h3 style="display:inline-block">Document: </h3> {{currentDoc?.title}}
         <p *ngIf="isConnected">To add an annotation, highlight the text and choose the category.</p>
         <mat-card>
             <div id="brat">
@@ -9,7 +10,7 @@
             <div id="myText" style="display: none;">
             </div>
         </mat-card>
-        <br/>
+        <br />
     </div>
 
 
@@ -22,13 +23,13 @@
             <button *ngIf="isConnected" class="btn btn-primary" (click)="Categoriser('Delete')">Delete Annotation</button>
             <div *ngFor="let item of categories" style="float: left;">
                 <button class="btn btn-primary" (click)="Categoriser(item?.color)" [ngStyle]="{'background-color': item?.color}">{{item?.name}}</button>
-                <br/>
-                <br/>
+                <br />
+                <br />
             </div>
-            <br/>
+            <br />
         </div>
     </mat-card>
-    <br/>
+    <br />
     <!--Section des boutons save et cancel-->
     <div *ngIf="isConnected" style="padding-left: 10px; padding-right: 10px;">
         <button class="btn btn-primary" (click)="saveTextModification()">Save</button>

@@ -17,13 +17,13 @@ export class CreateProjectComponent implements OnInit {
   project = { id: '', title: '', description: '', admin: [], annotators: [], categories: [], corpus: [] };
   currentUserId: string;
 
-  constructor(public router: Router, private afs: AngularFirestore){ }
+  constructor(public router: Router, private afs: AngularFirestore) { }
 
   ngOnInit() { }
 
-  create(){
-    if (this.project.title != null && this.project.title != '' &&
-        this.project.description != null && this.project.description != '') {
+  create() {
+    if (this.project.title != null && this.project.title !== '' &&
+      this.project.description != null && this.project.description !== '') {
 
       this.project.id = this.afs.createId();
       this.currentUserId = firebase.auth().currentUser.uid;

@@ -1,6 +1,6 @@
 // Service permettant l'accès aux catégories.
 import { Injectable } from '@angular/core';
-import { Category } from '../shared/category.model';
+import { Entite } from '../shared/entite.model';
 import { CATEGORIES } from './CategoryList';
 import { EntityType } from './EntityType';
 import { Observable } from 'rxjs/Observable';
@@ -15,7 +15,7 @@ export class CategoryService {
   }
 
   // Retourne le contenu du fichier mock CategoryList.ts
-  getCategory(): Observable<Category[]> {
+  getCategory(): Observable<Entite[]> {
     return of(CATEGORIES);
   }
 
@@ -33,7 +33,7 @@ export class CategoryService {
   // Transforme une catégorie en type d'entité
   // Note par J.F: Classe Category est maintenant identique à Entité. Par contre, on doit garder
   // la fonction de conversion sinon il faut changer tout les noms et débugger.
-  getCategoriesAsEntityTypes(categories: Category[]): EntityType[] {
+  getCategoriesAsEntityTypes(categories: Entite[]): EntityType[] {
     const newTypes = new Array<EntityType>();
     let newType: EntityType;
     categories.forEach(function (category) {

@@ -7,7 +7,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase';
 import { Project } from '../../shared/project.model';
-import { Category } from '../../shared/category.model';
+import { Entite } from '../../shared/entite.model';
 
 @Injectable()
 export class ProjectService {
@@ -32,7 +32,7 @@ export class ProjectService {
     return null;
   }
 
-  saveCategories(projectId: string, categs: Category[]) {
+  saveCategories(projectId: string, categs: Entite[]) {
     /* this.afs.collection('Categories').doc(projectId)
        .set({})*/
   }

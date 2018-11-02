@@ -18,7 +18,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import * as firebase from 'firebase';
 import './brat/brat-frontend-editor';
 import { collData, docData, options } from './brat/brat-data-mock';
-import { Category } from '../shared/category.model';
+import { Entite } from '../shared/entite.model';
 import { HttpClient } from '@angular/common/http';
 declare var BratFrontendEditor: any;
 
@@ -33,7 +33,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
   private brat: any;
   currentDoc: Doc;
-  categories: Category[];
+  categories: Entite[];
   currentProjectTitle: string;
   isConnected = false;
   projectId: string;

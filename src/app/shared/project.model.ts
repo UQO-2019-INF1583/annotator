@@ -1,6 +1,6 @@
 // structure de données utilisée pour représenter un projet
 import { Doc } from './document.model';
-import { Category } from './category.model';
+import { Entite } from './entite.model';
 import { Event } from './event.model';
 import { Attribute } from './attribute.model'
 import { Relation } from './relation.model';
@@ -12,7 +12,7 @@ export class Project {
   admin: string[]; // user ids
   annotators: string[]; // user ids
   corpus: Doc[];
-  categories: Category[];
+  entities: Entite[];
   attributes: Attribute[];
   events: Event[];
   relations: Relation[];
@@ -24,7 +24,7 @@ export class Project {
     this.admin = [];
     this.annotators = [];
     this.corpus = [];
-    this.categories = [];
+    this.entities = [];
     this.attributes = [];
     this.events = [];
     this.relations = [];

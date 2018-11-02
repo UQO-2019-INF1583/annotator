@@ -1,5 +1,5 @@
 // Format de données MOCK pour les catégories
-import { Category } from '../shared/category.model';
+import { Entite } from '../shared/entite.model';
 
 export const MOCK_CATEGORIES = [
   { color: '#4CAF50', name: 'Regulier', type: 'vocabulary', labels: [] },
@@ -8,7 +8,7 @@ export const MOCK_CATEGORIES = [
   { color: '#673AB7', name: 'Nom avec charactères escaped \'', type: 'vocabulary', labels: [] },
 ];
 
-export const CATEGORIES: Category[] = [
+export const CATEGORIES: Entite[] = [
   { name: 'Sentence', type: 'vocabulary', labels: [], color: 'green' },
   { name: 'AnatomicalSiteMention', type: 'medical', labels: [], color: 'yellow' },
   { name: 'SignSymptomMention', type: 'medical', labels: [], color: 'blue' }

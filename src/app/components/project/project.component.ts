@@ -46,7 +46,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     admin: [],
     annotators: [],
     corpus: [],
-    categories: [],
+    entities: [],
     attributes: [],
     events: [],
     relations: [],
@@ -77,6 +77,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.isConnected = this.authService.isConnected();
     this.sub = this.activeRouter.params.subscribe(params => {
       this.pm.getProject(params.id).then(doc => {
+        console.log(doc.data());
         this.currentProject = doc.data();
         this.corpus = this.ps.getCorpus(this.currentProject.id);
 
@@ -167,14 +168,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // ouvre la boîte de dialogue pour ajouter une catégorie
-  addCategorieDialogBox() {
+  addEntityDialogBox() {
     const dialogRef = this.dialog.open(AddCategoryComponent, {
       width: '250px',
       data: {
-        categoryName: undefined,
+        entityName: undefined,
         type: undefined,
         etiquettes: undefined,
-        categoryColor: undefined,
+        entityColor: undefined,
       },
     });
 
@@ -185,36 +186,36 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addEntitiesAfterClosedHandler(result: any) {
-    let categoryExists = false;
+    let entityExists = false;
     if (result !== undefined) {
       if (
-        result.categoryName !== undefined &&
-        result.categoryColor !== undefined &&
+        result.entityName !== undefined &&
+        result.entityColor !== undefined &&
         result.type !== undefined &&
         result.etiquettes !== undefined
       ) {
-        this.currentProject.categories.forEach(item => {
-          if (item.name === result.categoryName) {
-            categoryExists = true;
-            if (item.color === result.categoryColor) {
+        this.currentProject.entities.forEach(item => {
+          if (item.name === result.entityName) {
+            entityExists = true;
+            if (item.color === result.entityColor) {
               alert('The category already exists');
             } else {
               alert('Replacing color');
-              item.color = result.categoryColor;
+              item.color = result.entityColor;
             }
-          } else if (item.color === result.categoryColor) {
-            categoryExists = true;
+          } else if (item.color === result.entityColor) {
+            entityExists = true;
             alert('The chosen color is already used');
           }
         });
 
-        if (!categoryExists) {
+        if (!entityExists) {
           let etiquettesArray: string[];
           etiquettesArray = result.etiquettes.split(',');
-          this.currentProject.categories.push({
-            name: result.categoryName,
+          this.currentProject.entities.push({
+            name: result.entityName,
             type: result.type,
-            color: result.categoryColor,
+            color: result.entityColor,
             labels: etiquettesArray,
           });
         }
@@ -223,10 +224,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime la catégorie spécifiée dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteCategory(catName: string) {
-    this.currentProject.categories.forEach((item, index) => {
-      if (item.name === catName) {
-        this.currentProject.categories.splice(index, 1);
+  deleteEntity(entityName: string) {
+    this.currentProject.entities.forEach((item, index) => {
+      if (item.name === entityName) {
+        this.currentProject.entities.splice(index, 1);
       }
     });
   }

@@ -2,16 +2,16 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
-  selector: 'app-add-category',
-  templateUrl: './add-category.component.html',
-  styleUrls: ['./add-category.component.scss']
+  selector: 'app-add-entity',
+  templateUrl: './add-entity.component.html',
+  styleUrls: ['./add-entity.component.scss']
 })
 
-export class AddCategoryComponent implements OnInit {
+export class AddEntityComponent implements OnInit {
   availableColors: object[];
 
   constructor(
-    public dialogRef: MatDialogRef<AddCategoryComponent>,
+    public dialogRef: MatDialogRef<AddEntityComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {

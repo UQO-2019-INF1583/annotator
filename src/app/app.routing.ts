@@ -1,6 +1,6 @@
 import {
   AddAnnotatorComponent,
-  AddCategoryComponent,
+  AddEntityComponent,
   AddCorpusComponent,
   CreateProjectComponent
 } from './components';

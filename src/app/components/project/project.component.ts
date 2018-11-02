@@ -19,7 +19,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
 import { AddAdminComponent } from '../add-admin/add-admin.component';
 import { AddAnnotatorComponent } from '../add-annotator/add-annotator.component';
 import { AddAttributeComponent } from '../add-attribute/add-attribute.component';
-import { AddCategoryComponent } from '../add-category/add-category.component';
+import { AddEntityComponent } from '../add-entity/add-entity.component';
 import { AddCorpusComponent } from '../add-corpus/add-corpus.component';
 import { AddEventComponent } from '../add-event/add-event.component';
 import { AddRelationComponent } from '../add-relation/add-relation.component';
@@ -169,7 +169,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // ouvre la boîte de dialogue pour ajouter une catégorie
   addEntityDialogBox() {
-    const dialogRef = this.dialog.open(AddCategoryComponent, {
+    const dialogRef = this.dialog.open(AddEntityComponent, {
       width: '250px',
       data: {
         entityName: undefined,

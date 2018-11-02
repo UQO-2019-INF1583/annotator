@@ -70,7 +70,7 @@ import { AnnotationComponent } from './annotation/annotation.component';
 import {
   CreateProjectComponent,
   ProjectComponent,
-  AddCategoryComponent,
+  AddEntityComponent,
   AddCorpusComponent,
   AddAdminComponent,
   AddAnnotatorComponent,
@@ -85,7 +85,7 @@ import { AddAttributeComponent } from './components/add-attribute/add-attribute.
     AppComponent,
     AddAdminComponent,
     AddAnnotatorComponent,
-    AddCategoryComponent,
+    AddEntityComponent,
     AddCorpusComponent,
     AnnotationComponent,
     CreateProjectComponent,
@@ -107,7 +107,7 @@ import { AddAttributeComponent } from './components/add-attribute/add-attribute.
   entryComponents: [
     AddAdminComponent,
     AddAnnotatorComponent,
-    AddCategoryComponent,
+    AddEntityComponent,
     AddRelationComponent,
     AddEventComponent,
     AddAttributeComponent

@@ -124,62 +124,6 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     this.brat = null;
   }
 
-  Categoriser(couleur: string) {
-
-    let sel, range, ceci;
-    if (window.getSelection) {
-      sel = window.getSelection();
-
-      if (sel.getRangeAt && sel.rangeCount) {
-        if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id === 'myText' ||
-          sel.getRangeAt(0).commonAncestorContainer.parentNode.parentNode.id === 'myText'
-          || sel.getRangeAt(0).commonAncestorContainer.id === 'myText') {
-
-          if (couleur !== 'Delete') {
-            range = sel.getRangeAt(0);
-
-            const newSpan = document.createElement('span');
-            newSpan.style.fontWeight = 'bold';
-            newSpan.style.color = couleur;
-            newSpan.innerText = range.cloneContents().textContent;
-
-            range.deleteContents();
-
-            if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id !== 'myText' &&
-              sel.getRangeAt(0).commonAncestorContainer.id !== 'myText') {
-              range.commonAncestorContainer.parentNode.parentNode
-                .removeChild(range.commonAncestorContainer.parentNode);
-            }
-
-            range.insertNode(newSpan);
-
-          } else if (couleur === 'Delete') {
-            range = window.getSelection().getRangeAt(0);
-
-            const html = range.cloneContents().textContent
-            range.deleteContents();
-
-            if (sel.getRangeAt(0).commonAncestorContainer.parentNode.id !== 'myText' &&
-              sel.getRangeAt(0).commonAncestorContainer.id !== 'myText') {
-              range.commonAncestorContainer.parentNode.parentNode
-                .removeChild(range.commonAncestorContainer.parentNode);
-            }
-
-            const el = document.createElement('div');
-            el.innerHTML = html;
-            const frag = document.createDocumentFragment();
-            let lastNode;
-            while ((ceci = el.firstChild)) {
-              lastNode = frag.appendChild(ceci);
-            }
-            range.insertNode(frag);
-
-          }
-        }
-      }
-    }
-  }
-
   saveTextModification() {
     let data = this.brat.docData.text;
     const _docData = JSON.stringify(this.brat.docData);

@@ -197,13 +197,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.currentProject.entities.forEach(item => {
           if (item.name === result.entityName) {
             entityExists = true;
-            if (item.color === result.entityColor) {
+            if (item.bgColor === result.entityColor) {
               alert('The entity already exists');
             } else {
               alert('Replacing color');
-              item.color = result.entityColor;
+              item.bgColor = result.entityColor;
             }
-          } else if (item.color === result.entityColor) {
+          } else if (item.bgColor === result.entityColor) {
             entityExists = true;
             alert('The chosen color is already used');
           }
@@ -215,7 +215,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           this.currentProject.entities.push({
             name: result.entityName,
             type: result.type,
-            color: result.entityColor,
+            bgColor: result.entityColor,
             labels: etiquettesArray,
           });
         }

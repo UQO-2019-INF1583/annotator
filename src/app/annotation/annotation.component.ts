@@ -33,14 +33,14 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
   private brat: any;
   currentDoc: Doc;
-  categories: Entite[];
+  entities: Entite[];
   currentProjectTitle: string;
   isConnected = false;
   projectId: string;
   private dData: any;
   private cData: any;
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute, private router: Router,
-              /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore,
+    /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore,
     private categs: CategoryService, private storage: AngularFireStorage, private http: HttpClient) {
 
   }
@@ -58,7 +58,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
    * et de les ajouter aux types d'entités existants dans collData
    */
   private addEntityTypes() {
-    const newTypes = this.categs.getCategoriesAsEntityTypes(this.categories);
+    const newTypes = this.categs.getCategoriesAsEntityTypes(this.entities);
     let newType: any;
     newTypes.forEach(function (entity) {
       newType = {};
@@ -106,7 +106,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
     this.dData.text = text.replace(/<[^>]*>/g, '');
     console.log(this.dData.text);
-    this.categories = await this.categs.getCategories(this.projectId).toPromise();
+    this.entities = await this.categs.getCategories(this.projectId).toPromise();
 
     // Ajouter les catégories comme des types d'entités
     await this.addEntityTypes();

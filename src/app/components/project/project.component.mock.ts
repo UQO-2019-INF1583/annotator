@@ -11,13 +11,13 @@ export const entiteMock = {
   valid2: {
     name: 'Test',
     type: 'Test',
-    color: '#2196F3',
+    bgColor: '#2196F3',
     labels: ['Test']
   } as Entite,
   valid3: {
     name: 'Test3',
     type: 'Test3',
-    color: '#F44336',
+    bgColor: '#F44336',
     labels: ['Test3']
   } as Entite,
   result: {

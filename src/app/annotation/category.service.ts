@@ -27,7 +27,7 @@ export class CategoryService {
 
   // Retourne de façon asynchrone les catégories d'un projet dont le id est passé en paramètre, à partir de la base de données Firestore
   getCategories(projectId) {
-    return Observable.fromPromise(this.getProject(projectId).ref.get().then((documentSnapshot) => documentSnapshot.data().categories));
+    return Observable.fromPromise(this.getProject(projectId).ref.get().then((documentSnapshot) => documentSnapshot.data().entities));
   }
 
   // Transforme une catégorie en type d'entité
@@ -41,7 +41,7 @@ export class CategoryService {
       newType.name = category.name;
       newType.type = category.type;
       newType.labels = category.labels;
-      newType.bgColor = category.color;
+      newType.bgColor = category.bgColor;
       newTypes.push(newType);
     });
     return newTypes;

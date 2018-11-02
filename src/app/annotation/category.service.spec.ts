@@ -38,7 +38,7 @@ describe('CategoryService', () => {
     const convertedAsEntities = service.getCategoriesAsEntityTypes(MOCK_CATEGORIES);
     for (let i = 0; i < convertedAsEntities.length; i++) {
       expect(convertedAsEntities[i].type === MOCK_CATEGORIES[i].name);
-      expect(convertedAsEntities[i].bgColor === MOCK_CATEGORIES[i].color);
+      expect(convertedAsEntities[i].bgColor === MOCK_CATEGORIES[i].bgColor);
     }
   }));
 

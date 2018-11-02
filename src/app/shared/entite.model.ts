@@ -3,5 +3,5 @@ export class Entite {
   name: string;
   type: string;
   labels: string[];
-  color: string;
+  bgColor: string;
 }

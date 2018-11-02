@@ -67,7 +67,7 @@ describe('Projet', () => {
   describe('Entities', () => {
     it('should add the entite to the current project\'s entities if provided { with a valid } result', () => {
       projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid3);
-      expect(projectComponent.currentProject.categories).toContain(
+      expect(projectComponent.currentProject.entities).toContain(
         jasmine.objectContaining(entiteMock.valid3)
       );
     });
@@ -76,7 +76,7 @@ describe('Projet', () => {
       spyOn(window, 'alert');
       projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid1);
       projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid1);
-      expect(window.alert).toHaveBeenCalledWith('The category already exists');
+      expect(window.alert).toHaveBeenCalledWith('The entity already exists');
     });
 
     it('should alert the user when trying to add an entities using an already used color', () => {
@@ -86,7 +86,7 @@ describe('Projet', () => {
       expect(window.alert).toHaveBeenCalledWith(
         'The chosen color is already used'
       );
-      expect(projectComponent.currentProject.categories).not.toContain(
+      expect(projectComponent.currentProject.entities).not.toContain(
         jasmine.objectContaining(entiteMock.valid3)
       );
     });
@@ -96,18 +96,18 @@ describe('Projet', () => {
       projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid1);
       projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid2);
       expect(window.alert).toHaveBeenCalledWith('Replacing color');
-      expect(projectComponent.currentProject.categories).toContain(
+      expect(projectComponent.currentProject.entities).toContain(
         jasmine.objectContaining(entiteMock.valid2)
       );
     });
 
     it('should be able to delete an entity', () => {
       projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid3);
-      expect(projectComponent.currentProject.categories).toContain(
+      expect(projectComponent.currentProject.entities).toContain(
         jasmine.objectContaining(entiteMock.valid3)
       );
-      projectComponent.deleteCategory(entiteMock.valid3.name);
-      expect(projectComponent.currentProject.categories).not.toContain(
+      projectComponent.deleteEntity(entiteMock.valid3.name);
+      expect(projectComponent.currentProject.entities).not.toContain(
         jasmine.objectContaining(entiteMock.valid3)
       );
     });

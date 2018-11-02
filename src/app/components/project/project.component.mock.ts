@@ -22,22 +22,22 @@ export const entiteMock = {
   } as Entite,
   result: {
     valid1: {
-      categoryName: 'Test',
+      entityName: 'Test',
       type: 'Test',
       etiquettes: 'Test',
-      categoryColor: '#F44336'
+      entityColor: '#F44336'
     },
     valid2: {
-      categoryName: 'Test',
+      entityName: 'Test',
       type: 'Test',
       etiquettes: 'Test',
-      categoryColor: '#2196F3'
+      entityColor: '#2196F3'
     },
     valid3: {
-      categoryName: 'Test3',
+      entityName: 'Test3',
       type: 'Test3',
       etiquettes: 'Test3',
-      categoryColor: '#F44336'
+      entityColor: '#F44336'
     }
   }
 }

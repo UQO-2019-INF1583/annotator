@@ -198,7 +198,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           if (item.name === result.entityName) {
             entityExists = true;
             if (item.color === result.entityColor) {
-              alert('The category already exists');
+              alert('The entity already exists');
             } else {
               alert('Replacing color');
               item.color = result.entityColor;

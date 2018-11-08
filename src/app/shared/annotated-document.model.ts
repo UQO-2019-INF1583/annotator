@@ -4,48 +4,53 @@ import { Entite } from './entite.model';
 import { Doc } from './document.model';
 import { Event } from './event.model';
 
-type indices = number[][];
+type rangeTextSelection = [number, number];
 type id = string;
 
-interface EntityAnnotation {
-  id: id;
-  type: Entite;
-  locations: indices;
+interface Annotation {
+  id: id
 }
 
-interface AttributeAnnotation {
-  id: id;
-  type: Attribute;
-  target: string;
+interface EntityAnnotation extends Annotation, Entite {
+  locations: rangeTextSelection[];
 }
 
-interface RelationAnnotation {
-  id: id;
-  type: Relation;
-  from: string;
-  to: string;
+interface AttributeAnnotation extends Annotation, Attribute {
+  target: id;
 }
 
-interface EventAnnotation {
-  id: id;
-  event: Event;
-  locations: indices;
+interface RelationAnnotation extends Annotation, Relation {
+  from: RelationLink;
+  to: RelationLink;
+}
+
+interface RelationLink {
+  role: string,
+  id: id
+}
+
+interface EventAnnotation extends Annotation, Event {
+  locations: rangeTextSelection[];
   links: EventLink[];
 }
 
 interface EventLink {
-  entityId: id;
-  type: string;
+  type: string,
+  id: id
 }
 
 export class AnnotatedDocument extends Doc {
-  entities: EntityAnnotation[];
-  attributes: AttributeAnnotation[];
-  relations: RelationAnnotation[];
-  event: EventAnnotation[];
+  private entities: EntityAnnotation[];
+  private attributes: AttributeAnnotation[];
+  private relations: RelationAnnotation[];
+  private event: EventAnnotation[];
 
   constructor(document: Doc, text: string) {
     super(document.documentId, document.title, document.projectId);
+    this.entities = [];
+    this.attributes = [];
+    this.relations = [];
+    this.event = [];
     this.text = text;
   }
 }

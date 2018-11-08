@@ -81,11 +81,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.currentProject = doc.data();
         this.corpus = this.ps.getCorpus(this.currentProject.id);
 
-        // Initialisation de variables vides, puisqu'on ne les prend pas de FireStore
-        this.currentProject.attributes = [];
-        this.currentProject.events = [];
-        this.currentProject.relations = [];
-
         if (this.isConnected) {
           this.users = this.afs.collection<User>('Users').valueChanges();
           this.getAnnotatorEmail();

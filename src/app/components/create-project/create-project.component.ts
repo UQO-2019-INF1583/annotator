@@ -6,6 +6,7 @@ import {
   AngularFirestoreDocument
 } from 'angularfire2/firestore';
 import * as firebase from 'firebase';
+import { Project } from '../../shared/project.model';
 
 @Component({
   selector: 'app-create-project',
@@ -14,7 +15,18 @@ import * as firebase from 'firebase';
 })
 
 export class CreateProjectComponent implements OnInit {
-  project = { id: '', title: '', description: '', admin: [], annotators: [], categories: [], corpus: [] };
+  project: Project = {
+    id: '',
+    title: '',
+    description: '',
+    admin: [],
+    annotators: [],
+    corpus: [],
+    entities: [],
+    attributes: [],
+    events: [],
+    relations: [],
+  };
   currentUserId: string;
 
   constructor(public router: Router, private afs: AngularFirestore) { }
@@ -27,6 +39,8 @@ export class CreateProjectComponent implements OnInit {
 
       this.project.id = this.afs.createId();
       this.currentUserId = firebase.auth().currentUser.uid;
+      this.project.admin.push(this.currentUserId);
+      this.project.annotators.push(this.currentUserId);
       this.afs.collection('Projects').doc(this.project.id).set(this.project);
 
       alert('Création d\'un nouveau projet réussi');

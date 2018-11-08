@@ -4,18 +4,9 @@
 
 import 'rxjs/Rx';
 import 'rxjs/add/operator/mergeMap';
-
-import * as firebase from 'firebase';
-
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument,
-} from 'angularfire2/firestore';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
-
+import { MatDialog } from '@angular/material';
 import { AddAdminComponent } from '../add-admin/add-admin.component';
 import { AddAnnotatorComponent } from '../add-annotator/add-annotator.component';
 import { AddAttributeComponent } from '../add-attribute/add-attribute.component';
@@ -28,7 +19,6 @@ import { AuthService } from '../../shared/security/auth.service';
 import { Event } from '../../shared/event.model';
 import { Observable } from 'rxjs/Observable';
 import { Project } from '../../shared/project.model';
-import { ProjectManagerService } from '../../adm/projectManager';
 import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';
@@ -64,26 +54,22 @@ export class ProjectComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private activeRouter: ActivatedRoute,
     public dialog: MatDialog,
-    private afs: AngularFirestore,
     private router: Router,
-    private pm: ProjectManagerService,
     private ps: ProjectService
   ) { }
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
     this.sub = this.activeRouter.params.subscribe(params => {
-      this.pm.getProject(params.id).then(doc => {
-        console.log(doc.data());
+      this.ps.getProject(params.id).then(doc => {
         this.currentProject = doc.data();
         this.corpus = this.ps.getCorpus(this.currentProject.id);
 
         if (this.isConnected) {
-          this.users = this.afs.collection<User>('Users').valueChanges();
+          this.users = this.ps.getUsers();
           this.getAnnotatorEmail();
           this.getAdminEmail();
         }
-        // console.log(this.currentProject)
       });
     });
     this.isDataLoaded = true;
@@ -127,15 +113,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.currentProject.description != null &&
       this.currentProject.description !== ''
     ) {
-      this.afs
-        .collection('Projects')
-        .doc(this.currentProject.id)
-        .set(this.currentProject);
-
       this.ps.saveProject(this.currentProject);
 
       alert('Modification sauvegardé');
-      // this.router.navigate(['/']);
     }
   }
 
@@ -172,7 +152,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       this.addEntitiesAfterClosedHandler(result);
     });
   }

@@ -59,11 +59,14 @@ export class AnnotatedDocument extends Doc {
   toJSON(project: Project): string {
     let docData: DocData;
     docData.text = this.text;
-    docData.entities = this.entities.map(entity => [
-      entity.id,
-      entity.type,
-      entity.locations
-    ]);
+    this.entities.forEach(x => {
+      docData.entities.push([
+        x.id,
+        x.type,
+        x.locations
+      ]);
+    })
+
 
     return JSON.stringify(docData);
   }

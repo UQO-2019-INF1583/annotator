@@ -76,14 +76,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.pm.getProject(params.id).then(doc => {
         console.log(doc.data());
         this.currentProject = doc.data();
-        this.corpus = this.ps.getCorpus(this.currentProject.id);
+        this.corpus = this.ps.getCorpus();
 
         if (this.isConnected) {
           this.users = this.afs.collection<User>('Users').valueChanges();
           this.getAnnotatorEmail();
           this.getAdminEmail();
         }
-        // console.log(this.currentProject)
+        console.log(this.currentProject)
       });
     });
     this.isDataLoaded = true;
@@ -132,7 +132,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         .doc(this.currentProject.id)
         .set(this.currentProject);
 
-      this.ps.saveProject(this.currentProject);
+      // this.ps.saveProject(this.currentProject);
 
       alert('Modification sauvegardé');
       // this.router.navigate(['/']);
@@ -153,7 +153,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           result.corpusFile !== undefined
         ) {
           // est-ce qu'il y a une validation ici a faire? (titre du fichier déjà existant?)
-          this.ps.addCorpus(result, this.currentProject.id);
+          // this.ps.addCorpu(result, this.currentProject.id);
         }
       }
     });
@@ -471,6 +471,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime un texte
   deleteCorpus(corpus: any) {
-    this.ps.deleteCorpus(corpus.id, corpus.title);
+    // this.ps.deleteCorpu(corpus.id, corpus.title);
   }
 }

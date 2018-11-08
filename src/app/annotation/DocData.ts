@@ -13,11 +13,15 @@ export interface DocData {
   comments: comments;
 }
 
-type entities = [id, type, rangeTextSelection[]][];
-type attributes = [id, type, target][];
-type relations = [id, type, [relationArgs, relationArgs]][];
+export type rawRelation = [id, type, [relationArgs, relationArgs]];
+export type rawEventLink = [argType, argId];
+export type rawAttribute = [id, type, target];
+export type rawEntity = [id, type, rangeTextSelection[]];
+type entities = rawEntity[];
+type attributes = rawAttribute[];
+type relations = rawRelation[];
 type triggers = [id, type, rangeTextSelection[]][];
-type events = [id, trigger, [argType, argId][]][];
+type events = [id, trigger, rawEventLink[]][];
 type comments = [id, type, string][];
 
 // Common

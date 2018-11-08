@@ -4,69 +4,100 @@ import { Attribute } from './attribute.model';
 import { Entite } from './entite.model';
 import { Doc } from './document.model';
 import { Event } from './event.model';
-import { DocData } from '../annotation/DocData';
+import {
+  DocData,
+  rawRelation,
+  rawEventLink,
+  rawAttribute,
+  rawEntity
+} from '../annotation/DocData';
 
 type rangeTextSelection = [number, number];
 type id = string;
 
-interface Annotation {
+interface IAnnotation {
   id: id;
 }
 
-interface EntityAnnotation extends Annotation, Entite {
+interface EntityAnnotation extends IAnnotation, Entite {
   locations: rangeTextSelection[];
 }
 
-interface AttributeAnnotation extends Annotation, Attribute {
+interface AttributeAnnotation extends IAnnotation, Attribute {
   target: id;
 }
 
-interface RelationAnnotation extends Annotation, Relation {
+interface RelationAnnotation extends IAnnotation, Relation {
   from: RelationLink;
   to: RelationLink;
 }
 
-interface RelationLink {
+interface RelationLink extends IAnnotation {
   role: string;
-  id: id;
 }
 
-interface EventAnnotation extends Annotation, Event {
+interface EventAnnotation extends IAnnotation, Event {
   locations: rangeTextSelection[];
   links: EventLink[];
+  triggerId: id;
 }
 
-interface EventLink {
+interface EventLink extends IAnnotation {
   type: string;
-  id: id;
 }
 
 export class AnnotatedDocument extends Doc {
   private entities: EntityAnnotation[];
   private attributes: AttributeAnnotation[];
   private relations: RelationAnnotation[];
-  private event: EventAnnotation[];
+  private events: EventAnnotation[];
 
   constructor(document: Doc, text: string) {
     super(document.documentId, document.title, document.projectId);
     this.entities = [];
     this.attributes = [];
     this.relations = [];
-    this.event = [];
+    this.events = [];
     this.text = text;
   }
 
-  toJSON(project: Project): string {
-    let docData: DocData;
+  toJSON(): string {
+    const docData: DocData = null;
     docData.text = this.text;
-    this.entities.forEach(x => {
-      docData.entities.push([
-        x.id,
-        x.type,
-        x.locations
-      ]);
-    })
 
+    docData.entities = this.entities.map(entity => {
+      const e: rawEntity = [entity.id, entity.type, entity.locations];
+      return e;
+    });
+
+    docData.attributes = this.attributes.map(attribute => {
+      const a: rawAttribute = [attribute.id, attribute.type, attribute.target];
+      return a;
+    });
+
+    docData.relations = this.relations.map(relation => {
+      const r: rawRelation = [
+        relation.id,
+        relation.type,
+        [
+          [relation.from.role, relation.from.id],
+          [relation.to.role, relation.to.id]
+        ]
+      ];
+      return r;
+    });
+
+    this.events.forEach(event => {
+      docData.triggers.push([event.triggerId, event.type, event.locations]);
+      docData.events.push([
+        event.id,
+        event.triggerId,
+        event.links.map(link => {
+          const l: rawEventLink = [link.type, link.id];
+          return l;
+        })
+      ]);
+    });
 
     return JSON.stringify(docData);
   }

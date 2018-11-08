@@ -79,6 +79,7 @@ import {
 import { AddRelationComponent } from './components/add-relation/add-relation.component';
 import { AddEventComponent } from './components/add-event/add-event.component';
 import { AddAttributeComponent } from './components/add-attribute/add-attribute.component';
+import { YesNoDialogBoxComponent } from './components/yes-no-dialog-box/yes-no-dialog-box.component';
 
 @NgModule({
   declarations: [
@@ -102,7 +103,8 @@ import { AddAttributeComponent } from './components/add-attribute/add-attribute.
     UserManagerComponent,
     AddRelationComponent,
     AddEventComponent,
-    AddAttributeComponent
+    AddAttributeComponent,
+    YesNoDialogBoxComponent
   ],
   entryComponents: [
     AddAdminComponent,
@@ -110,7 +112,8 @@ import { AddAttributeComponent } from './components/add-attribute/add-attribute.
     AddEntityComponent,
     AddRelationComponent,
     AddEventComponent,
-    AddAttributeComponent
+    AddAttributeComponent,
+    YesNoDialogBoxComponent
   ],
   imports: [
     BrowserModule,

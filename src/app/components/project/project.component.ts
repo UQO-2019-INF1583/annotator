@@ -22,6 +22,7 @@ import { Project } from '../../shared/project.model';
 import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';
+import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
 
 @Component({
   selector: 'app-project',
@@ -196,9 +197,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime la catégorie spécifiée dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteEntity(entityName: string) {
-    this.currentProject.entities.forEach((item, index) => {
-      if (item.name === entityName) {
-        this.currentProject.entities.splice(index, 1);
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'entity',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.entities.forEach((item, index) => {
+          if (item.name === entityName) {
+            this.currentProject.entities.splice(index, 1);
+          }
+        });
       }
     });
   }
@@ -235,14 +248,26 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'annotateur spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAnnotator(uid: string) {
-    this.currentProject.annotators.forEach((item, index) => {
-      if (item === uid) {
-        this.currentProject.annotators.splice(index, 1);
-      }
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Annotator',
+        response: undefined
+      },
     });
-    this.annotators.forEach((item, index) => {
-      if (item.uid === uid) {
-        this.annotators.splice(index, 1);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.annotators.forEach((item, index) => {
+          if (item === uid) {
+            this.currentProject.annotators.splice(index, 1);
+          }
+        });
+        this.annotators.forEach((item, index) => {
+          if (item.uid === uid) {
+            this.annotators.splice(index, 1);
+          }
+        });
       }
     });
   }
@@ -279,14 +304,26 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'admin spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAdmin(uid: string) {
-    this.currentProject.admin.forEach((item, index) => {
-      if (item === uid) {
-        this.currentProject.admin.splice(index, 1);
-      }
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Administrator',
+        response: undefined
+      },
     });
-    this.admin.forEach((item, index) => {
-      if (item.uid === uid) {
-        this.admin.splice(index, 1);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.admin.forEach((item, index) => {
+          if (item === uid) {
+            this.currentProject.admin.splice(index, 1);
+          }
+        });
+        this.admin.forEach((item, index) => {
+          if (item.uid === uid) {
+            this.admin.splice(index, 1);
+          }
+        });
       }
     });
   }
@@ -326,9 +363,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAttribute(target: Attribute) {
-    this.currentProject.attributes.forEach((item, index) => {
-      if (item.name === target.name) {
-        this.currentProject.attributes.splice(index, 1);
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Attribute',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.attributes.forEach((item, index) => {
+          if (item.name === target.name) {
+            this.currentProject.attributes.splice(index, 1);
+          }
+        });
       }
     });
   }
@@ -383,9 +432,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
    *  @param target
    * */
   deleteRelation(target: Relation) {
-    this.currentProject.relations.forEach((relation, index) => {
-      if (relation.name === target.name) {
-        this.currentProject.relations.splice(index, 1);
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Relation',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.relations.forEach((relation, index) => {
+          if (relation.name === target.name) {
+            this.currentProject.relations.splice(index, 1);
+          }
+        });
       }
     });
   }
@@ -434,10 +495,22 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteEvent(target: string) {
-    this.currentProject.events.forEach((item, index) => {
-      if (item.name === target) {
-        this.currentProject.events.splice(index, 1);
+  deleteEvent(target: Event) {
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Event',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.events.forEach((event, index) => {
+          if (event.name === target.name) {
+            this.currentProject.events.splice(index, 1);
+          }
+        });
       }
     });
   }
@@ -450,6 +523,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime un texte
   deleteCorpus(corpus: any) {
-    this.ps.deleteCorpus(corpus.id, corpus.title);
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Corpus',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.ps.deleteCorpus(corpus.id, corpus.title);
+      }
+    });
   }
 }

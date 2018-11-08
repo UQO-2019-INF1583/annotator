@@ -1,14 +1,16 @@
+import { Project } from './project.model';
 import { Relation } from './relation.model';
 import { Attribute } from './attribute.model';
 import { Entite } from './entite.model';
 import { Doc } from './document.model';
 import { Event } from './event.model';
+import { DocData } from '../annotation/DocData';
 
 type rangeTextSelection = [number, number];
 type id = string;
 
 interface Annotation {
-  id: id
+  id: id;
 }
 
 interface EntityAnnotation extends Annotation, Entite {
@@ -25,8 +27,8 @@ interface RelationAnnotation extends Annotation, Relation {
 }
 
 interface RelationLink {
-  role: string,
-  id: id
+  role: string;
+  id: id;
 }
 
 interface EventAnnotation extends Annotation, Event {
@@ -35,8 +37,8 @@ interface EventAnnotation extends Annotation, Event {
 }
 
 interface EventLink {
-  type: string,
-  id: id
+  type: string;
+  id: id;
 }
 
 export class AnnotatedDocument extends Doc {
@@ -52,5 +54,17 @@ export class AnnotatedDocument extends Doc {
     this.relations = [];
     this.event = [];
     this.text = text;
+  }
+
+  toJSON(project: Project): string {
+    let docData: DocData;
+    docData.text = this.text;
+    docData.entities = this.entities.map(entity => [
+      entity.id,
+      entity.type,
+      entity.locations
+    ]);
+
+    return JSON.stringify(docData);
   }
 }

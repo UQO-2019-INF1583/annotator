@@ -1,16 +1,16 @@
 export interface DocData {
-  message: any[],
-  source_file: string[],
-  modifications: any[],
-  normalizations: any[],
-  ctime: any,
-  text: string,
-  entities: entities,
-  attributes: attributes,
-  relations: relations,
-  triggers: triggers,
-  events: events,
-  comments: comments
+  message: any[];
+  source_file: string[];
+  modifications: any[];
+  normalizations: any[];
+  ctime: any;
+  text: string;
+  entities: entities;
+  attributes: attributes;
+  relations: relations;
+  triggers: triggers;
+  events: events;
+  comments: comments;
 }
 
 type entities = [id, type, rangeTextSelection[]][];

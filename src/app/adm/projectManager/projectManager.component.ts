@@ -1,18 +1,11 @@
-import { Component, OnInit, Injectable } from '@angular/core';
-import { Project } from '../../shared/project.model';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/security/auth.service';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument
-} from 'angularfire2/firestore';
-import * as firebase from 'firebase';
-import { DataSource } from '@angular/cdk/collections';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { ProjectDataSource } from '../../data-sources/projectDataSource';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { YesNoDialogBoxComponent } from '../../components/yes-no-dialog-box/yes-no-dialog-box.component';
 import 'rxjs/add/observable/of';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-adm-project-manager',
@@ -25,7 +18,8 @@ export class ProjectManagerComponent implements OnInit {
   dataSource: ProjectDataSource | null;
   isConnected = false;
 
-  constructor(private authService: AuthService, public router: Router, private afs: AngularFirestore) {
+  constructor(private authService: AuthService, public router: Router, private afs: AngularFirestore,
+    public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -43,8 +37,19 @@ export class ProjectManagerComponent implements OnInit {
   }
 
   deleteProject(project: any) {
-    // ajouter un pop up qui demande si l'utilisateur veut vraiment supprimer le projet
-    this.afs.collection('Projects').doc(project.id).delete();
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Project and all its data',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.afs.collection('Projects').doc(project.id).delete();
+      }
+    });
   }
 
 }

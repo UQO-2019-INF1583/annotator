@@ -4,18 +4,9 @@
 
 import 'rxjs/Rx';
 import 'rxjs/add/operator/mergeMap';
-
-import * as firebase from 'firebase';
-
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument,
-} from 'angularfire2/firestore';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
-
+import { MatDialog } from '@angular/material';
 import { AddAdminComponent } from '../add-admin/add-admin.component';
 import { AddAnnotatorComponent } from '../add-annotator/add-annotator.component';
 import { AddAttributeComponent } from '../add-attribute/add-attribute.component';
@@ -28,10 +19,10 @@ import { AuthService } from '../../shared/security/auth.service';
 import { Event } from '../../shared/event.model';
 import { Observable } from 'rxjs/Observable';
 import { Project } from '../../shared/project.model';
-import { ProjectManagerService } from '../../adm/projectManager';
 import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';
+import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
 
 @Component({
   selector: 'app-project',
@@ -64,26 +55,22 @@ export class ProjectComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private activeRouter: ActivatedRoute,
     public dialog: MatDialog,
-    private afs: AngularFirestore,
     private router: Router,
-    private pm: ProjectManagerService,
     private ps: ProjectService
   ) { }
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
     this.sub = this.activeRouter.params.subscribe(params => {
-      this.pm.getProject(params.id).then(doc => {
-        console.log(doc.data());
+      this.ps.getProject(params.id).then(doc => {
         this.currentProject = doc.data();
         this.corpus = this.ps.getCorpus(this.currentProject.id);
 
         if (this.isConnected) {
-          this.users = this.afs.collection<User>('Users').valueChanges();
+          this.users = this.ps.getUsers();
           this.getAnnotatorEmail();
           this.getAdminEmail();
         }
-        // console.log(this.currentProject)
       });
     });
     this.isDataLoaded = true;
@@ -127,15 +114,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.currentProject.description != null &&
       this.currentProject.description !== ''
     ) {
-      this.afs
-        .collection('Projects')
-        .doc(this.currentProject.id)
-        .set(this.currentProject);
-
       this.ps.saveProject(this.currentProject);
 
       alert('Modification sauvegardé');
-      // this.router.navigate(['/']);
     }
   }
 
@@ -172,7 +153,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       this.addEntitiesAfterClosedHandler(result);
     });
   }
@@ -217,9 +197,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime la catégorie spécifiée dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteEntity(entityName: string) {
-    this.currentProject.entities.forEach((item, index) => {
-      if (item.name === entityName) {
-        this.currentProject.entities.splice(index, 1);
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'entity',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.entities.forEach((item, index) => {
+          if (item.name === entityName) {
+            this.currentProject.entities.splice(index, 1);
+          }
+        });
       }
     });
   }
@@ -256,14 +248,26 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'annotateur spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAnnotator(uid: string) {
-    this.currentProject.annotators.forEach((item, index) => {
-      if (item === uid) {
-        this.currentProject.annotators.splice(index, 1);
-      }
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Annotator',
+        response: undefined
+      },
     });
-    this.annotators.forEach((item, index) => {
-      if (item.uid === uid) {
-        this.annotators.splice(index, 1);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.annotators.forEach((item, index) => {
+          if (item === uid) {
+            this.currentProject.annotators.splice(index, 1);
+          }
+        });
+        this.annotators.forEach((item, index) => {
+          if (item.uid === uid) {
+            this.annotators.splice(index, 1);
+          }
+        });
       }
     });
   }
@@ -300,14 +304,26 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'admin spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAdmin(uid: string) {
-    this.currentProject.admin.forEach((item, index) => {
-      if (item === uid) {
-        this.currentProject.admin.splice(index, 1);
-      }
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Administrator',
+        response: undefined
+      },
     });
-    this.admin.forEach((item, index) => {
-      if (item.uid === uid) {
-        this.admin.splice(index, 1);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.admin.forEach((item, index) => {
+          if (item === uid) {
+            this.currentProject.admin.splice(index, 1);
+          }
+        });
+        this.admin.forEach((item, index) => {
+          if (item.uid === uid) {
+            this.admin.splice(index, 1);
+          }
+        });
       }
     });
   }
@@ -347,9 +363,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAttribute(target: Attribute) {
-    this.currentProject.attributes.forEach((item, index) => {
-      if (item.name === target.name) {
-        this.currentProject.attributes.splice(index, 1);
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Attribute',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.attributes.forEach((item, index) => {
+          if (item.name === target.name) {
+            this.currentProject.attributes.splice(index, 1);
+          }
+        });
       }
     });
   }
@@ -404,9 +432,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
    *  @param target
    * */
   deleteRelation(target: Relation) {
-    this.currentProject.relations.forEach((relation, index) => {
-      if (relation.name === target.name) {
-        this.currentProject.relations.splice(index, 1);
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Relation',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.relations.forEach((relation, index) => {
+          if (relation.name === target.name) {
+            this.currentProject.relations.splice(index, 1);
+          }
+        });
       }
     });
   }
@@ -455,10 +495,22 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteEvent(target: string) {
-    this.currentProject.events.forEach((item, index) => {
-      if (item.name === target) {
-        this.currentProject.events.splice(index, 1);
+  deleteEvent(target: Event) {
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Event',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.events.forEach((event, index) => {
+          if (event.name === target.name) {
+            this.currentProject.events.splice(index, 1);
+          }
+        });
       }
     });
   }
@@ -471,6 +523,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime un texte
   deleteCorpus(corpus: any) {
-    this.ps.deleteCorpus(corpus.id, corpus.title);
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Corpus',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.ps.deleteCorpus(corpus.id, corpus.title);
+      }
+    });
   }
 }

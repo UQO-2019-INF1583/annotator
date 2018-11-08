@@ -125,7 +125,11 @@ const authServiceMock: Partial<AuthService> = {
 const angularFirestoreMock: Partial<AngularFirestore> = {};
 
 const projectServiceMock: Partial<ProjectService> = {
-  getProject: (id: string) => { }
+  getProject: (id: string) => {
+    return new Promise(resolve => {
+      resolve('test');
+    });
+  }
 };
 
 const projectManagerMock: Partial<ProjectManagerService> = {

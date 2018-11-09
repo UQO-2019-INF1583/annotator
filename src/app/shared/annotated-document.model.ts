@@ -1,16 +1,15 @@
-import { Project } from './project.model';
 import { Relation } from './relation.model';
 import { Attribute } from './attribute.model';
 import { Entite } from './entite.model';
 import { Doc } from './document.model';
 import { Event } from './event.model';
 import {
-  DocData,
+  DocumentData,
   rawRelation,
   rawEventLink,
   rawAttribute,
   rawEntity
-} from '../annotation/DocData';
+} from '../annotation/document-data';
 
 type rangeTextSelection = [number, number];
 type id = string;
@@ -61,8 +60,10 @@ export class AnnotatedDocument extends Doc {
     this.text = text;
   }
 
+  fromJSON(json: string): void {}
+
   toJSON(): string {
-    const docData: DocData = null;
+    const docData: DocumentData = null;
     docData.text = this.text;
 
     docData.entities = this.entities.map(entity => {

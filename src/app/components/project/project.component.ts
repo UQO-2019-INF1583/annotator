@@ -23,6 +23,7 @@ import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';
 import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
+import { Entite } from '../../shared/entite.model';
 
 @Component({
   selector: 'app-project',
@@ -145,50 +146,49 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddEntityComponent, {
       width: '250px',
       data: {
-        entityName: undefined,
+        name: undefined,
         type: undefined,
-        etiquettes: undefined,
-        entityColor: undefined,
+        labels: [],
+        bgColor: undefined
       },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: Entite) => {
       this.addEntitiesAfterClosedHandler(result);
     });
   }
 
-  addEntitiesAfterClosedHandler(result: any) {
+  addEntitiesAfterClosedHandler(result: Entite) {
     let entityExists = false;
     if (result !== undefined) {
       if (
-        result.entityName !== undefined &&
-        result.entityColor !== undefined &&
+        result.name !== undefined &&
+        result.bgColor !== undefined &&
         result.type !== undefined &&
-        result.etiquettes !== undefined
+        result.labels !== undefined
       ) {
         this.currentProject.entities.forEach(item => {
-          if (item.name === result.entityName) {
+          if (item.name === result.name) {
             entityExists = true;
-            if (item.bgColor === result.entityColor) {
+            if (item.bgColor === result.bgColor) {
               alert('The entity already exists');
             } else {
               alert('Replacing color');
-              item.bgColor = result.entityColor;
+              item.bgColor = result.bgColor;
             }
-          } else if (item.bgColor === result.entityColor) {
+          } else if (item.bgColor === result.bgColor) {
             entityExists = true;
             alert('The chosen color is already used');
           }
         });
 
         if (!entityExists) {
-          let etiquettesArray: string[];
-          etiquettesArray = result.etiquettes.split(',');
+          const labelsArray: string[] = result.labels[0].split(',');
           this.currentProject.entities.push({
-            name: result.entityName,
+            name: result.name,
             type: result.type,
-            bgColor: result.entityColor,
-            labels: etiquettesArray,
+            bgColor: result.bgColor,
+            labels: labelsArray,
           });
         }
       }
@@ -332,26 +332,30 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addAttributesDialogBox() {
     const dialogRef = this.dialog.open(AddAttributeComponent, {
       width: '400px',
-      data: { UserId: undefined },
+      data: {
+        name: undefined,
+        type: undefined,
+        valeurs: []
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: Attribute) => {
       this.addAttributesAfterClosedHandler(result);
     });
   }
 
-  addAttributesAfterClosedHandler(result: any) {
+  addAttributesAfterClosedHandler(result: Attribute) {
     let attributeExists = false;
-    if (result !== undefined && result !== '') {
+    if (result !== undefined) {
       this.currentProject.attributes.forEach(item => {
-        if (item.name === result.attributeName) {
+        if (item.name === result.name) {
           attributeExists = true;
         }
       });
       if (!attributeExists) {
-        const array = result.valeurs.split(',');
+        const array: string[] = result.valeurs[0].split(',');
         this.currentProject.attributes.push({
-          name: result.attributeName,
+          name: result.name,
           type: result.type,
           valeurs: array,
         });
@@ -455,24 +459,24 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddEventComponent, {
       width: '400px',
       data: {
-        eventName: undefined,
+        name: undefined,
         type: undefined,
-        etiquettes: undefined,
-        attributs: undefined,
-        eventColor: undefined,
+        etiquettes: [],
+        attributs: [],
+        color: undefined,
       },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: Event) => {
       this.addEventAfterClosedHandler(result);
     });
   }
 
-  addEventAfterClosedHandler(result: any) {
+  addEventAfterClosedHandler(result: Event) {
     let eventExists = false;
-    if (result !== undefined && result !== '') {
+    if (result !== undefined) {
       this.currentProject.events.forEach(item => {
-        if (item.name === result.eventName) {
+        if (item.name === result.name) {
           eventExists = true;
         }
       });
@@ -484,13 +488,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
   }
 
-  mapValidResultToEvent(result: any): Event {
+  mapValidResultToEvent(result: Event): Event {
     return {
-      name: result.eventName,
+      name: result.name,
       type: result.type,
-      etiquettes: result.etiquettes.split(','),
-      attributs: result.attributs.split(','),
-      color: result.eventColor,
+      etiquettes: result.etiquettes[0].split(','),
+      attributs: result.attributs[0].split(','),
+      color: result.color,
     };
   }
 

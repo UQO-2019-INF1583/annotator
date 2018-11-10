@@ -1,16 +1,16 @@
 <h2 mat-dialog-title>Attribute</h2>
 <mat-form-field>
-  <input matInput placeholder="Name" [(ngModel)]="data.attributeName" name="nom" #nom="ngModel" required/>
+  <input matInput placeholder="Name" [(ngModel)]="data.name" name="nom" #nom="ngModel" required />
   <mat-error *ngIf="nom.value == '' || nom.value == null">nom obligatoire</mat-error>
 </mat-form-field>
 
 <mat-form-field>
-  <input matInput placeholder="Type" [(ngModel)]="data.type" name="type" #type="ngModel" required/>
+  <input matInput placeholder="Type" [(ngModel)]="data.type" name="type" #type="ngModel" required />
   <mat-error *ngIf="type.value == '' || type.value == null">type obligatoire</mat-error>
 </mat-form-field>
 
 <mat-form-field>
-  <input matInput placeholder="valeurs" [(ngModel)]="data.valeurs" name="valeurs" #valeurs="ngModel" required/>
+  <input matInput placeholder="valeurs" [(ngModel)]="data.valeurs[0]" name="valeurs" #valeurs="ngModel" required />
   <mat-error *ngIf="valeurs.value == '' || valeurs.value == null">Valeur obligatoire</mat-error>
 </mat-form-field>
 

@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Relation } from '../../shared/relation.model';
 
 @Component({
   selector: 'app-add-relation',
@@ -11,8 +12,7 @@ export class AddRelationComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddRelationComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) { }
+    @Inject(MAT_DIALOG_DATA) public data: Relation) { }
 
   ngOnInit() {
     this.availableColors = [

@@ -48,6 +48,7 @@ export class ProjectManagerComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result.response === true) {
         this.afs.collection('Projects').doc(project.id).delete();
+        // TODO: Supprimer tout les corpus de la Database et du storage qui sont relier avec le projet supprimé.
       }
     });
   }

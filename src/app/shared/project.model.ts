@@ -6,7 +6,7 @@ import { Attribute } from './attribute.model'
 import { Relation } from './relation.model';
 import { CollectionData } from '../annotation/collection-data';
 
-export class Project {
+export interface Project {
   id: string;
   title: string;
   description: string;
@@ -17,36 +17,25 @@ export class Project {
   attributes: Attribute[];
   events: Event[];
   relations: Relation[];
+}
 
-  constructor(id: string = '', title: string = '', description: string = '') {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.admin = [];
-    this.annotators = [];
-    this.corpus = [];
-    this.entities = [];
-    this.attributes = [];
-    this.events = [];
-    this.relations = [];
-  }
-
-  toFirebase() {
+export class ProjectUtils {
+  static generateEmpty(): Project {
     return {
-      id: this.id,
-      title: this.title,
-      description: this.description,
-      admin: this.admin,
-      annotators: this.annotators,
-      corpus: this.corpus,
-      tntities: this.entities,
-      attributes: this.attributes,
-      events: this.events,
-      relations: this.relations
+      id: '',
+      title: '',
+      description: '',
+      admin: [],
+      annotators: [],
+      corpus: [],
+      entities: [],
+      attributes: [],
+      events: [],
+      relations: []
     }
   }
 
-  asCollectionData(): CollectionData {
+  static toJSON(project: Project) {
     const collectionData: CollectionData = null;
 
     collectionData.messages = []
@@ -71,7 +60,7 @@ export class Project {
       attributes: 'attributs'
     }
 
-    collectionData.entity_types = this.entities.map(x => ({
+    collectionData.entity_types = project.entities.map(x => ({
       name: x.name,
       type: x.type,
       labels: x.labels,
@@ -86,7 +75,7 @@ export class Project {
       children: []
     }));
 
-    collectionData.event_type = this.events.map(x => ({
+    collectionData.event_type = project.events.map(x => ({
       name: x.name,
       type: x.type,
       labels: [x.type],
@@ -101,7 +90,7 @@ export class Project {
       arcs: []
     }));
 
-    collectionData.relation_types = this.relations.map(x => ({
+    collectionData.relation_types = project.relations.map(x => ({
       type: x.type,
       labels: [x.type],
       // TODO: What is this?
@@ -111,7 +100,7 @@ export class Project {
       args: []
     }));
 
-    collectionData.entity_attribute_types = this.attributes.map(x => ({
+    collectionData.entity_attribute_types = project.attributes.map(x => ({
       name: x.name,
       type: x.type,
       labels: [x.type],
@@ -133,10 +122,7 @@ export class Project {
     // TODO: Have something in project to represent this attribute
     collectionData.relation_attribute_types = []
 
-    return collectionData;
-  }
-
-  toJSON(): string {
-    return JSON.stringify(this.asCollectionData());
+    return JSON.stringify(collectionData);
   }
 }
+

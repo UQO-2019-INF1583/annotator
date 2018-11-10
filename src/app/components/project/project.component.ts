@@ -18,7 +18,7 @@ import { Attribute } from '../../shared/attribute.model';
 import { AuthService } from '../../shared/security/auth.service';
 import { Event } from '../../shared/event.model';
 import { Observable } from 'rxjs/Observable';
-import { Project } from '../../shared/project.model';
+import { Project, ProjectUtils } from '../../shared/project.model';
 import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';
@@ -31,7 +31,7 @@ import { Entite } from '../../shared/entite.model';
   styleUrls: ['./project.component.scss'],
 })
 export class ProjectComponent implements OnInit, OnDestroy {
-  currentProject: Project = new Project();
+  currentProject: Project = ProjectUtils.generateEmpty();
   private sub: any;
   isDataLoaded = false;
 

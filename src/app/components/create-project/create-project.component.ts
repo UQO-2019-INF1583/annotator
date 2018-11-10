@@ -6,7 +6,7 @@ import {
   AngularFirestoreDocument
 } from 'angularfire2/firestore';
 import * as firebase from 'firebase';
-import { Project } from '../../shared/project.model';
+import { Project, ProjectUtils } from '../../shared/project.model';
 
 @Component({
   selector: 'app-create-project',
@@ -15,7 +15,7 @@ import { Project } from '../../shared/project.model';
 })
 
 export class CreateProjectComponent implements OnInit {
-  project: Project = new Project();
+  project: Project = ProjectUtils.generateEmpty();
   currentUserId: string;
 
   constructor(public router: Router, private afs: AngularFirestore) { }

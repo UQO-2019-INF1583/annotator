@@ -74,7 +74,7 @@ export class Project {
     collectionData.event_type = this.events.map(x => ({
       name: x.name,
       type: x.type,
-      labels: [x.name],
+      labels: [x.type],
       bgColor: x.color,
       borderColor: 'darken',
       unused: false,
@@ -88,7 +88,7 @@ export class Project {
 
     collectionData.relation_types = this.relations.map(x => ({
       type: x.type,
-      labels: [x.name],
+      labels: [x.type],
       // TODO: What is this?
       dashArray: '3,3',
       color: x.color,

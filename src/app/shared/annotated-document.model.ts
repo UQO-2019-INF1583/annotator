@@ -117,6 +117,34 @@ export class AnnotatedDocument extends Doc {
       return relation;
     });
 
+    for (let i = 0; i < this.events.length; i++) {
+      const docTrigger = docData.triggers[i];
+      const docEvent = docData.events[i];
+      const projectEvent = project.events.find(e => e.type === docTrigger[1])
+
+      const event: EventAnnotation = null;
+      // Project event
+      event.etiquettes = projectEvent.etiquettes;
+      event.type = docTrigger[1];
+      event.color = projectEvent.color;
+      event.attributs = projectEvent.attributs;
+      event.name = projectEvent.name;
+
+      // Document event
+      event.triggerId = docTrigger[0];
+      event.locations = docTrigger[2];
+      event.id = docEvent[0];
+
+      event.links = docEvent[2].map(docLink => {
+        const link: EventLink = null;
+        link.id = docLink[1];
+        link.type = docLink[0];
+        return link;
+      });
+
+      this.events.push(event);
+    }
+
   }
 
   toJSON(): string {

@@ -347,20 +347,24 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addAttributesAfterClosedHandler(result: Attribute) {
     let attributeExists = false;
     if (result !== undefined) {
-      this.currentProject.attributes.forEach(item => {
-        if (item.name === result.name) {
-          attributeExists = true;
-        }
-      });
-      if (!attributeExists) {
-        const array: string[] = result.valeurs[0].split(',');
-        this.currentProject.attributes.push({
-          name: result.name,
-          type: result.type,
-          valeurs: array,
+      if (result.name !== undefined &&
+        result.type !== undefined &&
+        result.valeurs !== []) {
+        this.currentProject.attributes.forEach(item => {
+          if (item.name === result.name) {
+            attributeExists = true;
+          }
         });
-      } else {
-        alert('This attribute already exists');
+        if (!attributeExists) {
+          const array: string[] = result.valeurs[0].split(',');
+          this.currentProject.attributes.push({
+            name: result.name,
+            type: result.type,
+            valeurs: array,
+          });
+        } else {
+          alert('This attribute already exists');
+        }
       }
     }
   }
@@ -475,15 +479,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addEventAfterClosedHandler(result: Event) {
     let eventExists = false;
     if (result !== undefined) {
-      this.currentProject.events.forEach(item => {
-        if (item.name === result.name) {
-          eventExists = true;
+      if (result.name !== undefined &&
+        result.type !== undefined &&
+        result.etiquettes !== [] &&
+        result.attributs !== [] &&
+        result.color !== undefined) {
+        this.currentProject.events.forEach(item => {
+          if (item.name === result.name) {
+            eventExists = true;
+          }
+        });
+        if (!eventExists) {
+          this.currentProject.events.push(this.mapValidResultToEvent(result));
+        } else {
+          alert('This event already exists');
         }
-      });
-      if (!eventExists) {
-        this.currentProject.events.push(this.mapValidResultToEvent(result));
-      } else {
-        alert('This event already exists');
       }
     }
   }

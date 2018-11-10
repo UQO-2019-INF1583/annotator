@@ -52,12 +52,20 @@ export class AnnotationComponent implements OnInit, OnDestroy {
    */
   async getInterfaceData() {
     this.sub = await this.activeRouter.params.subscribe(params => {
-      this.currentDoc = new Doc(params.id, params.title, params.projectId);
       this.currentProjectTitle = params.projectTitle;
+      this.currentDoc = new Doc(params.id, params.title, params.projectId);
       this.projectId = params.projectId;
     });
 
     await this.as.getProject(this.projectId).then(p => this.project = p.data());
+
+    const URL = await firebase
+      .storage()
+      .ref()
+      .child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title)
+      .getDownloadURL();
+
+    this.currentDoc.text = await this.http.get(URL, { responseType: 'text' }).toPromise();
 
     await this.as.getAnnotatedDocument(this.currentDoc.documentId).then(d => {
       this.annotatedDocument = d.data();
@@ -67,7 +75,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       }
     });
 
-    console.log(ProjectUtils.toJSON(this.project));
+    console.log(JSON.parse(AnnotatedDocumentUtils.toJSON(this.annotatedDocument)));
 
     this.brat = new BratFrontendEditor(
       document.getElementById('brat'),

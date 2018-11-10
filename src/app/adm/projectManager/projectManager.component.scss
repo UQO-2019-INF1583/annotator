@@ -1,4 +1,16 @@
-.select:hover {
-  background-color: darkcyan;
+mat-row:hover {
+  background-color: #eee;
   cursor: pointer;
+}
+
+mat-row button {
+  visibility: hidden;
+}
+
+mat-row:hover button {
+  visibility: visible;
+}
+
+mat-header-cell {
+  font-size: 18px;
 }

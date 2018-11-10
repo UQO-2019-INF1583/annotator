@@ -80,6 +80,7 @@ import { AddRelationComponent } from './components/add-relation/add-relation.com
 import { AddEventComponent } from './components/add-event/add-event.component';
 import { AddAttributeComponent } from './components/add-attribute/add-attribute.component';
 import { YesNoDialogBoxComponent } from './components/yes-no-dialog-box/yes-no-dialog-box.component';
+import { CreateProjectService } from './components/create-project/create-project.service';
 
 @NgModule({
   declarations: [
@@ -160,7 +161,8 @@ import { YesNoDialogBoxComponent } from './components/yes-no-dialog-box/yes-no-d
     ProjectDataSource,
     ProjectManagerService,
     UserManagerService,
-    ProjectService
+    ProjectService,
+    CreateProjectService
   ],
 
   bootstrap: [AppComponent]

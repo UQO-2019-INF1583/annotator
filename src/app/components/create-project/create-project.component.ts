@@ -15,18 +15,7 @@ import { Project } from '../../shared/project.model';
 })
 
 export class CreateProjectComponent implements OnInit {
-  project: Project = {
-    id: '',
-    title: '',
-    description: '',
-    admin: [],
-    annotators: [],
-    corpus: [],
-    entities: [],
-    attributes: [],
-    events: [],
-    relations: [],
-  };
+  project: Project = new Project();
   currentUserId: string;
 
   constructor(public router: Router, private afs: AngularFirestore) { }

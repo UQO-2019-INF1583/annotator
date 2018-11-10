@@ -31,18 +31,7 @@ import { Entite } from '../../shared/entite.model';
   styleUrls: ['./project.component.scss'],
 })
 export class ProjectComponent implements OnInit, OnDestroy {
-  currentProject: Project = {
-    id: '',
-    title: '',
-    description: '',
-    admin: [],
-    annotators: [],
-    corpus: [],
-    entities: [],
-    attributes: [],
-    events: [],
-    relations: [],
-  };
+  currentProject: Project = new Project();
   private sub: any;
   isDataLoaded = false;
 

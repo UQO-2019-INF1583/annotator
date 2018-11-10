@@ -2,8 +2,8 @@ export interface CollectionData {
   messages: string[];
   entity_types: IEntity[];
   event_type: IEvent[];
-  relation_types: IRelation;
-  search_config: string[];
+  relation_types: IRelation[];
+  search_config: string[][];
   disambiguator_config: any[];
   unconfigured_types: any[];
   items: any[];
@@ -14,7 +14,7 @@ export interface CollectionData {
 }
 
 interface IUsable {
-  used: boolean;
+  unused: boolean;
 }
 
 interface IBase {

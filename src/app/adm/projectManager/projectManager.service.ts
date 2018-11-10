@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
-import {
-  AngularFirestore,
-  // AngularFirestoreCollection,
-  AngularFirestoreDocument
-} from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
-
-import { User } from '../../shared/user.model';
+import * as firebase from 'firebase';
 import { Project } from '../../shared/project.model';
-import { Doc } from '../../shared/document.model';
 
 // secret: structure de données utilisée pour représenter l'ensemble des projets
 // et en particulier, association entre projetId et l'emplacement du fichier correspondant
@@ -18,10 +12,22 @@ export class ProjectManagerService {
 
   constructor(private afs: AngularFirestore) { }
 
-  // Supprime un projet avec toutes les données
-  // Retourne false si project id n'existe pas.
-  deleteProject(projectId: string): boolean {
-    return true;
+  deleteProject(projectId: string) {
+    this.afs.collection('Corpus').ref.where('projectId', '==', projectId).get().then(querySnapshot => {
+      const batch = this.afs.firestore.batch();
+
+      querySnapshot.forEach(doc => {
+
+        batch.delete(doc.ref);
+        firebase.storage().ref().child('Projects/' + doc.data().id + '/' + doc.data().title).delete();
+
+      });
+      return batch.commit();
+    }).then(() => {
+      console.log('Corpus supprimé');
+    });
+
+    this.afs.collection('Projects').doc(projectId).delete();
   }
 
   // Modifie le titre du projet.

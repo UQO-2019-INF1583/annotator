@@ -8,6 +8,9 @@ export interface CollectionData {
   unconfigured_types: any[];
   items: any[];
   ui_names: IUIName;
+  event_attribute_types: IAttribute[];
+  entity_attribute_types: IAttribute[];
+  relation_attribute_types: IAttribute[];
 }
 
 interface IUsable {
@@ -77,88 +80,18 @@ interface IRelation {
   args: IRelationArgument[];
 }
 
-const collData = {
-  event_attribute_types: [
-    {
-      labels: null,
-      type: 'Confidence',
-      name: 'Confidence',
-      unused: false,
-      values: {
-        Certain: {
-          dashArray: ','
-        },
-        Likely: {
-          dashArray: '3,3'
-        },
-        Possible: {
-          dashArray: '3,6'
-        }
-      }
-    },
-    {
-      labels: null,
-      type: 'BombType',
-      name: 'BombType',
-      unused: false,
-      values: {
-        'Nuclear bomb': {},
-        'Neutron bomb': {},
-        'Napalm bomb': {},
-        'Hydrogen bomb': {}
-      }
-    },
-    {
-      name: 'Epic',
-      type: 'Epic',
-      values: { Epic: { glyph: '★★★' } }
-    }
-  ],
-  entity_attribute_types: [
-    {
-      name: 'Notorious',
-      type: 'Notorious',
-      values: { Notorious: { glyph: '★' } }
-    },
-    {
-      type: 'Polarity',
-      name: 'Polarity',
-      values: {
-        Positive: {
-          box: 'none',
-          glyph: '\n[Polarity:true]',
-          dashArray: '1,2'
-        },
-        Negative: {
-          box: 'crossed',
-          glyph: '\n[Polarity:false]',
-          dashArray: '3,4'
-        }
-      }
-    }
-  ],
-  relation_attribute_types: [
-    {
-      labels: null,
-      type: 'RelConfidence',
-      name: 'Relation Confidence',
-      unused: false,
-      values: {
-        Certain: {
-          dashArray: ','
-        },
-        Likely: {
-          dashArray: '3,3'
-        },
-        Possible: {
-          dashArray: '3,6'
-        }
-      }
-    },
-    {
-      name: 'Safe',
-      type: 'Safe',
-      values: { Safe: {} }
-    }
-  ]
-};
+interface IAttribute extends IUsable, IBase {
+  labels: string[];
+  values: IAttributeValueList;
+
+}
+
+interface IAttributeValueList {
+  [key: string]: IAttributeValue
+}
+
+interface IAttributeValue {
+  dashArray: string;
+  glyph: string;
+  box: string;
+}

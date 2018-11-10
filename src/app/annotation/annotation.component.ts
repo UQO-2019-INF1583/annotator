@@ -55,14 +55,17 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       this.currentDoc = new Doc(params.id, params.title, params.projectId);
       this.currentProjectTitle = params.projectTitle;
       this.projectId = params.projectId;
-
-      this.annotatedDocument = new AnnotatedDocument(this.currentDoc);
-      this.as.getAnnotatedDocument(this.currentDoc.documentId).then(d => {
-        this.annotatedDocument = d.data();
-      });
     });
 
     await this.as.getProject(this.projectId).then(p => this.project = p.data());
+
+    await this.as.getAnnotatedDocument(this.currentDoc.documentId).then(d => {
+      this.annotatedDocument = d.data();
+
+      if (this.annotatedDocument === null || this.annotatedDocument === undefined) {
+        this.annotatedDocument = new AnnotatedDocument(this.currentDoc);
+      }
+    });
 
     this.brat = new BratFrontendEditor(
       document.getElementById('brat'),

@@ -31,6 +31,21 @@ export class Project {
     this.relations = [];
   }
 
+  toFirebase() {
+    return {
+      id: this.id,
+      title: this.title,
+      description: this.description,
+      admin: this.admin,
+      annotators: this.annotators,
+      corpus: this.corpus,
+      tntities: this.entities,
+      attributes: this.attributes,
+      events: this.events,
+      relations: this.relations
+    }
+  }
+
   asCollectionData(): CollectionData {
     const collectionData: CollectionData = null;
 

@@ -38,6 +38,7 @@ export class ProjectUtils {
   static toJSON(project: Project) {
     const collectionData: CollectionData = new CollectionData();
 
+    collectionData.items = [];
     collectionData.messages = []
 
     collectionData.search_config = [

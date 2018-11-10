@@ -67,10 +67,12 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       }
     });
 
+    console.log(ProjectUtils.toJSON(this.project));
+
     this.brat = new BratFrontendEditor(
       document.getElementById('brat'),
-      ProjectUtils.toJSON(this.project),
-      AnnotatedDocumentUtils.toJSON(this.annotatedDocument),
+      JSON.parse(ProjectUtils.toJSON(this.project)),
+      JSON.parse(AnnotatedDocumentUtils.toJSON(this.annotatedDocument)),
       options);
   }
 

@@ -39,7 +39,7 @@
             <mat-list-item class="matListItemHover" *ngFor="let item of corpus | async">
               <h4 mat-line>{{item?.title}}</h4>
               <button *ngIf="isConnected" style="margin-right: 16px;" class="btn btn-primary" (click)="documentSelected(item)">View</button>
-              <button *ngIf="isConnected" class="btn btn-danger" (click)="deleteCorpus(item.name)">Delete</button>
+              <button *ngIf="isConnected" class="btn btn-danger" (click)="deleteCorpus(item)">Delete</button>
             </mat-list-item>
           </mat-list>
         </mat-card-content>

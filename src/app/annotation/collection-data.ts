@@ -1,4 +1,4 @@
-export interface CollectionData {
+export class CollectionData {
   messages: string[];
   entity_types: IEntity[];
   event_type: IEvent[];

@@ -36,7 +36,7 @@ export class ProjectUtils {
   }
 
   static toJSON(project: Project) {
-    const collectionData: CollectionData = null;
+    const collectionData: CollectionData = new CollectionData();
 
     collectionData.messages = []
 

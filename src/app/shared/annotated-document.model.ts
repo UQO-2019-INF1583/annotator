@@ -118,7 +118,7 @@ export class AnnotatedDocumentUtils {
   }
 
   static toJSON(annotatedDocument: AnnotatedDocument): string {
-    const docData: DocumentData = null;
+    const docData: DocumentData = new DocumentData();
     docData.text = annotatedDocument.text;
 
     docData.entities = annotatedDocument.entities.map(entity => {

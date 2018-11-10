@@ -1,4 +1,4 @@
-export interface DocumentData {
+export class DocumentData {
   message: any[];
   source_file: string[];
   modifications: any[];

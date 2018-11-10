@@ -26,7 +26,7 @@ import { ProjectManagerService } from '../../adm';
 import { ProjectService } from './project.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
-describe('Projet', () => {
+fdescribe('Projet', () => {
   let projectComponent: ProjectComponent;
   let projectFixture: ComponentFixture<ProjectComponent>;
 
@@ -66,7 +66,7 @@ describe('Projet', () => {
 
   describe('Entities', () => {
     it('should add the entite to the current project\'s entities if provided { with a valid } result', () => {
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid3);
+      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid3);
       expect(projectComponent.currentProject.entities).toContain(
         jasmine.objectContaining(entiteMock.valid3)
       );
@@ -74,15 +74,15 @@ describe('Projet', () => {
 
     it('should alert the user when trying to add an entities using an already used name', () => {
       spyOn(window, 'alert');
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid1);
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid1);
+      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid1);
+      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid1);
       expect(window.alert).toHaveBeenCalledWith('The entity already exists');
     });
 
     it('should alert the user when trying to add an entities using an already used color', () => {
       spyOn(window, 'alert');
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid1);
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid3);
+      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid1);
+      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid3);
       expect(window.alert).toHaveBeenCalledWith(
         'The chosen color is already used'
       );
@@ -93,8 +93,8 @@ describe('Projet', () => {
 
     it('should alert the user when trying to add an entities using an already used name and change the color if it\'s different', () => {
       spyOn(window, 'alert');
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid1);
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid2);
+      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid1);
+      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid2);
       expect(window.alert).toHaveBeenCalledWith('Replacing color');
       expect(projectComponent.currentProject.entities).toContain(
         jasmine.objectContaining(entiteMock.valid2)
@@ -102,7 +102,7 @@ describe('Projet', () => {
     });
 
     it('should be able to delete an entity', () => {
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.result.valid3);
+      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid3);
       expect(projectComponent.currentProject.entities).toContain(
         jasmine.objectContaining(entiteMock.valid3)
       );
@@ -115,7 +115,7 @@ describe('Projet', () => {
 
   describe('Attributs', () => {
     it('should add the attribute to the current project\'s attributes if provided { with a valid } result', () => {
-      projectComponent.addAttributesAfterClosedHandler(attributMock.result.valid1);
+      projectComponent.addAttributesAfterClosedHandler(attributMock.valid1);
       expect(projectComponent.currentProject.attributes).toContain(
         jasmine.objectContaining(attributMock.valid1)
       );
@@ -123,15 +123,15 @@ describe('Projet', () => {
 
     it('should alert the user when trying to add an entities using an already used name', () => {
       spyOn(window, 'alert');
-      projectComponent.addAttributesAfterClosedHandler(attributMock.result.valid1);
-      projectComponent.addAttributesAfterClosedHandler(attributMock.result.valid1);
+      projectComponent.addAttributesAfterClosedHandler(attributMock.valid1);
+      projectComponent.addAttributesAfterClosedHandler(attributMock.valid1);
       expect(window.alert).toHaveBeenCalledWith(
         'This attribute already exists'
       );
     });
 
     it('should be able to delete an attribut', () => {
-      projectComponent.addAttributesAfterClosedHandler(attributMock.result.valid1);
+      projectComponent.addAttributesAfterClosedHandler(attributMock.valid1);
       expect(projectComponent.currentProject.attributes).toContain(
         jasmine.objectContaining(attributMock.valid1)
       );
@@ -184,26 +184,26 @@ describe('Projet', () => {
     });
 
     it('should map result to event properly', () => {
-      expect(projectComponent.mapValidResultToEvent(eventMock.result.valid1)).toEqual({
-        name: eventMock.result.valid1.eventName,
-        attributs: eventMock.result.valid1.attributs.split(','),
-        etiquettes: eventMock.result.valid1.etiquettes.split(','),
-        type: eventMock.result.valid1.type,
-        color: eventMock.result.valid1.eventColor
+      expect(projectComponent.mapValidResultToEvent(eventMock.valid1)).toEqual({
+        name: eventMock.valid1.name,
+        attributs: eventMock.valid1.attributs[0].split(','),
+        etiquettes: eventMock.valid1.etiquettes[0].split(','),
+        type: eventMock.valid1.type,
+        color: eventMock.valid1.color
       });
     });
 
     it('should add the event to the current project\'s events if provided with a valid result', () => {
-      projectComponent.addEventAfterClosedHandler(eventMock.result.valid1);
+      projectComponent.addEventAfterClosedHandler(eventMock.valid1);
       expect(projectComponent.currentProject.events).toContain(
-        projectComponent.mapValidResultToEvent(eventMock.result.valid1)
+        projectComponent.mapValidResultToEvent(eventMock.valid1)
       );
     });
 
     it('should alert the user when trying to add an event that already exists', () => {
       spyOn(window, 'alert');
-      projectComponent.addEventAfterClosedHandler(eventMock.result.valid1);
-      projectComponent.addEventAfterClosedHandler(eventMock.result.valid1);
+      projectComponent.addEventAfterClosedHandler(eventMock.valid1);
+      projectComponent.addEventAfterClosedHandler(eventMock.valid1);
       expect(window.alert).toHaveBeenCalledWith('This event already exists');
     });
   });

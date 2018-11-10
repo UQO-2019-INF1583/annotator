@@ -5,9 +5,16 @@ import { Entite } from '../../shared/entite.model';
 import { ProjectManagerService } from '../../adm/projectManager/projectManager.service';
 import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
+import { Event } from '../../shared/event.model';
 
 // data mocks
 export const entiteMock = {
+  valid1: {
+    name: 'Test',
+    type: 'Test',
+    bgColor: '#F44336',
+    labels: ['Test'],
+  } as Entite,
   valid2: {
     name: 'Test',
     type: 'Test',
@@ -19,27 +26,7 @@ export const entiteMock = {
     type: 'Test3',
     bgColor: '#F44336',
     labels: ['Test3']
-  } as Entite,
-  result: {
-    valid1: {
-      entityName: 'Test',
-      type: 'Test',
-      etiquettes: 'Test',
-      entityColor: '#F44336'
-    },
-    valid2: {
-      entityName: 'Test',
-      type: 'Test',
-      etiquettes: 'Test',
-      entityColor: '#2196F3'
-    },
-    valid3: {
-      entityName: 'Test3',
-      type: 'Test3',
-      etiquettes: 'Test3',
-      entityColor: '#F44336'
-    }
-  }
+  } as Entite
 }
 
 export const attributMock = {
@@ -47,14 +34,7 @@ export const attributMock = {
     name: 'Test',
     type: 'Test',
     valeurs: ['Test']
-  } as Attribute,
-  result: {
-    valid1: {
-      attributeName: 'Test',
-      type: 'Test',
-      valeurs: 'Test'
-    }
-  }
+  } as Attribute
 }
 
 export const relationMock = {
@@ -79,15 +59,13 @@ export const relationMock = {
 }
 
 export const eventMock = {
-  result: {
-    valid1: {
-      eventName: 'event',
-      attributs: 'a',
-      etiquettes: 'a',
-      type: 'a',
-      eventColor: '#ffffff'
-    }
-  }
+  valid1: {
+    name: 'event',
+    attributs: ['a'],
+    etiquettes: ['a'],
+    type: 'a',
+    color: '#ffffff'
+  } as Event
 }
 
 export const annotatorMock = {

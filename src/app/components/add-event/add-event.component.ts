@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Event } from '../../shared/event.model';
 
 @Component({
   selector: 'app-add-event',
@@ -11,7 +12,7 @@ export class AddEventComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddEventComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: Event) { }
 
   ngOnInit() {
     this.availableColors = [

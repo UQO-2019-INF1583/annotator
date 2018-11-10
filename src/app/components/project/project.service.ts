@@ -42,7 +42,7 @@ export class ProjectService {
     firebase.storage().ref().child('Projects/' + corpusId + '/' + corpus.corpusTitle).put(corpus.corpusFile);
   }
 
-  getUsers(): Observable<User[]> {
+  getUsers(): Observable<any> {
     return this.afs.collection<User>('Users').valueChanges();
   }
 

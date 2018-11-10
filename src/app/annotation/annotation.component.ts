@@ -7,9 +7,12 @@ import { Doc } from '../shared/document.model'
 import { AnnotationService } from './annotation.service';
 import * as firebase from 'firebase';
 import './brat/brat-frontend-editor';
-import { collData, docData, options } from './brat/brat-data-mock';
+import { options } from './brat/brat-data-mock';
 import { Entite } from '../shared/entite.model';
 import { HttpClient } from '@angular/common/http';
+import { AnnotatedDocument, AnnotatedDocumentUtils } from '../shared/annotated-document.model';
+import { Project, ProjectUtils } from '../shared/project.model';
+
 declare var BratFrontendEditor: any;
 
 @Component({
@@ -22,13 +25,14 @@ declare var BratFrontendEditor: any;
 export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
   private brat: any;
+  private project: Project;
+  private annotatedDocument: AnnotatedDocument;
   currentDoc: Doc;
   entities: Entite[];
   currentProjectTitle: string;
   isConnected = false;
   projectId: string;
-  private dData: any;
-  private cData: any;
+
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute,
     private as: AnnotationService, private http: HttpClient) {
 
@@ -43,68 +47,33 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Cette méthode permet de charger les catégories, de les transformer en types d'entités
-   * et de les ajouter aux types d'entités existants dans collData
-   */
-  private addEntityTypes() {
-    const newTypes = this.as.getCategoriesAsEntityTypes(this.entities);
-    let newType: any;
-    newTypes.forEach(function (entity) {
-      newType = {};
-      for (const property in entity) {
-        if (entity.hasOwnProperty(property)) {
-          newType[property] = entity[property];
-        }
-      };
-      collData.entity_types.push(newType);
-    });
-  }
-
-  /**
    * Cette méthode, qui permet d'initialiser l'interface d'annotation, réunit des appels asynchrones qui doivent être exécutés
    * les uns après les autres.
    */
   async getInterfaceData() {
-    // Aller chercher les paramètres passés par l'URL
     this.sub = await this.activeRouter.params.subscribe(params => {
       this.currentDoc = new Doc(params.id, params.title, params.projectId);
       this.currentProjectTitle = params.projectTitle;
       this.projectId = params.projectId;
+
+      this.as.getProject(params.projectId).then(p => this.project = p.data());
+
+      this.annotatedDocument = new AnnotatedDocument(this.currentDoc);
+      this.as.getAnnotatedDocument(this.currentDoc.documentId).then(d => {
+        this.annotatedDocument = d.data();
+      });
     });
-    // Lire le fichier stocké pour en extraire le texte
-    const URL = await firebase
-      .storage()
-      .ref()
-      .child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title)
-      .getDownloadURL();
-    let text = await this.http.get(URL, { responseType: 'text' }).toPromise();
-    // split the data
-    const bratParams: string[] = text.split('-----');
-    text = bratParams[0];
 
-
-    // Load mock coll and doc if undefined, else, load what has already been saved
-    if (typeof (bratParams[1]) === 'undefined' && typeof (bratParams[1]) === 'undefined') {
-      this.dData = docData;
-      this.cData = collData;
-    } else {
-      this.dData = JSON.parse(bratParams[1]);
-      this.cData = JSON.parse(bratParams[2]);
-    }
-
-
-    this.dData.text = text.replace(/<[^>]*>/g, '');
-    console.log(this.dData.text);
-    this.entities = await this.as.getEntities(this.projectId).toPromise();
-
-    // Ajouter les catégories comme des types d'entités
-    await this.addEntityTypes();
-
-    this.brat = new BratFrontendEditor(document.getElementById('brat'), this.cData, this.dData, options);
+    this.brat = new BratFrontendEditor(
+      document.getElementById('brat'),
+      ProjectUtils.toJSON(this.project),
+      AnnotatedDocumentUtils.toJSON(this.annotatedDocument),
+      options);
   }
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
+
     this.getInterfaceData();
   }
 
@@ -114,13 +83,13 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   saveTextModification() {
-    let data = this.brat.docData.text;
-    const _docData = JSON.stringify(this.brat.docData);
-    const _collData = JSON.stringify(this.brat.collData)
-    data = data + '-----' + _docData + '-----' + _collData;
-    const thefile = new File([data], this.currentDoc.title);
+    const annotatedDocument = AnnotatedDocumentUtils
+      .fromJSON(
+        this.brat.docData,
+        this.project,
+        new AnnotatedDocument(this.currentDoc));
 
-    firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).put(thefile);
+    this.as.saveAnnotatedDocument(annotatedDocument);
 
     alert('Annotation saved');
   }

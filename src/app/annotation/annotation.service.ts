@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Entite } from '../shared/entite.model';
 import { EntityType } from './EntityType';
-import { Observable } from 'rxjs/Observable';
-import { Project } from '../shared/project.model';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { AnnotatedDocument } from '../shared/annotated-document.model';
 
 @Injectable()
 export class AnnotationService {
@@ -12,14 +11,20 @@ export class AnnotationService {
   }
 
   // Retourne de façon asynschore le document de type project, dont le id est passé en paramètre, à partir de la base de données Firestore
-  getProject(projectId): AngularFirestoreDocument<any> {
-    const projectRef = this.afs.collection<Project>('Projects').doc(projectId);
-    return projectRef;
+  getProject(projectId): Promise<any> {
+    return this.afs.collection('Projects/').doc(projectId).ref.get();
   }
 
-  // Retourne de façon asynchrone les entité d'un projet dont le id est passé en paramètre, à partir de la base de données Firestore
-  getEntities(projectId) {
-    return Observable.fromPromise(this.getProject(projectId).ref.get().then((documentSnapshot) => documentSnapshot.data().entities));
+  saveAnnotatedDocument(annotatedDocument: AnnotatedDocument): void {
+    if (annotatedDocument.documentId === null) {
+      annotatedDocument.documentId = this.afs.createId();
+    }
+
+    this.afs.collection('AnnotatedDocument').doc(annotatedDocument.documentId).set(annotatedDocument);
+  }
+
+  getAnnotatedDocument(documentId: string): Promise<any> {
+    return this.afs.collection('AnnotatedDocument/').doc(documentId).ref.get();
   }
 
   // Transforme une catégorie en type d'entité

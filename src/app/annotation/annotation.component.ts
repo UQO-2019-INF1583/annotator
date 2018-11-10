@@ -1,20 +1,10 @@
 // Rôle : Ce module a pour rôle de faire la liaison entre la vue du composant et les données envoyées par le service.
 // Il permet d’affecter la notion de catégorie à un texte et de le sauvegarder, supprimer une annotation, etc.
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../shared/security/auth.service';
 import { Doc } from '../shared/document.model'
-import { Project } from '../shared/project.model'
 import { AnnotationService } from './annotation.service';
-import { ProjectService } from '../components/project/project.service';
-import { CategoryService } from './category.service';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument
-} from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable';
-import { AngularFireStorage } from 'angularfire2/storage';
 import * as firebase from 'firebase';
 import './brat/brat-frontend-editor';
 import { collData, docData, options } from './brat/brat-data-mock';
@@ -26,7 +16,7 @@ declare var BratFrontendEditor: any;
   selector: 'app-annotation',
   templateUrl: './annotation.component.html',
   styleUrls: ['./annotation.component.scss'],
-  providers: [CategoryService]
+  providers: [AnnotationService]
 })
 
 export class AnnotationComponent implements OnInit, OnDestroy {
@@ -39,9 +29,8 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   projectId: string;
   private dData: any;
   private cData: any;
-  constructor(private authService: AuthService, private activeRouter: ActivatedRoute, private router: Router,
-    /*private as: AnnotationService,*/ private ps: ProjectService, private afs: AngularFirestore,
-    private categs: CategoryService, private storage: AngularFireStorage, private http: HttpClient) {
+  constructor(private authService: AuthService, private activeRouter: ActivatedRoute,
+    private as: AnnotationService, private http: HttpClient) {
 
   }
 
@@ -58,7 +47,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
    * et de les ajouter aux types d'entités existants dans collData
    */
   private addEntityTypes() {
-    const newTypes = this.categs.getCategoriesAsEntityTypes(this.entities);
+    const newTypes = this.as.getCategoriesAsEntityTypes(this.entities);
     let newType: any;
     newTypes.forEach(function (entity) {
       newType = {};
@@ -106,7 +95,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
     this.dData.text = text.replace(/<[^>]*>/g, '');
     console.log(this.dData.text);
-    this.entities = await this.categs.getCategories(this.projectId).toPromise();
+    this.entities = await this.as.getEntities(this.projectId).toPromise();
 
     // Ajouter les catégories comme des types d'entités
     await this.addEntityTypes();

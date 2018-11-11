@@ -75,13 +75,12 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       }
     });
 
-    console.log(JSON.parse(AnnotatedDocumentUtils.toJSON(this.annotatedDocument)));
-
     this.brat = new BratFrontendEditor(
       document.getElementById('brat'),
       JSON.parse(ProjectUtils.toJSON(this.project)),
       JSON.parse(AnnotatedDocumentUtils.toJSON(this.annotatedDocument)),
       options);
+
   }
 
   ngOnInit() {

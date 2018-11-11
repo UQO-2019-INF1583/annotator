@@ -1,6 +1,6 @@
 export class DocumentData {
-  message: any[];
-  source_file: string[];
+  messages: any[];
+  source_files: string[];
   modifications: any[];
   normalizations: any[];
   ctime: any;

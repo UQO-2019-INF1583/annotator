@@ -85,6 +85,8 @@ export class AnnotatedDocumentUtils {
       return relation;
     });
 
+
+
     for (let i = 0; i < annotatedDocument.events.length; i++) {
       const docTrigger = docData.triggers[i];
       const docEvent = docData.events[i];
@@ -121,6 +123,7 @@ export class AnnotatedDocumentUtils {
     const docData: DocumentData = new DocumentData();
     docData.text = annotatedDocument.text;
 
+
     docData.entities = annotatedDocument.entities.map(entity => {
       const e: rawEntity = [entity.id, entity.type, entity.locations];
       return e;
@@ -143,6 +146,7 @@ export class AnnotatedDocumentUtils {
       return r;
     });
 
+    docData.triggers = [];
     annotatedDocument.events.forEach(event => {
       docData.triggers.push([event.triggerId, event.type, event.locations]);
       docData.events.push([
@@ -154,6 +158,13 @@ export class AnnotatedDocumentUtils {
         })
       ]);
     });
+
+    docData.comments = [];
+    docData.ctime = 1351154734.5055847;
+    docData.messages = [];
+    docData.modifications = [];
+    docData.normalizations = [];
+    docData.source_files = [];
 
     return JSON.stringify(docData);
   }

@@ -79,8 +79,8 @@ export class AnnotatedDocumentUtils {
 
       // Project relation
       relation.color = project_relation.color;
-      relation.entity = project_relation.entity;
-      relation.name = project_relation.name;
+      relation.labels = project_relation.labels;
+      relation.type = project_relation.type;
 
       return relation;
     });

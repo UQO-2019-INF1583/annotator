@@ -61,7 +61,7 @@ export const relationMock = {
 export const eventMock = {
   valid1: {
     name: 'event',
-    attributs: ['a'],
+    attributes: ['a'],
     labels: ['a'],
     type: 'a',
     bgColor: '#ffffff'

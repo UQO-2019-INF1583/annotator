@@ -14,7 +14,7 @@
 </mat-form-field>
 
 <mat-form-field>
-  <input matInput placeholder="Attributs" [(ngModel)]="data.attributs" name="attributs" #attributs="ngModel" required />
+  <input matInput placeholder="Attributs" [(ngModel)]="data.attributes" name="attributs" #attributs="ngModel" required />
   <mat-error *ngIf="attributs.value == '' || attributs.value == null">Attribut obligatoire</mat-error>
 </mat-form-field>
 

@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Entity } from '../../shared/entity.model';
+import { availableColorsList } from '../../shared/sharedProperties.model';
 
 @Component({
   selector: 'app-add-entity',
@@ -9,20 +10,13 @@ import { Entity } from '../../shared/entity.model';
 })
 
 export class AddEntityComponent implements OnInit {
-  availableColors: object[];
+  availableColors: string[];
 
   constructor(
     public dialogRef: MatDialogRef<AddEntityComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Entity) { }
 
   ngOnInit() {
-    this.availableColors = [
-      { nom: 'rouge', couleur: '#F44336' },
-      { nom: 'bleu', couleur: '#2196F3' },
-      { nom: 'jaune', couleur: '#FFEB3B' },
-      { nom: 'vert', couleur: '#4CAF50' },
-      { nom: 'violet', couleur: '#673AB7' },
-      { nom: 'orange', couleur: '#FF5722' }
-    ];
+    this.availableColors = availableColorsList;
   }
 }

@@ -39,22 +39,30 @@ export const attributMock = {
 
 export const relationMock = {
   valid1: {
-    name: 'Relation1',
     type: 'Type1',
-    entity: 'Entite1',
-    color: '#2196F3'
+    labels: ['Entite1'],
+    color: '#2196F3',
+    dashArray: '3,3',
+    attributes: [],
+    arcs: []
   } as Relation,
   valid2: {
     name: 'Relation2',
     type: 'Type2',
-    entity: 'Entite2',
-    color: '#2196F3'
+    labels: ['Entite2'],
+    color: '#2196F3',
+    dashArray: '3,3',
+    attributes: [],
+    arcs: []
   } as Relation,
   valid3: {
     name: 'Relation3',
     type: 'Type3',
-    entity: 'Entite3',
-    color: '#2196F3'
+    labels: ['Entite3'],
+    color: '#2196F3',
+    dashArray: '3,3',
+    attributes: [],
+    arcs: []
   } as Relation
 }
 

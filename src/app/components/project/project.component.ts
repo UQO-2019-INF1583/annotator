@@ -380,10 +380,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddRelationComponent, {
       width: '400px',
       data: {
-        name: undefined,
-        color: undefined,
-        entity: undefined,
         type: undefined,
+        labels: [],
+        dashArray: '3,3',
+        color: undefined,
+        attributes: [],
+        arcs: []
       },
     });
 
@@ -413,7 +415,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   public isExist(data: Relation): boolean {
     let exist = false;
     this.currentProject.relations.forEach(relation => {
-      if (relation.name === data.name) {
+      if (relation.type === data.type) {
         exist = true;
       }
     });
@@ -435,7 +437,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result.response === true) {
         this.currentProject.relations.forEach((relation, index) => {
-          if (relation.name === target.name) {
+          if (relation.type === target.type) {
             this.currentProject.relations.splice(index, 1);
           }
         });

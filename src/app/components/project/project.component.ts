@@ -470,9 +470,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
     if (result !== undefined) {
       if (result.name !== undefined &&
         result.type !== undefined &&
-        result.etiquettes !== [] &&
+        result.labels !== [] &&
         result.attributs !== [] &&
-        result.color !== undefined) {
+        result.bgColor !== undefined) {
         this.currentProject.events.forEach(item => {
           if (item.name === result.name) {
             eventExists = true;
@@ -491,9 +491,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return {
       name: result.name,
       type: result.type,
-      etiquettes: result.etiquettes[0].split(','),
+      labels: result.labels[0].split(','),
       attributs: result.attributs[0].split(','),
-      color: result.color,
+      bgColor: result.bgColor,
     };
   }
 

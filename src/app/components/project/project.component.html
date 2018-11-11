@@ -162,7 +162,7 @@
         </mat-card-header>
         <mat-card-content>
           <mat-list role="list" class="card-list-project">
-            <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.events" [ngStyle]="{'background-color': item?.color}">
+            <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.events" [ngStyle]="{'background-color': item?.bgColor}">
               <h4 mat-line>{{item?.name}}</h4>
               <button class="btn btn-danger" (click)="deleteEvent(item)">Delete</button>
             </mat-list-item>

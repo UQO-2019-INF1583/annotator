@@ -80,7 +80,7 @@ export class ProjectUtils {
       name: x.name,
       type: x.type,
       labels: [x.type],
-      bgColor: x.color,
+      bgColor: x.bgColor,
       borderColor: 'darken',
       unused: false,
       // TODO: Fill

@@ -62,9 +62,9 @@ export const eventMock = {
   valid1: {
     name: 'event',
     attributs: ['a'],
-    etiquettes: ['a'],
+    labels: ['a'],
     type: 'a',
-    color: '#ffffff'
+    bgColor: '#ffffff'
   } as Event
 }
 

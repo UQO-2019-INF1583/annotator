@@ -1,7 +1,7 @@
 export class Event {
   name: string;
   type: string;
-  etiquettes: string[];
+  labels: string[];
   attributs: string[];
-  color: string;
+  bgColor: string;
 }

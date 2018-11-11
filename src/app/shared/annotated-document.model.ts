@@ -94,9 +94,9 @@ export class AnnotatedDocumentUtils {
 
       const event: EventAnnotation = null;
       // Project event
-      event.etiquettes = projectEvent.etiquettes;
+      event.labels = projectEvent.labels;
       event.type = docTrigger[1];
-      event.color = projectEvent.color;
+      event.bgColor = projectEvent.bgColor;
       event.attributs = projectEvent.attributs;
       event.name = projectEvent.name;
 

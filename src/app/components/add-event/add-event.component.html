@@ -9,9 +9,8 @@
 </mat-form-field>
 
 <mat-form-field>
-  <input matInput placeholder="Étiquettes" [(ngModel)]="data.etiquettes" name="etiquettes" #etiquettes="ngModel"
-    required />
-  <mat-error *ngIf="etiquettes.value == '' || etiquettes.value == null">Étiquette obligatoire</mat-error>
+  <input matInput placeholder="Labels" [(ngModel)]="data.labels" name="labels" #labels="ngModel" required />
+  <mat-error *ngIf="labels.value == '' || labels.value == null">Étiquette obligatoire</mat-error>
 </mat-form-field>
 
 <mat-form-field>
@@ -20,7 +19,7 @@
 </mat-form-field>
 
 <mat-form-field>
-  <mat-select placeholder="Color" [(ngModel)]="data.color" name="couleur" #couleur="ngModel" required>
+  <mat-select placeholder="Color" [(ngModel)]="data.bgColor" name="couleur" #couleur="ngModel" required>
     <mat-option *ngFor="let item of availableColors" [value]="item.couleur">
       {{item?.nom}}
     </mat-option>

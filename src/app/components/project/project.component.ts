@@ -494,6 +494,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
       labels: result.labels[0].split(','),
       attributes: result.attributes[0].split(','),
       bgColor: result.bgColor,
+      arcs: [],
+      borderColor: 'darken',
+      children: [],
+      unused: false
     };
   }
 

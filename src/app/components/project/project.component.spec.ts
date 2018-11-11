@@ -189,7 +189,11 @@ fdescribe('Projet', () => {
         attributes: eventMock.valid1.attributes[0].split(','),
         labels: eventMock.valid1.labels[0].split(','),
         type: eventMock.valid1.type,
-        bgColor: eventMock.valid1.bgColor
+        bgColor: eventMock.valid1.bgColor,
+        arcs: [],
+        borderColor: 'darken',
+        children: [],
+        unused: false
       });
     });
 

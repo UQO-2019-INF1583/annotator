@@ -29,8 +29,7 @@ export class AnnotatedDocument extends Doc {
 }
 
 export class AnnotatedDocumentUtils {
-  static fromJSON(json: string, project: Project, annotatedDocument: AnnotatedDocument): AnnotatedDocument {
-    const docData: DocumentData = JSON.parse(json);
+  static fromJSON(docData: DocumentData, project: Project, annotatedDocument: AnnotatedDocument): AnnotatedDocument {
 
     annotatedDocument.entities = docData.entities.map(docEntity => {
       const entity: EntityAnnotation = null;

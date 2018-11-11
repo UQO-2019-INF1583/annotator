@@ -79,33 +79,28 @@ export class ProjectUtils {
     collectionData.event_type = project.events.map(x => ({
       name: x.name,
       type: x.type,
-      labels: [x.type],
+      labels: x.labels,
       bgColor: x.bgColor,
       borderColor: 'darken',
       unused: false,
-      // TODO: Fill
       attributes: [],
-      // TODO: Fill
       children: [],
-      // TODO: Fill
       arcs: []
     }));
 
     collectionData.relation_types = project.relations.map(x => ({
       type: x.type,
-      labels: [x.type],
-      // TODO: What is this?
+      labels: x.labels,
       dashArray: '3,3',
       color: x.color,
-      // TODO: Fill
-      args: []
+      args: [],
+      attribute: []
     }));
 
     collectionData.entity_attribute_types = project.attributes.map(x => ({
       name: x.name,
       type: x.type,
       labels: x.labels,
-      // TODO: Is attribute "valeurs" field supposed to be mapped here?
       values: {},
       unused: false
     }));

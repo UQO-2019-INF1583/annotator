@@ -4,13 +4,14 @@ mat-row:hover {
 }
 
 mat-row button {
-  visibility: hidden;
-}
-
-mat-row:hover button {
-  visibility: visible;
+  margin-right: 16px;
 }
 
 mat-header-cell {
   font-size: 18px;
+}
+
+mat-cell {
+  overflow: visible;
+  padding: 0 16px;
 }

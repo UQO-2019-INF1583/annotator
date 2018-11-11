@@ -60,7 +60,7 @@ export class AnnotatedDocumentUtils {
 
       // Project attribute
       attribute.name = project_attribute.name;
-      attribute.valeurs = project_attribute.valeurs;
+      attribute.values = project_attribute.values;
 
       return attribute;
     });

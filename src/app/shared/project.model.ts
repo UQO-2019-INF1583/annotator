@@ -100,22 +100,22 @@ export class ProjectUtils {
       // TODO: Fill
       args: []
     }));
-
-    collectionData.entity_attribute_types = project.attributes.map(x => ({
-      name: x.name,
-      type: x.type,
-      labels: [x.type],
-      // TODO: Is attribute "valeurs" field supposed to be mapped here?
-      values: {
-        [x.type]: {
-          glyph: x.valeurs[0],
-          // TODO: What is this?
-          dashArray: '3,3',
-          box: ''
-        }
-      },
-      unused: false
-    }));
+    /*
+        collectionData.entity_attribute_types = project.attributes.map(x => ({
+          name: x.name,
+          type: x.type,
+          labels: [x.type]
+          // TODO: Is attribute "valeurs" field supposed to be mapped here?
+           values: {
+             [x.type]: {
+               glyph: x.valeurs[0],
+               // TODO: What is this?
+               dashArray: '3,3',
+               box: ''
+             }
+        },
+          unused: false
+        }));*/
 
     // TODO: Have something in project to represent this attribute
     collectionData.event_attribute_types = []

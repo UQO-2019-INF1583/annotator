@@ -33,7 +33,6 @@ export const attributMock = {
   valid1: {
     name: 'Test',
     type: 'Test',
-    valeurs: ['Test']
   } as Attribute
 }
 

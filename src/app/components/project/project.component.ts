@@ -319,7 +319,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         name: undefined,
         type: undefined,
-        valeurs: []
+        labels: []
       },
     });
 
@@ -329,23 +329,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addAttributesAfterClosedHandler(result: Attribute) {
-    let attributeExists = false;
+    const attributeExists = false;
     if (result !== undefined) {
-      if (result.name !== undefined &&
-        result.type !== undefined &&
-        result.valeurs !== []) {
-        this.currentProject.attributes.forEach(item => {
-          if (item.name === result.name) {
-            attributeExists = true;
-          }
-        });
+      if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
         if (!attributeExists) {
-          const array: string[] = result.valeurs[0].split(',');
-          this.currentProject.attributes.push({
-            name: result.name,
-            type: result.type,
-            valeurs: array,
-          });
+          result.labels = result.labels[0].split(',');
+          this.currentProject.attributes.push(new Attribute(result.name, result.type, result.labels));
         } else {
           alert('This attribute already exists');
         }
@@ -450,7 +439,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         name: undefined,
         type: undefined,
         etiquettes: [],
-        attributs: [],
+        attributes: [],
         color: undefined,
       },
     });

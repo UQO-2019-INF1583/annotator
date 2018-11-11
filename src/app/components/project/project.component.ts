@@ -466,7 +466,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       if (result.name !== undefined &&
         result.type !== undefined &&
         result.labels !== [] &&
-        result.attributs !== [] &&
+        result.attributes !== [] &&
         result.bgColor !== undefined) {
         this.currentProject.events.forEach(item => {
           if (item.name === result.name) {
@@ -487,8 +487,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
       name: result.name,
       type: result.type,
       labels: result.labels[0].split(','),
-      attributs: result.attributs[0].split(','),
+      attributes: result.attributes[0].split(','),
       bgColor: result.bgColor,
+      arcs: [],
+      borderColor: 'darken',
+      children: [],
+      unused: false
     };
   }
 

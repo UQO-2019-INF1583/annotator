@@ -319,7 +319,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         name: undefined,
         type: undefined,
-        labels: []
+        labels: [],
+        unused: false,
+        values: ''
       },
     });
 
@@ -334,7 +336,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
         if (!attributeExists) {
           result.labels = result.labels[0].split(',');
-          this.currentProject.attributes.push(new Attribute(result.name, result.type, result.labels));
+          this.currentProject.attributes.push(result);
         } else {
           alert('This attribute already exists');
         }

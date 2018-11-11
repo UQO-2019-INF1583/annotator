@@ -1,11 +1,10 @@
-import { AttributeValue } from './attribute-value.model';
 
 export class Attribute {
   name: string;
   type: string;
   labels: string[];
   unused: boolean;
-  values: any;
+  values: object;
 
   constructor(name: string = '', type: string = '', labels: string[] = [], unused: boolean = false,
     values: object = {}) {

@@ -20,7 +20,7 @@ export class AnnotationService {
     }
     console.log(annotatedDocument);
 
-    this.afs.collection('AnnotatedDocument').doc(annotatedDocument.documentId).set(annotatedDocument);
+    this.afs.collection('AnnotatedDocument').doc(annotatedDocument.documentId).set(Object.assign({}, annotatedDocument));
   }
 
   getAnnotatedDocument(documentId: string): Promise<any> {

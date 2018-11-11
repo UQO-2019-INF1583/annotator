@@ -1,7 +1,7 @@
 export class CollectionData {
   messages: string[];
   entity_types: IEntity[];
-  event_type: IEvent[];
+  event_types: IEvent[];
   relation_types: IRelation[];
   search_config: string[][];
   disambiguator_config: any[];

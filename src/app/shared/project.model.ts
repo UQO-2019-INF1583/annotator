@@ -76,7 +76,7 @@ export class ProjectUtils {
       children: []
     }));
 
-    collectionData.event_type = project.events.map(x => ({
+    collectionData.event_types = project.events.map(x => ({
       name: x.name,
       type: x.type,
       labels: x.labels,

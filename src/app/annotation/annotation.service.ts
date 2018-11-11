@@ -18,6 +18,7 @@ export class AnnotationService {
     if (annotatedDocument.documentId === null) {
       annotatedDocument.documentId = this.afs.createId();
     }
+    console.log(annotatedDocument);
 
     this.afs.collection('AnnotatedDocument').doc(annotatedDocument.documentId).set(annotatedDocument);
   }

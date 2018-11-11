@@ -32,7 +32,7 @@ export class AnnotatedDocumentUtils {
   static fromJSON(docData: DocumentData, project: Project, annotatedDocument: AnnotatedDocument): AnnotatedDocument {
 
     annotatedDocument.entities = docData.entities.map(docEntity => {
-      const entity: EntityAnnotation = null;
+      const entity: EntityAnnotation = EntityAnnotationUtils.generateEmpty();
       const project_entity = project.entities.find(e => e.type === docEntity[1])
 
       // Document entity
@@ -49,7 +49,7 @@ export class AnnotatedDocumentUtils {
     });
 
     annotatedDocument.attributes = docData.attributes.map(docAttribute => {
-      const attribute: AttributeAnnotation = null;
+      const attribute: AttributeAnnotation = AttributeAnnotationUtils.generateEmpty();
       const project_attribute = project.attributes.find(a => a.type === docAttribute[1])
 
       // Document attribute
@@ -65,7 +65,7 @@ export class AnnotatedDocumentUtils {
     });
 
     annotatedDocument.relations = docData.relations.map(docRelation => {
-      const relation: RelationAnnotation = null;
+      const relation: RelationAnnotation = RelationAnnotationUtils.generateEmpty();
       const project_relation = project.relations.find(r => r.type === docRelation[1])
 
       // Document relation
@@ -91,7 +91,7 @@ export class AnnotatedDocumentUtils {
       const docEvent = docData.events[i];
       const projectEvent = project.events.find(e => e.type === docTrigger[1])
 
-      const event: EventAnnotation = null;
+      const event: EventAnnotation = EventAnnotationUtils.generateEmpty();
       // Project event
       event.labels = projectEvent.labels;
       event.type = docTrigger[1];
@@ -105,7 +105,7 @@ export class AnnotatedDocumentUtils {
       event.id = docEvent[0];
 
       event.links = docEvent[2].map(docLink => {
-        const link: EventLink = null;
+        const link: EventLink = EventLinkUtils.generateEmpty();
         link.id = docLink[1];
         link.type = docLink[0];
         return link;
@@ -180,13 +180,60 @@ interface EntityAnnotation extends IAnnotation, Entity {
   locations: rangeTextSelection[];
 }
 
+class EntityAnnotationUtils {
+  static generateEmpty(): EntityAnnotation {
+    return {
+      id: '',
+      locations: [],
+      name: '',
+      type: '',
+      labels: [],
+      bgColor: '',
+      borderColor: 'darken',
+      unused: false,
+      arcs: [],
+      children: []
+    }
+  }
+}
+
 interface AttributeAnnotation extends IAnnotation, Attribute {
   target: id;
+}
+
+class AttributeAnnotationUtils {
+  static generateEmpty(): AttributeAnnotation {
+    return {
+      id: '',
+      name: '',
+      type: '',
+      labels: [],
+      unused: false,
+      values: '',
+      target: ''
+    }
+  }
 }
 
 interface RelationAnnotation extends IAnnotation, Relation {
   from: RelationLink;
   to: RelationLink;
+}
+
+class RelationAnnotationUtils {
+  static generateEmpty(): RelationAnnotation {
+    return {
+      id: '',
+      from: { id: '', role: '' },
+      to: { id: '', role: '' },
+      type: '',
+      labels: [],
+      dashArray: '3,3',
+      color: '',
+      attributes: [],
+      arcs: []
+    }
+  }
 }
 
 interface RelationLink extends IAnnotation {
@@ -199,6 +246,35 @@ interface EventAnnotation extends IAnnotation, Event {
   triggerId: id;
 }
 
+class EventAnnotationUtils {
+  static generateEmpty(): EventAnnotation {
+    return {
+      id: '',
+      locations: [],
+      links: [],
+      triggerId: '',
+      name: '',
+      type: '',
+      labels: [],
+      bgColor: '',
+      borderColor: 'darken',
+      attributes: [],
+      children: [],
+      unused: false,
+      arcs: []
+    }
+  }
+}
+
 interface EventLink extends IAnnotation {
   type: string;
+}
+
+class EventLinkUtils {
+  static generateEmpty(): EventLink {
+    return {
+      id: '',
+      type: ''
+    }
+  }
 }

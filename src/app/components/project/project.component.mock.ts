@@ -1,7 +1,7 @@
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Attribute } from '../../shared/attribute.model';
 import { AuthService } from '../../shared/security/auth.service';
-import { Entite } from '../../shared/entite.model';
+import { Entity } from '../../shared/entity.model';
 import { ProjectManagerService } from '../../adm/projectManager/projectManager.service';
 import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
@@ -14,19 +14,19 @@ export const entiteMock = {
     type: 'Test',
     bgColor: '#F44336',
     labels: ['Test'],
-  } as Entite,
+  } as Entity,
   valid2: {
     name: 'Test',
     type: 'Test',
     bgColor: '#2196F3',
     labels: ['Test']
-  } as Entite,
+  } as Entity,
   valid3: {
     name: 'Test3',
     type: 'Test3',
     bgColor: '#F44336',
     labels: ['Test3']
-  } as Entite
+  } as Entity
 }
 
 export const attributMock = {

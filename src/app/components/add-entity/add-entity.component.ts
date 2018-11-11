@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Entite } from '../../shared/entite.model';
+import { Entity } from '../../shared/entity.model';
 
 @Component({
   selector: 'app-add-entity',
@@ -13,7 +13,7 @@ export class AddEntityComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddEntityComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Entite) { }
+    @Inject(MAT_DIALOG_DATA) public data: Entity) { }
 
   ngOnInit() {
     this.availableColors = [

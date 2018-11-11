@@ -23,7 +23,7 @@ import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';
 import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
-import { Entite } from '../../shared/entite.model';
+import { Entity } from '../../shared/entity.model';
 
 @Component({
   selector: 'app-project',
@@ -142,12 +142,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result: Entite) => {
+    dialogRef.afterClosed().subscribe((result: Entity) => {
       this.addEntitiesAfterClosedHandler(result);
     });
   }
 
-  addEntitiesAfterClosedHandler(result: Entite) {
+  addEntitiesAfterClosedHandler(result: Entity) {
     let entityExists = false;
     if (result !== undefined) {
       if (
@@ -172,13 +172,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
         });
 
         if (!entityExists) {
-          const labelsArray: string[] = result.labels[0].split(',');
-          this.currentProject.entities.push({
-            name: result.name,
-            type: result.type,
-            bgColor: result.bgColor,
-            labels: labelsArray,
-          });
+          result.labels = result.labels[0].split(',');
+          this.currentProject.entities.push(result);
         }
       }
     }

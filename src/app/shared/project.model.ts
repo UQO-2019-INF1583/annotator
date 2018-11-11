@@ -1,6 +1,6 @@
 // structure de données utilisée pour représenter un projet
 import { Doc } from './document.model';
-import { Entite } from './entite.model';
+import { Entity } from './entity.model';
 import { Event } from './event.model';
 import { Attribute } from './attribute.model'
 import { Relation } from './relation.model';
@@ -13,7 +13,7 @@ export interface Project {
   admin: string[]; // user ids
   annotators: string[]; // user ids
   corpus: Doc[];
-  entities: Entite[];
+  entities: Entity[];
   attributes: Attribute[];
   events: Event[];
   relations: Relation[];

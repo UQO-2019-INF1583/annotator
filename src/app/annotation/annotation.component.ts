@@ -8,7 +8,7 @@ import { AnnotationService } from './annotation.service';
 import * as firebase from 'firebase';
 import './brat/brat-frontend-editor';
 import { options } from './brat/brat-data-mock';
-import { Entite } from '../shared/entite.model';
+import { Entity } from '../shared/entity.model';
 import { HttpClient } from '@angular/common/http';
 import { AnnotatedDocument, AnnotatedDocumentUtils } from '../shared/annotated-document.model';
 import { Project, ProjectUtils } from '../shared/project.model';
@@ -28,7 +28,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   private project: Project;
   private annotatedDocument: AnnotatedDocument;
   currentDoc: Doc;
-  entities: Entite[];
+  entities: Entity[];
   currentProjectTitle: string;
   isConnected = false;
   projectId: string;

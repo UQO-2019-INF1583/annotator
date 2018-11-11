@@ -1,6 +1,6 @@
 import { Relation } from './relation.model';
 import { Attribute } from './attribute.model';
-import { Entite } from './entite.model';
+import { Entity } from './entity.model';
 import { Doc } from './document.model';
 import { Event } from './event.model';
 import {
@@ -177,7 +177,7 @@ interface IAnnotation {
   id: id;
 }
 
-interface EntityAnnotation extends IAnnotation, Entite {
+interface EntityAnnotation extends IAnnotation, Entity {
   locations: rangeTextSelection[];
 }
 

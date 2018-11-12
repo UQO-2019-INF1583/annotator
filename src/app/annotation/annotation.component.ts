@@ -10,8 +10,9 @@ import './brat/brat-frontend-editor';
 import { options } from './brat/brat-data-mock';
 import { Entity } from '../shared/entity.model';
 import { HttpClient } from '@angular/common/http';
-import { AnnotatedDocument, AnnotatedDocumentUtils } from '../shared/annotated-document.model';
+import { AnnotatedDocument } from '../shared/annotated-document.model';
 import { Project, ProjectUtils } from '../shared/project.model';
+import { BratUtils } from './brat/brat-utils';
 
 declare var BratFrontendEditor: any;
 
@@ -73,17 +74,14 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       if (data === undefined) {
         this.annotatedDocument = new AnnotatedDocument(this.currentDoc);
       } else {
-        this.annotatedDocument = AnnotatedDocumentUtils.fromJSON(
-          JSON.parse(data.document),
-          this.project,
-          new AnnotatedDocument(this.currentDoc));
+        this.annotatedDocument = BratUtils.fromDocData(JSON.parse(data.document), this.project, new AnnotatedDocument(this.currentDoc));
       }
     });
 
     this.brat = new BratFrontendEditor(
       document.getElementById('brat'),
-      JSON.parse(ProjectUtils.toJSON(this.project)),
-      JSON.parse(AnnotatedDocumentUtils.toJSON(this.annotatedDocument)),
+      BratUtils.getColDataFromProject(this.project),
+      BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument),
       options);
 
   }
@@ -100,13 +98,9 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   saveTextModification() {
-    const annotatedDocument = AnnotatedDocumentUtils
-      .fromJSON(
-        this.brat.docData,
-        this.project,
-        new AnnotatedDocument(this.currentDoc));
+    const aDoc = BratUtils.fromDocData(this.brat.docData, this.project, new AnnotatedDocument(this.currentDoc));
 
-    this.as.saveAnnotatedDocument(annotatedDocument);
+    this.as.saveAnnotatedDocument(aDoc);
 
     alert('Annotation saved');
   }

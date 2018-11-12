@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Entity } from '../shared/entity.model';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { AnnotatedDocument, AnnotatedDocumentUtils } from '../shared/annotated-document.model';
+import { AnnotatedDocument } from '../shared/annotated-document.model';
+import { BratUtils } from './brat/brat-utils';
 
 @Injectable()
 export class AnnotationService {
@@ -20,7 +21,7 @@ export class AnnotationService {
     }
 
     const data = {
-      document: AnnotatedDocumentUtils.toJSON(annotatedDocument)
+      document: JSON.stringify(BratUtils.getDocDataFromAnnotatedDocument(annotatedDocument))
     }
 
     this.afs.collection('AnnotatedDocument').doc(annotatedDocument.documentId).set(data);

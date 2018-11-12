@@ -22,7 +22,7 @@ import { Project } from '../../shared/project.model';
 import { CollectionData } from '../collection-data';
 
 export class BratUtils {
-  static getDocDataFromAnnotatedDocument(annotatedDocument: AnnotatedDocument) {
+  static getDocDataFromAnnotatedDocument(annotatedDocument: AnnotatedDocument): DocumentData {
     const docData: DocumentData = new DocumentData();
     docData.text = annotatedDocument.text;
 
@@ -72,7 +72,7 @@ export class BratUtils {
     return docData;
   }
 
-  static getColDataFromProject(project: Project) {
+  static getColDataFromProject(project: Project): CollectionData {
     const collectionData: CollectionData = new CollectionData();
 
     collectionData.items = [];

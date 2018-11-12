@@ -1,3 +1,7 @@
+mat-card{
+  min-width: 600px;
+}
+
 mat-row:hover {
   background-color: #eee;
   cursor: pointer;
@@ -11,7 +15,29 @@ mat-header-cell {
   font-size: 18px;
 }
 
-mat-cell {
+mat-cell{
+  overflow: visible;
+}
+
+mat-header-cell, mat-cell{
   overflow: visible;
   padding: 0 16px;
+
+  &:first-child {
+    padding-left:0;
+  }
+
+  &:last-child {
+    padding-right: 0;
+  }
+}
+
+@media(max-width: 767px){
+  mat-card{
+    min-width: 50%;
+  }
+}
+
+.mat-column-description{
+  white-space: pre-line;
 }

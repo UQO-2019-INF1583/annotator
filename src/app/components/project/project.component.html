@@ -1,6 +1,6 @@
 <main flex *ngIf="isDataLoaded">
 
-  <div style="padding-left: 10px; padding-right: 10px;">
+  <div class="project-form-title" style="padding-left: 10px; padding-right: 10px;">
     <h3 style="display:inline-block">Project: </h3>
     <mat-form-field>
       <input matInput [readonly]="!isConnected" [ngModel]="currentProject.title" (ngModelChange)="currentProject.title = $event"
@@ -10,7 +10,7 @@
   </div>
 
 
-  <div style="padding-left: 10px; padding-right: 10px;">
+  <div class="project-form-description" style="padding-left: 10px; padding-right: 10px;">
     <h3 style="display:inline-block">Description: </h3>
 
     <mat-form-field style="display:inline-block">

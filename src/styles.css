@@ -4,3 +4,18 @@
 body {
   background: #eee;
 }
+
+.cdk-overlay-pane{
+  min-width: 400px;
+}
+
+.cdk-overlay-pane mat-form-field{
+  width: 100%;
+  padding-right: 10px;
+}
+
+@media(max-width: 767px){
+  .cdk-overlay-pane{
+    min-width: 50vw;
+  }
+}

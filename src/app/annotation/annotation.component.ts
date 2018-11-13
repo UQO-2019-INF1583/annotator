@@ -74,7 +74,11 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       if (data === undefined) {
         this.annotatedDocument = new AnnotatedDocument(this.currentDoc);
       } else {
-        this.annotatedDocument = BratUtils.fromDocData(JSON.parse(data.document), this.project, new AnnotatedDocument(this.currentDoc));
+        this.annotatedDocument = BratUtils.getAnnotatedDocumentfromDocumentDataFirebase(
+          data,
+          this.project,
+          new AnnotatedDocument(this.currentDoc)
+        );
       }
     });
 
@@ -98,7 +102,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   saveTextModification() {
-    const aDoc = BratUtils.fromDocData(this.brat.docData, this.project, new AnnotatedDocument(this.currentDoc));
+    const aDoc = BratUtils.getAnnotatedDocumentfromDocData(this.brat.docData, this.project, new AnnotatedDocument(this.currentDoc));
 
     this.as.saveAnnotatedDocument(aDoc);
 

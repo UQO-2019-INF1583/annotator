@@ -218,7 +218,8 @@ export class BratUtils {
     return collectionData;
   }
 
-  static fromDocumentDataFirebase(docData: DocumentDataFirebase, project: Project, annotatedDocument: AnnotatedDocument):
+  static getAnnotatedDocumentfromDocumentDataFirebase(
+    docData: DocumentDataFirebase, project: Project, annotatedDocument: AnnotatedDocument):
     AnnotatedDocument {
     annotatedDocument.entities = docData.entities.map(x => {
       const entity: EntityAnnotation = EntityAnnotationUtils.generateEmpty();
@@ -297,6 +298,98 @@ export class BratUtils {
         const link: EventLink = EventLinkUtils.generateEmpty();
         link.id = y.argId;
         link.type = y.argType;
+        return link;
+      });
+
+      annotatedDocument.events.push(event);
+    }
+
+    return annotatedDocument;
+  }
+
+  static getAnnotatedDocumentfromDocData(docData: DocumentData, project: Project, annotatedDocument: AnnotatedDocument): AnnotatedDocument {
+    annotatedDocument.entities = docData.entities.map(docEntity => {
+      const entity: EntityAnnotation = EntityAnnotationUtils.generateEmpty();
+      const project_entity = project.entities.find(e => e.type === docEntity[1])
+
+      // Document entity
+      entity.id = docEntity[0];
+      entity.locations = docEntity[2].map(x => ({
+        start: x[0],
+        end: x[1]
+      }));
+
+      // Project entity
+      entity.name = project_entity.name;
+      entity.type = project_entity.type;
+      entity.bgColor = project_entity.bgColor;
+      entity.labels = project_entity.labels;
+
+      return entity;
+    });
+
+    annotatedDocument.attributes = docData.attributes.map(docAttribute => {
+      const attribute: AttributeAnnotation = AttributeAnnotationUtils.generateEmpty();
+      const project_attribute = project.attributes.find(a => a.type === docAttribute[1])
+
+      // Document attribute
+      attribute.id = docAttribute[0];
+      attribute.type = docAttribute[1];
+      attribute.target = docAttribute[2];
+
+      // Project attribute
+      attribute.name = project_attribute.name;
+      attribute.values = project_attribute.values;
+
+      return attribute;
+    });
+
+    annotatedDocument.relations = docData.relations.map(docRelation => {
+      const relation: RelationAnnotation = RelationAnnotationUtils.generateEmpty();
+      const project_relation = project.relations.find(r => r.type === docRelation[1])
+
+      // Document relation
+      relation.id = docRelation[0];
+      relation.type = docRelation[1];
+      relation.from.id = docRelation[2][0][0];
+      relation.from.role = docRelation[2][0][1];
+      relation.to.id = docRelation[2][1][0];
+      relation.to.role = docRelation[2][1][1];
+
+      // Project relation
+      relation.color = project_relation.color;
+      relation.labels = project_relation.labels;
+      relation.type = project_relation.type;
+
+      return relation;
+    });
+
+    for (let i = 0; i < annotatedDocument.events.length; i++) {
+      const docTrigger = docData.triggers[i];
+      const docEvent = docData.events[i];
+      const projectEvent = project.events.find(e => e.type === docTrigger[1])
+
+      const event: EventAnnotation = EventAnnotationUtils.generateEmpty();
+      // Project event
+      event.labels = projectEvent.labels;
+      event.type = docTrigger[1];
+      event.bgColor = projectEvent.bgColor;
+      event.attributes = projectEvent.attributes;
+      event.name = projectEvent.name;
+      event.locations = docTrigger[2].map(x => ({
+        start: x[0],
+        end: x[1]
+      }));
+
+      // Document event
+      event.triggerId = docTrigger[0];
+
+      event.id = docEvent[0];
+
+      event.links = docEvent[2].map(docLink => {
+        const link: EventLink = EventLinkUtils.generateEmpty();
+        link.id = docLink[1];
+        link.type = docLink[0];
         return link;
       });
 

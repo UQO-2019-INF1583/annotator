@@ -13,7 +13,7 @@ import {
 import { Project } from './project.model';
 
 // tslint:disable-next-line:interface-over-type-literal
-export class AnnotatedDocument {
+export type AnnotatedDocument = {
   documentId: string;
   title: string;
   file: any;

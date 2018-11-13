@@ -11,6 +11,8 @@ export class Doc {
     this.documentId = docId;
     this.title = title;
     this.projectId = projectId;
+    this.file = '';
+    this.projectId = '';
   }
 
 }

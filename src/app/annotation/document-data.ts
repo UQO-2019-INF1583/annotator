@@ -1,4 +1,5 @@
-export class DocumentData {
+// tslint:disable-next-line:interface-over-type-literal
+export type DocumentData = {
   messages: any[];
   source_files: string[];
   modifications: any[];

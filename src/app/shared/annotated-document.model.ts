@@ -12,24 +12,42 @@ import {
 } from '../annotation/document-data';
 import { Project } from './project.model';
 
-export class AnnotatedDocument extends Doc {
+// tslint:disable-next-line:interface-over-type-literal
+export type AnnotatedDocument = {
+  documentId: string;
+  title: string;
+  file: any;
+  text: string;
+  projectId: string;
   entities: EntityAnnotation[];
   attributes: AttributeAnnotation[];
   relations: RelationAnnotation[];
   events: EventAnnotation[];
+}
 
-  constructor(document: Doc) {
-    super(document.documentId, document.title, document.projectId);
-    this.entities = [];
-    this.attributes = [];
-    this.relations = [];
-    this.events = [];
-    this.text = document.text;
+export class AnnotatedDocumentUtils {
+  static fromDoc(document: Doc): AnnotatedDocument {
+    const annotatedDocument: AnnotatedDocument = {
+      documentId: document.documentId,
+      title: document.title,
+      projectId: document.projectId,
+      file: document.file,
+      text: document.text,
+      entities: [],
+      attributes: [],
+      relations: [],
+      events: []
+    }
+
+    return annotatedDocument;
   }
 }
 
+interface RangeTextSelection {
+  start: number,
+  end: number
+};
 
-type rangeTextSelection = [number, number];
 type id = string;
 
 interface IAnnotation {
@@ -37,7 +55,7 @@ interface IAnnotation {
 }
 
 export interface EntityAnnotation extends IAnnotation, Entity {
-  locations: rangeTextSelection[];
+  locations: RangeTextSelection[];
 }
 
 export class EntityAnnotationUtils {
@@ -101,7 +119,7 @@ export interface RelationLink extends IAnnotation {
 }
 
 export interface EventAnnotation extends IAnnotation, Event {
-  locations: rangeTextSelection[];
+  locations: RangeTextSelection[];
   links: EventLink[];
   triggerId: id;
 }

@@ -12,7 +12,7 @@ import { Entity } from '../shared/entity.model';
 import { FilterBrat } from '../shared/filterBrat.model';
 import { FilterOptionsList } from '../shared/filterOptions.model';
 import { HttpClient } from '@angular/common/http';
-import { AnnotatedDocument } from '../shared/annotated-document.model';
+import { AnnotatedDocument, AnnotatedDocumentUtils } from '../shared/annotated-document.model';
 import { Project, ProjectUtils } from '../shared/project.model';
 import { BratUtils } from './brat/brat-utils';
 
@@ -79,9 +79,9 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       const data = d.data()
 
       if (data === undefined) {
-        this.annotatedDocument = new AnnotatedDocument(this.currentDoc);
+        this.annotatedDocument = AnnotatedDocumentUtils.fromDoc(this.currentDoc);
       } else {
-        this.annotatedDocument = BratUtils.fromDocData(JSON.parse(data.document), this.project, new AnnotatedDocument(this.currentDoc));
+        this.annotatedDocument = data;
       }
     });
 
@@ -110,7 +110,11 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   saveTextModification() {
-    const aDoc = BratUtils.fromDocData(this.brat.docData, this.project, new AnnotatedDocument(this.currentDoc));
+    const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
+      this.brat.docData,
+      this.project,
+      AnnotatedDocumentUtils.fromDoc(this.currentDoc)
+    );
 
     this.as.saveAnnotatedDocument(aDoc);
 

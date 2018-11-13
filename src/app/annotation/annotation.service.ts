@@ -23,7 +23,7 @@ export class AnnotationService {
     this.afs
       .collection('AnnotatedDocument')
       .doc(annotatedDocument.documentId)
-      .set(Object.assign({}, BratUtils.getDocumentDataFirebaseFromAnnotatedDocument(annotatedDocument)));
+      .set(Object.assign({}, annotatedDocument));
   }
 
   getAnnotatedDocument(documentId: string): Promise<any> {

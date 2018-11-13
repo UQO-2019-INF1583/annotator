@@ -12,19 +12,34 @@ import {
 } from '../annotation/document-data';
 import { Project } from './project.model';
 
-export class AnnotatedDocument extends Doc {
+// tslint:disable-next-line:interface-over-type-literal
+export class AnnotatedDocument {
+  documentId: string;
+  title: string;
+  file: any;
+  text: string;
+  projectId: string;
   entities: EntityAnnotation[];
   attributes: AttributeAnnotation[];
   relations: RelationAnnotation[];
   events: EventAnnotation[];
+}
 
-  constructor(document: Doc) {
-    super(document.documentId, document.title, document.projectId);
-    this.entities = [];
-    this.attributes = [];
-    this.relations = [];
-    this.events = [];
-    this.text = document.text;
+export class AnnotatedDocumentUtils {
+  static fromDoc(document: Doc): AnnotatedDocument {
+    const annotatedDocument: AnnotatedDocument = {
+      documentId: document.documentId,
+      title: document.title,
+      projectId: document.projectId,
+      file: document.file,
+      text: document.text,
+      entities: [],
+      attributes: [],
+      relations: [],
+      events: []
+    }
+
+    return annotatedDocument;
   }
 }
 

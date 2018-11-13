@@ -23,100 +23,38 @@ import { Project } from '../../shared/project.model';
 import { CollectionData } from '../collection-data';
 
 export class BratUtils {
-  static getDocumentDataFirebaseFromAnnotatedDocument(annotatedDocument: AnnotatedDocument): DocumentDataFirebase {
-    const docDataFirebase: DocumentDataFirebase = new DocumentDataFirebase();
-    docDataFirebase.text = annotatedDocument.text;
-
-    docDataFirebase.entities = annotatedDocument.entities.map(x => ({
-      id: x.id,
-      type: x.type,
-      locations: x.locations.map(y => ({
-        start: y.start,
-        end: y.end
-      }))
-    }));
-
-    docDataFirebase.attributes = annotatedDocument.attributes.map(x => ({
-      id: x.id,
-      type: x.type,
-      target: x.target
-    }));
-
-    docDataFirebase.relations = annotatedDocument.relations.map(x => ({
-      id: x.id,
-      type: x.type,
-      relations: {
-        from: {
-          argName: x.from.role,
-          target: x.from.id
-        },
-        to: {
-          argName: x.to.role,
-          target: x.to.id
-        }
-      }
-    }));
-
-    docDataFirebase.triggers = [];
-
-    annotatedDocument.events.forEach(event => {
-      docDataFirebase.triggers.push({
-        id: event.triggerId,
-        type: event.type,
-        locations: event.locations.map(y => ({
-          start: y.start,
-          end: y.end
-        }))
-      });
-
-      docDataFirebase.events.push({
-        id: event.id,
-        trigger: event.triggerId,
-        eventLinks: event.links.map(y => ({
-          argType: y.type,
-          argId: y.id
-        }))
-      });
-    });
-
-    docDataFirebase.comments = [];
-    docDataFirebase.ctime = 1351154734.5055847;
-    docDataFirebase.messages = [];
-    docDataFirebase.modifications = [];
-    docDataFirebase.normalizations = [];
-    docDataFirebase.source_files = [];
-
-    return docDataFirebase;
-  }
-
   static getDocDataFromAnnotatedDocument(annotatedDocument: AnnotatedDocument): DocumentData {
-    const docData: DocumentData = new DocumentData();
-    docData.text = annotatedDocument.text;
+    const docData: DocumentData = {
+      text: annotatedDocument.text,
+      entities: annotatedDocument.entities.map(entity => {
+        const e: rawEntity = [entity.id, entity.type, entity.locations.map(x => ([x.start, x.end] as [number, number]))];
+        return e;
+      }),
+      attributes: annotatedDocument.attributes.map(attribute => {
+        const a: rawAttribute = [attribute.id, attribute.type, attribute.target];
+        return a;
+      }),
+      relations: annotatedDocument.relations.map(relation => {
+        const r: rawRelation = [
+          relation.id,
+          relation.type,
+          [
+            [relation.from.role, relation.from.id],
+            [relation.to.role, relation.to.id]
+          ]
+        ];
+        return r;
+      }),
+      triggers: [],
+      events: [],
+      comments: [],
+      ctime: 1351154734.5055847,
+      messages: [],
+      modifications: [],
+      normalizations: [],
+      source_files: []
+    };
 
-
-    docData.entities = annotatedDocument.entities.map(entity => {
-      const e: rawEntity = [entity.id, entity.type, entity.locations.map(x => ([x.start, x.end] as [number, number]))];
-      return e;
-    });
-
-    docData.attributes = annotatedDocument.attributes.map(attribute => {
-      const a: rawAttribute = [attribute.id, attribute.type, attribute.target];
-      return a;
-    });
-
-    docData.relations = annotatedDocument.relations.map(relation => {
-      const r: rawRelation = [
-        relation.id,
-        relation.type,
-        [
-          [relation.from.role, relation.from.id],
-          [relation.to.role, relation.to.id]
-        ]
-      ];
-      return r;
-    });
-
-    docData.triggers = [];
     annotatedDocument.events.forEach(event => {
       docData.triggers.push([event.triggerId, event.type, event.locations.map(x => ([x.start, x.end] as [number, number]))]);
       docData.events.push([
@@ -129,91 +67,74 @@ export class BratUtils {
       ]);
     });
 
-    docData.comments = [];
-    docData.ctime = 1351154734.5055847;
-    docData.messages = [];
-    docData.modifications = [];
-    docData.normalizations = [];
-    docData.source_files = [];
-
     return docData;
   }
 
   static getColDataFromProject(project: Project): CollectionData {
-    const collectionData: CollectionData = new CollectionData();
-
-    collectionData.items = [];
-    collectionData.messages = []
-
-    collectionData.search_config = [
-      ['Google', 'http://www.google.com/search?q=%s'],
-      ['Wikipedia', 'http://en.wikipedia.org/wiki/Special:Search?search=%s'],
-      ['UniProt', 'http://www.uniprot.org/uniprot/?sort=score&query=%s'],
-      ['EntrezGene', 'http://www.ncbi.nlm.nih.gov/gene?term=%s'],
-      ['GeneOntology', 'http://amigo.geneontology.org/cgi-bin/amigo/search.cgi?search_query=%s&action=new-search&search_constraint=term'],
-      ['ALC', 'http://eow.alc.co.jp/%s']
-    ];
-
-    collectionData.disambiguator_config = [];
-
-    collectionData.unconfigured_types = [];
-
-    collectionData.ui_names = {
-      entities: 'entités',
-      events: 'événements',
-      relations: 'relations',
-      attributes: 'attributs'
-    }
-
-    collectionData.entity_types = project.entities.map(x => ({
-      name: x.name,
-      type: x.type,
-      labels: x.labels,
-      bgColor: x.bgColor,
-      borderColor: 'darken',
-      unused: false,
-      // TODO: Fill
-      attributes: [],
-      // TODO: Fill
-      arcs: [],
-      // TODO: Fill
-      children: []
-    }));
-
-    collectionData.event_types = project.events.map(x => ({
-      name: x.name,
-      type: x.type,
-      labels: x.labels,
-      bgColor: x.bgColor,
-      borderColor: 'darken',
-      unused: false,
-      attributes: [],
-      children: [],
-      arcs: []
-    }));
-
-    collectionData.relation_types = project.relations.map(x => ({
-      type: x.type,
-      labels: x.labels,
-      dashArray: '3,3',
-      color: x.color,
-      args: [],
-      attribute: []
-    }));
-
-    collectionData.entity_attribute_types = project.attributes.map(x => ({
-      name: x.name,
-      type: x.type,
-      labels: x.labels,
-      values: {},
-      unused: false
-    }));
-
-    // TODO: Have something in project to represent this attribute
-    collectionData.event_attribute_types = []
-
-    // TODO: Have something in project to represent this attribute
-    collectionData.relation_attribute_types = []
+    const collectionData: CollectionData = {
+      items: [],
+      messages: [],
+      search_config: [
+        ['Google', 'http://www.google.com/search?q=%s'],
+        ['Wikipedia', 'http://en.wikipedia.org/wiki/Special:Search?search=%s'],
+        ['UniProt', 'http://www.uniprot.org/uniprot/?sort=score&query=%s'],
+        ['EntrezGene', 'http://www.ncbi.nlm.nih.gov/gene?term=%s'],
+        ['GeneOntology', 'http://amigo.geneontology.org/cgi-bin/amigo/search.cgi?search_query=%s&action=new-search&search_constraint=term'],
+        ['ALC', 'http://eow.alc.co.jp/%s']
+      ],
+      disambiguator_config: [],
+      unconfigured_types: [],
+      ui_names: {
+        entities: 'entités',
+        events: 'événements',
+        relations: 'relations',
+        attributes: 'attributs'
+      },
+      entity_types: project.entities.map(x => ({
+        name: x.name,
+        type: x.type,
+        labels: x.labels,
+        bgColor: x.bgColor,
+        borderColor: 'darken',
+        unused: false,
+        // TODO: Fill
+        attributes: [],
+        // TODO: Fill
+        arcs: [],
+        // TODO: Fill
+        children: []
+      })),
+      event_types: project.events.map(x => ({
+        name: x.name,
+        type: x.type,
+        labels: x.labels,
+        bgColor: x.bgColor,
+        borderColor: 'darken',
+        unused: false,
+        attributes: [],
+        children: [],
+        arcs: []
+      })),
+      relation_types: project.relations.map(x => ({
+        type: x.type,
+        labels: x.labels,
+        dashArray: '3,3',
+        color: x.color,
+        args: [],
+        attribute: []
+      })),
+      entity_attribute_types: project.attributes.map(x => ({
+        name: x.name,
+        type: x.type,
+        labels: x.labels,
+        values: {},
+        unused: false
+      })),
+      // TODO: Have something in project to represent this attribute
+      event_attribute_types: [],
+      // TODO: Have something in project to represent this attribute
+      relation_attribute_types: []
+    };
 
     return collectionData;
   }

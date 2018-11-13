@@ -186,10 +186,14 @@ fdescribe('Projet', () => {
     it('should map result to event properly', () => {
       expect(projectComponent.mapValidResultToEvent(eventMock.valid1)).toEqual({
         name: eventMock.valid1.name,
-        attributs: eventMock.valid1.attributs[0].split(','),
-        etiquettes: eventMock.valid1.etiquettes[0].split(','),
+        attributes: eventMock.valid1.attributes[0].split(','),
+        labels: eventMock.valid1.labels[0].split(','),
         type: eventMock.valid1.type,
-        color: eventMock.valid1.color
+        bgColor: eventMock.valid1.bgColor,
+        arcs: [],
+        borderColor: 'darken',
+        children: [],
+        unused: false
       });
     });
 

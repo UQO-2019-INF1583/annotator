@@ -1,7 +1,9 @@
-export interface CollectionData {
+
+// tslint:disable-next-line:interface-over-type-literal
+export type CollectionData = {
   messages: string[];
   entity_types: IEntity[];
-  event_type: IEvent[];
+  event_types: IEvent[];
   relation_types: IRelation[];
   search_config: string[][];
   disambiguator_config: any[];

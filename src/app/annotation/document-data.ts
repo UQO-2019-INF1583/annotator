@@ -1,6 +1,7 @@
-export interface DocumentData {
-  message: any[];
-  source_file: string[];
+// tslint:disable-next-line:interface-over-type-literal
+export type DocumentData = {
+  messages: any[];
+  source_files: string[];
   modifications: any[];
   normalizations: any[];
   ctime: any;

@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Relation } from '../../shared/relation.model';
+import { availableColorsList } from '../../shared/sharedProperties.model';
 
 @Component({
   selector: 'app-add-relation',
@@ -8,20 +9,13 @@ import { Relation } from '../../shared/relation.model';
   styleUrls: ['./add-relation.component.css'],
 })
 export class AddRelationComponent implements OnInit {
-  availableColors: object[];
+  availableColors: string[];
 
   constructor(
     public dialogRef: MatDialogRef<AddRelationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Relation) { }
 
   ngOnInit() {
-    this.availableColors = [
-      { nom: 'rouge', couleur: '#F44336' },
-      { nom: 'bleu', couleur: '#2196F3' },
-      { nom: 'jaune', couleur: '#FFEB3B' },
-      { nom: 'vert', couleur: '#4CAF50' },
-      { nom: 'violet', couleur: '#673AB7' },
-      { nom: 'orange', couleur: '#FF5722' },
-    ];
+    this.availableColors = availableColorsList;
   }
 }

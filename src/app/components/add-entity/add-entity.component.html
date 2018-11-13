@@ -16,8 +16,8 @@
 
 <mat-form-field>
   <mat-select placeholder="Color" [(ngModel)]="data.bgColor" name="color" #color="ngModel" required>
-    <mat-option *ngFor="let item of availableColors" [value]="item.couleur">
-      {{item.nom}}
+    <mat-option *ngFor="let item of availableColors" [value]="item">
+      {{item}}
     </mat-option>
   </mat-select>
   <mat-error *ngIf="color.value == null">couleur obligatoire</mat-error>

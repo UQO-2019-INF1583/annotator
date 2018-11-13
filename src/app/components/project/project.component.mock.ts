@@ -1,7 +1,7 @@
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Attribute } from '../../shared/attribute.model';
 import { AuthService } from '../../shared/security/auth.service';
-import { Entite } from '../../shared/entite.model';
+import { Entity } from '../../shared/entity.model';
 import { ProjectManagerService } from '../../adm/projectManager/projectManager.service';
 import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
@@ -14,57 +14,64 @@ export const entiteMock = {
     type: 'Test',
     bgColor: '#F44336',
     labels: ['Test'],
-  } as Entite,
+  } as Entity,
   valid2: {
     name: 'Test',
     type: 'Test',
     bgColor: '#2196F3',
     labels: ['Test']
-  } as Entite,
+  } as Entity,
   valid3: {
     name: 'Test3',
     type: 'Test3',
     bgColor: '#F44336',
     labels: ['Test3']
-  } as Entite
+  } as Entity
 }
 
 export const attributMock = {
   valid1: {
     name: 'Test',
     type: 'Test',
-    valeurs: ['Test']
   } as Attribute
 }
 
 export const relationMock = {
   valid1: {
-    name: 'Relation1',
     type: 'Type1',
-    entity: 'Entite1',
-    color: '#2196F3'
+    labels: ['Entite1'],
+    color: '#2196F3',
+    dashArray: '3,3',
+    attributes: [],
+    arcs: []
   } as Relation,
   valid2: {
     name: 'Relation2',
     type: 'Type2',
-    entity: 'Entite2',
-    color: '#2196F3'
+    labels: ['Entite2'],
+    color: '#2196F3',
+    dashArray: '3,3',
+    attributes: [],
+    arcs: []
   } as Relation,
   valid3: {
     name: 'Relation3',
     type: 'Type3',
-    entity: 'Entite3',
-    color: '#2196F3'
+    labels: ['Entite3'],
+    color: '#2196F3',
+    dashArray: '3,3',
+    attributes: [],
+    arcs: []
   } as Relation
 }
 
 export const eventMock = {
   valid1: {
     name: 'event',
-    attributs: ['a'],
-    etiquettes: ['a'],
+    attributes: ['a'],
+    labels: ['a'],
     type: 'a',
-    color: '#ffffff'
+    bgColor: '#ffffff'
   } as Event
 }
 

@@ -7,9 +7,15 @@ import { Doc } from '../shared/document.model'
 import { AnnotationService } from './annotation.service';
 import * as firebase from 'firebase';
 import './brat/brat-frontend-editor';
-import { collData, docData, options } from './brat/brat-data-mock';
-import { Entite } from '../shared/entite.model';
+import { options } from './brat/brat-data-mock';
+import { Entity } from '../shared/entity.model';
+import { FilterBrat } from '../shared/filterBrat.model';
+import { FilterOptionsList } from '../shared/filterOptions.model';
 import { HttpClient } from '@angular/common/http';
+import { AnnotatedDocument, AnnotatedDocumentUtils } from '../shared/annotated-document.model';
+import { Project, ProjectUtils } from '../shared/project.model';
+import { BratUtils } from './brat/brat-utils';
+
 declare var BratFrontendEditor: any;
 
 @Component({
@@ -22,13 +28,19 @@ declare var BratFrontendEditor: any;
 export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
   private brat: any;
+  private project: Project;
+  private annotatedDocument: AnnotatedDocument;
+  availableColors: string[];
   currentDoc: Doc;
-  entities: Entite[];
+  filterBrat: FilterBrat;
+  filterOptions: string[];
+  entities: Entity[];
   currentProjectTitle: string;
   isConnected = false;
   projectId: string;
-  private dData: any;
-  private cData: any;
+  isDataLoaded = false;
+  customCssHtml: string;
+
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute,
     private as: AnnotationService, private http: HttpClient) {
 
@@ -43,68 +55,52 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Cette méthode permet de charger les catégories, de les transformer en types d'entités
-   * et de les ajouter aux types d'entités existants dans collData
-   */
-  private addEntityTypes() {
-    const newTypes = this.as.getCategoriesAsEntityTypes(this.entities);
-    let newType: any;
-    newTypes.forEach(function (entity) {
-      newType = {};
-      for (const property in entity) {
-        if (entity.hasOwnProperty(property)) {
-          newType[property] = entity[property];
-        }
-      };
-      collData.entity_types.push(newType);
-    });
-  }
-
-  /**
    * Cette méthode, qui permet d'initialiser l'interface d'annotation, réunit des appels asynchrones qui doivent être exécutés
    * les uns après les autres.
    */
   async getInterfaceData() {
-    // Aller chercher les paramètres passés par l'URL
     this.sub = await this.activeRouter.params.subscribe(params => {
-      this.currentDoc = new Doc(params.id, params.title, params.projectId);
       this.currentProjectTitle = params.projectTitle;
+      this.currentDoc = new Doc(params.id, params.title, params.projectId);
       this.projectId = params.projectId;
     });
-    // Lire le fichier stocké pour en extraire le texte
+
+    await this.as.getProject(this.projectId).then(p => this.project = p.data());
+
     const URL = await firebase
       .storage()
       .ref()
       .child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title)
       .getDownloadURL();
-    let text = await this.http.get(URL, { responseType: 'text' }).toPromise();
-    // split the data
-    const bratParams: string[] = text.split('-----');
-    text = bratParams[0];
 
+    this.currentDoc.text = await this.http.get(URL, { responseType: 'text' }).toPromise();
 
-    // Load mock coll and doc if undefined, else, load what has already been saved
-    if (typeof (bratParams[1]) === 'undefined' && typeof (bratParams[1]) === 'undefined') {
-      this.dData = docData;
-      this.cData = collData;
-    } else {
-      this.dData = JSON.parse(bratParams[1]);
-      this.cData = JSON.parse(bratParams[2]);
-    }
+    await this.as.getAnnotatedDocument(this.currentDoc.documentId).then(d => {
+      const data = d.data()
 
+      if (data === undefined) {
+        this.annotatedDocument = AnnotatedDocumentUtils.fromDoc(this.currentDoc);
+      } else {
+        this.annotatedDocument = data;
+      }
+    });
 
-    this.dData.text = text.replace(/<[^>]*>/g, '');
-    console.log(this.dData.text);
-    this.entities = await this.as.getEntities(this.projectId).toPromise();
+    this.brat = new BratFrontendEditor(
+      document.getElementById('brat'),
+      BratUtils.getColDataFromProject(this.project),
+      BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument),
+      options);
 
-    // Ajouter les catégories comme des types d'entités
-    await this.addEntityTypes();
+	this.filterBrat = new FilterBrat();
+	this.filterOptions = FilterOptionsList;
 
-    this.brat = new BratFrontendEditor(document.getElementById('brat'), this.cData, this.dData, options);
+	this.isDataLoaded = true;
+
   }
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
+
     this.getInterfaceData();
   }
 
@@ -114,15 +110,31 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   saveTextModification() {
-    let data = this.brat.docData.text;
-    const _docData = JSON.stringify(this.brat.docData);
-    const _collData = JSON.stringify(this.brat.collData)
-    data = data + '-----' + _docData + '-----' + _collData;
-    const thefile = new File([data], this.currentDoc.title);
+    const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
+      this.brat.docData,
+      this.project,
+      AnnotatedDocumentUtils.fromDoc(this.currentDoc)
+    );
 
-    firebase.storage().ref().child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title).put(thefile);
+    this.as.saveAnnotatedDocument(aDoc);
 
     alert('Annotation saved');
   }
 
+  customCSS () {
+	const head=document.getElementsByTagName('head')[0];
+	const oldFilter=document.getElementById("custom-css");
+	if (oldFilter){
+		head.removeChild(oldFilter);
+	}
+	const newFilter=document.createElement("style");
+	newFilter.type="text/css";
+	newFilter.id="custom-css";
+    this.customCssHtml = '';
+    this.customCssHtml += "#brat .span_"+this.filterBrat.value+"{";
+    this.customCssHtml += "stroke-width: 3 !important;";
+    this.customCssHtml += "}";
+    newFilter.appendChild(document.createTextNode(this.customCssHtml));
+	head.appendChild(newFilter);
+  }
 }

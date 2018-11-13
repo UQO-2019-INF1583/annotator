@@ -23,7 +23,7 @@ import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';
 import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
-import { Entite } from '../../shared/entite.model';
+import { Entity } from '../../shared/entity.model';
 
 @Component({
   selector: 'app-project',
@@ -133,7 +133,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // ouvre la boîte de dialogue pour ajouter une catégorie
   addEntityDialogBox() {
     const dialogRef = this.dialog.open(AddEntityComponent, {
-      width: '250px',
       data: {
         name: undefined,
         type: undefined,
@@ -142,12 +141,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result: Entite) => {
+    dialogRef.afterClosed().subscribe((result: Entity) => {
       this.addEntitiesAfterClosedHandler(result);
     });
   }
 
-  addEntitiesAfterClosedHandler(result: Entite) {
+  addEntitiesAfterClosedHandler(result: Entity) {
     let entityExists = false;
     if (result !== undefined) {
       if (
@@ -172,13 +171,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
         });
 
         if (!entityExists) {
-          const labelsArray: string[] = result.labels[0].split(',');
-          this.currentProject.entities.push({
-            name: result.name,
-            type: result.type,
-            bgColor: result.bgColor,
-            labels: labelsArray,
-          });
+          result.labels = result.labels[0].split(',');
+          this.currentProject.entities.push(result);
         }
       }
     }
@@ -324,7 +318,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         name: undefined,
         type: undefined,
-        valeurs: []
+        labels: [],
+        unused: false,
+        values: ''
       },
     });
 
@@ -334,23 +330,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addAttributesAfterClosedHandler(result: Attribute) {
-    let attributeExists = false;
+    const attributeExists = false;
     if (result !== undefined) {
-      if (result.name !== undefined &&
-        result.type !== undefined &&
-        result.valeurs !== []) {
-        this.currentProject.attributes.forEach(item => {
-          if (item.name === result.name) {
-            attributeExists = true;
-          }
-        });
+      if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
         if (!attributeExists) {
-          const array: string[] = result.valeurs[0].split(',');
-          this.currentProject.attributes.push({
-            name: result.name,
-            type: result.type,
-            valeurs: array,
-          });
+          result.labels = result.labels[0].split(',');
+          this.currentProject.attributes.push(result);
         } else {
           alert('This attribute already exists');
         }
@@ -385,10 +370,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddRelationComponent, {
       width: '400px',
       data: {
-        name: undefined,
-        color: undefined,
-        entity: undefined,
         type: undefined,
+        labels: [],
+        dashArray: '3,3',
+        color: undefined,
+        attributes: [],
+        arcs: []
       },
     });
 
@@ -418,7 +405,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   public isExist(data: Relation): boolean {
     let exist = false;
     this.currentProject.relations.forEach(relation => {
-      if (relation.name === data.name) {
+      if (relation.type === data.type) {
         exist = true;
       }
     });
@@ -440,7 +427,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result.response === true) {
         this.currentProject.relations.forEach((relation, index) => {
-          if (relation.name === target.name) {
+          if (relation.type === target.type) {
             this.currentProject.relations.splice(index, 1);
           }
         });
@@ -455,7 +442,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         name: undefined,
         type: undefined,
         etiquettes: [],
-        attributs: [],
+        attributes: [],
         color: undefined,
       },
     });
@@ -470,9 +457,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
     if (result !== undefined) {
       if (result.name !== undefined &&
         result.type !== undefined &&
-        result.etiquettes !== [] &&
-        result.attributs !== [] &&
-        result.color !== undefined) {
+        result.labels !== [] &&
+        result.attributes !== [] &&
+        result.bgColor !== undefined) {
         this.currentProject.events.forEach(item => {
           if (item.name === result.name) {
             eventExists = true;
@@ -491,9 +478,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return {
       name: result.name,
       type: result.type,
-      etiquettes: result.etiquettes[0].split(','),
-      attributs: result.attributs[0].split(','),
-      color: result.color,
+      labels: result.labels[0].split(','),
+      attributes: result.attributes[0].split(','),
+      bgColor: result.bgColor,
+      arcs: [],
+      borderColor: 'darken',
+      children: [],
+      unused: false
     };
   }
 

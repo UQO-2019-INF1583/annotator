@@ -2,6 +2,8 @@
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+  margin: 0 -15px;
+  padding-left: 9px;
 }
 
 .card-header-project {
@@ -26,7 +28,7 @@
 
 .item-project {
   flex-grow: 1;
-  margin: 32px;
+  margin: 15px;
 }
 
 main {
@@ -43,4 +45,27 @@ main {
 .matListItemHover:hover {
   background-color: #eee;
   cursor: pointer;
+}
+
+.project-form{
+  margin: auto;
+  width: 50%;
+  
+  mat-form-field, input, textarea{
+    width: 100%;
+  }
+}
+
+
+
+/* Fix for the alignment of Description textarea title */
+textarea[name=description]{
+  vertical-align: top;
+  resize: both;
+}
+
+@media(max-width: 767px){
+  .project-form{
+	width: 80vw;
+  }
 }

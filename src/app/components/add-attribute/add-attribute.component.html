@@ -10,8 +10,8 @@
 </mat-form-field>
 
 <mat-form-field>
-  <input matInput placeholder="valeurs" [(ngModel)]="data.valeurs[0]" name="valeurs" #valeurs="ngModel" required />
-  <mat-error *ngIf="valeurs.value == '' || valeurs.value == null">Valeur obligatoire</mat-error>
+  <input matInput placeholder="Labels" [(ngModel)]="data.labels[0]" name="labels" #labels="ngModel" required />
+  <mat-error *ngIf="labels.value == '' || labels.value == null">Étiquette obligatoire</mat-error>
 </mat-form-field>
 
 <mat-dialog-actions>

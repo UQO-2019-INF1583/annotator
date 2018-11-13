@@ -28,8 +28,11 @@ export class AnnotatedDocument extends Doc {
   }
 }
 
+interface RangeTextSelection {
+  start: number,
+  end: number
+};
 
-type rangeTextSelection = [number, number];
 type id = string;
 
 interface IAnnotation {
@@ -37,7 +40,7 @@ interface IAnnotation {
 }
 
 export interface EntityAnnotation extends IAnnotation, Entity {
-  locations: rangeTextSelection[];
+  locations: RangeTextSelection[];
 }
 
 export class EntityAnnotationUtils {
@@ -101,7 +104,7 @@ export interface RelationLink extends IAnnotation {
 }
 
 export interface EventAnnotation extends IAnnotation, Event {
-  locations: rangeTextSelection[];
+  locations: RangeTextSelection[];
   links: EventLink[];
   triggerId: id;
 }

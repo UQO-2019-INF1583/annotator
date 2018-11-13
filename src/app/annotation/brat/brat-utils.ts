@@ -16,19 +16,86 @@ import {
   rawRelation,
   rawEventLink,
   rawAttribute,
-  rawEntity
+  rawEntity,
+  DocumentDataFirebase
 } from '../document-data';
 import { Project } from '../../shared/project.model';
 import { CollectionData } from '../collection-data';
 
 export class BratUtils {
+  static getDocumentDataFirebaseFromAnnotatedDocument(annotatedDocument: AnnotatedDocument): DocumentDataFirebase {
+    const docDataFirebase: DocumentDataFirebase = new DocumentDataFirebase();
+    docDataFirebase.text = annotatedDocument.text;
+
+    docDataFirebase.entities = annotatedDocument.entities.map(x => ({
+      id: x.id,
+      type: x.type,
+      locations: x.locations.map(y => ({
+        start: y.start,
+        end: y.end
+      }))
+    }));
+
+    docDataFirebase.attributes = annotatedDocument.attributes.map(x => ({
+      id: x.id,
+      type: x.type,
+      target: x.target
+    }));
+
+    docDataFirebase.relations = annotatedDocument.relations.map(x => ({
+      id: x.id,
+      type: x.type,
+      relations: {
+        from: {
+          argName: x.from.role,
+          target: x.from.id
+        },
+        to: {
+          argName: x.to.role,
+          target: x.to.id
+        }
+      }
+    }));
+
+    docDataFirebase.triggers = [];
+
+    annotatedDocument.events.forEach(event => {
+      docDataFirebase.triggers.push({
+        id: event.triggerId,
+        type: event.type,
+        locations: event.locations.map(y => ({
+          start: y.start,
+          end: y.end
+        }))
+      });
+
+      docDataFirebase.events.push({
+        id: event.id,
+        trigger: event.triggerId,
+        eventLinks: event.links.map(y => ({
+          argType: y.type,
+          argId: y.id
+        }))
+      });
+    });
+
+    docDataFirebase.comments = [];
+    docDataFirebase.ctime = 1351154734.5055847;
+    docDataFirebase.messages = [];
+    docDataFirebase.modifications = [];
+    docDataFirebase.normalizations = [];
+    docDataFirebase.source_files = [];
+
+    return docDataFirebase;
+  }
+
   static getDocDataFromAnnotatedDocument(annotatedDocument: AnnotatedDocument): DocumentData {
     const docData: DocumentData = new DocumentData();
     docData.text = annotatedDocument.text;
 
 
     docData.entities = annotatedDocument.entities.map(entity => {
-      const e: rawEntity = [entity.id, entity.type, entity.locations];
+      const e: rawEntity = [entity.id, entity.type, entity.locations.map(x => ([x.start, x.end] as [number, number]))];
       return e;
     });
 
@@ -51,7 +118,7 @@ export class BratUtils {
 
     docData.triggers = [];
     annotatedDocument.events.forEach(event => {
-      docData.triggers.push([event.triggerId, event.type, event.locations]);
+      docData.triggers.push([event.triggerId, event.type, event.locations.map(x => ([x.start, x.end] as [number, number]))]);
       docData.events.push([
         event.id,
         event.triggerId,
@@ -151,14 +218,15 @@ export class BratUtils {
     return collectionData;
   }
 
-  static fromDocData(docData: DocumentData, project: Project, annotatedDocument: AnnotatedDocument): AnnotatedDocument {
-    annotatedDocument.entities = docData.entities.map(docEntity => {
+  static fromDocumentDataFirebase(docData: DocumentDataFirebase, project: Project, annotatedDocument: AnnotatedDocument):
+    AnnotatedDocument {
+    annotatedDocument.entities = docData.entities.map(x => {
       const entity: EntityAnnotation = EntityAnnotationUtils.generateEmpty();
-      const project_entity = project.entities.find(e => e.type === docEntity[1])
+      const project_entity = project.entities.find(e => e.type === x.type)
 
       // Document entity
-      entity.id = docEntity[0];
-      entity.locations = docEntity[2];
+      entity.id = x.id;
+      entity.locations = x.locations
 
       // Project entity
       entity.name = project_entity.name;
@@ -169,14 +237,14 @@ export class BratUtils {
       return entity;
     });
 
-    annotatedDocument.attributes = docData.attributes.map(docAttribute => {
+    annotatedDocument.attributes = docData.attributes.map(x => {
       const attribute: AttributeAnnotation = AttributeAnnotationUtils.generateEmpty();
-      const project_attribute = project.attributes.find(a => a.type === docAttribute[1])
+      const project_attribute = project.attributes.find(a => a.type === x.type)
 
       // Document attribute
-      attribute.id = docAttribute[0];
-      attribute.type = docAttribute[1];
-      attribute.target = docAttribute[2];
+      attribute.id = x.id;
+      attribute.type = x.type;
+      attribute.target = x.target;
 
       // Project attribute
       attribute.name = project_attribute.name;
@@ -185,17 +253,17 @@ export class BratUtils {
       return attribute;
     });
 
-    annotatedDocument.relations = docData.relations.map(docRelation => {
+    annotatedDocument.relations = docData.relations.map(x => {
       const relation: RelationAnnotation = RelationAnnotationUtils.generateEmpty();
-      const project_relation = project.relations.find(r => r.type === docRelation[1])
+      const project_relation = project.relations.find(r => r.type === x.type)
 
       // Document relation
-      relation.id = docRelation[0];
-      relation.type = docRelation[1];
-      relation.from.id = docRelation[2][0][0];
-      relation.from.role = docRelation[2][0][1];
-      relation.to.id = docRelation[2][1][0];
-      relation.to.role = docRelation[2][1][1];
+      relation.id = x.id;
+      relation.type = x.type;
+      relation.from.id = x.relations.from.target;
+      relation.from.role = x.relations.from.argName;
+      relation.to.id = x.relations.to.target;
+      relation.to.role = x.relations.to.argName;
 
       // Project relation
       relation.color = project_relation.color;
@@ -210,25 +278,25 @@ export class BratUtils {
     for (let i = 0; i < annotatedDocument.events.length; i++) {
       const docTrigger = docData.triggers[i];
       const docEvent = docData.events[i];
-      const projectEvent = project.events.find(e => e.type === docTrigger[1])
+      const projectEvent = project.events.find(e => e.type === docTrigger.type)
 
       const event: EventAnnotation = EventAnnotationUtils.generateEmpty();
       // Project event
       event.labels = projectEvent.labels;
-      event.type = docTrigger[1];
+      event.type = docTrigger.type;
       event.bgColor = projectEvent.bgColor;
       event.attributes = projectEvent.attributes;
       event.name = projectEvent.name;
+      event.locations = docTrigger.locations;
 
       // Document event
-      event.triggerId = docTrigger[0];
-      event.locations = docTrigger[2];
-      event.id = docEvent[0];
+      event.triggerId = docEvent.trigger;
+      event.id = docEvent.id;
 
-      event.links = docEvent[2].map(docLink => {
+      event.links = docEvent.eventLinks.map(y => {
         const link: EventLink = EventLinkUtils.generateEmpty();
-        link.id = docLink[1];
-        link.type = docLink[0];
+        link.id = y.argId;
+        link.type = y.argType;
         return link;
       });
 

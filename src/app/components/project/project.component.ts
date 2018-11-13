@@ -133,7 +133,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // ouvre la boîte de dialogue pour ajouter une catégorie
   addEntityDialogBox() {
     const dialogRef = this.dialog.open(AddEntityComponent, {
-      width: '250px',
       data: {
         name: undefined,
         type: undefined,

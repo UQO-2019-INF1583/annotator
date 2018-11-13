@@ -1,26 +1,24 @@
 <main flex *ngIf="isDataLoaded">
-
-  <div class="project-form-title" style="padding-left: 10px; padding-right: 10px;">
-    <h3 style="display:inline-block">Project: </h3>
-    <mat-form-field>
-      <input matInput [readonly]="!isConnected" [ngModel]="currentProject.title" (ngModelChange)="currentProject.title = $event"
-        name="titre" #titre="ngModel" required />
-      <mat-error *ngIf="titre.value == '' || titre.value == null">Project title is required</mat-error>
-    </mat-form-field>
-  </div>
-
-
-  <div class="project-form-description" style="padding-left: 10px; padding-right: 10px;">
-    <h3 style="display:inline-block">Description: </h3>
-
-    <mat-form-field style="display:inline-block">
-      <textarea matInput [readonly]="!isConnected" [ngModel]="currentProject.description" (ngModelChange)="currentProject.description = $event"
-        name="description" #description="ngModel" required>
-
-      </textarea>
-      <mat-error *ngIf="currentProject.description.value == '' || currentProject.description.value == null">Project
-        description is required</mat-error>
-    </mat-form-field>
+  <div class="mat-card project-form">
+    <div class="project-form-title" style="padding-left: 10px; padding-right: 10px;">
+      <mat-form-field>
+        <input matInput [readonly]="!isConnected" [ngModel]="currentProject.title" placeholder="Project" (ngModelChange)="currentProject.title = $event"
+          name="titre" #titre="ngModel" required />
+        <mat-error *ngIf="titre.value == '' || titre.value == null">Project title is required</mat-error>
+      </mat-form-field>
+    </div>
+    
+    
+    <div class="project-form-description" style="padding-left: 10px; padding-right: 10px;">
+      <mat-form-field style="display:inline-block">
+        <textarea matInput [readonly]="!isConnected" [ngModel]="currentProject.description" placeholder="Descriprion"  (ngModelChange)="currentProject.description = $event"
+          name="description" #description="ngModel" required>
+      
+        </textarea>
+        <mat-error *ngIf="currentProject.description.value == '' || currentProject.description.value == null">Project
+          description is required</mat-error>
+      </mat-form-field>
+    </div>
   </div>
 
   <div class="container-project">

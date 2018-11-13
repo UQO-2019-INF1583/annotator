@@ -9,6 +9,8 @@ import * as firebase from 'firebase';
 import './brat/brat-frontend-editor';
 import { options } from './brat/brat-data-mock';
 import { Entity } from '../shared/entity.model';
+import { FilterBrat } from '../shared/filterBrat.model';
+import { FilterOptionsList } from '../shared/filterOptions.model';
 import { HttpClient } from '@angular/common/http';
 import { AnnotatedDocument } from '../shared/annotated-document.model';
 import { Project, ProjectUtils } from '../shared/project.model';
@@ -28,11 +30,16 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   private brat: any;
   private project: Project;
   private annotatedDocument: AnnotatedDocument;
+  availableColors: string[];
   currentDoc: Doc;
+  filterBrat: FilterBrat;
+  filterOptions: string[];
   entities: Entity[];
   currentProjectTitle: string;
   isConnected = false;
   projectId: string;
+  isDataLoaded = false;
+  customCssHtml: string;
 
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute,
     private as: AnnotationService, private http: HttpClient) {
@@ -84,6 +91,11 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument),
       options);
 
+	this.filterBrat = new FilterBrat();
+	this.filterOptions = FilterOptionsList;
+
+	this.isDataLoaded = true;
+
   }
 
   ngOnInit() {
@@ -105,4 +117,20 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     alert('Annotation saved');
   }
 
+  customCSS () {
+	const head=document.getElementsByTagName('head')[0];
+	const oldFilter=document.getElementById("custom-css");
+	if (oldFilter){
+		head.removeChild(oldFilter);
+	}
+	const newFilter=document.createElement("style");
+	newFilter.type="text/css";
+	newFilter.id="custom-css";
+    this.customCssHtml = '';
+    this.customCssHtml += "#brat .span_"+this.filterBrat.value+"{";
+    this.customCssHtml += "stroke-width: 3 !important;";
+    this.customCssHtml += "}";
+    newFilter.appendChild(document.createTextNode(this.customCssHtml));
+	head.appendChild(newFilter);
+  }
 }

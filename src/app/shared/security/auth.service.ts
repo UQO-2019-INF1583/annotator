@@ -30,11 +30,11 @@ export class AuthService {
   authState: any = null;
   currentUser: string = null;
   email: string;
-  private UserCollection : AngularFirestoreCollection<User>;
+  private UserCollection: AngularFirestoreCollection<User>;
 
   constructor(private afAuth: AngularFireAuth,
-              private afs: AngularFirestore,
-              private router: Router) {
+    private afs: AngularFirestore,
+    private router: Router) {
 
     //// Get auth data, then get firestore user document || null
     this.user = this.afAuth.authState
@@ -49,15 +49,15 @@ export class AuthService {
 
   signIn(email, password): any {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
-    .then(credentials => {
-      localStorage.setItem('currentUser', JSON.stringify(credentials.displayName));
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
+      .then(credentials => {
+        localStorage.setItem('currentUser', JSON.stringify(credentials.displayName));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
-  logout(): void  {
+  logout(): void {
     this.afAuth.auth.signOut();
     // clear token remove user from local storage to log user out
     localStorage.removeItem('currentUser');
@@ -84,21 +84,20 @@ export class AuthService {
         this.email = result.user.email;
         this.afs.collection('Users').ref.where('email', '==', this.email).get()
           .then((snapshot) => {
-            if (snapshot.size == 0){
+            if (snapshot.size === 0) {
               this.afs.collection('Users').ref.add({
-              id: firebase.auth().currentUser.uid,
-              email: this.email,
-              firstname: '?',
-              lastname: '?' });
+                id: firebase.auth().currentUser.uid,
+                email: this.email,
+                firstname: '?',
+                lastname: '?'
+              });
             }
-            else {
-            }
-        });
+          });
 
-        //let userContent: Array<Object> = [this.username,this.email];
+        // let userContent: Array<Object> = [this.username,this.email];
         localStorage.setItem('currentUser', JSON.stringify(result.user.displayName));
       })
-      .catch((error) =>  this.handleError(error) );
+      .catch((error) => this.handleError(error));
   }
 
   private updateUserData(user) {
@@ -108,9 +107,9 @@ export class AuthService {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
-      password: "",
+      password: '',
       role: Role.Visitor
-      //lastname:"???"
+      // lastname:"???"
     }
     return userRef.set(data)
   }
@@ -121,11 +120,11 @@ export class AuthService {
   }
 
   // If error, console log and notify user
- private handleError(error: Error) {
-   console.error(error);
- }
+  private handleError(error: Error) {
+    console.error(error);
+  }
 
- isConnected(): boolean {
-   return firebase.auth().currentUser != null;
- }
+  isConnected(): boolean {
+    return firebase.auth().currentUser != null;
+  }
 }

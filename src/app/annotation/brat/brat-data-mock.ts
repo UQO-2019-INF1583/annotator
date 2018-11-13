@@ -35,8 +35,8 @@ export let collData = {
   'entity_types': [
     {
       'name': 'Person',
-      'type'   : 'Person',
-      'labels' : ['Per', 'P'],
+      'type': 'Person',
+      'labels': ['Per', 'P'],
       'bgColor': '#FE2E2E',
       'borderColor': 'darken',
       // "children": [],
@@ -53,44 +53,44 @@ export let collData = {
         'type': 'Ennemy',
         'targets': ['Person']
       },
-        {
-          'arrowHead': 'triangle,5',
-          'color': 'black',
-          'labels': ['Friend', 'Fr'],
-          'dashArray': ',',
-          'hotkey': 'T',
-          'type': 'Friend',
-          'targets': ['Person']
-        },
-        {
-          'arrowHead': 'triangle,5',
-          'color': 'black',
-          'labels': ['Destruction', 'Dest'],
-          'dashArray': ',',
-          'hotkey': 'T',
-          'type': 'Destruction',
-          'targets': ['Object', 'Person']
-        }],
+      {
+        'arrowHead': 'triangle,5',
+        'color': 'black',
+        'labels': ['Friend', 'Fr'],
+        'dashArray': ',',
+        'hotkey': 'T',
+        'type': 'Friend',
+        'targets': ['Person']
+      },
+      {
+        'arrowHead': 'triangle,5',
+        'color': 'black',
+        'labels': ['Destruction', 'Dest'],
+        'dashArray': ',',
+        'hotkey': 'T',
+        'type': 'Destruction',
+        'targets': ['Object', 'Person']
+      }],
       'children': [
         {
           'name': 'Child',
-          'type'   : 'Child',
-          'labels' : ['Child', 'Child'],
+          'type': 'Child',
+          'labels': ['Child', 'Child'],
           'bgColor': '#FE2E2E',
           'borderColor': 'darken',
           'children': [
             {
               'name': 'Baby',
-              'type'   : 'Baby',
-              'labels' : ['Baby', 'Baby'],
+              'type': 'Baby',
+              'labels': ['Baby', 'Baby'],
               'bgColor': '#DF7401',
               'borderColor': 'darken',
               'children': []
             },
             {
               'name': 'Kid',
-              'type'   : 'Kid',
-              'labels' : ['Kid', 'Kid'],
+              'type': 'Kid',
+              'labels': ['Kid', 'Kid'],
               'bgColor': '#FE2E2E',
               'borderColor': 'darken',
               'children': []
@@ -118,8 +118,8 @@ export let collData = {
     // null, //will produde <hr> between entity groups or single entities but generate bugs with current code
     {
       'name': 'Object',
-      'type'   : 'Object',
-      'labels' : ['Object', 'Obj'],
+      'type': 'Object',
+      'labels': ['Object', 'Obj'],
       'bgColor': '#7fa2ff',
       'borderColor': 'darken',
       'attributes': [],
@@ -167,14 +167,14 @@ export let collData = {
     },
     {
       'name': 'Epic',
-      'type'  : 'Epic',
+      'type': 'Epic',
       'values': { 'Epic': { 'glyph': '★★★' } }
     }
   ],
   'entity_attribute_types': [
     {
       'name': 'Notorious',
-      'type'  : 'Notorious',
+      'type': 'Notorious',
       'values': { 'Notorious': { 'glyph': '★' } }
     },
     {
@@ -214,60 +214,60 @@ export let collData = {
     },
     {
       'name': 'Safe',
-      'type'  : 'Safe',
+      'type': 'Safe',
       'values': { 'Safe': {} }
     }
   ],
   'relation_types': [
     {
-      'type'     : 'Destruction',
-      'labels'   : ['Destruction', 'Dest'],
+      'type': 'Destruction',
+      'labels': ['Destruction', 'Dest'],
       'dashArray': '3,3',
-      'color'    : 'purple',
-      'args'     : [
-        {'role': 'Destructor', 'targets': ['Person', 'Object'] },
-        {'role': 'Destroyed',  'targets': ['Person', 'Object'] }
+      'color': 'purple',
+      'args': [
+        { 'role': 'Destructor', 'targets': ['Person', 'Object'] },
+        { 'role': 'Destroyed', 'targets': ['Person', 'Object'] }
       ]
     },
     {
-      'type'     : 'Friend',
-      'labels'   : ['Friend', 'Fr'],
+      'type': 'Friend',
+      'labels': ['Friend', 'Fr'],
       'dashArray': '3,3',
-      'color'    : 'purple',
+      'color': 'purple',
       'attributes': [
         'RelConfidence', 'Safe'
       ],
-      'args'     : [
-        {'role': 'From', 'targets': ['Person'] },
-        {'role': 'To',  'targets': ['Person'] }
+      'args': [
+        { 'role': 'From', 'targets': ['Person'] },
+        { 'role': 'To', 'targets': ['Person'] }
       ]
     },
     {
-      'type'     : 'Ennemy',
-      'labels'   : ['Ennemy', 'Enn'],
+      'type': 'Ennemy',
+      'labels': ['Ennemy', 'Enn'],
       'dashArray': '3,3',
-      'color'    : 'purple',
-      'args'     : [
-        {'role': 'From', 'targets': ['Person'] },
-        {'role': 'To',  'targets': ['Person'] }
+      'color': 'purple',
+      'args': [
+        { 'role': 'From', 'targets': ['Person'] },
+        { 'role': 'To', 'targets': ['Person'] }
       ]
     },
     {
-      'type'     : 'Perpetrator',
-      'labels'   : ['Perpetrator', 'Perp'],
+      'type': 'Perpetrator',
+      'labels': ['Perpetrator', 'Perp'],
       'dashArray': '3,3',
-      'color'    : 'purple',
-      'args'     : [
-        {'role': 'From', 'targets': ['Assassination'] },
-        {'role': 'To',  'targets': ['Person'] }
+      'color': 'purple',
+      'args': [
+        { 'role': 'From', 'targets': ['Assassination'] },
+        { 'role': 'To', 'targets': ['Person'] }
       ]
     }
   ],
   'event_types': [
     {
       'name': 'Assassination',
-      'type'   : 'Assassination',
-      'labels' : ['Assassination', 'Assas'],
+      'type': 'Assassination',
+      'labels': ['Assassination', 'Assas'],
       'bgColor': 'lightgreen',
       'borderColor': 'darken',
       'attributes': [
@@ -275,7 +275,7 @@ export let collData = {
       ],
       'children': [],
       'unused': false,
-      'arcs'   : [
+      'arcs': [
         {
           'type': 'Victim',
           'labels': [
@@ -301,8 +301,8 @@ export let collData = {
     },
     {
       'name': 'Bomb',
-      'type'   : 'Bomb',
-      'labels' : ['Bomb', 'Bomb'],
+      'type': 'Bomb',
+      'labels': ['Bomb', 'Bomb'],
       'bgColor': 'gold',
       'borderColor': 'darken',
       'attributes': [
@@ -310,7 +310,7 @@ export let collData = {
       ],
       'children': [],
       'unused': false,
-      'arcs'   : [
+      'arcs': [
         {
           'type': 'Destroyed',
           'labels': ['Destroyed', 'Dest'],
@@ -320,8 +320,8 @@ export let collData = {
     },
     {
       'name': 'Resurrection',
-      'type'   : 'Resurrection',
-      'labels' : ['Resurrection', 'Resur'],
+      'type': 'Resurrection',
+      'labels': ['Resurrection', 'Resur'],
       'bgColor': 'magenta',
       'borderColor': 'darken',
       'attributes': [
@@ -329,7 +329,7 @@ export let collData = {
       ],
       'children': [],
       'unused': false,
-      'arcs'   : [
+      'arcs': [
         {
           'type': 'Resurrected',
           'labels': ['Resurrected', 'Resur'],
@@ -355,9 +355,9 @@ export let docData = {
   'modifications': [],
   'normalizations': [],
   'ctime': 1351154734.5055847,
-  'text'     : '', // 'Ed O\'Kelley was the man who shot the man who shot Jesse James.\nJ\'ai lancé une bombe nucléaire sur Simon, Gustav et Pavel... sans raison particulière. Nos trois comparses se ne pouvant se venger sont allés directement au Paradis. Cette histoire est vraie. Ceci est la fin du paragraphe.\n Ceci est le second paragraphe. C\'est l\'histoire du petit castor le plus petit, mais le plus fort.',
-  'entities' : [
-    /*["N1", "Person", [[0, 2], [5, 11]]], //TODO, name text-bound annotations Tn to be coherent with standoff brat format http://brat.nlplab.org/standoff.html
+  'text': 'Ed O\'Kelley was the man who shot the man who shot Jesse James.\nJ\'ai castor le plus petit, mais le plus fort.',
+  'entities': [
+    /*["N1", "Person", [[0, 2], [5, 11]]],
     ["N2", "Person", [[20, 55], [55, 90], [90,124]]],
     ["N3", "Person", [[37, 40]]],
     ["N4", "Object", [[78, 83], [84, 93]]],

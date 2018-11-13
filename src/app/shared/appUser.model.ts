@@ -7,7 +7,7 @@ export class AppUser extends User {
   firstname: string;
   lastname: string;
 
-  constructor(userName : string = '', firstname : string = '', lastname : string = '') {
+  constructor(userName: string = '', firstname: string = '', lastname: string = '') {
     super();
     this.userName = userName;
     this.firstname = firstname;

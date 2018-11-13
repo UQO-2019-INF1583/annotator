@@ -1,186 +1,179 @@
 <main flex *ngIf="isDataLoaded">
-
-  <div style="padding-left: 10px; padding-right: 10px;">
-    <h3 style="display:inline-block">Project: </h3>
-    <mat-form-field>
-      <input matInput [readonly]="!isConnected" [ngModel]="currentProject.title" (ngModelChange)="currentProject.title = $event" name="titre" #titre="ngModel"
-        required />
-      <mat-error *ngIf="titre.value == '' || titre.value == null">Project title is required</mat-error>
-    </mat-form-field>
+  <div class="mat-card project-form">
+    <div class="project-form-title" style="padding-left: 10px; padding-right: 10px;">
+      <mat-form-field>
+        <input matInput [readonly]="!isConnected" [ngModel]="currentProject.title" placeholder="Project" (ngModelChange)="currentProject.title = $event"
+          name="titre" #titre="ngModel" required />
+        <mat-error *ngIf="titre.value == '' || titre.value == null">Project title is required</mat-error>
+      </mat-form-field>
+    </div>
+    
+    
+    <div class="project-form-description" style="padding-left: 10px; padding-right: 10px;">
+      <mat-form-field style="display:inline-block">
+        <textarea matInput [readonly]="!isConnected" [ngModel]="currentProject.description" placeholder="Descriprion"  (ngModelChange)="currentProject.description = $event"
+          name="description" #description="ngModel" required>
+      
+        </textarea>
+        <mat-error *ngIf="currentProject.description.value == '' || currentProject.description.value == null">Project
+          description is required</mat-error>
+      </mat-form-field>
+    </div>
   </div>
 
+  <div class="container-project">
 
-  <div style="padding-left: 10px; padding-right: 10px;">
-    <h3 style="display:inline-block">Description: </h3>
+    <!-- Corpus -->
+    <div class="item-project">
+      <mat-card>
+        <mat-card-header class="card-header-project">
+          <mat-card-title>
+            <h2>Corpus</h2>
+          </mat-card-title>
+          <button *ngIf="isConnected" class="btn btn btn-primary" (click)="addCorpusDialogBox()">+</button>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list role="list" class="card-list-project">
+            <mat-list-item class="matListItemHover" *ngFor="let item of corpus | async">
+              <h4 mat-line>{{item?.title}}</h4>
+              <button *ngIf="isConnected" style="margin-right: 16px;" class="btn btn-primary" (click)="documentSelected(item)">View</button>
+              <button *ngIf="isConnected" class="btn btn-danger" (click)="deleteCorpus(item)">Delete</button>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
-    <mat-form-field style="display:inline-block">
-      <textarea matInput [readonly]="!isConnected" [ngModel]="currentProject.description" (ngModelChange)="currentProject.description = $event" name="description"
-        #description="ngModel" required>
-      </textarea>
-      <mat-error *ngIf="currentProject.description.value == '' || currentProject.description.value == null">Project description is required</mat-error>
-    </mat-form-field>
-  </div>
-
-  <!--Section pour les textes (corpus)-->
-  <div class="column">
-    <mat-card>
-      <mat-toolbar style="display: flex">
-        <span>Corpus</span>
-        <span class="example-fill-remaining-space"></span>
-        <span *ngIf="isConnected">
-          <button class="btn btn btn-primary" (click)="addCorpusDialogBox()">+</button>
-        </span>
-      </mat-toolbar>
-      <mat-list *ngFor="let item of corpus | async">
-        <mat-list-item>
-          <span class="matListItemHover" (click)="documentSelected(item)">{{item?.title}}</span>
-          <span class="example-fill-remaining-space"></span>
-          <span *ngIf="isConnected">
-            <button class="btn btn-primary" (click)="deleteCorpus(item)">Delete</button>
-          </span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card>
-  </div>
-
-  <!--Section categories-->
-  <div class="column">
-    <mat-card>
-      <mat-toolbar style="display: flex">
-        <span>Entities</span>
-        <span class="example-fill-remaining-space"></span>
-        <span *ngIf="isConnected">
-          <button class="btn btn btn-primary" (click)="addCategorieDialogBox()">+</button>
-        </span>
-      </mat-toolbar>
-      <mat-list>
-        <mat-list-item *ngFor="let item of currentProject.categories" [ngStyle]="{'background-color': item?.color}">
-          <span>{{item?.name}}</span>
-          <span class="example-fill-remaining-space"></span>
-          <span *ngIf="isConnected">
-            <button class="btn btn-primary" (click)="deleteCategory(item.name)">Delete</button>
-          </span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card>
-  </div>
-
-  <!--Section annotators-->
-  <div *ngIf="isConnected" class="column">
-    <mat-card>
-      <mat-toolbar style="display: flex">
-        <span>Annotators</span>
-        <span class="example-fill-remaining-space"></span>
-        <span>
+    <!-- Annotators -->
+    <div class="item-project">
+      <mat-card *ngIf="isConnected">
+        <mat-card-header class="card-header-project">
+          <mat-card-title>
+            <h2>Annotators</h2>
+          </mat-card-title>
           <button class="btn btn btn-primary" (click)="addAnnotatorDialogBox()">+</button>
-        </span>
-      </mat-toolbar>
-      <mat-list role="list">
-        <mat-list-item *ngFor="let item of annotators">
-          <span>{{item.email}}</span>
-          <span class="example-fill-remaining-space"></span>
-          <span>
-            <button class="btn btn-primary" (click)="deleteAnnotator(item.uid)">Delete</button>
-          </span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card>
-  </div>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list role="list" class="card-list-project">
+            <mat-list-item class="matListItemHover" *ngFor="let item of annotators">
+              <h4 mat-line>{{item.email}}</h4>
+              <button *ngIf="isConnected" class="btn btn-danger" (click)="deleteAnnotator(item.uid)">Delete</button>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
-  <!--Section admin-->
-  <div *ngIf="isConnected" class="column">
-    <mat-card>
-      <mat-toolbar style="display: flex">
-        <span>Administrators</span>
-        <span class="example-fill-remaining-space"></span>
-        <span *ngIf="isConnected">
+    <!-- Admin -->
+    <div class="item-project">
+      <mat-card *ngIf="isConnected">
+        <mat-card-header class="card-header-project">
+          <mat-card-title>
+            <h2>Administrators</h2>
+          </mat-card-title>
           <button class="btn btn btn-primary" (click)="addAdminDialogBox()">+</button>
-        </span>
-      </mat-toolbar>
-      <mat-list *ngIf="isConnected" role="list">
-        <mat-list-item *ngFor="let item of admin">
-          <span>{{item.email}}</span>
-          <span class="example-fill-remaining-space"></span>
-          <span>
-            <button class="btn btn-primary" (click)="deleteAdmin(item.uid)">Delete</button>
-          </span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list role="list" class="card-list-project">
+            <mat-list-item class="matListItemHover" *ngFor="let item of admin">
+              <h4 mat-line>{{item.email}}</h4>
+              <button *ngIf="isConnected" class="btn btn-danger" (click)="deleteAdmin(item.uid)">Delete</button>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+
   </div>
 
-  <!--Section Attributs-->
-  <div *ngIf="isConnected" class="column">
-    <mat-card>
-      <mat-toolbar style="display: flex">
-        <span>Attributs</span>
-        <span class="example-fill-remaining-space"></span>
-        <span>
+  <div class="container-project">
+
+    <!-- Entity -->
+    <div class="item-project">
+      <mat-card *ngIf="isConnected">
+        <mat-card-header class="card-header-project">
+          <mat-card-title>
+            <h2>Entities</h2>
+          </mat-card-title>
+          <button class="btn btn btn-primary" (click)="addEntityDialogBox()">+</button>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list role="list" class="card-list-project">
+            <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.entities" [ngStyle]="{'background-color': item?.bgColor}">
+              <h4 mat-line>{{item?.name}}</h4>
+              <button class="btn btn-danger" (click)="deleteEntity(item.name)">Delete</button>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!--Attributs-->
+    <div class="item-project">
+      <mat-card *ngIf="isConnected">
+        <mat-card-header class="card-header-project">
+          <mat-card-title>
+            <h2>Attributs</h2>
+          </mat-card-title>
           <button class="btn btn btn-primary" (click)="addAttributesDialogBox()">+</button>
-        </span>
-      </mat-toolbar>
-      <mat-list role="list">
-        <mat-list-item *ngFor="let item of currentProject.attributes">
-          <span>{{item?.name}}</span>
-          <span class="example-fill-remaining-space"></span>
-          <span>
-            <button class="btn btn-primary" (click)="deleteAttribute(item)">Delete</button>
-          </span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card>
-  </div>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list role="list" class="card-list-project">
+            <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.attributes">
+              <h4 mat-line>{{item?.name}}</h4>
+              <button class="btn btn-danger" (click)="deleteAttribute(item)">Delete</button>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
-
-  <!--Section Relations-->
-  <div *ngIf="isConnected" class="column">
-    <mat-card>
-      <mat-toolbar style="display: flex">
-        <span>Relations</span>
-        <span class="example-fill-remaining-space"></span>
-        <span>
+    <!-- Relations-->
+    <div class="item-project">
+      <mat-card *ngIf="isConnected">
+        <mat-card-header class="card-header-project">
+          <mat-card-title>
+            <h2>Relations</h2>
+          </mat-card-title>
           <button class="btn btn btn-primary" (click)="addRelationDialogBox()">+</button>
-        </span>
-      </mat-toolbar>
-      <mat-list role="list">
-        <mat-list-item *ngFor="let item of currentProject.relations" [ngStyle]="{'background-color': item?.color}">
-          <span>{{item?.name}}</span>
-          <span class="example-fill-remaining-space"></span>
-          <span>
-            <button class="btn btn-primary" (click)="deleteRelation(item)">Delete</button>
-          </span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card>
-  </div>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list role="list" class="card-list-project">
+            <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.relations" [ngStyle]="{'background-color': item?.color}">
+              <h4 mat-line>{{item?.type}}</h4>
+              <button class="btn btn-danger" (click)="deleteRelation(item)">Delete</button>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
-
-  <!--Section Events-->
-  <div *ngIf="isConnected" class="column">
-    <mat-card>
-      <mat-toolbar style="display: flex">
-        <span>Events</span>
-        <span class="example-fill-remaining-space"></span>
-        <span>
+    <!-- Events -->
+    <div class="item-project">
+      <mat-card *ngIf="isConnected">
+        <mat-card-header class="card-header-project">
+          <mat-card-title>
+            <h2>Events</h2>
+          </mat-card-title>
           <button class="btn btn btn-primary" (click)="addEventDialogBox()">+</button>
-        </span>
-      </mat-toolbar>
-      <mat-list role="list">
-        <mat-list-item *ngFor="let item of currentProject.events" [ngStyle]="{'background-color': item?.color}">
-          <span>{{item?.name}}</span>
-          <span class="example-fill-remaining-space"></span>
-          <span>
-            <button class="btn btn-primary" (click)="deleteEvent(item)">Delete</button>
-          </span>
-        </mat-list-item>
-      </mat-list>
-    </mat-card>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list role="list" class="card-list-project">
+            <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.events" [ngStyle]="{'background-color': item?.bgColor}">
+              <h4 mat-line>{{item?.name}}</h4>
+              <button class="btn btn-danger" (click)="deleteEvent(item)">Delete</button>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
   </div>
 
+  <!--Button pour sauvegarder on annuler les modifications-->
+  <div *ngIf="isConnected" class="button-row" style="padding-left: 10px; padding-right: 10px;">
+    <button class="btn btn-primary" (click)="saveProjectModification()">Save</button>
+    <button class="btn btn btn-primary" [routerLink]="['']">Cancel</button>
+  </div>
 </main>
-
-<!--Button pour sauvegarder on annuler les modifications-->
-<div *ngIf="isConnected" class="button-row" style="padding-left: 10px; padding-right: 10px;">
-  <button class="btn btn-primary" (click)="saveProjectModification()">Save</button>
-  <button class="btn btn btn-primary" [routerLink]="['']">Cancel</button>
-</div>

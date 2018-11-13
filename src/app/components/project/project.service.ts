@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument
-} from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase';
 import { Project } from '../../shared/project.model';
-import { Category } from '../../shared/category.model';
+import { User } from './../../shared/user.model';
 
 @Injectable()
 export class ProjectService {
@@ -16,10 +12,8 @@ export class ProjectService {
 
   }
 
-  getProject(id: string): any {
-    this.afs.collection('Projects/').doc(id).ref.get().then((doc) => {
-      return doc.data();
-    });
+  getProject(projectId: string): Promise<any> {
+    return this.afs.collection('Projects/').doc(projectId).ref.get();
   }
 
   // Trouve les textes du projet sélectionné
@@ -27,19 +21,9 @@ export class ProjectService {
     return this.afs.collection('Corpus', ref => ref.where('projectId', '==', projectId)).valueChanges();
   }
 
-  // Trouve les catégories du projet sélectionné
-  getCategories(projectId: string): string[] {
-    return null;
-  }
-
-  saveCategories(projectId: string, categs: Category[]) {
-    /* this.afs.collection('Categories').doc(projectId)
-       .set({})*/
-  }
-
+  // Save the project with all change
   saveProject(project: Project) {
-    this.afs.collection('Projects').doc(project.id)
-      .update({ 'description': project.description, 'title': project.title });
+    this.afs.collection('Projects').doc(project.id).set(project);
   }
 
   // Supprime un texte
@@ -56,6 +40,10 @@ export class ProjectService {
       .set({ 'id': corpusId, 'projectId': projectId, 'title': corpus.corpusTitle });
 
     firebase.storage().ref().child('Projects/' + corpusId + '/' + corpus.corpusTitle).put(corpus.corpusFile);
+  }
+
+  getUsers(): Observable<any> {
+    return this.afs.collection<User>('Users').valueChanges();
   }
 
 }

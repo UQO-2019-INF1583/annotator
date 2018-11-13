@@ -22,21 +22,21 @@ export class AddCorpusComponent implements OnInit {
   public fileDropped(event: UploadEvent) {
     this.files = event.files;
 
-    //la variable info contient le document que l'on veux sauvegarder dans la base de données
+    // la variable info contient le document que l'on veux sauvegarder dans la base de données
     for (const file of event.files) {
       file.fileEntry.file(info => {
-        //console.log(info);
+        // console.log(info);
         this.data.corpusFile = info;
       });
     }
   }
 
   public fileOver(event) {
-    //console.log(event);
+    // console.log(event);
   }
 
   public fileLeave(event) {
-   // console.log(event);
+    // console.log(event);
   }
 
 }

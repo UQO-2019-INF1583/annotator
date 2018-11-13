@@ -1,0 +1,7 @@
+<p>Are you sure that you want to delete this {{data.text}} ?</p>
+
+<mat-dialog-actions>
+  <button class="btn btn btn-primary" (click)="data.response = true" [mat-dialog-close]="data">Yes</button>
+  <div style="width: 10px"></div>
+  <button class="btn btn btn-primary" (click)="data.response = false" mat-dialog-close>No</button>
+</mat-dialog-actions>

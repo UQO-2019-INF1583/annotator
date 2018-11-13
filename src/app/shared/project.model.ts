@@ -1,32 +1,37 @@
 // structure de données utilisée pour représenter un projet
 import { Doc } from './document.model';
-import { Category } from './category.model';
-import {Event} from './event.model';
-import {Attribute} from './attribute.model'
+import { Entity } from './entity.model';
+import { Event } from './event.model';
+import { Attribute } from './attribute.model'
 import { Relation } from './relation.model';
 
-export class Project {
+export interface Project {
   id: string;
   title: string;
   description: string;
   admin: string[]; // user ids
   annotators: string[]; // user ids
   corpus: Doc[];
-  categories: Category[];
+  entities: Entity[];
   attributes: Attribute[];
   events: Event[];
   relations: Relation[];
+}
 
-  constructor(id: string = '', title: string = '', description: string = '') {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.admin = [];
-    this.annotators = [];
-    this.corpus = [];
-    this.categories = [];
-    this.attributes = [];
-    this.events = [];
-    this.relations = [];
+export class ProjectUtils {
+  static generateEmpty(): Project {
+    return {
+      id: '',
+      title: '',
+      description: '',
+      admin: [],
+      annotators: [],
+      corpus: [],
+      entities: [],
+      attributes: [],
+      events: [],
+      relations: []
+    }
   }
 }
+

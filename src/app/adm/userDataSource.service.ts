@@ -15,7 +15,7 @@ export class UserDataSource extends DataSource<User> {
   }
 
   connect(): Observable<User[]> {
-    return this.afs.collection<User>("Users", ref => ref.orderBy('email')).valueChanges();
+    return this.afs.collection<User>('Users', ref => ref.orderBy('email')).valueChanges();
   }
 
   disconnect(): void {

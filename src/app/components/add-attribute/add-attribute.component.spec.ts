@@ -8,9 +8,9 @@ describe('AddAttributeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddAttributeComponent ]
+      declarations: [AddAttributeComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

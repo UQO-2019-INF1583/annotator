@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   userInfo: any = {};
 
   constructor(public authService: AuthService,
-              public router: Router) {
+    public router: Router) {
     localStorage.removeItem('errorAuth');
   }
 
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
   }
 
   authenticated() {
-    return HeaderComponent.currUsername != '';
+    return HeaderComponent.currUsername !== '';
   }
 
   /// Social Login
@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
   /// Shared
 
   private afterSignIn() {
-   // Do after login stuff here, such router redirects, toast messages, etc.
-   this.router.navigate(['/']);
+    // Do after login stuff here, such router redirects, toast messages, etc.
+    this.router.navigate(['/']);
   }
 }

@@ -1,9 +1,16 @@
 
 import { BratUtils } from './brat-utils';
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CollectionData } from '../collection-data';
+import {
+  docData,
+  colData,
+  project,
+  annotDoc
+} from './brat-utils.mock';
 import { Project } from '../../shared/project.model';
 import { AnnotatedDocument } from '../../shared/annotated-document.model';
-import { docData } from './brat-data-mock';
+
 
 
 describe('bratUtils', () => {
@@ -14,7 +21,16 @@ describe('bratUtils', () => {
     TestBed.configureTestingModule({
     }).compileComponents();
   });
-  it('should create component', () => {
-    // expect(BratUtils.getDocDataFromAnnotatedDocument()).toBeDefined();
+
+  it('should create docData', () => {
+          expect(BratUtils.getDocDataFromAnnotatedDocument(annotDoc.doc1)).toBe(docData.docRes1);
+  });
+
+  it('should create colData', () => {
+    expect(BratUtils.getColDataFromProject(project.proj1)).toBe(colData.colRes1);
+  });
+
+  it('should create annotatedDocument', () => {
+    expect(BratUtils.getColDataFromProject(project.proj1)).toBe(colData.colRes1);
   });
 });

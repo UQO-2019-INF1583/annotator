@@ -10,7 +10,7 @@ export class Relation {
   dashArray: string;
   color: string;
   attributes: string[];
-  arcs: any[];
+  args: any[];
 
   constructor() {
     this.type = '';
@@ -18,6 +18,6 @@ export class Relation {
     this.dashArray = '3,3';
     this.color = '';
     this.attributes = [];
-    this.arcs = [];
+    this.args = [];
   }
 }

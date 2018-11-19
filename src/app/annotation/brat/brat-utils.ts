@@ -120,7 +120,7 @@ export class BratUtils {
         dashArray: '3,3',
         color: x.color,
         args: [],
-        attribute: []
+        // attribute: []
       })),
       entity_attribute_types: project.attributes.map(x => ({
         name: x.name,

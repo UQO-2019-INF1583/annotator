@@ -43,7 +43,7 @@ export const relationMock = {
     color: '#2196F3',
     dashArray: '3,3',
     attributes: [],
-    arcs: []
+    args: []
   } as Relation,
   valid2: {
     name: 'Relation2',
@@ -52,7 +52,7 @@ export const relationMock = {
     color: '#2196F3',
     dashArray: '3,3',
     attributes: [],
-    arcs: []
+    args: []
   } as Relation,
   valid3: {
     name: 'Relation3',
@@ -61,7 +61,7 @@ export const relationMock = {
     color: '#2196F3',
     dashArray: '3,3',
     attributes: [],
-    arcs: []
+    args: []
   } as Relation
 }
 

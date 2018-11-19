@@ -120,7 +120,7 @@ export class BratUtils {
         dashArray: '3,3',
         color: x.color,
         args: [],
-        attribute: []
+        // attribute: []
       })),
       entity_attribute_types: project.attributes.map(x => ({
         name: x.name,
@@ -182,10 +182,10 @@ export class BratUtils {
       // Document relation
       relation.id = docRelation[0];
       relation.type = docRelation[1];
-      relation.from.id = docRelation[2][0][0];
-      relation.from.role = docRelation[2][0][1];
-      relation.to.id = docRelation[2][1][0];
-      relation.to.role = docRelation[2][1][1];
+      relation.from.role = docRelation[2][0][0];
+      relation.from.id = docRelation[2][0][1];
+      relation.to.role = docRelation[2][1][0];
+      relation.to.id = docRelation[2][1][1];
 
       // Project relation
       relation.color = project_relation.color;
@@ -219,8 +219,8 @@ export class BratUtils {
 
       event.links = docEvent[2].map(docLink => {
         const link: EventLink = EventLinkUtils.generateEmpty();
-        link.id = docLink[1];
-        link.type = docLink[0];
+        link.id = docLink[0][1];
+        link.type = docLink[0][0];
         return link;
       });
 

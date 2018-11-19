@@ -11,6 +11,7 @@ import {
   rawEntity
 } from '../annotation/document-data';
 import { Project } from './project.model';
+import { Arc } from './arc.model';
 
 // tslint:disable-next-line:interface-over-type-literal
 export type AnnotatedDocument = {
@@ -109,7 +110,7 @@ export class RelationAnnotationUtils {
       dashArray: '3,3',
       color: '',
       attributes: [],
-      arcs: []
+      args: []
     }
   }
 }

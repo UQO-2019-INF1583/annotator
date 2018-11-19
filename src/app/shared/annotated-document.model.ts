@@ -110,7 +110,7 @@ export class RelationAnnotationUtils {
       dashArray: '3,3',
       color: '',
       attributes: [],
-      arcs: []
+      args: []
     }
   }
 }

@@ -21,10 +21,16 @@ export class CreateProjectComponent implements OnInit {
     if (this.project.title != null && this.project.title !== '' &&
       this.project.description != null && this.project.description !== '') {
 
-      this.cps.createNewProject(this.project);
+      this.cps.projectNameExists(this.project).then((exists) => {
+        if (exists) {
+          alert('already exists')
+        } else {
+          this.cps.createNewProject(this.project);
+          alert('Création d\'un nouveau projet réussi');
+          this.router.navigate(['/']);
+        }
+      });
 
-      alert('Création d\'un nouveau projet réussi');
-      this.router.navigate(['/']);
     }
   }
 }

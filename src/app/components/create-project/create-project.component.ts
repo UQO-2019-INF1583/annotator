@@ -12,19 +12,50 @@ import { CreateProjectService } from './create-project.service';
 
 export class CreateProjectComponent implements OnInit {
   project: Project = ProjectUtils.generateEmpty();
+  CreationStatus = CreationStatus;
+  creationDetails: CreationDetails = {
+    status: CreationStatus.NotSubmitted,
+    message: ''
+  };
 
   constructor(public router: Router, private cps: CreateProjectService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.creationDetails.status = CreationStatus.NotSubmitted;
+  }
 
   create() {
     if (this.project.title != null && this.project.title !== '' &&
       this.project.description != null && this.project.description !== '') {
 
-      this.cps.createNewProject(this.project);
+      this.creationDetails.status = CreationStatus.InProgress;
+      this.creationDetails.message = 'Attempting to save..';
 
-      alert('Création d\'un nouveau projet réussi');
-      this.router.navigate(['/']);
+      this.cps.projectNameExists(this.project).then((exists) => {
+        if (exists) {
+          this.creationDetails.status = CreationStatus.Error;
+          this.creationDetails.message = `A project with the name "${this.project.title}" already exists.`
+        } else {
+          this.cps.createNewProject(this.project);
+          this.creationDetails.status = CreationStatus.Success;
+          this.creationDetails.message = `Project saved successfully!`;
+          alert('Project saved successfully!');
+          this.router.navigate(['/']);
+        }
+      });
+
     }
   }
+}
+
+interface CreationDetails {
+  status: CreationStatus,
+  message: string
+}
+
+enum CreationStatus {
+  NotSubmitted,
+  InProgress,
+  Success,
+  Error
 }

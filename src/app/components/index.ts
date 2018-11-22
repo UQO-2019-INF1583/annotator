@@ -4,3 +4,4 @@ export * from './add-entity/add-entity.component';
 export * from './add-corpus/add-corpus.component';
 export * from './add-admin/add-admin.component';
 export * from './add-annotator/add-annotator.component';
+export * from './contact/contact.component';

@@ -74,7 +74,8 @@ import {
   AddCorpusComponent,
   AddAdminComponent,
   AddAnnotatorComponent,
-  ProjectService
+  ProjectService,
+  ContactComponent
 } from './components/index';
 import { AddRelationComponent } from './components/add-relation/add-relation.component';
 import { AddEventComponent } from './components/add-event/add-event.component';
@@ -98,6 +99,7 @@ import { CreateProjectService } from './components/create-project/create-project
     LoginComponent,
     PageNotFoundComponent,
     ProjectComponent,
+    ContactComponent,
     ProjectManagerComponent,
     RegisterComponent,
     UserComponent,

@@ -170,6 +170,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         });
 
+        if(result.name.length > 30){
+          alert("Name length must be lower than 30");
+          return;
+        }
+
         if (!entityExists) {
           result.labels = result.labels[0].split(',');
           this.currentProject.entities.push(result);
@@ -333,11 +338,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const attributeExists = false;
     if (result !== undefined) {
       if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
-        if (!attributeExists) {
-          result.labels = result.labels[0].split(',');
-          this.currentProject.attributes.push(result);
+        if(result.name.length < 30){
+          if (!attributeExists) {
+            result.labels = result.labels[0].split(',');
+            this.currentProject.attributes.push(result);
+          } else {
+            alert('This attribute already exists');
+          }
         } else {
-          alert('This attribute already exists');
+          alert('Maximum lenght of 30 for the name');
         }
       }
     }
@@ -392,7 +401,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
       if (this.isExist(data)) {
         alert('This relation already exists');
       } else {
-        this.currentProject.relations.push(data);
+        if(data.type.length < 30)
+          this.currentProject.relations.push(data);
+        else
+          alert("Maximum length of 30 for name/type");
       }
     }
   }
@@ -466,7 +478,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         });
         if (!eventExists) {
-          this.currentProject.events.push(this.mapValidResultToEvent(result));
+          if(result.name.length < 30)
+            this.currentProject.events.push(this.mapValidResultToEvent(result));
+          else
+            alert("Maximum length of 30 for name parameter");
         } else {
           alert('This event already exists');
         }

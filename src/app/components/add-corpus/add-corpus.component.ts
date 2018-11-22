@@ -40,7 +40,7 @@ export class AddCorpusComponent implements OnInit {
         }
 
         // console.log(info);
-        this.data.corpusFile = droppedFile;
+        this.data.corpusFile = info;
       });
     }
   }

@@ -2,8 +2,8 @@
 
 <mat-dialog-content>
   <div>
-    <file-drop headertext="Déposer un fichier ici" (onFileDrop)="fileDropped($event)"
-               (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"></file-drop>
+    <file-drop headertext="Déposer un fichier ici" (onFileDrop)="fileDropped($event)" (onFileOver)="fileOver($event)"
+      (onFileLeave)="fileLeave($event)"></file-drop>
     <div class="upload-table">
       <table class="table">
         <thead>
@@ -13,7 +13,8 @@
         </thead>
         <tbody class="upload-name-style">
           <tr *ngFor="let item of files; let i=index">
-            <td><strong>{{ item.relativePath }}</strong></td>
+            <td><strong>{{ item.relativePath }}</strong>
+              <span *ngIf="isValid" style="color:red">Veuillez ajouter seulement des fichiers de type text</span></td>
           </tr>
         </tbody>
       </table>
@@ -22,12 +23,14 @@
 </mat-dialog-content>
 
 <mat-form-field>
-  <input matInput placeholder="Titre" [(ngModel)]="data.corpusTitle" name="titre" #titre="ngModel" required />
+  <input matInput placeholder="
+                Titre" [(ngModel)]="data.corpusTitle" name="titre" #titre="ngModel"
+    required />
   <mat-error *ngIf="titre.value == '' || titre.value == null">Titre obligatoire</mat-error>
 </mat-form-field>
 
 <mat-dialog-actions>
-  <button class="btn btn btn-primary" [mat-dialog-close]="data">Ajouter</button>
+  <button class="btn btn btn-primary" [mat-dialog-close]="data" [disabled]="isValid">Ajouter</button>
   <div style="width: 10px"></div>
   <button class="btn btn btn-primary" mat-dialog-close>Annuler</button>
 </mat-dialog-actions>

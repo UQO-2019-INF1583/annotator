@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { FileDropModule, UploadFile, UploadEvent } from 'ngx-file-drop';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { UploadFile, UploadEvent } from 'ngx-file-drop';
 
 @Component({
   selector: 'app-add-corpus',
@@ -10,21 +10,35 @@ import { FileDropModule, UploadFile, UploadEvent } from 'ngx-file-drop';
 
 export class AddCorpusComponent implements OnInit {
   public files: UploadFile[] = [];
+  isValid = false;
 
   constructor(
-    public dialogRef: MatDialogRef<AddCorpusComponent>,
+    //  public dialogRef: MatDialogRef<AddCorpusComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   public fileDropped(event: UploadEvent) {
+    console.log(event);
     this.files = event.files;
 
     // la variable info contient le document que l'on veux sauvegarder dans la base de données
-    for (const file of event.files) {
-      file.fileEntry.file(info => {
+    for (const droppedFile of event.files) {
+      droppedFile.fileEntry.file(info => {
+        console.log(info);
+        if (droppedFile.fileEntry.isFile) {
+          const fileEntry = droppedFile.fileEntry;
+
+          const fileName = droppedFile.relativePath;
+          const fileExt = fileName.split(".").pop();
+          //Verification du depot de document text
+          if (fileExt != "txt") {
+            this.isValid = true;
+          } else {
+            this.isValid = false;
+          }
+        }
+
         // console.log(info);
         this.data.corpusFile = info;
       });

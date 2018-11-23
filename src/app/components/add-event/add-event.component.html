@@ -1,4 +1,5 @@
 <h2 mat-dialog-title>Add Event</h2>
+<form #eventvalidate="ngForm">
 <mat-form-field>
   <input matInput placeholder="Name" [(ngModel)]="data.name" name="nom" #nom="ngModel" required />
   <mat-error *ngIf="nom.value == '' || nom.value == null">nom obligatoire</mat-error>
@@ -28,7 +29,8 @@
 </mat-form-field>
 
 <mat-dialog-actions>
-  <button class="btn btn btn-primary" [mat-dialog-close]="data">Add</button>
+<button class="btn btn btn-primary" [disabled]="!eventvalidate.valid" [mat-dialog-close]="data">Add</button>
   <div style="width: 10px"></div>
   <button class="btn btn btn-primary" mat-dialog-close>Cancel</button>
 </mat-dialog-actions>
+</form>

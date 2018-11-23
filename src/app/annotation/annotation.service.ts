@@ -1,79 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-
-import { Annotation } from '../shared/annotation.model';
-
-// secret de la classe: la manière dont les annotations sont représentées dans le fichier .xmi
+import { Entity } from '../shared/entity.model';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { AnnotatedDocument } from '../shared/annotated-document.model';
+import { BratUtils } from './brat/brat-utils';
 
 @Injectable()
 export class AnnotationService {
-  static currentDoc: Document = null;
 
-  constructor() { }
-
-  // Ajoute une nouvelle annotation.
-  // Retourne false si une erreur est détectée.
-  addAnnotation(begin: number, end: number, cat: string): boolean {
-    return false;
+  constructor(private readonly afs: AngularFirestore) {
   }
 
-  // Supprime une annotation.
-  // Retourne false si une erreur est détectée.
-  delAnnotation(begin: number, end: number, cat: string): boolean {
-    return false;
+  // Retourne de façon asynschore le document de type project, dont le id est passé en paramètre, à partir de la base de données Firestore
+  getProject(projectId): Promise<any> {
+    return this.afs.collection('Projects/').doc(projectId).ref.get();
   }
 
-  // Retourne toutes les annotations du document.
-  // Retourne false si une erreur est détectée.
-  getAllAnnotations(): Annotation[] | boolean {
-    return false;
+  saveAnnotatedDocument(annotatedDocument: AnnotatedDocument): void {
+    if (annotatedDocument.documentId === null) {
+      annotatedDocument.documentId = this.afs.createId();
+    }
+
+    this.afs
+      .collection('AnnotatedDocument')
+      .doc(annotatedDocument.documentId)
+      .set(Object.assign({}, annotatedDocument));
   }
 
-  // Retourne les annotations de la catégorie donnée dans le document.
-  // Retourne false si une erreur est détectée.
-  getAnnotations(cat: string): Annotation[] | boolean {
-    return false;
-  }
-
-  // Ajoute une catégorie.
-  // Retourne false si cette catégorie existe déjà.
-  addCategory(cat: string): boolean {
-    return false;
-  }
-
-  // Supprime une catégorie.
-  // Retourne false si une erreur est détectée.
-  delCategory(cat: string): boolean {
-    return false;
-  }
-
-  // Remplace une catégorie.
-  // Retourne false si une erreur est détectée.
-  replaceCategory(oldCat: string, newCat: string): boolean {
-    return false;
-  }
-
-  // Vérifie si une catégorie existe.
-  checkCategory(cat: string): boolean {
-    return false;
-  }
-
-  // Associe une couleur avec une catégorie.
-  // Retourne false si une erreur est détectée.
-  colorCategory(cat: string, color: string): boolean {
-    return false;
-  }
-
-  // Retourne les catégories du projet.
-  // Retourne false si une erreur est détectée.
-  getCategories(cat: string): string[] | boolean {
-    return false;
-  }
-
-  // Retourne la couleur d'une catégorie.
-  // Retourne false si une erreur est détectée.
-  getCategoryColor(cat: string): string | boolean {
-    return false;
+  getAnnotatedDocument(documentId: string): Promise<any> {
+    return this.afs.collection('AnnotatedDocument/').doc(documentId).ref.get();
   }
 
 }

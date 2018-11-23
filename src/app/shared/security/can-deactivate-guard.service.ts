@@ -1,7 +1,6 @@
 // Rôle : indique au routeur si une route doit être désactivée ou non;
 // implémente l’interface de même nom d'Angular
 
-
 import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs/Observable';

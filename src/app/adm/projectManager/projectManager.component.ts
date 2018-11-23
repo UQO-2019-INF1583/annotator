@@ -1,21 +1,15 @@
-import { Component, OnInit, Injectable } from '@angular/core';
-import { Project } from '../../shared/project.model';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/security/auth.service';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument
-} from 'angularfire2/firestore';
-import * as firebase from 'firebase';
-import { DataSource } from '@angular/cdk/collections';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { ProjectDataSource } from '../../data-sources/projectDataSource';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { YesNoDialogBoxComponent } from '../../components/yes-no-dialog-box/yes-no-dialog-box.component';
 import 'rxjs/add/observable/of';
+import { MatDialog } from '@angular/material';
+import { ProjectManagerService } from './projectManager.service';
 
 @Component({
-  selector: 'app-adm-projectManager',
+  selector: 'app-adm-project-manager',
   templateUrl: './projectManager.component.html',
   styleUrls: ['./projectManager.component.scss']
 })
@@ -23,29 +17,39 @@ import 'rxjs/add/observable/of';
 export class ProjectManagerComponent implements OnInit {
   displayedColumns = [];
   dataSource: ProjectDataSource | null;
-  isConnected: boolean = false;
+  isConnected = false;
 
-  constructor(private authService: AuthService, public router: Router, private afs: AngularFirestore) {
+  constructor(
+    private authService: AuthService,
+    public router: Router,
+    private afs: AngularFirestore,
+    public dialog: MatDialog,
+    private pms: ProjectManagerService) {
   }
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
-    if (this.isConnected){
-      this.displayedColumns = ['title', 'description', 'modify'];
-    }
-    else {
-      this.displayedColumns = ['title', 'description'];
-    }
+    this.displayedColumns = ['title', 'description', 'actions'];
     this.dataSource = new ProjectDataSource(this.afs);
   }
 
   modifyProject(project: any) {
-    this.router.navigate(['/project', {id: project.id}]);
+    this.router.navigate(['/project', { id: project.id }]);
   }
 
   deleteProject(project: any) {
-    //ajouter un pop up qui demande si l'utilisateur veut vraiment supprimer le projet
-    this.afs.collection('Projects').doc(project.id).delete();
-  }
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Project and all its data',
+        response: undefined
+      },
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.pms.deleteProject(project.id);
+      }
+    });
+  }
 }

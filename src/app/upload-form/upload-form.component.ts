@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 
 export class UploadFormComponent implements OnInit {
 
-  constructor( ) {
+  constructor() {
   }
 
   ngOnInit() {

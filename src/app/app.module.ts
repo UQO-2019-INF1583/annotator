@@ -70,7 +70,7 @@ import { AnnotationComponent } from './annotation/annotation.component';
 import {
   CreateProjectComponent,
   ProjectComponent,
-  AddCategoryComponent,
+  AddEntityComponent,
   AddCorpusComponent,
   AddAdminComponent,
   AddAnnotatorComponent,
@@ -79,13 +79,15 @@ import {
 import { AddRelationComponent } from './components/add-relation/add-relation.component';
 import { AddEventComponent } from './components/add-event/add-event.component';
 import { AddAttributeComponent } from './components/add-attribute/add-attribute.component';
+import { YesNoDialogBoxComponent } from './components/yes-no-dialog-box/yes-no-dialog-box.component';
+import { CreateProjectService } from './components/create-project/create-project.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     AddAdminComponent,
     AddAnnotatorComponent,
-    AddCategoryComponent,
+    AddEntityComponent,
     AddCorpusComponent,
     AnnotationComponent,
     CreateProjectComponent,
@@ -102,15 +104,17 @@ import { AddAttributeComponent } from './components/add-attribute/add-attribute.
     UserManagerComponent,
     AddRelationComponent,
     AddEventComponent,
-    AddAttributeComponent
+    AddAttributeComponent,
+    YesNoDialogBoxComponent
   ],
   entryComponents: [
     AddAdminComponent,
     AddAnnotatorComponent,
-    AddCategoryComponent,
+    AddEntityComponent,
     AddRelationComponent,
     AddEventComponent,
-    AddAttributeComponent
+    AddAttributeComponent,
+    YesNoDialogBoxComponent
   ],
   imports: [
     BrowserModule,
@@ -157,9 +161,10 @@ import { AddAttributeComponent } from './components/add-attribute/add-attribute.
     ProjectDataSource,
     ProjectManagerService,
     UserManagerService,
-    ProjectService
+    ProjectService,
+    CreateProjectService
   ],
 
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

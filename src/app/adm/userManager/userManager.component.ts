@@ -11,7 +11,7 @@ import { UserManagerService } from './userManager.service';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
-  selector: 'app-adm-userManager',
+  selector: 'app-adm-user-manager',
   templateUrl: './userManager.component.html',
   styleUrls: ['./userManager.component.scss']
 })
@@ -32,7 +32,7 @@ export class UserManagerComponent implements OnInit {
   }
 
   deleteUser(user: any) {
-    //ajouter un pop up qui demande si l'administrateur veut vraiment supprimer l'utilisateur
+    // ajouter un pop up qui demande si l'administrateur veut vraiment supprimer l'utilisateur
     this.um.deleteUser(user.uid);
   }
 

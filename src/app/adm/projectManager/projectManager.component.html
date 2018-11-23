@@ -1,32 +1,34 @@
-<div>
+<div style="display:flex;justify-content: center">
   <mat-card>
-    <h2>List of projects</h2>
+    <mat-card-title>
+      <h2>List of projects</h2>
+    </mat-card-title>
+    <mat-card-content>
+      <mat-table #table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="title">
+          <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+          <mat-cell *matCellDef="let project"> {{project.title}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+          <mat-cell *matCellDef="let project"> {{project.description}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+          <mat-cell *matCellDef="let project">
+            <div style="display: flex;flex-wrap: nowrap;">
+              <button *ngIf="isConnected" class="btn btn-primary" (click)="modifyProject(project)">View</button>
+              <button *ngIf="isConnected" id="delete" class="btn btn-danger" (click)="deleteProject(project)">Delete</button>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </mat-card-content>
   </mat-card>
-
-  <div class="example-container mat-elevation-z8">
-    <mat-table #table [dataSource]="dataSource">
-
-      <ng-container matColumnDef="title">
-        <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-        <mat-cell class="select" *matCellDef="let project" [routerLink]="['/project', {id: project.id}]"> {{project.title}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="description">
-        <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
-        <mat-cell *matCellDef="let project"> {{project.description}} </mat-cell>
-      </ng-container>
-
-      <ng-container *ngIf="isConnected" matColumnDef="modify">
-        <mat-header-cell *matHeaderCellDef> Modify / Delete </mat-header-cell>
-        <mat-cell *matCellDef="let project">
-          <button class="btn btn-primary" (click)="modifyProject(project)">Modify</button>
-          <button class="btn btn-primary" (click)="deleteProject(project)">Delete</button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-  </div>
-
 </div>

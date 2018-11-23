@@ -1,27 +1,27 @@
 <h2 mat-dialog-title>Add Event</h2>
 <mat-form-field>
-  <input matInput placeholder="Name" [(ngModel)]="data.eventName" name="nom" #nom="ngModel" required/>
+  <input matInput placeholder="Name" [(ngModel)]="data.name" name="nom" #nom="ngModel" required />
   <mat-error *ngIf="nom.value == '' || nom.value == null">nom obligatoire</mat-error>
 </mat-form-field>
 <mat-form-field>
-  <input matInput placeholder="Type" [(ngModel)]="data.type" name="type" #type="ngModel" required/>
+  <input matInput placeholder="Type" [(ngModel)]="data.type" name="type" #type="ngModel" required />
   <mat-error *ngIf="type.value == '' || type.value == null">type obligatoire</mat-error>
 </mat-form-field>
 
 <mat-form-field>
-  <input matInput placeholder="Étiquettes" [(ngModel)]="data.etiquettes" name="etiquettes" #etiquettes="ngModel" required/>
-  <mat-error *ngIf="etiquettes.value == '' || etiquettes.value == null">Étiquette obligatoire</mat-error>
+  <input matInput placeholder="Labels" [(ngModel)]="data.labels" name="labels" #labels="ngModel" required />
+  <mat-error *ngIf="labels.value == '' || labels.value == null">Étiquette obligatoire</mat-error>
 </mat-form-field>
 
 <mat-form-field>
-  <input matInput placeholder="Attributs" [(ngModel)]="data.attributs" name="attributs" #attributs="ngModel" required/>
+  <input matInput placeholder="Attributs" [(ngModel)]="data.attributes" name="attributs" #attributs="ngModel" required />
   <mat-error *ngIf="attributs.value == '' || attributs.value == null">Attribut obligatoire</mat-error>
 </mat-form-field>
 
 <mat-form-field>
-  <mat-select placeholder="Color" [(ngModel)]="data.eventColor" name="couleur" #couleur="ngModel" required>
-    <mat-option *ngFor="let item of availableColors" [value]="item.couleur">
-      {{item?.nom}}
+  <mat-select placeholder="Color" [(ngModel)]="data.bgColor" name="couleur" #couleur="ngModel" required>
+    <mat-option *ngFor="let item of availableColors" [value]="item">
+      {{item}}
     </mat-option>
   </mat-select>
   <mat-error *ngIf="couleur.value == null">couleur obligatoire</mat-error>

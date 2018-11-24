@@ -63,6 +63,10 @@ export class AuthService {
     localStorage.removeItem('currentUser');
   }
 
+  getUser() {
+    return this.afAuth.auth.currentUser;
+  }
+
   googleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);

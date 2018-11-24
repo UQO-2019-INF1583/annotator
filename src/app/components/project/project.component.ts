@@ -96,6 +96,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
+  isAdmin(): boolean {
+    let a = false;
+    this.admin.forEach((uid, i) => {
+      if (uid === this.authService.getUser().uid) {
+        a = true;
+      }
+    });
+    return a;
+  }
+
   // Sauvegarde les modifications apportées au projet.
   saveProjectModification() {
     if (

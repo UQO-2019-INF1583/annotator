@@ -3,13 +3,13 @@
   <form name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
     <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !firstname.valid }">
       <label for="firstname">First Name</label>
-      <input type="text" class="form-control" name="firstname" [(ngModel)]="userInfo.firstname" #firstname="ngModel" required />
-      <div *ngIf="f.submitted && !firstname.valid" class="help-block">First name is required</div>
+      <input type="text" pattern="[A-Za-z]*" class="form-control" name="firstname" [(ngModel)]="userInfo.firstname" #firstname="ngModel" required />
+      <div *ngIf="f.submitted && !firstname.valid" class="help-block">First name is required or contains invalid characters </div>
     </div>
     <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !lastname.valid }">
       <label for="lastname">Last Name</label>
-      <input type="text" class="form-control" name="lastname" [(ngModel)]="userInfo.lastname" #lastname="ngModel" required />
-      <div *ngIf="f.submitted && !lastname.valid" class="help-block">Last name is required</div>
+      <input type="text" pattern="[A-Za-z]*" class="form-control" name="lastname" [(ngModel)]="userInfo.lastname" #lastname="ngModel" required />
+      <div *ngIf="f.submitted && !lastname.valid" class="help-block">Last name is required or contains invalid characters </div>
     </div>
     <div class="form-group" [ngClass]="{ 'has-error': f.submitted && email.valid }">
       <label for="email">E-mail</label>

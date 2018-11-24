@@ -10,7 +10,8 @@ import { UploadFile, UploadEvent } from 'ngx-file-drop';
 
 export class AddCorpusComponent implements OnInit {
   public files: UploadFile[] = [];
-  isValid = false;
+  isExtValid = false;
+  isSizeValid = false;
 
   constructor(
     //  public dialogRef: MatDialogRef<AddCorpusComponent>,
@@ -27,15 +28,15 @@ export class AddCorpusComponent implements OnInit {
       droppedFile.fileEntry.file(info => {
         console.log(info);
         if (droppedFile.fileEntry.isFile) {
-          const fileEntry = droppedFile.fileEntry;
-
           const fileName = droppedFile.relativePath;
           const fileExt = fileName.split(".").pop();
           //Verification du depot de document text
           if (fileExt != "txt") {
-            this.isValid = true;
+            this.isExtValid = true;
+          } else if (info.size == 0) {
+            this.isSizeValid = true;
           } else {
-            this.isValid = false;
+            this.isExtValid = false;
           }
         }
 

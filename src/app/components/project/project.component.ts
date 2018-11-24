@@ -98,8 +98,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   isAdmin(): boolean {
     let a = false;
-    this.admin.forEach((uid, i) => {
-      if (uid === this.authService.getUser().uid) {
+    this.admin.forEach((user, i) => {
+      if (user.uid === this.authService.getUser().uid) {
         a = true;
       }
     });

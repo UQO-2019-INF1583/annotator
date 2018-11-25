@@ -335,9 +335,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addAttributesAfterClosedHandler(result: Attribute) {
-    const attributeExists = false;
+    let attributeExists = false;
     if (result !== undefined) {
       if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
+<<<<<<< HEAD
         if(result.name.length < 30){
           if (!attributeExists) {
             result.labels = result.labels[0].split(',');
@@ -345,6 +346,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
           } else {
             alert('This attribute already exists');
           }
+=======
+        this.currentProject.attributes.forEach(item => {
+        if (item.name === result.name) {
+          attributeExists = true;
+        }
+      });
+        if (!attributeExists) {
+          result.labels = result.labels[0].split(',');
+          this.currentProject.attributes.push(result);
+>>>>>>> ChakibBug
         } else {
           alert('Maximum lenght of 30 for the name');
         }

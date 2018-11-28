@@ -172,7 +172,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
         if(result.name.length > 30){
           alert("Name length must be lower than 30");
-          return;
+          return false;
         }
 
         if (!entityExists) {
@@ -346,7 +346,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
             alert('This attribute already exists');
           }
         } else {
-          alert('Maximum lenght of 30 for the name');
+          alert('Name length must be lower than 30');
         }
       }
     }
@@ -407,10 +407,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
           alert('The chosen color is already used');
         }
       } else {
-        if(data.type.length < 30)
+        if(data.type.length < 30){
           this.currentProject.relations.push(data);
-        else
-          alert("Maximum length of 30 for name/type");
+        }
+        else{
+          alert("Name length must be lower than 30");
+          return;
+        }
         alert('This relation already exists');
       }
     }
@@ -508,7 +511,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           if(result.name.length < 30)
             this.currentProject.events.push(this.mapValidResultToEvent(result));
           else
-            alert("Maximum length of 30 for name parameter");
+            alert("Name length must be lower than 30");
         } else {
           alert('This event already exists');
         }

@@ -338,15 +338,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
     let attributeExists = false;
     if (result !== undefined) {
       if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
-<<<<<<< HEAD
-        if(result.name.length < 30){
+       
           if (!attributeExists) {
             result.labels = result.labels[0].split(',');
             this.currentProject.attributes.push(result);
           } else {
             alert('This attribute already exists');
           }
-=======
         this.currentProject.attributes.forEach(item => {
         if (item.name === result.name) {
           attributeExists = true;
@@ -355,13 +353,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
         if (!attributeExists) {
           result.labels = result.labels[0].split(',');
           this.currentProject.attributes.push(result);
->>>>>>> ChakibBug
         } else {
-          alert('Name length must be lower than 30');
-        }
+           if(result.name.length > 30){
+            alert('Name length must be lower than 30');
+            return;
+          }
       }
     }
   }
+}
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAttribute(target: Attribute) {

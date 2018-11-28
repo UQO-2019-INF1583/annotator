@@ -10,32 +10,42 @@ import { UploadFile, UploadEvent } from 'ngx-file-drop';
 
 export class AddCorpusComponent implements OnInit {
   public files: UploadFile[] = [];
-  isValid = false;
-
+  isExtValid = false;
+  isSizeValid = false;
+  isNotValid: boolean;
+  progress: boolean;
   constructor(
     //  public dialogRef: MatDialogRef<AddCorpusComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.isNotValid = true;
+    this.progress = false;
+  }
 
   public fileDropped(event: UploadEvent) {
     console.log(event);
     this.files = event.files;
-
+    this.isNotValid = true;
+    this.progress = true;
     // la variable info contient le document que l'on veux sauvegarder dans la base de données
     for (const droppedFile of event.files) {
       droppedFile.fileEntry.file(info => {
         console.log(info);
         if (droppedFile.fileEntry.isFile) {
-          const fileEntry = droppedFile.fileEntry;
-
           const fileName = droppedFile.relativePath;
           const fileExt = fileName.split(".").pop();
           //Verification du depot de document text
           if (fileExt != "txt") {
-            this.isValid = true;
+            this.isExtValid = true;
+            this.progress = false;
+          } else if (info.size == 0) {
+            this.progress = false;
+            this.isSizeValid = true;
           } else {
-            this.isValid = false;
+            this.progress = false;
+            this.isNotValid = false;
+            this.isExtValid = false;
           }
         }
 

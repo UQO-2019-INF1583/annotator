@@ -2,7 +2,8 @@ import {
   AddAnnotatorComponent,
   AddEntityComponent,
   AddCorpusComponent,
-  CreateProjectComponent
+  CreateProjectComponent,
+  ContactComponent
 } from './components';
 import { ProjectManagerComponent, UserManagerComponent } from './adm';
 import { RouterModule, Routes } from '@angular/router';
@@ -17,8 +18,10 @@ import { PageNotFoundComponent } from './not-found/not-found.component';
 import { ProjectComponent } from './components/index';
 import { RegisterComponent } from './register';
 import { UserComponent } from './adm';
-
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 const appRoutes: Routes = [
+  { path: 'contact', component: ContactComponent },
+
   { path: '', component: HomeWelcomeComponent, pathMatch: 'full' },
   // { path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
   {
@@ -41,6 +44,7 @@ const appRoutes: Routes = [
     component: ProjectManagerComponent /*, canActivate: [AuthGuard]*/
   },
   { path: 'register', component: RegisterComponent },
+  { path: 'reset', component: ResetPasswordComponent },
   {
     path: 'userManager',
     component: UserManagerComponent,

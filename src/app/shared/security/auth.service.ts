@@ -48,8 +48,18 @@ export class AuthService {
         return Observable.of(null);
       }
     });
+    this.afAuth.authState.subscribe((auth) => {
+      this.authState = auth
+    });
   }
-
+  // Returns true if user is logged in
+  get authenticated(): boolean {
+    return this.authState !== null;
+  }
+  // Returns current user UID
+  get currentUserId(): string {
+    return this.authenticated ? this.authState.uid : '';
+  }
   signIn(email, password): Promise<any> {
     return new Promise((resolve, reject) => {
       this.afAuth.auth
@@ -71,6 +81,13 @@ export class AuthService {
     this.afAuth.auth.signOut();
     // clear token remove user from local storage to log user out
     localStorage.removeItem('currentUser');
+  }
+  resetPassword(email: string) {
+    var auth = firebase.auth();
+
+    return auth.sendPasswordResetEmail(email)
+      .then(() => console.log("email sent"))
+      .catch((error) => console.log(error))
   }
 
   googleLogin() {

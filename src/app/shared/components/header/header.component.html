@@ -23,7 +23,7 @@
             <li (click)="isCollapsed = true" routerLinkActive="active">
               <a class="navbar-left" [routerLink]="['/projectManager']">{{'Projects'}}</a>
             </li>
-            <li *ngIf="isUser()" (click)="isCollapsed = true" routerLinkActive="active">
+            <li *ngIf="isAnnotation()" (click)="isCollapsed = true" routerLinkActive="active_annotation" >
               <a class="navbar-left" [routerLink]="['/annotation']">{{'Annotation'}}</a>
             </li>
             <li *ngIf="isAdmin()" (click)="isCollapsed = true" routerLinkActive="active">

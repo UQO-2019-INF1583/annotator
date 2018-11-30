@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AngularFirestore } from 'angularfire2/firestore';
+import * as firebase from 'firebase';
 
 @Component({
     selector: 'app-contact',
@@ -9,9 +11,19 @@ import { Router } from '@angular/router';
 })
 
 export class ContactComponent implements OnInit {
-    constructor(public router: Router) { }
+    private message: string;
+
+    constructor(private afs: AngularFirestore) {
+
+    }
 
     ngOnInit() {
     }
+    createMessage() {
+
+        this.afs.collection('messageContact').doc(this.afs.createId()).set(this.message);
+    }
+
 
 }
+

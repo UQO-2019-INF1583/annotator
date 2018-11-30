@@ -8,14 +8,34 @@
         </mat-card-header>
         <mat-card-content>
             <p>
-                Pour toutes questions, suggestions ou remarques n’hésitez pas à contacter l'administrateur de
-                système.
+                Pour toutes question, suggestions ou remarques,veuillez contacter l'administrateur de
+                système par email.
+
+
+                <a href="mailto:admin@email.com">
+                    admin@email.com
+                </a>
             </p>
-            <a href="mailto:admin@email.com">
-                E-mail: admin@email.com
-            </a>
+            <p>Ou veuillez remplir le champ ci-dessous avec votre nom, e-mail et nous
+                communiquerons avec vous par courriel le plutôt possible.
+
+            </p>
+            <div>
+                <mat-form-field style="height: 75px;width:100%">
+                    <textarea row="5" style="height: 75px;width:100%" [(ngModel)]="message" matInput placeholder="Nom,email,commentaire ou question ">¨
+                                    
+                            </textarea>
+
+                </mat-form-field>
+            </div>
 
         </mat-card-content>
+
+        <div class="button-row">
+
+            <button class="btn btn-link" mat-raised-button color="primary" (click)="createMessage()">Envoyer</button>
+
+        </div>
     </mat-card>
 
 

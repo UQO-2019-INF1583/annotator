@@ -2,18 +2,18 @@
   <div class="mat-card project-form">
     <div class="project-form-title" style="padding-left: 10px; padding-right: 10px;">
       <mat-form-field>
-        <input matInput [readonly]="!isConnected" [ngModel]="currentProject.title" placeholder="Project" (ngModelChange)="currentProject.title = $event"
-          name="titre" #titre="ngModel" required />
+        <input matInput [readonly]="!isConnected" [ngModel]="currentProject.title" placeholder="Project"
+          (ngModelChange)="currentProject.title = $event" name="titre" #titre="ngModel" required />
         <mat-error *ngIf="titre.value == '' || titre.value == null">Project title is required</mat-error>
       </mat-form-field>
     </div>
-    
-    
+
+
     <div class="project-form-description" style="padding-left: 10px; padding-right: 10px;">
       <mat-form-field style="display:inline-block">
-        <textarea matInput [readonly]="!isConnected" [ngModel]="currentProject.description" placeholder="Descriprion"  (ngModelChange)="currentProject.description = $event"
-          name="description" #description="ngModel" required>
-      
+        <textarea matInput [readonly]="!isConnected" [ngModel]="currentProject.description" placeholder="Descriprion"
+          (ngModelChange)="currentProject.description = $event" name="description" #description="ngModel" required>
+
         </textarea>
         <mat-error *ngIf="currentProject.description.value == '' || currentProject.description.value == null">Project
           description is required</mat-error>
@@ -96,12 +96,14 @@
           <mat-card-title>
             <h2>Entities</h2>
           </mat-card-title>
-          <button class="btn btn btn-primary" (click)="addEntityDialogBox()">+</button>
+          <button class="btn btn btn-primary" (click)="addEntityDialogBox(null)">+</button>
         </mat-card-header>
         <mat-card-content>
           <mat-list role="list" class="card-list-project">
             <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.entities" [ngStyle]="{'background-color': item?.bgColor}">
               <h4 mat-line>{{item?.name}}</h4>
+              <!-- Edit entity -->
+              <button class="btn btn-danger" (click)="addEntityDialogBox(item)">Edit</button>
               <button class="btn btn-danger" (click)="deleteEntity(item.name)">Delete</button>
             </mat-list-item>
           </mat-list>

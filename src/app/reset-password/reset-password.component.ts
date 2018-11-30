@@ -3,7 +3,7 @@ import { AuthService } from '../shared/security/auth.service';
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.css']
+  //styleUrls: ['./reset-password.component.css']
 })
 export class ResetPasswordComponent implements OnInit {
   userInfo: any = {};

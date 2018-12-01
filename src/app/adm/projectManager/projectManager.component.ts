@@ -29,6 +29,7 @@ export class ProjectManagerComponent implements OnInit {
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
+    console.log(this.isConnected);
     this.displayedColumns = ['title', 'description', 'actions'];
     this.dataSource = new ProjectDataSource(this.afs);
   }

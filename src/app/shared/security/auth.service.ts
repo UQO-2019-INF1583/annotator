@@ -140,9 +140,12 @@ export class AuthService {
 
   signOut() {
     this.afAuth.auth.signOut().then(() => {});
+    localStorage.removeItem('currentUser');
   }
 
   isConnected(): boolean {
-    return firebase.auth().currentUser != null;
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    // console.log(currentUser);
+    return currentUser != null;
   }
 }

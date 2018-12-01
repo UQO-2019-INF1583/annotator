@@ -26,14 +26,24 @@ export const entiteMock = {
     type: 'Test3',
     bgColor: '#F44336',
     labels: ['Test3']
-  } as Entity
+  } as Entity,
+  invalid4: {
+    name: 'Test4Test4Test4Test4Test4Test4Tes',
+    type: 'Test4',
+    bgColor: '#F44336',
+    labels: ['Test4']
+  } as Entity,
 }
 
 export const attributMock = {
   valid1: {
     name: 'Test',
     type: 'Test',
-  } as Attribute
+  } as Attribute,
+  invalid2: {
+    name: 'Test2Test2Test2Test2Test2Test2Test2',
+    type: 'Test2',
+  } as Attribute,
 }
 
 export const relationMock = {
@@ -62,7 +72,16 @@ export const relationMock = {
     dashArray: '3,3',
     attributes: [],
     args: []
-  } as Relation
+  } as Relation,
+  invalid4: {
+    name: 'Relation4RelationRelationRelationRelationRelation',
+    type: 'Type4',
+    labels: ['Entite4'],
+    color: '#2345F3',
+    dashArray: '3,3',
+    attributes: [],
+    args: []
+  } as Relation,
 }
 
 export const eventMock = {
@@ -72,7 +91,14 @@ export const eventMock = {
     labels: ['a'],
     type: 'a',
     bgColor: '#ffffff'
-  } as Event
+  } as Event,
+  invalid2: {
+    name: 'eventeventeventeventeventeventeventevent',
+    attributes: ['a'],
+    labels: ['a'],
+    type: 'a',
+    bgColor: '#ffffff'
+  } as Event,
 }
 
 export const annotatorMock = {

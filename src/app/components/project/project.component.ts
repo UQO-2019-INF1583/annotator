@@ -131,19 +131,33 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // ouvre la boîte de dialogue pour ajouter une catégorie
-  addEntityDialogBox() {
-    const dialogRef = this.dialog.open(AddEntityComponent, {
-      data: {
-        name: undefined,
-        type: undefined,
-        labels: [],
-        bgColor: undefined
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result: Entity) => {
-      this.addEntitiesAfterClosedHandler(result);
-    });
+  addEntityDialogBox(entity) {
+    let dialogRef = null;
+    if (entity === null) {
+      dialogRef = this.dialog.open(AddEntityComponent, {
+        data: {
+          name: undefined,
+          type: undefined,
+          labels: [],
+          bgColor: undefined
+        },
+      });
+      dialogRef.afterClosed().subscribe((result: Entity) => {
+        this.addEntitiesAfterClosedHandler(result);
+      });
+    } else if (entity) {
+      dialogRef = this.dialog.open(AddEntityComponent, {
+        data: {
+          name: entity.name,
+          type: entity.type,
+          labels: entity.labels,
+          bgColor: entity.bgColor
+        },
+      });
+      dialogRef.afterClosed().subscribe((result: Entity) => {
+        this.editEntitiesAfterClosedHandler(result);
+      });
+    }
   }
 
   addEntitiesAfterClosedHandler(result: Entity) {
@@ -170,14 +184,57 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         });
 
-        if(result.name.length > 30){
-          alert("Name length must be lower than 30");
-          return;
+        if (result.name.length > 30) {
+          alert('Name length must be lower than 30');
+          return false;
         }
 
         if (!entityExists) {
           result.labels = result.labels[0].split(',');
           this.currentProject.entities.push(result);
+        }
+      }
+    }
+  }
+
+  /**
+ *Modifier un attribut
+ * Cette méthode s'assure qu'il n'y a aucun conflits avec des noms, types
+ * et couleurs préexistants avant d'ajouter l'entité
+ * @param result l'entité à ajouter
+ */
+  editEntitiesAfterClosedHandler(result: Entity) {
+    let entityExists = false;
+    let typeExists = false;
+    const item = this.currentProject.entities;
+    const backup = this.currentProject.entities;
+    if (result !== undefined) {
+      if (
+        result.name !== undefined &&
+        result.bgColor !== undefined &&
+        result.type !== undefined &&
+        result.labels !== undefined
+      ) {
+        for (let i = 0; i < item.length; i++) {
+          if (item[i].name === result.name) {
+            item[i] = new Entity;
+            item.forEach(items => {
+              if (items.name === result.name) {
+                entityExists = true;
+                alert('The entity already exists');
+              } else if (items.bgColor === result.bgColor) {
+                entityExists = true;
+                this.currentProject.entities = backup;
+                alert('The chosen color is already used');
+              } else if (items.type === result.type) {
+                typeExists = true;
+                alert('This type already exists');
+              } else
+                if (!entityExists && !typeExists && items.name === '') {
+                  this.currentProject.entities[i] = result;
+                }
+            });
+          }
         }
       }
     }
@@ -335,18 +392,29 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addAttributesAfterClosedHandler(result: Attribute) {
-    const attributeExists = false;
+    let attributeExists = false;
     if (result !== undefined) {
       if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
-        if(result.name.length < 30){
-          if (!attributeExists) {
-            result.labels = result.labels[0].split(',');
-            this.currentProject.attributes.push(result);
-          } else {
-            alert('This attribute already exists');
-          }
+
+        if (!attributeExists) {
+          result.labels = result.labels[0].split(',');
+          this.currentProject.attributes.push(result);
         } else {
-          alert('Maximum lenght of 30 for the name');
+          alert('This attribute already exists');
+        }
+        this.currentProject.attributes.forEach(item => {
+          if (item.name === result.name) {
+            attributeExists = true;
+          }
+        });
+        if (!attributeExists) {
+          result.labels = result.labels[0].split(',');
+          this.currentProject.attributes.push(result);
+        } else {
+          if (result.name.length > 30) {
+            alert('Name length must be lower than 30');
+            return;
+          }
         }
       }
     }
@@ -407,10 +475,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
           alert('The chosen color is already used');
         }
       } else {
-        if(data.type.length < 30)
+        if (data.type.length < 30) {
           this.currentProject.relations.push(data);
-        else
-          alert("Maximum length of 30 for name/type");
+        } else {
+          alert('Name length must be lower than 30');
+          return;
+        }
         alert('This relation already exists');
       }
     }
@@ -488,7 +558,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addEventAfterClosedHandler(result: Event) {
-    let eventExists = false;
+    const eventExists = false;
     if (result !== undefined) {
       if (result.name !== undefined &&
         result.type !== undefined &&
@@ -503,12 +573,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
             alert('The chosen color is already used');
           }
         }
-        
+
         if (!eventExists) {
-          if(result.name.length < 30)
+          if (result.name.length < 30) {
             this.currentProject.events.push(this.mapValidResultToEvent(result));
-          else
-            alert("Maximum length of 30 for name parameter");
+          } else {
+            alert('Name length must be lower than 30');
+          }
         } else {
           alert('This event already exists');
         }

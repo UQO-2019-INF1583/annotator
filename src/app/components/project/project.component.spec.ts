@@ -111,6 +111,12 @@ describe('Projet', () => {
         jasmine.objectContaining(entiteMock.valid3)
       );
     });
+
+   it('should block attemps to create a entite with a too long name', () => {
+      spyOn(window, 'alert');
+      projectComponent.addEntitiesAfterClosedHandler(entiteMock.invalid4);
+      expect(window.alert).toHaveBeenCalledWith('Name length must be lower than 30');
+    });
   });
 
   describe('Attributs', () => {
@@ -139,6 +145,11 @@ describe('Projet', () => {
       expect(projectComponent.currentProject.attributes).not.toContain(
         jasmine.objectContaining(attributMock.valid1)
       );
+    });
+     it('should block attemps to create a attribute with a too long name', () => {
+      spyOn(window, 'alert');
+      projectComponent.addAttributesAfterClosedHandler(attributMock.invalid2);
+      expect(window.alert).toHaveBeenCalledWith('Name length must be lower than 30');
     });
   });
 
@@ -173,6 +184,12 @@ describe('Projet', () => {
       projectComponent.addRelation(null);
       expect(projectComponent.currentProject.relations.length).toBe(0);
     });
+
+    it('should block attemps to create a relation with a too long name', () => {
+      spyOn(window, 'alert');
+      projectComponent.addRelation(relationMock.invalid4);
+      expect(window.alert).toHaveBeenCalledWith('Name length must be lower than 30');
+    })
   });
 
   describe('Events', () => {
@@ -209,6 +226,12 @@ describe('Projet', () => {
       projectComponent.addEventAfterClosedHandler(eventMock.valid1);
       projectComponent.addEventAfterClosedHandler(eventMock.valid1);
       expect(window.alert).toHaveBeenCalledWith('This event already exists');
+    });
+
+    it('should block attemps to create a Event with a too long name', () => {
+      spyOn(window, 'alert');
+      projectComponent.addEventAfterClosedHandler(eventMock.invalid2);
+      expect(window.alert).toHaveBeenCalledWith('Name length must be lower than 30');
     });
   });
 

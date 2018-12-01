@@ -160,16 +160,8 @@ $topnav-background-color: #222;
   border: 4px solid #fff;
   margin: 0 10px 0 0;
 }
+#reset {
+  position: absolute;
+  left: 550px;
 
-.login_error {
-  margin: 10px 0px;
-  padding: 12px;
-  color: #d8000c;
-  background-color: #ffd2d2;
-}
-
-.login_error i {
-  margin: 10px 22px;
-  font-size: 2em;
-  vertical-align: middle;
 }

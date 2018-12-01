@@ -5,31 +5,31 @@
         <h3 style="display:inline-block">Document: </h3> {{currentDoc?.title}}
         <p *ngIf="isConnected">To add an annotation, highlight the text and choose the category.</p>
         <mat-card>
-		    <div class="filtre-brat" ng-controller="AnnotationComponent" *ngIf="isDataLoaded">
-				<mat-form-field>
-				    <mat-select id="filter-brat-filter" placeholder="Filter by..." [(ngModel)]="filterBrat.filter">
-						<mat-option *ngFor="let item of filterOptions" [value]="item">
+            <div class="filtre-brat" ng-controller="AnnotationComponent" *ngIf="isDataLoaded">
+                <mat-form-field>
+                    <mat-select id="filter-brat-filter" placeholder="Filter by..." [(ngModel)]="filterBrat.filter">
+                        <mat-option *ngFor="let item of filterOptions" [value]="item">
                             {{item}}
                         </mat-option>
                     </mat-select>
-				</mat-form-field>
-				
-				<mat-form-field *ngIf="filterBrat.filter == 'Entities'">
-				    <mat-select id="filter-brat-value" placeholder="Entity..." [(ngModel)]="filterBrat.value" (change)="customCSS()">
+                </mat-form-field>
+
+                <mat-form-field *ngIf="filterBrat.filter == 'Entities'">
+                    <mat-select id="filter-brat-value" placeholder="Entity..." [(ngModel)]="filterBrat.value" (change)="customCSS()">
                         <mat-option *ngFor="let item of project.entities" [value]="item.type">
                             {{item.labels}}
                         </mat-option>
                     </mat-select>
-				</mat-form-field>
-				
-				<mat-form-field *ngIf="filterBrat.filter == 'Events'">
-				    <mat-select id="filter-brat-value" placeholder="Event..." [(ngModel)]="filterBrat.value" (change)="customCSS()">
+                </mat-form-field>
+
+                <mat-form-field *ngIf="filterBrat.filter == 'Events'">
+                    <mat-select id="filter-brat-value" placeholder="Event..." [(ngModel)]="filterBrat.value" (change)="customCSS()">
                         <mat-option *ngFor="let item of project.events" [value]="item.type">
                             {{item.labels}}
                         </mat-option>
                     </mat-select>
-				</mat-form-field>
-		    </div>
+                </mat-form-field>
+            </div>
             <div id="brat">
             </div>
             <div id="myText" style="display: none;">

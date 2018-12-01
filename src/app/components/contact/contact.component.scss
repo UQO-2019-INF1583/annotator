@@ -1,0 +1,18 @@
+
+.create-contact-container {
+    display:flex;
+    justify-content: center;
+  }
+  
+  
+  .card-header-contact{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .button-row {
+    display:flex; 
+    justify-content: flex-end;
+    margin-bottom: 16px;
+  }

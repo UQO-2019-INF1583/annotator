@@ -1,5 +1,4 @@
 <h2 mat-dialog-title>Nouveau texte</h2>
-
 <mat-dialog-content>
   <div>
     <file-drop headertext="Déposer un fichier ici" (onFileDrop)="fileDropped($event)" (onFileOver)="fileOver($event)"
@@ -14,7 +13,9 @@
         <tbody class="upload-name-style">
           <tr *ngFor="let item of files; let i=index">
             <td><strong>{{ item.relativePath }}</strong>
-              <span *ngIf="isValid" style="color:red">Veuillez ajouter seulement des fichiers de type text</span></td>
+              <span *ngIf="isExtValid" style="color:red">Veuillez ajouter seulement des fichiers de type texte.</span>
+              <span *ngIf="isSizeValid" style="color:red">Veuillez ajouter seulement des fichiers taille non-nulle.</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -30,7 +31,10 @@
 </mat-form-field>
 
 <mat-dialog-actions>
-  <button class="btn btn btn-primary" [mat-dialog-close]="data" [disabled]="isValid">Ajouter</button>
+  <button class="btn btn btn-primary" [mat-dialog-close]="data" [disabled]="isNotValid">Ajouter</button>
   <div style="width: 10px"></div>
   <button class="btn btn btn-primary" mat-dialog-close>Annuler</button>
 </mat-dialog-actions>
+<br />
+<mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
+<span *ngIf="progress" style="color:green">Validation du fichier en cours</span>

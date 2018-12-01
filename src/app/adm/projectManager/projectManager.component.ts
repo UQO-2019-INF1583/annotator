@@ -18,6 +18,7 @@ export class ProjectManagerComponent implements OnInit {
   displayedColumns = [];
   dataSource: ProjectDataSource | null;
   isConnected = false;
+  idUser: string;
 
   constructor(
     private authService: AuthService,
@@ -28,6 +29,7 @@ export class ProjectManagerComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.idUser = this.authService.currentUserId;
     this.isConnected = this.authService.isConnected();
     console.log(this.isConnected);
     this.displayedColumns = ['title', 'description', 'actions'];

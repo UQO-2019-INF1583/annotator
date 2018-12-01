@@ -90,19 +90,7 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  twitterLogin() {}
-
-  githubLogin() {
-    this.loading = true;
-    this.authService
-      .githubLogin()
-      .then(() => {
-        this.afterSignIn();
-      })
-      .catch(error => {
-        this.handleError(error);
-      });
-  }
+  twitterLogin() { }
 
   /// Shared
 

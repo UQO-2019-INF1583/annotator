@@ -70,10 +70,6 @@ export class AuthService {
       .catch((error) => console.log(error))
   }
 
-  getUser() {
-    return this.afAuth.auth.currentUser;
-  }
-
   googleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);

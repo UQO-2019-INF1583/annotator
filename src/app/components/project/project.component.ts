@@ -473,8 +473,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         });
         if (!attributeExists) {
-          result.labels = result.labels[0].split(',');
-          this.currentProject.attributes.push(result);
+          if (!typeExists) {
+            result.labels = result.labels[0].split(',');
+            this.currentProject.attributes.push(result);
+          } else {
+            alert('This type already exists');
+          }
         } else {
           if (result.name.length > 30) {
             alert('Name length must be lower than 30');

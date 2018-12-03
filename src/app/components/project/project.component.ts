@@ -50,11 +50,29 @@ export class ProjectComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    // show spinner during the firebase call
+    var bgSpinner = document.createElement('div');
+    bgSpinner.classList.add("spinner-div");
+    var spinner = document.createElement('div');
+    spinner.classList.add("spinner");
+
+    bgSpinner.appendChild(spinner);
+    document.body.appendChild(bgSpinner);
+
     this.isConnected = this.authService.isConnected();
     this.sub = this.activeRouter.params.subscribe(params => {
       this.ps.getProject(params.id).then(doc => {
         this.currentProject = doc.data();
-        this.corpus = this.ps.getCorpus(this.currentProject.id);
+
+        try {
+          this.corpus = this.ps.getCorpus(this.currentProject.id);
+
+          // we can remove the spinner after the request
+          document.body.removeChild(bgSpinner);
+        } catch (e) {
+          // the firebase request failed; we have to redirect the user
+          window.location.replace('/error404');
+        }
 
         if (this.isConnected) {
           this.users = this.ps.getUsers();

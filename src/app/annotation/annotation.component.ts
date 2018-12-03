@@ -59,6 +59,15 @@ export class AnnotationComponent implements OnInit, OnDestroy {
    * les uns après les autres.
    */
   async getInterfaceData() {
+    // show spinner during the firebase call
+    let bgSpinner = document.createElement('div');
+    bgSpinner.classList.add('spinner-div');
+    let spinner = document.createElement('div');
+    spinner.classList.add('spinner');
+
+    bgSpinner.appendChild(spinner);
+    document.body.appendChild(bgSpinner);
+
     this.sub = await this.activeRouter.params.subscribe(params => {
       this.currentProjectTitle = params.projectTitle;
       this.currentDoc = new Doc(params.id, params.title, params.projectId);
@@ -67,11 +76,18 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
     await this.as.getProject(this.projectId).then(p => this.project = p.data());
 
-    const URL = await firebase
-      .storage()
-      .ref()
-      .child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title)
-      .getDownloadURL();
+    let URL;
+    try {
+      URL = await firebase
+        .storage()
+        .ref()
+        .child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title)
+        .getDownloadURL();
+
+    } catch (e) {
+      // the firebase request failed; we have to redirect the user
+      window.location.replace('/error404');
+    }
 
     this.currentDoc.text = await this.http.get(URL, { responseType: 'text' }).toPromise();
 
@@ -85,16 +101,43 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       }
     });
 
+    let colDataFromProject;
+    let docDataFromProject;
+
+    // usefull because the spinner will be removed before the location change if title aren't equals
+    let titleIsRight = true;
+    try {
+      // check if the projectTitle in URL is the same than found in project settings
+      if (this.project) {
+        if (this.project.title !== this.currentProjectTitle) {
+          // URL have benn manualy modified; we have to redirect the user
+          titleIsRight = false;
+          window.location.replace('/error404');
+        }
+      }
+
+      colDataFromProject = BratUtils.getColDataFromProject(this.project);
+      docDataFromProject = BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument)
+    } catch (e) {
+      // the firebase request failed; we have to redirect the user
+      window.location.replace('/error404');
+    }
+
     this.brat = new BratFrontendEditor(
       document.getElementById('brat'),
-      BratUtils.getColDataFromProject(this.project),
-      BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument),
+      colDataFromProject,
+      docDataFromProject,
       options);
 
 	this.filterBrat = new FilterBrat();
 	this.filterOptions = FilterOptionsList;
 
 	this.isDataLoaded = true;
+
+    // we can remove the spinner after last request; if the title was correct
+    if (titleIsRight) {
+      document.body.removeChild(bgSpinner);
+    }
 
   }
 

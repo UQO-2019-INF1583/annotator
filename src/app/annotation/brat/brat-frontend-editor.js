@@ -3554,6 +3554,20 @@
             }).attr({role: "dialog", "aria-labelledby": e}).mousedown(function (i) {
               a.moveToTop(false, i)
             });
+          $(".header a").click(function(i){ a.close(i) });
+          function hashHandler(){
+            this.oldUrl = window.location.href;
+            this.Check;
+            var that = this;
+            var detect = function(){
+              if(that.oldUrl!=window.location.href && a._isOpen == true){
+                that.oldUrl = window.location.href;
+                a.close();
+              }
+            };
+            this.Check = setInterval(function(){ detect() }, 100);
+          }
+          var hashDetection = new hashHandler();
           a.element.show().removeAttr("title").addClass("ui-dialog-content ui-widget-content").appendTo(g);
           var f = (a.uiDialogTitlebar = c("<div></div>")).addClass("ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix").prependTo(g),
             h = c('<a href="#"></a>').addClass("ui-dialog-titlebar-close ui-corner-all").attr("role", "button").hover(function () {
@@ -28194,7 +28208,6 @@
 // 1.0   - (10/2/2009) Initial release
 
     (function ($, window) {
-      console.info('yes!')
       '$:nomunge'; // Used by YUI compressor.
 
       // Some convenient shortcuts.

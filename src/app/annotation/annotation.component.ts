@@ -3,7 +3,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../shared/security/auth.service';
-import { Doc } from '../shared/document.model'
+import { Doc } from '../shared/document.model';
 import { AnnotationService } from './annotation.service';
 import * as firebase from 'firebase';
 import './brat/brat-frontend-editor';
@@ -12,7 +12,10 @@ import { Entity } from '../shared/entity.model';
 import { FilterBrat } from '../shared/filterBrat.model';
 import { FilterOptionsList } from '../shared/filterOptions.model';
 import { HttpClient } from '@angular/common/http';
-import { AnnotatedDocument, AnnotatedDocumentUtils } from '../shared/annotated-document.model';
+import {
+  AnnotatedDocument,
+  AnnotatedDocumentUtils
+} from '../shared/annotated-document.model';
 import { Project, ProjectUtils } from '../shared/project.model';
 import { BratUtils } from './brat/brat-utils';
 
@@ -24,7 +27,6 @@ declare var BratFrontendEditor: any;
   styleUrls: ['./annotation.component.scss'],
   providers: [AnnotationService]
 })
-
 export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
   private brat: any;
@@ -40,18 +42,22 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   projectId: string;
   isDataLoaded = false;
   customCssHtml: string;
+  selectvalue: any;
+  annotatedDocument_new: any;
 
-  constructor(private authService: AuthService, private activeRouter: ActivatedRoute,
-    private as: AnnotationService, private http: HttpClient) {
-
-  }
+  constructor(
+    private authService: AuthService,
+    private activeRouter: ActivatedRoute,
+    private as: AnnotationService,
+    private http: HttpClient
+  ) {}
 
   /**
    * Méthode qui retourne l'interface d'annotation brat, si et seulement si elle a été initialisée
    * @returns {any} brat si brat a été initialisé, null sinon
    */
   public getBrat(): any {
-    return (this.brat instanceof BratFrontendEditor ? this.brat : null);
+    return this.brat instanceof BratFrontendEditor ? this.brat : null;
   }
 
   /**
@@ -59,88 +65,59 @@ export class AnnotationComponent implements OnInit, OnDestroy {
    * les uns après les autres.
    */
   async getInterfaceData() {
-    // show spinner during the firebase call
-    let bgSpinner = document.createElement('div');
-    bgSpinner.classList.add('spinner-div');
-    let spinner = document.createElement('div');
-    spinner.classList.add('spinner');
-
-    bgSpinner.appendChild(spinner);
-    document.body.appendChild(bgSpinner);
-
     this.sub = await this.activeRouter.params.subscribe(params => {
       this.currentProjectTitle = params.projectTitle;
       this.currentDoc = new Doc(params.id, params.title, params.projectId);
       this.projectId = params.projectId;
     });
 
-    await this.as.getProject(this.projectId).then(p => this.project = p.data());
+    await this.as
+      .getProject(this.projectId)
+      .then(p => (this.project = p.data()));
 
-    let URL;
-    try {
-      URL = await firebase
-        .storage()
-        .ref()
-        .child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title)
-        .getDownloadURL();
+    const URL = await firebase
+      .storage()
+      .ref()
+      .child(
+        'Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title
+      )
+      .getDownloadURL();
 
-    } catch (e) {
-      // the firebase request failed; we have to redirect the user
-      window.location.replace('/error404');
-    }
-
-    this.currentDoc.text = await this.http.get(URL, { responseType: 'text' }).toPromise();
+    this.currentDoc.text = await this.http
+      .get(URL, { responseType: 'text' })
+      .toPromise();
 
     await this.as.getAnnotatedDocument(this.currentDoc.documentId).then(d => {
-      const data = d.data()
+      const data = d.data();
 
       if (data === undefined) {
-        this.annotatedDocument = AnnotatedDocumentUtils.fromDoc(this.currentDoc);
+        this.annotatedDocument = AnnotatedDocumentUtils.fromDoc(
+          this.currentDoc
+        );
       } else {
         this.annotatedDocument = data;
         this.annotatedDocument_new = data;
+        // console.log('data is ', this.annotatedDocument);
+        // console.log('data is ', this.annotatedDocument.entities[0].labels[0]);
+        // const entities = this.annotatedDocument.entities;
+        // const map1 = entities.filter(x => {
+        //   return x.labels.findIndex(lbl => lbl === 'Disease') > -1;
+        // });
+        // console.log(map1);
       }
     });
-
-    let colDataFromProject;
-    let docDataFromProject;
-
-
-    // usefull because the spinner will be removed before the location change if title aren't equals
-    let titleIsRight = true;
-    try {
-      // check if the projectTitle in URL is the same than found in project settings
-      if (this.project) {
-        if (this.project.title !== this.currentProjectTitle) {
-          // URL have benn manualy modified; we have to redirect the user
-          titleIsRight = false;
-          window.location.replace('/error404');
-        }
-      }
-
-      colDataFromProject = BratUtils.getColDataFromProject(this.project);
-      docDataFromProject = BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument)
-    } catch (e) {
-      // the firebase request failed; we have to redirect the user
-      window.location.replace('/error404');
-    }
 
     this.brat = new BratFrontendEditor(
       document.getElementById('brat'),
       BratUtils.getColDataFromProject(this.project),
       BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument),
-      options);
+      options
+    );
 
-	this.filterBrat = new FilterBrat();
-	this.filterOptions = FilterOptionsList;
+    this.filterBrat = new FilterBrat();
+    this.filterOptions = FilterOptionsList;
 
-	this.isDataLoaded = true;
-
-    // we can remove the spinner after last request; if the title was correct
-    if (titleIsRight) {
-      document.body.removeChild(bgSpinner);
-    }
-
+    this.isDataLoaded = true;
   }
 
   ngOnInit() {
@@ -189,19 +166,22 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       BratUtils.getDocDataFromAnnotatedDocument(this.selectvalue),
       options
     );
-	const head=document.getElementsByTagName('head')[0];
-	const oldFilter=document.getElementById("custom-css");
-	if (oldFilter){
-		head.removeChild(oldFilter);
-	}
-	const newFilter=document.createElement("style");
-	newFilter.type="text/css";
-	newFilter.id="custom-css";
+
+    // console.log("project value is ", this.project);
+    // console.log("selected value is ", this.filterBrat.value);
+    const head = document.getElementsByTagName('head')[0];
+    const oldFilter = document.getElementById('custom-css');
+    if (oldFilter) {
+      head.removeChild(oldFilter);
+    }
+    const newFilter = document.createElement('style');
+    newFilter.type = 'text/css';
+    newFilter.id = 'custom-css';
     this.customCssHtml = '';
-    this.customCssHtml += "#brat .span_"+this.filterBrat.value+"{";
-    this.customCssHtml += "stroke-width: 3 !important;";
-    this.customCssHtml += "}";
+    this.customCssHtml += '#brat .span_' + item.value + '{';
+    this.customCssHtml += 'stroke-width: 3 !important;';
+    this.customCssHtml += '}';
     newFilter.appendChild(document.createTextNode(this.customCssHtml));
-	head.appendChild(newFilter);
+    head.appendChild(newFilter);
   }
 }

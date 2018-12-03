@@ -15,8 +15,8 @@
                 </mat-form-field>
 
                 <mat-form-field *ngIf="filterBrat.filter == 'Entities'">
-                    <mat-select id="filter-brat-value" placeholder="Entity..." [(ngModel)]="filterBrat.value" (change)="customCSS()">
-                        <mat-option *ngFor="let item of project.entities" [value]="item.type">
+                    <mat-select id="filter-brat-value" placeholder="Entity..." [(ngModel)]="filterBrat.value" (change)="customCSS(filterBrat)">
+                        <mat-option *ngFor="let item of project.entities" [value]="item.name">
                             {{item.labels}}
                         </mat-option>
                     </mat-select>

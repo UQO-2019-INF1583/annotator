@@ -469,18 +469,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data.labels !== [] &&
       data.color !== undefined) {
       if (!this.isExist(data)) {
-        if (!this.relationColorAlreadyUsed(data)) {
-          this.currentProject.relations.push(data);
-        } else {
-          alert('The chosen color is already used');
-        }
-      } else {
-        if (data.type.length < 30) {
-          this.currentProject.relations.push(data);
+        if (data.type.length <= 30) {
+          if (!this.relationColorAlreadyUsed(data)) {
+            this.currentProject.relations.push(data);
+          } else {
+            alert('The chosen color is already used');
+          }
         } else {
           alert('Name length must be lower than 30');
-          return;
         }
+      } else {
         alert('This relation already exists');
       }
     }

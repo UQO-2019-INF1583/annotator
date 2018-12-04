@@ -3,7 +3,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../shared/security/auth.service';
-import { Doc } from '../shared/document.model'
+import { Doc } from '../shared/document.model';
 import { AnnotationService } from './annotation.service';
 import * as firebase from 'firebase';
 import './brat/brat-frontend-editor';
@@ -12,7 +12,10 @@ import { Entity } from '../shared/entity.model';
 import { FilterBrat } from '../shared/filterBrat.model';
 import { FilterOptionsList } from '../shared/filterOptions.model';
 import { HttpClient } from '@angular/common/http';
-import { AnnotatedDocument, AnnotatedDocumentUtils } from '../shared/annotated-document.model';
+import {
+  AnnotatedDocument,
+  AnnotatedDocumentUtils
+} from '../shared/annotated-document.model';
 import { Project, ProjectUtils } from '../shared/project.model';
 import { BratUtils } from './brat/brat-utils';
 
@@ -24,7 +27,6 @@ declare var BratFrontendEditor: any;
   styleUrls: ['./annotation.component.scss'],
   providers: [AnnotationService]
 })
-
 export class AnnotationComponent implements OnInit, OnDestroy {
   private sub: any;
   private brat: any;
@@ -40,18 +42,22 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   projectId: string;
   isDataLoaded = false;
   customCssHtml: string;
+  selectvalue: any;
+  annotatedDocument_new: any;
 
-  constructor(private authService: AuthService, private activeRouter: ActivatedRoute,
-    private as: AnnotationService, private http: HttpClient) {
-
-  }
+  constructor(
+    private authService: AuthService,
+    private activeRouter: ActivatedRoute,
+    private as: AnnotationService,
+    private http: HttpClient
+  ) {}
 
   /**
    * Méthode qui retourne l'interface d'annotation brat, si et seulement si elle a été initialisée
    * @returns {any} brat si brat a été initialisé, null sinon
    */
   public getBrat(): any {
-    return (this.brat instanceof BratFrontendEditor ? this.brat : null);
+    return this.brat instanceof BratFrontendEditor ? this.brat : null;
   }
 
   /**
@@ -65,23 +71,39 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       this.projectId = params.projectId;
     });
 
-    await this.as.getProject(this.projectId).then(p => this.project = p.data());
+    await this.as
+      .getProject(this.projectId)
+      .then(p => (this.project = p.data()));
 
     const URL = await firebase
       .storage()
       .ref()
-      .child('Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title)
+      .child(
+        'Projects/' + this.currentDoc.documentId + '/' + this.currentDoc.title
+      )
       .getDownloadURL();
 
-    this.currentDoc.text = await this.http.get(URL, { responseType: 'text' }).toPromise();
+    this.currentDoc.text = await this.http
+      .get(URL, { responseType: 'text' })
+      .toPromise();
 
     await this.as.getAnnotatedDocument(this.currentDoc.documentId).then(d => {
-      const data = d.data()
+      const data = d.data();
 
       if (data === undefined) {
-        this.annotatedDocument = AnnotatedDocumentUtils.fromDoc(this.currentDoc);
+        this.annotatedDocument = AnnotatedDocumentUtils.fromDoc(
+          this.currentDoc
+        );
       } else {
         this.annotatedDocument = data;
+        this.annotatedDocument_new = data;
+        // console.log('data is ', this.annotatedDocument);
+        // console.log('data is ', this.annotatedDocument.entities[0].labels[0]);
+        // const entities = this.annotatedDocument.entities;
+        // const map1 = entities.filter(x => {
+        //   return x.labels.findIndex(lbl => lbl === 'Disease') > -1;
+        // });
+        // console.log(map1);
       }
     });
 
@@ -89,13 +111,13 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       document.getElementById('brat'),
       BratUtils.getColDataFromProject(this.project),
       BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument),
-      options);
+      options
+    );
 
-	this.filterBrat = new FilterBrat();
-	this.filterOptions = FilterOptionsList;
+    this.filterBrat = new FilterBrat();
+    this.filterOptions = FilterOptionsList;
 
-	this.isDataLoaded = true;
-
+    this.isDataLoaded = true;
   }
 
   ngOnInit() {
@@ -121,20 +143,45 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     alert('Annotation saved');
   }
 
-  customCSS () {
-	const head=document.getElementsByTagName('head')[0];
-	const oldFilter=document.getElementById("custom-css");
-	if (oldFilter){
-		head.removeChild(oldFilter);
-	}
-	const newFilter=document.createElement("style");
-	newFilter.type="text/css";
-	newFilter.id="custom-css";
+  customCSS(item) {
+    // console.log(item);
+
+    const entities = this.annotatedDocument.entities.map(en => en); // this.annotatedDocument.entities
+    // const entities = Array.from(this.annotatedDocument.entities);
+    // console.log('new entities ', entities);
+    // console.log('old entities ', this.annotatedDocument.entities);
+    const map1 = entities.filter(x => {
+      return x.labels.findIndex(lbl => lbl === this.filterBrat.value) > -1;
+    });
+    // console.log(map1);
+    this.selectvalue = Object.assign({}, this.annotatedDocument);
+    this.selectvalue.entities = map1;
+    // console.log(this.selectvalue);
+    // console.log('real entities ', this.annotatedDocument.entities);
+    // this.annotatedDocument.entities = map1;
+
+    this.brat = new BratFrontendEditor(
+      document.getElementById('brat'),
+      BratUtils.getColDataFromProject(this.project),
+      BratUtils.getDocDataFromAnnotatedDocument(this.selectvalue),
+      options
+    );
+
+    // console.log("project value is ", this.project);
+    // console.log("selected value is ", this.filterBrat.value);
+    const head = document.getElementsByTagName('head')[0];
+    const oldFilter = document.getElementById('custom-css');
+    if (oldFilter) {
+      head.removeChild(oldFilter);
+    }
+    const newFilter = document.createElement('style');
+    newFilter.type = 'text/css';
+    newFilter.id = 'custom-css';
     this.customCssHtml = '';
-    this.customCssHtml += "#brat .span_"+this.filterBrat.value+"{";
-    this.customCssHtml += "stroke-width: 3 !important;";
-    this.customCssHtml += "}";
+    this.customCssHtml += '#brat .span_' + item.value + '{';
+    this.customCssHtml += 'stroke-width: 3 !important;';
+    this.customCssHtml += '}';
     newFilter.appendChild(document.createTextNode(this.customCssHtml));
-	head.appendChild(newFilter);
+    head.appendChild(newFilter);
   }
 }

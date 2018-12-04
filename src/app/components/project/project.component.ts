@@ -28,7 +28,7 @@ import { Entity } from '../../shared/entity.model';
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',
-  styleUrls: ['./project.component.scss'],
+  styleUrls: ['./project.component.scss']
 })
 export class ProjectComponent implements OnInit, OnDestroy {
   currentProject: Project = ProjectUtils.generateEmpty();
@@ -47,14 +47,32 @@ export class ProjectComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private router: Router,
     private ps: ProjectService
-  ) { }
+  ) {}
 
   ngOnInit() {
+    // show spinner during the firebase call
+    const bgSpinner = document.createElement('div');
+    bgSpinner.classList.add('spinner-div');
+    const spinner = document.createElement('div');
+    spinner.classList.add('spinner');
+
+    bgSpinner.appendChild(spinner);
+    document.body.appendChild(bgSpinner);
+
     this.isConnected = this.authService.isConnected();
     this.sub = this.activeRouter.params.subscribe(params => {
       this.ps.getProject(params.id).then(doc => {
         this.currentProject = doc.data();
-        this.corpus = this.ps.getCorpus(this.currentProject.id);
+
+        try {
+          this.corpus = this.ps.getCorpus(this.currentProject.id);
+
+          // we can remove the spinner after the request
+          document.body.removeChild(bgSpinner);
+        } catch (e) {
+          // the firebase request failed; we have to redirect the user
+          window.location.replace('/error404');
+        }
 
         if (this.isConnected) {
           this.users = this.ps.getUsers();
@@ -96,6 +114,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
+  isAdmin(): boolean {
+    let a = false;
+    this.admin.forEach((user, i) => {
+      if (user.uid === this.authService.getUser().uid) {
+        a = true;
+      }
+    });
+    return a;
+  }
+
   // Sauvegarde les modifications apportées au projet.
   saveProjectModification() {
     if (
@@ -114,7 +142,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addCorpusDialogBox() {
     const dialogRef = this.dialog.open(AddCorpusComponent, {
       width: '250px',
-      data: { corpusTitle: undefined, corpusFile: undefined },
+      data: { corpusTitle: undefined, corpusFile: undefined }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -140,7 +168,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           type: undefined,
           labels: [],
           bgColor: undefined
-        },
+        }
       });
       dialogRef.afterClosed().subscribe((result: Entity) => {
         this.addEntitiesAfterClosedHandler(result);
@@ -152,16 +180,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
           type: entity.type,
           labels: entity.labels,
           bgColor: entity.bgColor
-        },
+        }
       });
       dialogRef.afterClosed().subscribe((result: Entity) => {
         this.editEntitiesAfterClosedHandler(result);
       });
     }
   }
-
+  /**
+   *Cette méthode s'assure qu'il n'y a aucun conflits avec des noms, types
+   * et couleurs préexistants avant d'ajouter l'entité
+   * @param result l'entité à ajouter
+   */
   addEntitiesAfterClosedHandler(result: Entity) {
     let entityExists = false;
+    let typeExists = false;
     if (result !== undefined) {
       if (
         result.name !== undefined &&
@@ -181,6 +214,27 @@ export class ProjectComponent implements OnInit, OnDestroy {
           } else if (item.bgColor === result.bgColor) {
             entityExists = true;
             alert('The chosen color is already used');
+          } else if (item.type === result.type) {
+            typeExists = true;
+            alert('This type already exists');
+          }
+        });
+        this.currentProject.attributes.forEach(item => {
+          if (item.type === result.type) {
+            typeExists = true;
+            alert('This type already exists');
+          }
+        });
+        this.currentProject.relations.forEach(item => {
+          if (item.type === result.type) {
+            typeExists = true;
+            alert('This type already exists');
+          }
+        });
+        this.currentProject.events.forEach(item => {
+          if (item.type === result.type) {
+            typeExists = true;
+            alert('This type already exists');
           }
         });
 
@@ -198,11 +252,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   /**
- *Modifier un attribut
- * Cette méthode s'assure qu'il n'y a aucun conflits avec des noms, types
- * et couleurs préexistants avant d'ajouter l'entité
- * @param result l'entité à ajouter
- */
+   *Modifier un attribut
+   * Cette méthode s'assure qu'il n'y a aucun conflits avec des noms, types
+   * et couleurs préexistants avant d'ajouter l'entité
+   * @param result l'entité à ajouter
+   */
   editEntitiesAfterClosedHandler(result: Entity) {
     let entityExists = false;
     let typeExists = false;
@@ -217,7 +271,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       ) {
         for (let i = 0; i < item.length; i++) {
           if (item[i].name === result.name) {
-            item[i] = new Entity;
+            item[i] = new Entity();
             item.forEach(items => {
               if (items.name === result.name) {
                 entityExists = true;
@@ -229,10 +283,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
               } else if (items.type === result.type) {
                 typeExists = true;
                 alert('This type already exists');
-              } else
-                if (!entityExists && !typeExists && items.name === '') {
-                  this.currentProject.entities[i] = result;
-                }
+              } else if (!entityExists && !typeExists && items.name === '') {
+                this.currentProject.entities[i] = result;
+              }
             });
           }
         }
@@ -247,7 +300,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'entity',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -266,7 +319,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddAnnotatorComponent, {
       width: '600px',
       height: '600px',
-      data: { UserId: undefined },
+      data: { UserId: undefined }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -298,7 +351,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'Annotator',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -322,7 +375,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddAdminComponent, {
       width: '600px',
       height: '600px',
-      data: { UserId: undefined },
+      data: { UserId: undefined }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -354,7 +407,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'Administrator',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -383,22 +436,34 @@ export class ProjectComponent implements OnInit, OnDestroy {
         labels: [],
         unused: false,
         values: ''
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe((result: Attribute) => {
       this.addAttributesAfterClosedHandler(result);
     });
   }
-
+  /**
+   *Cette méthode s'assure qu'il n'y a aucun conflits avec des noms et types
+   *préexistants avant d'ajouter l'attribut
+   * @param result l'attribut à ajouter
+   */
   addAttributesAfterClosedHandler(result: Attribute) {
+    const typeExists = false;
     let attributeExists = false;
     if (result !== undefined) {
-      if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
-
+      if (
+        result.name !== undefined &&
+        result.type !== undefined &&
+        result.labels !== undefined
+      ) {
         if (!attributeExists) {
-          result.labels = result.labels[0].split(',');
-          this.currentProject.attributes.push(result);
+          if (!typeExists) {
+            result.labels = result.labels[0].split(',');
+            this.currentProject.attributes.push(result);
+          } else {
+            alert('This type already exists');
+          }
         } else {
           alert('This attribute already exists');
         }
@@ -408,8 +473,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         });
         if (!attributeExists) {
-          result.labels = result.labels[0].split(',');
-          this.currentProject.attributes.push(result);
+          if (!typeExists) {
+            result.labels = result.labels[0].split(',');
+            this.currentProject.attributes.push(result);
+          } else {
+            alert('This type already exists');
+          }
         } else {
           if (result.name.length > 30) {
             alert('Name length must be lower than 30');
@@ -427,7 +496,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'Attribute',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -453,7 +522,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         color: undefined,
         attributes: [],
         arcs: []
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe((result: Relation) => {
@@ -461,13 +530,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
   /**
-   *  Ajouter la donnée dans la liste de relation
-   * @param data la donnée à ajouter
+   *Cette méthode s'assure qu'il n'y a aucun conflits avec des noms et types
+   *préexistants avant d'ajouter la relation
+   * @param data la relation à ajouter
    */
   public addRelation(data: Relation) {
-    if (data.type !== undefined &&
+    if (
+      data.type !== undefined &&
       data.labels !== [] &&
-      data.color !== undefined) {
+      data.color !== undefined
+    ) {
       if (!this.isExist(data)) {
         if (data.type.length <= 30) {
           if (!this.relationColorAlreadyUsed(data)) {
@@ -524,7 +596,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'Relation',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -546,8 +618,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
         type: undefined,
         etiquettes: [],
         attributes: [],
-        color: undefined,
-      },
+        color: undefined
+      }
     });
 
     dialogRef.afterClosed().subscribe((result: Event) => {
@@ -555,15 +627,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   *Cette méthode s'assure qu'il n'y a aucun conflits avec des noms et types
+   *préexistants avant d'ajouter l'attribut
+   * @param result l'event à ajouter
+   */
   addEventAfterClosedHandler(result: Event) {
     const eventExists = false;
     if (result !== undefined) {
-      if (result.name !== undefined &&
+      if (
+        result.name !== undefined &&
         result.type !== undefined &&
         result.labels !== [] &&
         result.attributes !== [] &&
-        result.bgColor !== undefined) {
-
+        result.bgColor !== undefined
+      ) {
         if (!this.isEventExist(result)) {
           if (!this.eventColorAlreadyUsed(result)) {
             if (result.name.length < 30) {
@@ -632,7 +710,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'Event',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -659,7 +737,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'Corpus',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {

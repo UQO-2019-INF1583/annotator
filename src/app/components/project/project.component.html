@@ -96,15 +96,15 @@
           <mat-card-title>
             <h2>Entities</h2>
           </mat-card-title>
-          <button class="btn btn btn-primary" (click)="addEntityDialogBox(null)">+</button>
+          <button *ngIf="isAdmin()" class="btn btn btn-primary" (click)="addEntityDialogBox(null)">+</button>
         </mat-card-header>
         <mat-card-content>
           <mat-list role="list" class="card-list-project">
             <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.entities" [ngStyle]="{'background-color': item?.bgColor}">
               <h4 mat-line>{{item?.name}}</h4>
               <!-- Edit entity -->
-              <button class="btn btn-danger" (click)="addEntityDialogBox(item)">Edit</button>
-              <button class="btn btn-danger" (click)="deleteEntity(item.name)">Delete</button>
+              <button *ngIf="isAdmin()" class="btn btn-danger" (click)="addEntityDialogBox(item)">Edit</button>
+              <button *ngIf="isAdmin()" class="btn btn-danger" (click)="deleteEntity(item.name)">Delete</button>
             </mat-list-item>
           </mat-list>
         </mat-card-content>

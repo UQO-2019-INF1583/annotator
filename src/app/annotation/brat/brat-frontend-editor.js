@@ -3555,7 +3555,7 @@
               a.moveToTop(false, i)
             });
           /* En cliquant sur un des boutons de l'entête, la fenêtre d'annotation se ferme*/
-          $(".header a").click(function(i){ a.close(i) });
+          $(".header a").click(function(i){ if(a._isOpen == true) a.close(i) });
           /* La fonction urlHandler permet de vérifier si l'url a changer */
           function urlHandler(){
             this.oldUrl = window.location.href;

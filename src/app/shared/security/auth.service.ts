@@ -86,8 +86,6 @@ export class AuthService {
     var auth = firebase.auth();
 
     return auth.sendPasswordResetEmail(email)
-      .then(() => console.log("email sent"))
-      .catch((error) => console.log(error))
   }
 
   getUser() {

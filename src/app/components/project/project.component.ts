@@ -566,17 +566,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
         if (!this.isEventExist(result)) {
           if (!this.eventColorAlreadyUsed(result)) {
-            this.currentProject.events.push(this.mapValidResultToEvent(result));
+            if (result.name.length < 30) {
+              this.currentProject.events.push(this.mapValidResultToEvent(result));
+            } else {
+              alert('Name length must be lower than 30');
+            }
           } else {
             alert('The chosen color is already used');
-          }
-        }
-
-        if (!eventExists) {
-          if (result.name.length < 30) {
-            this.currentProject.events.push(this.mapValidResultToEvent(result));
-          } else {
-            alert('Name length must be lower than 30');
           }
         } else {
           alert('This event already exists');

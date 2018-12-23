@@ -12,9 +12,9 @@ $topnav-background-color: #222;
   text-align: center;
   padding: 3em;
   margin: auto;
-  width:40%;
+  width: 40%;
   .col-md-4 {
-    padding :0;
+    padding: 0;
   }
   .input-lg {
     width: 46px;
@@ -27,8 +27,8 @@ $topnav-background-color: #222;
     background: 0 0;
     border: none;
     box-shadow: none;
-    border-bottom: 2px solid rgba(255,255,255,.5);
-    color: #FFF;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    color: #fff;
     border-radius: 0;
   }
   .input-underline:focus {
@@ -37,17 +37,20 @@ $topnav-background-color: #222;
   }
   .rounded-btn {
     -webkit-border-radius: 50px;
-            border-radius: 50px;
-    color: rgba(255,255,255,0.8);
+    border-radius: 50px;
+    color: rgba(255, 255, 255, 0.8);
     background: $topnav-background-color;
-    border: 2px solid rgba(255,255,255,0.8);
+    border: 2px solid rgba(255, 255, 255, 0.8);
     font-size: 18px;
     line-height: 40px;
     padding: 0 25px;
   }
-  .rounded-btn:hover,.rounded-btn:focus,.rounded-btn:active,.rounded-btn:visited{
-    color: rgba(255,255,255,1);
-    border: 2px solid rgba(255,255,255,1);
+  .rounded-btn:hover,
+  .rounded-btn:focus,
+  .rounded-btn:active,
+  .rounded-btn:visited {
+    color: rgba(255, 255, 255, 1);
+    border: 2px solid rgba(255, 255, 255, 1);
     outline: none;
   }
 
@@ -57,26 +60,28 @@ $topnav-background-color: #222;
     margin-bottom: 10px;
     font-size: 36px;
     small {
-      color: rgba(255,255,255,0.7);
+      color: rgba(255, 255, 255, 0.7);
     }
   }
 
   .form-group {
     padding: 8px 0;
     input::-webkit-input-placeholder {
-      color: rgba(255,255,255,0.6) !important;
+      color: rgba(255, 255, 255, 0.6) !important;
     }
 
-    input:-moz-placeholder { /* Firefox 18- */
-      color: rgba(255,255,255,0.6) !important;
+    input:-moz-placeholder {
+      /* Firefox 18- */
+      color: rgba(255, 255, 255, 0.6) !important;
     }
 
-    input::-moz-placeholder {  /* Firefox 19+ */
-      color: rgba(255,255,255,0.6) !important;
+    input::-moz-placeholder {
+      /* Firefox 19+ */
+      color: rgba(255, 255, 255, 0.6) !important;
     }
 
     input:-ms-input-placeholder {
-      color: rgba(255,255,255,0.6) !important;
+      color: rgba(255, 255, 255, 0.6) !important;
     }
   }
   .form-content {
@@ -84,78 +89,87 @@ $topnav-background-color: #222;
   }
   .user-avatar {
     -webkit-border-radius: 50%;
-            border-radius: 50%;
-    border: 2px solid #FFF;
+    border-radius: 50%;
+    border: 2px solid #fff;
   }
 }
 
-
 /*        Pascal                 */
-.md_card_login{
+.md_card_login {
   width: 400px;
   height: 800px;
-
 }
 
-.grid_list_login{
+.grid_list_login {
   margin-top: 50px;
   background-color: #7e57c2;
 }
 
-.login-titre{
+.login-titre {
   font-family: "Times New Roman", Times, serif;
-  color:#546E7A;
+  color: #546e7a;
 }
 
-.image-providers{
+.image-providers {
   float: right;
 }
-.login-text-button{
+.login-text-button {
   float: left;
   font-family: "Times New Roman", Times, serif;
 }
-.list-item-button{
+.list-item-button {
   height: 85px;
 }
 
-
-.login-button{
-  height:75px;
+.login-button {
+  height: 75px;
 }
 
-.login-jouindre-button{
+.login-jouindre-button {
   font-family: "Times New Roman", Times, serif;
-  color:#546E7A;
+  color: #546e7a;
 }
-.imgGit{
- margin-left: 117px;
+.imgGit {
+  margin-left: 117px;
   margin-top: 12px;
 }
-.logo{
-  height:325px;
+.logo {
+  height: 325px;
   width: 325px;
-  background-color: #673AB7;
+  background-color: #673ab7;
   border-radius: 80%;
   position: absolute;
-  left:-100px;
-
-
+  left: -100px;
 }
-.un{
-  background-color: #7e57c2;;
+.un {
+  background-color: #7e57c2;
 }
-.titre-login{
+.titre-login {
   position: absolute;
-  left :0px;
+  left: 0px;
   top: 80px;
 }
-.facebook{}
+.facebook {
+}
 
 .socialIcon {
-  display:inline-block;
-  width:40px;
-  height:40px;
-  text-indent:-10000px;
-  border:4px solid #fff;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  text-indent: -10000px;
+  border: 4px solid #fff;
   margin: 0 10px 0 0;
+}
+
+.login_error {
+  margin: 10px 0px;
+  padding: 12px;
+  color: #d8000c;
+  background-color: #ffd2d2;
+}
+
+.login_error i {
+  margin: 10px 22px;
+  font-size: 2em;
+  vertical-align: middle;
 }

@@ -388,11 +388,17 @@ export class ProjectComponent implements OnInit, OnDestroy {
    * @param data la donnée à ajouter
    */
   public addRelation(data: Relation) {
-    if (data) {
-      if (this.isExist(data)) {
-        alert('This relation already exists');
+    if (data.type !== undefined &&
+      data.labels !== [] &&
+      data.color !== undefined) {
+      if (!this.isExist(data)) {
+        if (!this.relationColorAlreadyUsed(data)) {
+          this.currentProject.relations.push(data);
+        } else {
+          alert('The chosen color is already used');
+        }
       } else {
-        this.currentProject.relations.push(data);
+        alert('This relation already exists');
       }
     }
   }
@@ -411,6 +417,22 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
     return exist;
   }
+
+  /**
+   * Vérifie qu'une relation n'a pas déjà la même couleur
+   * @param data
+   */
+  relationColorAlreadyUsed(data: Relation): boolean {
+    let exist = false;
+    this.currentProject.relations.forEach(relation => {
+      if (relation.color === data.color) {
+        exist = true;
+      }
+    });
+
+    return exist;
+  }
+
   /**
    * Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
    *  @param target
@@ -453,25 +475,54 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addEventAfterClosedHandler(result: Event) {
-    let eventExists = false;
     if (result !== undefined) {
       if (result.name !== undefined &&
         result.type !== undefined &&
         result.labels !== [] &&
         result.attributes !== [] &&
         result.bgColor !== undefined) {
-        this.currentProject.events.forEach(item => {
-          if (item.name === result.name) {
-            eventExists = true;
+
+        if (!this.isEventExist(result)) {
+          if (!this.eventColorAlreadyUsed(result)) {
+            this.currentProject.events.push(this.mapValidResultToEvent(result));
+          } else {
+            alert('The chosen color is already used');
           }
-        });
-        if (!eventExists) {
-          this.currentProject.events.push(this.mapValidResultToEvent(result));
         } else {
           alert('This event already exists');
         }
       }
     }
+  }
+
+  /**
+   * Vérifie qu'un event n'a pas déjà le même nom
+   * @param data
+   */
+  isEventExist(data: Event): boolean {
+    let exist = false;
+    this.currentProject.events.forEach(event => {
+      if (event.name === data.name) {
+        exist = true;
+      }
+    });
+
+    return exist;
+  }
+
+  /**
+   * Vérifie qu'un event n'a pas déjà la même couleur
+   * @param data
+   */
+  eventColorAlreadyUsed(data: Event): boolean {
+    let exist = false;
+    this.currentProject.events.forEach(event => {
+      if (event.bgColor === data.bgColor) {
+        exist = true;
+      }
+    });
+
+    return exist;
   }
 
   mapValidResultToEvent(result: Event): Event {

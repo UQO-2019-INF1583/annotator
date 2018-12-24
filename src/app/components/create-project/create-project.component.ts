@@ -3,6 +3,18 @@ import { Router } from '@angular/router';
 import { Project, ProjectUtils } from '../../shared/project.model';
 import { CreateProjectService } from './create-project.service';
 
+export enum CreationStatus {
+  NotSubmitted,
+  InProgress,
+  Success,
+  Error
+}
+
+interface CreationDetails {
+  status: CreationStatus,
+  message: string
+}
+
 @Component({
   selector: 'app-create-project',
   templateUrl: './create-project.component.html',
@@ -12,6 +24,8 @@ import { CreateProjectService } from './create-project.service';
 
 export class CreateProjectComponent implements OnInit {
   project: Project = ProjectUtils.generateEmpty();
+  // make the enum a property of the component class
+  CreationStatus = CreationStatus;
   creationDetails: CreationDetails = {
     status: CreationStatus.NotSubmitted,
     message: ''
@@ -44,16 +58,4 @@ export class CreateProjectComponent implements OnInit {
       });
     }
   }
-}
-
-interface CreationDetails {
-  status: CreationStatus,
-  message: string
-}
-
-enum CreationStatus {
-  NotSubmitted,
-  InProgress,
-  Success,
-  Error
 }

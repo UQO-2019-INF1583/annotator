@@ -58,4 +58,10 @@ export class HeaderComponent implements OnInit {
     return this.authService.isConnected() && HeaderComponent.currRole === Role.Adm;
   }
 
+  // Verifie si on se trouve sur la page d'annotation
+  isAnnotation(){
+    var adress = window.location.pathname;
+    return adress.includes("annotation");
+  }
+
 }

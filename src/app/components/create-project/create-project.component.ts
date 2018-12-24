@@ -25,7 +25,7 @@ interface CreationDetails {
 export class CreateProjectComponent implements OnInit {
   project: Project = ProjectUtils.generateEmpty();
   // make the enum a property of the component class
-  CreationStatus = CreationStatus;
+  creationStatus = CreationStatus;
   creationDetails: CreationDetails = {
     status: CreationStatus.NotSubmitted,
     message: ''

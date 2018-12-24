@@ -24,7 +24,7 @@
             <button class="btn btn-link" mat-raised-button color="primary" [routerLink]="['']">Cancel</button>
           </div>
           <div>
-            <p [style.color]="creationDetails.status == CreationStatus.Error ? 'red' : creationDetails.status == CreationStatus.Success ? 'green' : 'black'">
+            <p [style.color]="creationDetails.status == creationStatus.Error ? 'red' : creationDetails.status == creationStatus.Success ? 'green' : 'black'">
               {{creationDetails.message}}
             </p>
           </div>

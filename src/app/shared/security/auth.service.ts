@@ -48,6 +48,19 @@ export class AuthService {
         return Observable.of(null);
       }
     });
+    this.afAuth.authState.subscribe((auth) => {
+      this.authState = auth
+    });
+  }
+
+  // Returns true if user is logged in
+  get authenticated(): boolean {
+    return this.authState !== null;
+  }
+
+  // Returns current user UID
+  get currentUserId(): string {
+    return this.authenticated ? this.authState.uid : '';
   }
 
   signIn(email, password): Promise<any> {

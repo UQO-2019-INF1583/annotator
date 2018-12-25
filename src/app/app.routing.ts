@@ -17,6 +17,7 @@ import { PageNotFoundComponent } from './not-found/not-found.component';
 import { ProjectComponent } from './components/index';
 import { RegisterComponent } from './register';
 import { UserComponent } from './adm';
+import { ProfileComponent } from './profile/profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const appRoutes: Routes = [
@@ -42,6 +43,7 @@ const appRoutes: Routes = [
     component: ProjectManagerComponent /*, canActivate: [AuthGuard]*/
   },
   { path: 'register', component: RegisterComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: 'reset', component: ResetPasswordComponent },
   {
     path: 'userManager',

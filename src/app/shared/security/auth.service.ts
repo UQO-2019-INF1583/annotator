@@ -86,6 +86,16 @@ export class AuthService {
     localStorage.removeItem('currentUser');
   }
 
+  resetPassword(email: string) {
+    var auth = firebase.auth();
+
+    return auth.sendPasswordResetEmail(email)
+  }
+
+  getUser() {
+    return this.afAuth.auth.currentUser;
+  }
+
   googleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);
@@ -151,9 +161,11 @@ export class AuthService {
 
   signOut() {
     this.afAuth.auth.signOut().then(() => {});
+    localStorage.removeItem('currentUser');
   }
 
   isConnected(): boolean {
-    return firebase.auth().currentUser != null;
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    return currentUser != null;
   }
 }

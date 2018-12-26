@@ -28213,7 +28213,6 @@
 // 1.0   - (10/2/2009) Initial release
 
     (function ($, window) {
-      console.info('yes!')
       '$:nomunge'; // Used by YUI compressor.
 
       // Some convenient shortcuts.

@@ -340,9 +340,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addAttributesAfterClosedHandler(result: Attribute) {
-    const attributeExists = false;
+    let attributeExists = false;
     if (result !== undefined) {
       if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
+        this.currentProject.attributes.forEach(item => {
+          if (item.name === result.name) {
+            attributeExists = true;
+          }
+        });
         if (!attributeExists) {
           result.labels = result.labels[0].split(',');
           this.currentProject.attributes.push(result);

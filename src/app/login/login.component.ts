@@ -91,9 +91,9 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  twitterLogin() {
-    this.loading = true;
-
+  signInWithTwitterLogin() {
+    this.authService.twitterLogin()
+     .then((data) => this.afterSignIn());
   }
 
   /// Shared

@@ -111,6 +111,11 @@ export class AuthService {
     return this.oAuthLogin(provider);
   }
 
+  twitterLogin(){
+    const provider = new firebase.auth.TwitterAuthProvider();
+    return this.oAuthLogin(provider);
+  }
+
   private oAuthLogin(provider: firebase.auth.AuthProvider): Promise<any> {
     return new Promise((resolve, reject) => {
       this.afAuth.auth

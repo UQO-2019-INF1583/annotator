@@ -27,7 +27,10 @@
 </mat-form-field>
 
 <mat-dialog-actions>
-  <button class="btn btn btn-primary" [mat-dialog-close]="data">Ajouter</button>
+  <button class="btn btn-primary" [mat-dialog-close]="data" [disabled]="isNotValid">Ajouter</button>
   <div style="width: 10px"></div>
   <button class="btn btn btn-primary" mat-dialog-close>Annuler</button>
 </mat-dialog-actions>
+<br/>
+<mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
+<span *ngIf="progress" style="color:green">Validation du fichier en cours</span>

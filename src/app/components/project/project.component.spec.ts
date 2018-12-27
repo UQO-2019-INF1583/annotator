@@ -25,6 +25,8 @@ import { ProjectComponent } from './project.component';
 import { ProjectManagerService } from '../../adm';
 import { ProjectService } from './project.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 
 describe('Projet', () => {
   let projectComponent: ProjectComponent;
@@ -41,9 +43,10 @@ describe('Projet', () => {
         RouterTestingModule,
         MatDialogModule,
         BrowserAnimationsModule,
-        MatSelectModule
+        BrowserDynamicTestingModule,
+        MatSelectModule,
       ],
-      declarations: [ProjectComponent],
+      declarations: [ProjectComponent, YesNoDialogBoxComponent],
       providers: [
         { provide: AngularFirestore, useValue: projectMocks.angularFirestore },
         { provide: AuthService, useValue: projectMocks.authService },
@@ -52,7 +55,11 @@ describe('Projet', () => {
           provide: ProjectManagerService,
           useValue: projectMocks.projectManagerService
         }
-      ]
+      ],
+    }).overrideModule(BrowserDynamicTestingModule, {
+      set: {
+        entryComponents: [ YesNoDialogBoxComponent ],
+      }
     }).compileComponents();
 
     projectFixture = TestBed.createComponent(ProjectComponent);

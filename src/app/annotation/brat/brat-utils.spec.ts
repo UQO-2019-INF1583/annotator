@@ -22,12 +22,8 @@ describe ('getDocDataFromAnnotatedDocument', () => {
     }).compileComponents();
   });
 
-  /*it('should create a docData', () => {
-    expect(BratUtils.getDocDataFromAnnotatedDocument(annotDoc.doc1)).toEqual(jasmine.any(DocumentData))
-  });*/
-
   it('should create a DocumentData', () => {
-    expect(BratUtils.getDocDataFromAnnotatedDocument(annotDoc.doc1)).toBe(docData.stdDocData);
+    expect(BratUtils.getDocDataFromAnnotatedDocument(annotDoc.doc1)).toEqual(docData.doc1DocData);
   });
 });
 
@@ -41,12 +37,8 @@ describe ('getColDataFromProject', () => {
     }).compileComponents();
   });
 
-  /*it('should create a colData', () => {
-    expect(BratUtils.getColDataFromProject(project.proj1)).toEqual(jasmine.any(CollectionData))
-  });*/
-
   it('should create a CollectionData', () => {
-    expect(BratUtils.getColDataFromProject(project.proj1)).toBe(colData.stdColData);
+    expect(BratUtils.getColDataFromProject(project.proj1)).toEqual(colData.stdColData);
   });
 });
 
@@ -60,13 +52,8 @@ describe ('getAnnotatedDocumentfromDocData', () => {
     }).compileComponents();
   });
 
-  /*it('should create a colData', () => {
-    expect(BratUtils.getAnnotatedDocumentfromDocData(docData.expectedDocData,
-     project.proj1, annotDoc.doc2)).toEqual(jasmine.any(AnnotatedDocument))
-  });*/
-
   it('should create an annotated document', () => {
-    expect(BratUtils.getAnnotatedDocumentfromDocData(docData.expectedDocData, project.proj1, annotDoc.aDocInit)).toBe(annotDoc.doc1);
+    expect(BratUtils.getAnnotatedDocumentfromDocData(docData.annotDocData, project.proj1, annotDoc.aDocInit)).toEqual(annotDoc.doc1);
   });
 });
 

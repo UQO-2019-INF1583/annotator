@@ -4,7 +4,7 @@ import { AnnotatedDocument } from '../../shared/annotated-document.model';
 import { CollectionData } from '../collection-data';
 
 export const docData = {
-  expectedDocData : {
+  annotDocData : {
     text: 'Ed O\'Kelley was the man who shot the man who shot Jesse James.\nJ\'ai castor le plus petit, mais le plus fort.',
     entities: [
       ['N1', 'Person', [[0, 2]]],
@@ -17,7 +17,7 @@ export const docData = {
       ['R1', 'Friend', [['From', 'N1'], ['To', 'N2']]]
     ],
     triggers: [
-      ['T1', 'Friend', [[3, 4]] ]
+      ['T1', 'Greeting', [[3, 4]] ]
     ],
     events: [
       ['E1', 'T1', [['Greeter', 'N1'], ['Greeted', 'N2']]]
@@ -31,8 +31,8 @@ export const docData = {
     normalizations: [],
     source_files: []
   }as DocumentData,
-  stdDocData : {
-    text: 'Ed O\'Kelley was ,the man who shot the man who shot Jesse James.\nJ\'ai castor le plus petit, mais le plus fort.',
+  doc1DocData : {
+    text: 'Ed O\'Kelley was the man who shot the man who shot Jesse James.\nJ\'ai castor le plus petit, mais le plus fort.',
     entities: [
       ['N1', 'Person', [[0, 2]]],
       ['N2', 'Person', [[5, 11]]]
@@ -43,8 +43,12 @@ export const docData = {
     relations: [
       ['R1', 'Friend', [['From', 'N1'], ['To', 'N2']]]
     ],
-    triggers: [],
-    events: [],
+    triggers: [
+      ['T1', 'Greeting', [[3, 4]] ]
+    ],
+    events: [
+      ['E1', 'T1', [['Greeter', 'N1'], ['Greeted', 'N2']]]
+    ],
     comments: [],
     ctime: 1351154734.5055847,
     messages: [],
@@ -71,10 +75,10 @@ export const annotDoc = {
             end: 2
           }
         ],
-        type: '',
-        labels: [],
+        type: 'Person',
+        labels: ['person'],
         bgColor: '#FE2E2E',
-        borderColor: '',
+        borderColor: 'darken',
         unused: false,
         arcs: [],
         children: []
@@ -88,10 +92,10 @@ export const annotDoc = {
             end: 11
           }
         ],
-        type: '',
-        labels: [],
+        type: 'Person',
+        labels: ['person'],
         bgColor: '#FE2E2E',
-        borderColor: '',
+        borderColor: 'darken',
         unused: false,
         arcs: [],
         children: []
@@ -104,7 +108,7 @@ export const annotDoc = {
         type: 'Notorious',
         labels: [],
         unused: false,
-        values: '',
+        values: {},
         target: 'N1'
       }
     ],
@@ -120,7 +124,7 @@ export const annotDoc = {
           id: 'N2',
           role: 'To'
         },
-        labels: [],
+        labels: ['friend'],
         dashArray: '3,3',
         color: '',
         attributes: [],
@@ -136,14 +140,20 @@ export const annotDoc = {
             end: 4
           }
         ],
-        links: [{
-          id: 'N1',
-          type: 'Greeter'
-        }],
+        links: [
+          {
+            id: 'N1',
+            type: 'Greeter'
+          },
+          {
+            id: 'N2',
+            type: 'Greeted'
+          }
+        ],
         triggerId: 'T1',
         name: 'Greeting',
-        type: 'Friend',
-        labels: [],
+        type: 'Greeting',
+        labels: ['Greeting'],
         bgColor: '',
         borderColor: 'darken',
         attributes: [],
@@ -177,10 +187,10 @@ export const project = {
     entities: [
       {
         name: 'Person',
-        type: '',
-        labels: [],
+        type: 'Person',
+        labels: ['person'],
         bgColor: '#FE2E2E',
-        borderColor: '',
+        borderColor: 'darken',
         unused: false,
         arcs: [],
         children: []
@@ -198,8 +208,8 @@ export const project = {
     events: [
       {
         name: 'Greeting',
-        type: 'Friend',
-        labels: [],
+        type: 'Greeting',
+        labels: ['Greeting'],
         bgColor: '',
         borderColor: 'darken',
         attributes: [],
@@ -211,7 +221,7 @@ export const project = {
     relations: [
       {
         type: 'Friend',
-        labels: [],
+        labels: ['friend'],
         dashArray: '3,3',
         color: '',
         attributes: [],
@@ -244,8 +254,8 @@ export const colData = {
     entity_types: [
       {
         name: 'Person',
-        type: '',
-        labels: [],
+        type: 'Person',
+        labels: ['person'],
         bgColor: '#FE2E2E',
         borderColor: 'darken',
         unused: false,
@@ -257,8 +267,8 @@ export const colData = {
     event_types: [
       {
         name: 'Greeting',
-        type: 'Friend',
-        labels: [],
+        type: 'Greeting',
+        labels: ['Greeting'],
         bgColor: '',
         borderColor: 'darken',
         attributes: [],
@@ -270,7 +280,7 @@ export const colData = {
     relation_types: [
       {
         type: 'Friend',
-        labels: [],
+        labels: ['friend'],
         dashArray: '3,3',
         color: '',
         args: []

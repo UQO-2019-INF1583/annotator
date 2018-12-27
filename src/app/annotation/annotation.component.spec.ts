@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { AnnotationComponent } from './annotation.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatToolbarModule } from '@angular/material'
+import { MatCardModule, MatSelectModule, MatToolbarModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
@@ -15,6 +14,7 @@ import { FirebaseApp, AngularFireModule } from 'angularfire2';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient } from '@angular/common/http';
 import { AnnotationService } from './annotation.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 let AngularFirestoreStub: Partial<AngularFirestore>;
 let AngularFireStorageStub: Partial<AngularFireStorage>;
@@ -55,14 +55,16 @@ describe('AnnotationComponent', () => {
     };
 
     AnnotationServiceStub = {
-      //getEntities: function (projectId) { return Observable.of([]) },
     };
 
     TestBed.configureTestingModule({
       declarations: [AnnotationComponent],
       imports: [
-        RouterTestingModule,
+        FormsModule,
+        ReactiveFormsModule,
         MatCardModule,
+        RouterTestingModule,
+        MatSelectModule,
         MatToolbarModule,
         AngularFireModule,
         HttpClientTestingModule,

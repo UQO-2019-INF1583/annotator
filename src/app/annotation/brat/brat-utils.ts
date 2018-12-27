@@ -195,7 +195,8 @@ export class BratUtils {
       return relation;
     });
 
-    for (let i = 0; i < annotatedDocument.events.length; i++) {
+    annotatedDocument.events = [];
+    for (let i = 0; i < docData.events.length; i++) {
       const docTrigger = docData.triggers[i];
       const docEvent = docData.events[i];
       const projectEvent = project.events.find(e => e.type === docTrigger[1])
@@ -207,6 +208,7 @@ export class BratUtils {
       event.bgColor = projectEvent.bgColor;
       event.attributes = projectEvent.attributes;
       event.name = projectEvent.name;
+      event.arcs = projectEvent.arcs;
       event.locations = docTrigger[2].map(x => ({
         start: x[0],
         end: x[1]
@@ -217,10 +219,12 @@ export class BratUtils {
 
       event.id = docEvent[0];
 
+      // TODO : vérifier que docEvent[1] se trouve dans les triggers
+
       event.links = docEvent[2].map(docLink => {
         const link: EventLink = EventLinkUtils.generateEmpty();
-        link.id = docLink[0][1];
-        link.type = docLink[0][0];
+        link.id = docLink[1];
+        link.type = docLink[0];
         return link;
       });
 

@@ -1,7 +1,6 @@
 // En grande partie le code à été pris dans le site suivant:
 // https://angularfirebase.com/snippets/angularfire2-version-4-authentication-service/#Gist
 
-
 // Rôle : récupère et gère les informations d'authentification d'un utilisateur
 // donné naviguant dans l’application, qu'il soit anonyme ou connecté via compte
 // utilisateur ou autre plateforme.
@@ -20,7 +19,11 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/delay';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
+import {
+  AngularFirestore,
+  AngularFirestoreDocument,
+  AngularFirestoreCollection
+} from 'angularfire2/firestore';
 
 import { Role, User } from '../user.model';
 
@@ -32,29 +35,49 @@ export class AuthService {
   email: string;
   private UserCollection: AngularFirestoreCollection<User>;
 
-  constructor(private afAuth: AngularFireAuth,
+  constructor(
+    private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
-    private router: Router) {
-
+    private router: Router
+  ) {
     //// Get auth data, then get firestore user document || null
-    this.user = this.afAuth.authState
-      .switchMap(user => {
-        if (user) {
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
-        } else {
-          return Observable.of(null)
-        }
-      })
+    this.user = this.afAuth.authState.switchMap(user => {
+      if (user) {
+        return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+      } else {
+        return Observable.of(null);
+      }
+    });
+    this.afAuth.authState.subscribe((auth) => {
+      this.authState = auth
+    });
   }
 
-  signIn(email, password): any {
-    return this.afAuth.auth.signInWithEmailAndPassword(email, password)
-      .then(credentials => {
-        localStorage.setItem('currentUser', JSON.stringify(credentials.displayName));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  // Returns true if user is logged in
+  get authenticated(): boolean {
+    return this.authState !== null;
+  }
+
+  // Returns current user UID
+  get currentUserId(): string {
+    return this.authenticated ? this.authState.uid : '';
+  }
+
+  signIn(email, password): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.afAuth.auth
+        .signInWithEmailAndPassword(email, password)
+        .then(credentials => {
+          localStorage.setItem(
+            'currentUser',
+            JSON.stringify(credentials.displayName)
+          );
+          resolve();
+        })
+        .catch(function(error: Error) {
+          reject(error);
+        });
+    });
   }
 
   logout(): void {
@@ -68,6 +91,16 @@ export class AuthService {
     return auth.sendPasswordResetEmail(email)
       .then(() => console.log("email sent"))
       .catch((error) => console.log(error))
+  }
+
+  resetPassword(email: string) {
+    var auth = firebase.auth();
+
+    return auth.sendPasswordResetEmail(email)
+  }
+
+  getUser() {
+    return this.afAuth.auth.currentUser;
   }
 
   googleLogin() {
@@ -85,26 +118,43 @@ export class AuthService {
     return this.oAuthLogin(provider);
   }
 
-  private oAuthLogin(provider: firebase.auth.AuthProvider) {
-    return this.afAuth.auth.signInWithPopup(provider)
-      .then((result) => {
-        this.email = result.user.email;
-        this.afs.collection('Users').ref.where('email', '==', this.email).get()
-          .then((snapshot) => {
-            if (snapshot.size === 0) {
-              this.afs.collection('Users').ref.add({
-                id: firebase.auth().currentUser.uid,
-                email: this.email,
-                firstname: '?',
-                lastname: '?'
-              });
-            }
-          });
+  twitterLogin(){
+    const provider = new firebase.auth.TwitterAuthProvider();
+    return this.oAuthLogin(provider);
+  }
 
-        // let userContent: Array<Object> = [this.username,this.email];
-        localStorage.setItem('currentUser', JSON.stringify(result.user.displayName));
-      })
-      .catch((error) => this.handleError(error));
+  private oAuthLogin(provider: firebase.auth.AuthProvider): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.afAuth.auth
+        .signInWithPopup(provider)
+        .then(result => {
+          this.email = result.user.email;
+          this.afs
+            .collection('Users')
+            .ref.where('email', '==', this.email)
+            .get()
+            .then(snapshot => {
+              if (snapshot.size === 0) {
+                this.afs.collection('Users').ref.add({
+                  id: firebase.auth().currentUser.uid,
+                  email: this.email,
+                  firstname: '?',
+                  lastname: '?'
+                });
+              }
+            });
+
+          // let userContent: Array<Object> = [this.username,this.email];
+          localStorage.setItem(
+            'currentUser',
+            JSON.stringify(result.user.displayName)
+          );
+          resolve();
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   }
 
   private updateUserData(user) {
@@ -117,21 +167,17 @@ export class AuthService {
       password: '',
       role: Role.Visitor
       // lastname:"???"
-    }
-    return userRef.set(data)
+    };
+    return userRef.set(data);
   }
 
   signOut() {
-    this.afAuth.auth.signOut().then(() => {
-    });
-  }
-
-  // If error, console log and notify user
-  private handleError(error: Error) {
-    console.error(error);
+    this.afAuth.auth.signOut().then(() => {});
+    localStorage.removeItem('currentUser');
   }
 
   isConnected(): boolean {
-    return firebase.auth().currentUser != null;
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    return currentUser != null;
   }
 }

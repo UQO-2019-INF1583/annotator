@@ -81,6 +81,7 @@ import { AddEventComponent } from './components/add-event/add-event.component';
 import { AddAttributeComponent } from './components/add-attribute/add-attribute.component';
 import { YesNoDialogBoxComponent } from './components/yes-no-dialog-box/yes-no-dialog-box.component';
 import { CreateProjectService } from './components/create-project/create-project.service';
+import { ProfileComponent } from './profile/profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
@@ -107,6 +108,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     AddEventComponent,
     AddAttributeComponent,
     YesNoDialogBoxComponent,
+    ProfileComponent,
     ResetPasswordComponent
   ],
   entryComponents: [

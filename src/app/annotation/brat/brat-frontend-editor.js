@@ -3554,6 +3554,25 @@
             }).attr({role: "dialog", "aria-labelledby": e}).mousedown(function (i) {
               a.moveToTop(false, i)
             });
+          /* En cliquant sur un des boutons de l'entête, la fenêtre d'annotation se ferme*/
+          $(".header a").click(function(i){ if(a._isOpen == true) a.close(i) });
+          /* La fonction urlHandler permet de vérifier si l'url a changé */
+          function urlHandler(){
+            this.oldUrl = window.location.href;
+            this.Check;
+            var that = this;
+            /* La fonction detect permet de détecter le changement d'url  */
+            var detect = function(){
+              if(that.oldUrl!=window.location.href && a._isOpen == true){
+                that.oldUrl = window.location.href;
+                a.close();
+              }
+            };
+            /* La fonction detect() est appelée toutes les 100ms */
+            this.Check = setInterval(function(){ detect() }, 100);
+          }
+          /* Appel de la fonction urlHandler */
+          var urlDetection = new urlHandler();
           a.element.show().removeAttr("title").addClass("ui-dialog-content ui-widget-content").appendTo(g);
           var f = (a.uiDialogTitlebar = c("<div></div>")).addClass("ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix").prependTo(g),
             h = c('<a href="#"></a>').addClass("ui-dialog-titlebar-close ui-corner-all").attr("role", "button").hover(function () {
@@ -28194,7 +28213,6 @@
 // 1.0   - (10/2/2009) Initial release
 
     (function ($, window) {
-      console.info('yes!')
       '$:nomunge'; // Used by YUI compressor.
 
       // Some convenient shortcuts.

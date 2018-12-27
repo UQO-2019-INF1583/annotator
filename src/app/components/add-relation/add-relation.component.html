@@ -1,4 +1,5 @@
 <h2 mat-dialog-title>Relations</h2>
+<form #relationvalidate="ngForm">
 <mat-form-field>
     <input matInput placeholder="Type" [(ngModel)]="data.type" name="type" #type="ngModel" required />
     <mat-error *ngIf="type.value == '' ||  type.value == null">type obligatoire</mat-error>
@@ -19,7 +20,8 @@
 </mat-form-field>
 
 <mat-dialog-actions>
-    <button class="btn btn btn-primary" [mat-dialog-close]="data">Add</button>
+<button class="btn btn btn-primary" [disabled]="!relationvalidate.valid" [mat-dialog-close]="data">Add</button>
     <div style="width: 10px"></div>
     <button class="btn btn btn-primary" mat-dialog-close>Cancel</button>
 </mat-dialog-actions>
+</form>

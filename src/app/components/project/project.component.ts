@@ -96,6 +96,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
+  isAdmin(): boolean {
+    let a = false;
+    this.admin.forEach((user, i) => {
+      if (user.uid === this.authService.getUser().uid) {
+        a = true;
+      }
+    });
+    return a;
+  }
+
   // Sauvegarde les modifications apportées au projet.
   saveProjectModification() {
     if (
@@ -145,14 +155,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.addEntitiesAfterClosedHandler(result);
     });
   }
-  /**
-   *Cette méthode s'assure qu'il n'y a aucun conflits avec des noms, types
-   * et couleurs préexistants avant d'ajouter l'entité
-   * @param result l'entité à ajouter
-   */
+
   addEntitiesAfterClosedHandler(result: Entity) {
     let entityExists = false;
-    let typeExists = false;
     if (result !== undefined) {
       if (
         result.name !== undefined &&
@@ -172,31 +177,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
           } else if (item.bgColor === result.bgColor) {
             entityExists = true;
             alert('The chosen color is already used');
-          } else if  (item.type === result.type) {
-            typeExists = true;
-            alert('This type already exists');
-          }
-        });
-        this.currentProject.attributes.forEach(item => {
-          if  (item.type === result.type) {
-            typeExists = true;
-            alert('This type already exists');
-          }
-        });
-        this.currentProject.relations.forEach(item => {
-          if  (item.type === result.type) {
-            typeExists = true;
-            alert('This type already exists');
-          }
-        });
-        this.currentProject.events.forEach(item => {
-          if  (item.type === result.type) {
-            typeExists = true;
-            alert('This type already exists');
           }
         });
 
-        if (!entityExists && !typeExists) {
+        if (!entityExists) {
           result.labels = result.labels[0].split(',');
           this.currentProject.entities.push(result);
         }
@@ -354,45 +338,19 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.addAttributesAfterClosedHandler(result);
     });
   }
-  /**
-   *Cette méthode s'assure qu'il n'y a aucun conflits avec des noms et types
-   *préexistants avant d'ajouter l'attribut
-   * @param result l'attribut à ajouter
-   */
+
   addAttributesAfterClosedHandler(result: Attribute) {
-    let typeExists = false;
     let attributeExists = false;
     if (result !== undefined) {
       if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
         this.currentProject.attributes.forEach(item => {
           if (item.name === result.name) {
             attributeExists = true;
-          } else if  (item.type === result.type) {
-            typeExists = true;
-          }
-        });
-        this.currentProject.entities.forEach(item => {
-          if  (item.type === result.type) {
-            typeExists = true;
-          }
-        });
-        this.currentProject.relations.forEach(item => {
-          if  (item.type === result.type) {
-            typeExists = true;
-          }
-        });
-        this.currentProject.events.forEach(item => {
-          if  (item.type === result.type) {
-            typeExists = true;
           }
         });
         if (!attributeExists) {
-          if (!typeExists) {
-            result.labels = result.labels[0].split(',');
-            this.currentProject.attributes.push(result);
-          } else {
-            alert('This type already exists');
-          }
+          result.labels = result.labels[0].split(',');
+          this.currentProject.attributes.push(result);
         } else {
           alert('This attribute already exists');
         }
@@ -441,34 +399,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
   /**
-   *Cette méthode s'assure qu'il n'y a aucun conflits avec des noms et types
-   *préexistants avant d'ajouter la relation
-   * @param data la relation à ajouter
+   *  Ajouter la donnée dans la liste de relation
+   * @param data la donnée à ajouter
    */
   public addRelation(data: Relation) {
-    let typeExists = false;
-    this.currentProject.entities.forEach(item => {
-      if  (item.type === data.type) {
-        typeExists = true;
-      }
-    });
-    this.currentProject.attributes.forEach(item => {
-      if  (item.type === data.type) {
-        typeExists = true;
-      }
-    });
-    this.currentProject.events.forEach(item => {
-      if  (item.type === data.type) {
-        typeExists = true;
-      }
-    });
-    if (data) {
-      if (this.isExist(data)) {
-        alert('This relation already exists');
-      } else if (typeExists) {
-        alert('This type already exists')
+    if (data.type !== undefined &&
+      data.labels !== [] &&
+      data.color !== undefined) {
+      if (!this.isExist(data)) {
+        if (!this.relationColorAlreadyUsed(data)) {
+          this.currentProject.relations.push(data);
+        } else {
+          alert('The chosen color is already used');
+        }
       } else {
-        this.currentProject.relations.push(data);
+        alert('This relation already exists');
       }
     }
   }
@@ -487,6 +432,22 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
     return exist;
   }
+
+  /**
+   * Vérifie qu'une relation n'a pas déjà la même couleur
+   * @param data
+   */
+  relationColorAlreadyUsed(data: Relation): boolean {
+    let exist = false;
+    this.currentProject.relations.forEach(relation => {
+      if (relation.color === data.color) {
+        exist = true;
+      }
+    });
+
+    return exist;
+  }
+
   /**
    * Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
    *  @param target
@@ -528,53 +489,55 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   *Cette méthode s'assure qu'il n'y a aucun conflits avec des noms et types
-   *préexistants avant d'ajouter l'attribut
-   * @param result l'event à ajouter
-   */
   addEventAfterClosedHandler(result: Event) {
-    let eventExists = false;
-    let typeExists = false;
     if (result !== undefined) {
       if (result.name !== undefined &&
         result.type !== undefined &&
         result.labels !== [] &&
         result.attributes !== [] &&
         result.bgColor !== undefined) {
-        this.currentProject.entities.forEach(item => {
-          if  (item.type === result.type) {
-            typeExists = true;
-          }
-        });
-        this.currentProject.attributes.forEach(item => {
-          if  (item.type === result.type) {
-            typeExists = true;
-          }
-        });
-        this.currentProject.relations.forEach(item => {
-          if  (item.type === result.type) {
-            typeExists = true;
-          }
-        });
-        this.currentProject.events.forEach(item => {
-          if (item.name === result.name) {
-            eventExists = true;
-          } else  if  (item.type === result.type) {
-            typeExists = true;
-          }
-        });
-        if (!eventExists) {
-          if (!typeExists) {
+
+        if (!this.isEventExist(result)) {
+          if (!this.eventColorAlreadyUsed(result)) {
             this.currentProject.events.push(this.mapValidResultToEvent(result));
           } else {
-            alert('This type already exists');
+            alert('The chosen color is already used');
           }
         } else {
           alert('This event already exists');
         }
       }
     }
+  }
+
+  /**
+   * Vérifie qu'un event n'a pas déjà le même nom
+   * @param data
+   */
+  isEventExist(data: Event): boolean {
+    let exist = false;
+    this.currentProject.events.forEach(event => {
+      if (event.name === data.name) {
+        exist = true;
+      }
+    });
+
+    return exist;
+  }
+
+  /**
+   * Vérifie qu'un event n'a pas déjà la même couleur
+   * @param data
+   */
+  eventColorAlreadyUsed(data: Event): boolean {
+    let exist = false;
+    this.currentProject.events.forEach(event => {
+      if (event.bgColor === data.bgColor) {
+        exist = true;
+      }
+    });
+
+    return exist;
   }
 
   mapValidResultToEvent(result: Event): Event {

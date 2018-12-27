@@ -85,17 +85,9 @@ export class AuthService {
     // clear token remove user from local storage to log user out
     localStorage.removeItem('currentUser');
   }
-  resetPassword(email: string) {
-    var auth = firebase.auth();
-
-    return auth.sendPasswordResetEmail(email)
-      .then(() => console.log("email sent"))
-      .catch((error) => console.log(error))
-  }
 
   resetPassword(email: string) {
     var auth = firebase.auth();
-
     return auth.sendPasswordResetEmail(email)
   }
 
@@ -118,7 +110,7 @@ export class AuthService {
     return this.oAuthLogin(provider);
   }
 
-  twitterLogin(){
+  twitterLogin() {
     const provider = new firebase.auth.TwitterAuthProvider();
     return this.oAuthLogin(provider);
   }

@@ -27,6 +27,7 @@ import { ProjectService } from './project.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { Observable } from 'rxjs/Observable';
 
 describe('Projet', () => {
   let projectComponent: ProjectComponent;
@@ -51,10 +52,7 @@ describe('Projet', () => {
         { provide: AngularFirestore, useValue: projectMocks.angularFirestore },
         { provide: AuthService, useValue: projectMocks.authService },
         { provide: ProjectService, useValue: projectMocks.projectService },
-        {
-          provide: ProjectManagerService,
-          useValue: projectMocks.projectManagerService
-        }
+        { provide: ProjectManagerService, useValue: projectMocks.projectManagerService }
       ],
     }).overrideModule(BrowserDynamicTestingModule, {
       set: {
@@ -109,6 +107,7 @@ describe('Projet', () => {
     });
 
     it('should be able to delete an entity', () => {
+      spyOn(projectComponent.dialog, 'open').and.returnValue({afterClosed: () => Observable.of({response: true})});
       projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid3);
       expect(projectComponent.currentProject.entities).toContain(
         jasmine.objectContaining(entiteMock.valid3)
@@ -138,6 +137,7 @@ describe('Projet', () => {
     });
 
     it('should be able to delete an attribut', () => {
+      spyOn(projectComponent.dialog, 'open').and.returnValue({afterClosed: () => Observable.of({response: true})});
       projectComponent.addAttributesAfterClosedHandler(attributMock.valid1);
       expect(projectComponent.currentProject.attributes).toContain(
         jasmine.objectContaining(attributMock.valid1)
@@ -163,6 +163,7 @@ describe('Projet', () => {
     });
 
     it('should be able to delete a relation', () => {
+      spyOn(projectComponent.dialog, 'open').and.returnValue({afterClosed: () => Observable.of({response: true})});
       // Adding valid1
       projectComponent.addRelation(relationMock.valid1);
       expect(projectComponent.currentProject.relations).toContain(
@@ -176,9 +177,11 @@ describe('Projet', () => {
       );
     });
 
-    it('should not add a null relation to the current project\'s relation', () => {
-      projectComponent.addRelation(null);
-      expect(projectComponent.currentProject.relations.length).toBe(0);
+    it('should not add an undefined relation to the current project\'s relation', () => {
+      projectComponent.addRelation(relationMock.valid1);
+      expect(projectComponent.currentProject.relations.length).toBe(1);
+      projectComponent.addRelation(relationMock.undefined);
+      expect(projectComponent.currentProject.relations.length).toBe(1);
     });
   });
 
@@ -229,6 +232,7 @@ describe('Projet', () => {
     });
 
     it('should be able to delete an annotator', () => {
+      spyOn(projectComponent.dialog, 'open').and.returnValue({afterClosed: () => Observable.of({response: true})});
       projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
       expect(projectComponent.currentProject.annotators).toContain(
         annotatorMock.result.valid1.uid
@@ -261,6 +265,7 @@ describe('Projet', () => {
     });
 
     it('should be able to delete an admin', () => {
+      spyOn(projectComponent.dialog, 'open').and.returnValue({afterClosed: () => Observable.of({response: true})});
       projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
       expect(projectComponent.currentProject.admin).toContain(
         adminMock.result.valid1.uid

@@ -63,6 +63,15 @@ export const relationMock = {
     dashArray: '3,3',
     attributes: [],
     args: []
+  } as Relation,
+  undefined: {
+    name: undefined,
+    type: undefined,
+    labels: undefined,
+    color: undefined,
+    dashArray: undefined,
+    attributes: [],
+    args: []
   } as Relation
 }
 

@@ -28,7 +28,7 @@ import { Entity } from '../../shared/entity.model';
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',
-  styleUrls: ['./project.component.scss'],
+  styleUrls: ['./project.component.scss']
 })
 export class ProjectComponent implements OnInit, OnDestroy {
   currentProject: Project = ProjectUtils.generateEmpty();

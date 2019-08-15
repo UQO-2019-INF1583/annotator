@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import * as firebase from 'firebase';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth } from '@angular/fire/auth';
 import {
   AngularFirestore
-} from 'angularfire2/firestore';
+} from '@angular/fire/firestore';
 
 import { AuthService } from '../shared/security/auth.service';
 import { Role, User } from '../shared/user.model';
@@ -27,8 +27,8 @@ export class RegisterComponent {
   register() {
     firebase.auth().createUserWithEmailAndPassword(this.userInfo.email, this.userInfo.password)
       .then((user) => {
-        this.userInfo.uid = user.uid;
-        user.updateProfile({
+        this.userInfo.uid = user.user.uid;
+        user.user.updateProfile({
           displayName: this.userInfo.firstname,
           photoURL: ''
         }).then(() => {

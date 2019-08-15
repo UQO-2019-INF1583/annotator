@@ -1,6 +1,7 @@
+/* to do; mettre à jour cette classe */
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { FileDropModule, UploadFile, UploadEvent } from 'ngx-file-drop';
+import { NgxFileDropModule/*, UploadFile, UploadEvent*/, NgxFileDropEntry } from 'ngx-file-drop';
 
 @Component({
   selector: 'app-add-corpus',
@@ -9,9 +10,11 @@ import { FileDropModule, UploadFile, UploadEvent } from 'ngx-file-drop';
 })
 
 export class AddCorpusComponent implements OnInit {
+/*
   public files: UploadFile[] = [];
   isExtValid = false;
   isSizeValid = false;
+*/
   isNotValid: boolean;
   progress: boolean;
 
@@ -23,7 +26,10 @@ export class AddCorpusComponent implements OnInit {
     this.isNotValid = true;
     this.progress = false;
   }
+  public fileDropped(files: NgxFileDropEntry[]) {
 
+  }
+/*
   public fileDropped(event: UploadEvent) {
     console.log(event);
     this.files = event.files;
@@ -55,7 +61,7 @@ export class AddCorpusComponent implements OnInit {
       });
     }
   }
-
+*/
   public fileOver(event) {
     // console.log(event);
   }

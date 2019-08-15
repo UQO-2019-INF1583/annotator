@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Entity } from '../shared/entity.model';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { AnnotatedDocument } from '../shared/annotated-document.model';
 import { BratUtils } from './brat/brat-utils';
 

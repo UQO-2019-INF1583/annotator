@@ -4,7 +4,7 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
   AngularFirestoreDocument
-} from 'angularfire2/firestore';
+} from '@angular/fire/firestore';
 import { DataSource } from '@angular/cdk/collections';
 import { UserDataSource } from '../userDataSource.service';
 import { UserManagerService } from './userManager.service';

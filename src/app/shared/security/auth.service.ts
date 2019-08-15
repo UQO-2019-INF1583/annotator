@@ -11,8 +11,8 @@
 // validant son authentification.
 
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs/Observable';
@@ -23,7 +23,7 @@ import {
   AngularFirestore,
   AngularFirestoreDocument,
   AngularFirestoreCollection
-} from 'angularfire2/firestore';
+} from '@angular/fire/firestore';
 
 import { Role, User } from '../user.model';
 
@@ -70,7 +70,7 @@ export class AuthService {
         .then(credentials => {
           localStorage.setItem(
             'currentUser',
-            JSON.stringify(credentials.displayName)
+            JSON.stringify(credentials.user.displayName)
           );
           resolve();
         })

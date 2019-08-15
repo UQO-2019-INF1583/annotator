@@ -1,4 +1,4 @@
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Attribute } from '../../shared/attribute.model';
 import { AuthService } from '../../shared/security/auth.service';
 import { Entity } from '../../shared/entity.model';

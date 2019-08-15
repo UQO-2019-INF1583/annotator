@@ -6,7 +6,7 @@ import { Project } from '../shared/project.model';
 import {
   AngularFirestore,
   AngularFirestoreCollection
-} from 'angularfire2/firestore';
+} from '@angular/fire/firestore';
 
 @Injectable()
 export class ProjectDataSource extends DataSource<Project> {

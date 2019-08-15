@@ -4,7 +4,7 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
   AngularFirestoreDocument
-} from 'angularfire2/firestore';
+} from '@angular/fire/firestore';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs/Observable';
 import { DataSource } from '@angular/cdk/collections';

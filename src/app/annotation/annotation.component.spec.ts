@@ -2,15 +2,15 @@ import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing'
 import { AnnotationComponent } from './annotation.component';
 import { MatCardModule, MatSelectModule, MatToolbarModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { AuthService } from '../shared/security/auth.service';
 import { ProjectService } from '../components/project/project.service';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../environments/environment';
-import { FirebaseApp, AngularFireModule } from 'angularfire2';
+import { FirebaseApp, AngularFireModule } from '@angular/fire';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient } from '@angular/common/http';
 import { AnnotationService } from './annotation.service';

@@ -16,7 +16,7 @@ import {
   annotatorMock
 } from './project.component.mock';
 
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from '../../shared/security/auth.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';

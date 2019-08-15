@@ -1,9 +1,10 @@
+<!-- to do: corriger le code de file-drop -->
 <h2 mat-dialog-title>Nouveau texte</h2>
 
 <mat-dialog-content>
-  <div>
+  <div><!--
     <file-drop headertext="Déposer un fichier ici" (onFileDrop)="fileDropped($event)"
-               (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"></file-drop>
+               (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"></file-drop> -->
     <div class="upload-table">
       <table class="table">
         <thead>
@@ -34,3 +35,4 @@
 <br/>
 <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
 <span *ngIf="progress" style="color:green">Validation du fichier en cours</span>
+

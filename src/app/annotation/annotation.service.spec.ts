@@ -1,5 +1,5 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { } from 'jasmine';
 import { MOCK_ENTITIES } from './annotation.service.MOCKDATA';
 

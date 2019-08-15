@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { AngularFirestore,
          //AngularFirestoreCollection,
          //AngularFirestoreDocument
-       } from 'angularfire2/firestore';
+       } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { environment } from '../../../environments/environment';
 import { User } from '../../shared/user.model';

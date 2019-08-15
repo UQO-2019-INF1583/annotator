@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth } from '@angular/fire/auth';
 import {
   AngularFirestore,
   AngularFirestoreDocument
-} from 'angularfire2/firestore';
+} from '@angular/fire/firestore';
 import { User } from '../shared/user.model';
 import { Role } from '../shared/user.model';
 

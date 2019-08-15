@@ -42,14 +42,14 @@ import {
   MatTooltipModule
 } from '@angular/material';
 
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireStorageModule } from 'angularfire2/storage';
-import { AngularFireAuthModule } from 'angularfire2/auth';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
-import { FileDropModule } from 'ngx-file-drop';
+import { NgxFileDropModule } from 'ngx-file-drop';
 
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared/security/auth.guard';
@@ -151,7 +151,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     MatChipsModule,
     MatIconModule,
     MatDialogModule,
-    FileDropModule,
+    NgxFileDropModule,
     MatPaginatorModule,
     MatSortModule, // MatTableDataSource,
     AngularFireStorageModule,

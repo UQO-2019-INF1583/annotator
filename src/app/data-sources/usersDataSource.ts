@@ -3,7 +3,7 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
   AngularFirestoreDocument
-} from 'angularfire2/firestore';
+} from '@angular/fire/firestore';
 import { Observable } from 'rxjs/Observable';
 
 export class UsersDataSource extends DataSource<any> {

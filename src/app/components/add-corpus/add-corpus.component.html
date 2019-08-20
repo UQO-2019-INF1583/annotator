@@ -2,9 +2,16 @@
 <h2 mat-dialog-title>Nouveau texte</h2>
 
 <mat-dialog-content>
-  <div><!--
-    <file-drop headertext="Déposer un fichier ici" (onFileDrop)="fileDropped($event)"
-               (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"></file-drop> -->
+  <div>
+    <ngx-file-drop
+      (onFileDrop)="fileDropped($event)"
+      (onFileOver)="fileOver($event)"
+      (onFileLeave)="fileLeave($event)">
+      <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+	    Déposer un fichier ici.
+	    <button type="button" (click)="openFileSelector()">Browse Files</button>
+      </ng-template>
+    </ngx-file-drop>
     <div class="upload-table">
       <table class="table">
         <thead>

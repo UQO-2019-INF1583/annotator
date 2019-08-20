@@ -1,7 +1,9 @@
-/* to do; mettre � jour cette classe */
+/* to do; mettre à jour cette classe */
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { NgxFileDropModule/*, UploadFile, UploadEvent*/, NgxFileDropEntry } from 'ngx-file-drop';
+import { NgxFileDropModule,
+         NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry
+       } from 'ngx-file-drop';
 
 @Component({
   selector: 'app-add-corpus',
@@ -10,12 +12,10 @@ import { NgxFileDropModule/*, UploadFile, UploadEvent*/, NgxFileDropEntry } from
 })
 
 export class AddCorpusComponent implements OnInit {
-/*
-  public files: UploadFile[] = [];
-  isExtValid = false;
-  isSizeValid = false;
-*/
-  isNotValid: boolean;
+  public files: NgxFileDropEntry[] = [];
+  isExtValid = false;	//Is it used?
+  isSizeValid = false;	//Is it used?
+  isNotValid: boolean;	//Is it used?
   progress: boolean;
 
   constructor(
@@ -27,22 +27,16 @@ export class AddCorpusComponent implements OnInit {
     this.progress = false;
   }
   public fileDropped(files: NgxFileDropEntry[]) {
-
-  }
-/*
-  public fileDropped(event: UploadEvent) {
-    console.log(event);
-    this.files = event.files;
-    this.isNotValid = true;
-    this.progress = true;
-    // la variable info contient le document que l'on veux sauvegarder dans la base de donn�es
-    for (const droppedFile of event.files) {
-      droppedFile.fileEntry.file(info => {
-        console.log(info);
-        if (droppedFile.fileEntry.isFile) {
+    this.files = files;
+    for (const droppedFile of files) {
+      // Is it a file?
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file(info => {
+          console.log(info);
           const fileName = droppedFile.relativePath;
           const fileExt = fileName.split(".").pop();
-          //Verification du depot de document text
+          //Vérification du dépôt de document text
           if (fileExt != "txt") {
             this.isExtValid = true;
             this.progress = false;
@@ -54,14 +48,16 @@ export class AddCorpusComponent implements OnInit {
             this.isNotValid = false;
             this.isExtValid = false;
           }
-        }
-
-        // console.log(info);
-        this.data.corpusFile = info;
-      });
+          this.data.corpusFile = info;
+        });
+      } else {
+        // It was a directory (empty directories are added, otherwise only files)
+        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
+        console.log(droppedFile.relativePath, fileEntry);
+      }
     }
   }
-*/
+
   public fileOver(event) {
     // console.log(event);
   }

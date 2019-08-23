@@ -83,6 +83,7 @@ import { YesNoDialogBoxComponent } from './components/yes-no-dialog-box/yes-no-d
 import { CreateProjectService } from './components/create-project/create-project.service';
 import { ProfileComponent } from './profile/profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { EditUserComponent } from './components/edit-user/edit-user.component';
 
 @NgModule({
   declarations: [
@@ -109,7 +110,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     AddAttributeComponent,
     YesNoDialogBoxComponent,
     ProfileComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    EditUserComponent
   ],
   entryComponents: [
     AddAdminComponent,
@@ -118,7 +120,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     AddRelationComponent,
     AddEventComponent,
     AddAttributeComponent,
-    YesNoDialogBoxComponent
+    YesNoDialogBoxComponent,
+    EditUserComponent
   ],
   imports: [
     BrowserModule,

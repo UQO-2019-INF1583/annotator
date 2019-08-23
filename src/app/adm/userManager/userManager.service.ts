@@ -68,7 +68,15 @@ export class UserManagerService {
 
   // Modifie un utilisateur.
   // Retourne false si username n'existe pas.
-  replaceUser(user: firebase.User): boolean {
+  modifyUser(user): boolean {
+    console.log(user);
+    this.afs.collection('Users').doc(user.uid)
+      .update({ 'email': user.email,
+                'firstname': user.firstname,
+                'lastname': user.lastname,
+                'role': user.role }).then(() => {
+      console.log(user);
+    }, (() => true));
     return false;
   }
 
@@ -83,9 +91,9 @@ export class UserManagerService {
 
   getAll(){
     return this.afs
-               .collection('User', ref => ref
-               .orderBy('displayName'))
-               .valueChanges();
+      .collection('User', ref => ref
+      .orderBy('displayName'))
+      .valueChanges();
   }
 
 }

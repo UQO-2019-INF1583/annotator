@@ -21,7 +21,7 @@
     <ng-container matColumnDef="modify">
       <mat-header-cell *matHeaderCellDef> Modify / Delete </mat-header-cell>
       <mat-cell *matCellDef="let user">
-        <button class="btn btn-primary" routerLink="/user/{{user.email}}">Modify</button>
+        <button class="btn btn-primary" (click)="modifyUser(user)">Modify</button>
         <button class="btn btn-primary" (click)="deleteUser(user)">Delete</button>
       </mat-cell>
     </ng-container>

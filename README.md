@@ -12,7 +12,7 @@ Pour plus d'informations, vous pouvez consulter le wiki du projet qui contient u
 
 1.1.2 Si Node.js et npm ne sont pas installés, suivre les instructions d'installation sur https://nodejs.org
 
-## 1.2 Création d’un projet Firebase (création d'une nouvelle base de données) - optionnel
+## 1.2 Création d’un projet Firebase (si vous voulez votre propre base de données - optionnel)
 
 1.2.1 À partir de la console Firebase, créer un nouveau projet web en cliquant sur “New
 Project”, puis en cliquant sur “Add Firebase to your web app”. Ceci génère cinq variables de

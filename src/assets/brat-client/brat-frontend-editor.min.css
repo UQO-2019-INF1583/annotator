@@ -997,7 +997,6 @@
   font-size: .1px;
   z-index: 99999;
   display: block;
-  background-image: url(about:blank)
 }
 
 .ui-resizable-autohide .ui-resizable-handle, .ui-resizable-disabled .ui-resizable-handle {

@@ -28,7 +28,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/style-vis.css",
+              "src/style-ui.css",
+              "src/assets/brat-client/brat-frontend-editor.min.css"
             ],
             "scripts": []
           },

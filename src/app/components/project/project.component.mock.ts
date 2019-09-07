@@ -2,10 +2,11 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Attribute } from '../../shared/attribute.model';
 import { AuthService } from '../../shared/security/auth.service';
 import { Entity } from '../../shared/entity.model';
-import { ProjectManagerService } from '../../adm/projectManager/projectManager.service';
+import { ProjectManagerService } from '../../adm/projectManager';
 import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
 import { Event } from '../../shared/event.model';
+import { Observable } from 'rxjs/Observable';
 
 // data mocks
 export const entiteMock = {
@@ -27,7 +28,7 @@ export const entiteMock = {
     bgColor: '#F44336',
     labels: ['Test3']
   } as Entity
-}
+};
 
 export const attributMock = {
   valid1: {
@@ -35,7 +36,7 @@ export const attributMock = {
     type: 'Test',
     labels: ['test']
   } as Attribute
-}
+};
 
 export const relationMock = {
   valid1: {
@@ -73,7 +74,7 @@ export const relationMock = {
     attributes: [],
     args: []
   } as Relation
-}
+};
 
 export const eventMock = {
   valid1: {
@@ -83,7 +84,7 @@ export const eventMock = {
     type: 'a',
     bgColor: '#ffffff'
   } as Event
-}
+};
 
 export const annotatorMock = {
   result: {
@@ -92,7 +93,7 @@ export const annotatorMock = {
       email: 'test@UQOAnnotator.ca'
     }
   }
-}
+};
 
 export const adminMock = {
   result: {
@@ -101,7 +102,7 @@ export const adminMock = {
       email: 'test@UQOAnnotator.ca'
     }
   }
-}
+};
 
 // service mocks
 interface IProjectMocks {
@@ -134,6 +135,15 @@ const projectManagerMock: Partial<ProjectManagerService> = {
     });
   }
 };
+
+// Cette boîte de dialogue retourne toujours un objet avec la propriété response = true
+export class MatDialogMock {
+  open() {
+    return {
+      afterClosed: () => Observable.of({response: true})
+    };
+  }
+}
 
 export const projectMocks: IProjectMocks = {
   authService: authServiceMock,

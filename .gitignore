@@ -32,7 +32,8 @@
 npm-debug.log
 testem.log
 /typings
-/src/environments/**
+#/src/environments/**
+/src/environments/serviceAccountKey.json
 **/firestore-export.json
 
 # e2e

@@ -33,9 +33,7 @@ describe('Annotation', () => {
     expect(service).toBeTruthy();
   }));
 
-
-
-  it('should allow to get entities for a certain project ID', inject([AnnotationService], (service: AnnotationService) => {
+  xit('should allow to get entities for a certain project ID', inject([AnnotationService], (service: AnnotationService) => {
     // expect(ENTITIES == service.getEntities(1));
   }));
 
@@ -47,5 +45,5 @@ describe('Annotation', () => {
   xit('should only return entities for projects associated with the user\'s level of permission',
     inject([AnnotationService], (service: AnnotationService) => {
       // TODO Needs a better understanding of the Database
-    }));
+    })); 
 });

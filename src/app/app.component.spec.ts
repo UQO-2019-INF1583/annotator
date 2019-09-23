@@ -56,9 +56,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'Annotateur'`, () => {
+  it(`should have as title 'UQO Annotator'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('Annotateur');
+    expect(app.title).toEqual('UQO Annotator');
   });
 });

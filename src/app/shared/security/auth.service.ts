@@ -24,6 +24,7 @@ import {
   AngularFirestoreDocument,
   AngularFirestoreCollection
 } from '@angular/fire/firestore';
+import { switchMap } from 'rxjs/operators';
 
 import { Role, User } from '../user.model';
 
@@ -41,13 +42,13 @@ export class AuthService {
     private router: Router
   ) {
     //// Get auth data, then get firestore user document || null
-    this.user = this.afAuth.authState.switchMap(user => {
+    this.user = this.afAuth.authState.pipe(switchMap(user => {
       if (user) {
         return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
       } else {
         return Observable.of(null);
       }
-    });
+    }));
     this.afAuth.authState.subscribe((auth) => {
       this.authState = auth
     });

@@ -11,7 +11,7 @@ import * as firebase from 'firebase/app';
   providers: [AngularFireAuth]
 })
 export class AppComponent {
-  title = 'Annotateur';
+  title = 'UQO Annotator';
   user: Observable<firebase.User>;
   items: AngularFireList<any[]>;
   msgVal = '';

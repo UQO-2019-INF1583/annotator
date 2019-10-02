@@ -3,7 +3,6 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material
 import { YesNoDialogBoxComponent } from './yes-no-dialog-box.component';
 import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';
 
-
 describe('YesNoDialogBoxComponent', () => {
   let component: YesNoDialogBoxComponent;
   let fixture: ComponentFixture<YesNoDialogBoxComponent>;

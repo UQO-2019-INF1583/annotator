@@ -10,7 +10,7 @@ describe('AddRelationComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AddRelationComponent]
     })
-      .compileComponents();
+    .compileComponents();
   }));
 
   beforeEach(() => {

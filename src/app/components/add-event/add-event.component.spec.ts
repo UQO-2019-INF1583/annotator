@@ -10,7 +10,7 @@ describe('AddEventComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AddEventComponent]
     })
-      .compileComponents();
+    .compileComponents();
   }));
 
   beforeEach(() => {
@@ -22,4 +22,5 @@ describe('AddEventComponent', () => {
   xit('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });

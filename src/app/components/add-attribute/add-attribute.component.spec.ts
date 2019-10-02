@@ -10,7 +10,7 @@ describe('AddAttributeComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AddAttributeComponent]
     })
-      .compileComponents();
+    .compileComponents();
   }));
 
   beforeEach(() => {

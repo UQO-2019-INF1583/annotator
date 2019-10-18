@@ -42,6 +42,22 @@ export class UserManagerComponent implements OnInit {
   // Modification des informations d'un utilisateur
   modifyUser(user: any) {
     // ajouter un pop up pour la modification
+    let roleString: string;
+    switch (user.role) {
+      case 0: {
+        roleString = 'Visiteur';
+        break;
+      }
+      case 1: {
+        roleString = 'Membre';
+        break;
+      }
+      case 2: {
+        roleString = 'Administrateur';
+        break;
+      }
+
+    }
     const dialogRef = this.dialog.open(EditUserComponent, {
       width: '600px',
       height: '400px',
@@ -50,6 +66,7 @@ export class UserManagerComponent implements OnInit {
         lastname: user.lastname,
         email: user.email,
         role: user.role,
+        roleRepresent: roleString,
         roles: [
           { valeur: 1, viewValue: 'Member' },
           { valeur: 2, viewValue: 'Administrator' },

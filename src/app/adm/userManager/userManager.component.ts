@@ -22,22 +22,22 @@ import { User } from '../../shared/user.model';
 
 export class UserManagerComponent implements OnInit {
 
-  displayedColumns = ['email', 'firstname', 'lastname', 'modify'];
+  displayedColumns = ['email', 'firstname', 'lastname', 'role', 'modify'];
   dataSource: UserDataSource | null;
 
   constructor(public router: Router,
-			  private afs: AngularFirestore,
-			  private um: UserManagerService,
-			  public dialog: MatDialog) { }
+    private afs: AngularFirestore,
+    private um: UserManagerService,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
     this.dataSource = new UserDataSource(this.afs);
   }
-/*
-  modifyUser(user: any) {
-    this.router.navigate(['/user', user]);
-  }
-*/
+  /*
+    modifyUser(user: any) {
+      this.router.navigate(['/user', user]);
+    }
+  */
 
   // Modification des informations d'un utilisateur
   modifyUser(user: any) {
@@ -65,7 +65,7 @@ export class UserManagerComponent implements OnInit {
           result.lastname !== undefined &&
           result.email !== undefined &&
           result.role !== undefined) {
-            const upd = this.um.modifyUser({
+          const upd = this.um.modifyUser({
             'firstname': result.firstname,
             'lastname': result.lastname,
             'email': result.email,
@@ -76,7 +76,7 @@ export class UserManagerComponent implements OnInit {
       }
     });
   }
-	
+
   deleteUser(user: any) {
     // un pop up qui demande si l'administrateur veut vraiment supprimer l'utilisateur
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
@@ -91,7 +91,7 @@ export class UserManagerComponent implements OnInit {
       if (result.response === true) {
         this.um.deleteUser(user.uid);
       }
-    });	  
+    });
   }
 
 }

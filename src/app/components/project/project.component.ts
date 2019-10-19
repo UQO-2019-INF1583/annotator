@@ -14,7 +14,7 @@ import { AddEntityComponent } from '../add-entity/add-entity.component';
 import { AddCorpusComponent } from '../add-corpus/add-corpus.component';
 import { AddEventComponent } from '../add-event/add-event.component';
 import { AddRelationComponent } from '../add-relation/add-relation.component';
-import { Attribute } from '../../shared/attribute.model';
+import { EntityAttributeTypes, EntityAttributeValues } from '../../shared/entityAttribute.model';
 import { AuthService } from '../../shared/security/auth.service';
 import { Event } from '../../shared/event.model';
 import { Observable } from 'rxjs/Observable';
@@ -328,28 +328,31 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         name: undefined,
         type: undefined,
-        labels: [],
-        unused: false,
-        values: ''
+        valueString: undefined,
+        values: []
       },
     });
 
-    dialogRef.afterClosed().subscribe((result: Attribute) => {
+    dialogRef.afterClosed().subscribe((result: EntityAttributeTypes) => {
       this.addAttributesAfterClosedHandler(result);
     });
   }
 
-  addAttributesAfterClosedHandler(result: Attribute) {
+  addAttributesAfterClosedHandler(result: EntityAttributeTypes) {
     let attributeExists = false;
     if (result !== undefined) {
-      if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
+      if (result.name !== undefined && result.type !== undefined && result.values !== undefined) {
         this.currentProject.attributes.forEach(item => {
           if (item.name === result.name) {
             attributeExists = true;
           }
         });
         if (!attributeExists) {
-          result.labels = result.labels[0].split(',');
+          let valuesArray = result.valueString.split(',');
+
+          for (let i = 0; i < valuesArray.length; i++) {
+            result.values.push(EntityAttributeValues.generateAttributeValues(valuesArray[i].trim()));
+          }
           this.currentProject.attributes.push(result);
         } else {
           alert('This attribute already exists');
@@ -359,7 +362,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteAttribute(target: Attribute) {
+  deleteAttribute(target: EntityAttributeTypes
+  ) {
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
       width: '250px',
       data: {

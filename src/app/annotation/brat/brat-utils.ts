@@ -18,6 +18,7 @@ import {
   rawAttribute,
   rawEntity
 } from '../document-data';
+import { EntityAttributeValues } from '../../shared/entityAttribute.model';
 import { Project } from '../../shared/project.model';
 import { CollectionData } from '../collection-data';
 
@@ -125,9 +126,7 @@ export class BratUtils {
       entity_attribute_types: project.attributes.map(x => ({
         name: x.name,
         type: x.type,
-        labels: x.labels,
-        values: {},
-        unused: false
+        values: BratUtils.formatValues(x.values)
       })),
       // TODO: Have something in project to represent this attribute
       event_attribute_types: [],
@@ -136,6 +135,20 @@ export class BratUtils {
     };
 
     return collectionData;
+  }
+
+  static formatValues(values: EntityAttributeValues[]) {
+    let result = {};
+
+    values.forEach(value => {
+      result[value.name] = {
+        box: value.box,
+        glyph: value.glyph,
+        dashArray: value.dashArray,
+      }
+    });
+
+    return result;
   }
 
   static getAnnotatedDocumentfromDocData(docData: DocumentData, project: Project, annotatedDocument: AnnotatedDocument): AnnotatedDocument {

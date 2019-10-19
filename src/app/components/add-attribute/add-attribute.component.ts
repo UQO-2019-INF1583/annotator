@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Attribute } from '../../shared/attribute.model';
+import { EntityAttributeTypes } from '../../shared/entityAttribute.model';
 
 @Component({
   selector: 'app-add-attribute',
@@ -11,7 +11,7 @@ export class AddAttributeComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddAttributeComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Attribute) { }
+    @Inject(MAT_DIALOG_DATA) public data: EntityAttributeTypes) { }
 
   ngOnInit() {
   }

@@ -1,5 +1,5 @@
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Attribute } from '../../shared/attribute.model';
+import { EntityAttributeTypes, EntityAttributeValues } from '../../shared/entityAttribute.model';
 import { AuthService } from '../../shared/security/auth.service';
 import { Entity } from '../../shared/entity.model';
 import { ProjectManagerService } from '../../adm/projectManager';
@@ -34,8 +34,9 @@ export const attributMock = {
   valid1: {
     name: 'Test',
     type: 'Test',
-    labels: ['test']
-  } as Attribute
+    valueString: 'tests',
+    values: [new EntityAttributeValues('tests')]
+  } as EntityAttributeTypes
 };
 
 export const relationMock = {
@@ -140,7 +141,7 @@ const projectManagerMock: Partial<ProjectManagerService> = {
 export class MatDialogMock {
   open() {
     return {
-      afterClosed: () => Observable.of({response: true})
+      afterClosed: () => Observable.of({ response: true })
     };
   }
 }

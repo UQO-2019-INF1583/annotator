@@ -12,9 +12,11 @@ import {
 } from '../annotation/document-data';
 import { Project } from './project.model';
 import { Arc } from './arc.model';
+import * as firebase from 'firebase';
 
 // tslint:disable-next-line:interface-over-type-literal
 export type AnnotatedDocument = {
+  etatDocument: any;
   documentId: string;
   title: string;
   file: any;
@@ -29,6 +31,7 @@ export type AnnotatedDocument = {
 export class AnnotatedDocumentUtils {
   static fromDoc(document: Doc): AnnotatedDocument {
     const annotatedDocument: AnnotatedDocument = {
+      etatDocument: document.etatDocument,
       documentId: document.documentId,
       title: document.title,
       projectId: document.projectId,
@@ -39,7 +42,6 @@ export class AnnotatedDocumentUtils {
       relations: [],
       events: []
     }
-
     return annotatedDocument;
   }
 }
@@ -53,6 +55,9 @@ type id = string;
 
 interface IAnnotation {
   id: id;
+  AnnotatorID: any;
+  EtatAnnotation: any;
+  DateHeure: any;
 }
 
 export interface EntityAnnotation extends IAnnotation, Entity {
@@ -62,6 +67,9 @@ export interface EntityAnnotation extends IAnnotation, Entity {
 export class EntityAnnotationUtils {
   static generateEmpty(): EntityAnnotation {
     return {
+      AnnotatorID: '',
+      EtatAnnotation: '',
+      DateHeure: '',
       id: '',
       locations: [],
       name: '',
@@ -76,6 +84,8 @@ export class EntityAnnotationUtils {
   }
 }
 
+
+
 export interface AttributeAnnotation extends IAnnotation, Attribute {
   target: id;
 }
@@ -83,6 +93,9 @@ export interface AttributeAnnotation extends IAnnotation, Attribute {
 export class AttributeAnnotationUtils {
   static generateEmpty(): AttributeAnnotation {
     return {
+      AnnotatorID: '',
+      EtatAnnotation: '',
+      DateHeure: '',
       id: '',
       name: '',
       type: '',
@@ -94,6 +107,8 @@ export class AttributeAnnotationUtils {
   }
 }
 
+
+
 export interface RelationAnnotation extends IAnnotation, Relation {
   from: RelationLink;
   to: RelationLink;
@@ -102,9 +117,15 @@ export interface RelationAnnotation extends IAnnotation, Relation {
 export class RelationAnnotationUtils {
   static generateEmpty(): RelationAnnotation {
     return {
+      AnnotatorID: '',
+      EtatAnnotation: '',
+      DateHeure: '',
       id: '',
-      from: { id: '', role: '' },
-      to: { id: '', role: '' },
+      from: { id: '', role: '',       AnnotatorID: '', EtatAnnotation: '',
+        DateHeure: ''},
+      to: { id: '', role: '',       AnnotatorID: '',
+        EtatAnnotation: '',
+        DateHeure: '', },
       type: '',
       labels: [],
       dashArray: '3,3',
@@ -119,6 +140,8 @@ export interface RelationLink extends IAnnotation {
   role: string;
 }
 
+
+
 export interface EventAnnotation extends IAnnotation, Event {
   locations: RangeTextSelection[];
   links: EventLink[];
@@ -128,6 +151,9 @@ export interface EventAnnotation extends IAnnotation, Event {
 export class EventAnnotationUtils {
   static generateEmpty(): EventAnnotation {
     return {
+      AnnotatorID: '',
+      EtatAnnotation: '',
+      DateHeure: '',
       id: '',
       locations: [],
       links: [],
@@ -145,6 +171,8 @@ export class EventAnnotationUtils {
   }
 }
 
+
+
 export interface EventLink extends IAnnotation {
   type: string;
 }
@@ -152,8 +180,12 @@ export interface EventLink extends IAnnotation {
 export class EventLinkUtils {
   static generateEmpty(): EventLink {
     return {
+      AnnotatorID: '',
+      EtatAnnotation: '',
+      DateHeure: '',
       id: '',
       type: ''
     }
   }
 }
+

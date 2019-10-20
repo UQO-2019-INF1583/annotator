@@ -1,7 +1,7 @@
 /*
 Classe/fichier code qui fait le Passage à la version Angular 8. 
 Date de creation: le 18 oct 2019
-Auteur : Groupe 2, Hugo 
+Auteur : Hugo Lapointe, Groupe 2
 
 Date de derniere modification: 20 oct 2019
 par : Victor Blaja

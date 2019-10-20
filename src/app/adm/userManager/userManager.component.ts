@@ -68,9 +68,9 @@ export class UserManagerComponent implements OnInit {
         role: user.role,
         roleRepresent: roleString,
         roles: [
-          { valeur: 1, viewValue: 'Member' },
-          { valeur: 2, viewValue: 'Administrator' },
-          { valeur: 0, viewValue: 'Visitor' }
+          { valeur: 1, viewValue: 'Membre' },
+          { valeur: 2, viewValue: 'Administrateur' },
+          { valeur: 0, viewValue: 'Visiteur' }
         ]
       },
     });

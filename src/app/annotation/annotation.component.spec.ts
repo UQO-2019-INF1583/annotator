@@ -1,4 +1,7 @@
 /*
+Classe faisant partie de la suite de classes de la modification du groupe 2 
+La modification AnnotationComponent qui est une composante ajoutee au systeme d'Annotations
+
 Classe/fichier code qui fait le Passage à la version Angular 8. 
 Date de creation: le 18 oct 2019
 Auteur : Hugo Lapointe, Groupe 2
@@ -29,7 +32,7 @@ import { HttpClient } from '@angular/common/http';
 import { AnnotationService } from './annotation.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// definition ou declaration des variables de classe
+// declaration des variables de classe
 
 let AngularFirestoreStub: Partial<AngularFirestore>;
 let AngularFireStorageStub: Partial<AngularFireStorage>;
@@ -38,7 +41,7 @@ let ProjectServiceStub: Partial<ProjectService>;
 let AnnotationServiceStub: Partial<AnnotationService>;
 
 
-/*
+/* note pour le programmeur: 
 Prochaines étapes: Doit créer les stubs pour mocker les interactions entre le component et ses services injectés
 ressources :
 https://stackoverflow.com/questions/48760093/how-to-provide-mock-angularfirestore-module-inside-angular-component-for-default
@@ -55,7 +58,7 @@ describe('AnnotationComponent', () => {
   let httpTestingController: HttpTestingController;
   let app: FirebaseApp;
 
-//==== a continuer annotation  a partir d'ici, Victor
+//Assignation des valeurs aux variables, avant la synchronisation du programme
   beforeEach(async(() => {
 
     AngularFirestoreStub = {
@@ -74,6 +77,7 @@ describe('AnnotationComponent', () => {
     AnnotationServiceStub = {
     };
 
+    // configuration du module de test pour la modification AnnotationComponent qui est une composante ajoutee au systeme d'Annotations
     TestBed.configureTestingModule({
       declarations: [AnnotationComponent],
       imports: [

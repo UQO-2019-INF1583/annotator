@@ -1,3 +1,16 @@
+/*
+Classe/fichier code qui fait le Passage à la version Angular 8. 
+Date de creation: le 18 oct 2019
+Auteur : Groupe 2, Hugo 
+
+Date de derniere modification: 20 oct 2019
+par : Victor Blaja
+quoi: ajouter des commentaires
+*/
+
+
+//Importation des librairies
+
 import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { AnnotationComponent } from './annotation.component';
 import { MatCardModule, MatSelectModule, MatToolbarModule } from '@angular/material';
@@ -16,6 +29,8 @@ import { HttpClient } from '@angular/common/http';
 import { AnnotationService } from './annotation.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+// definition ou declaration des variables de classe
+
 let AngularFirestoreStub: Partial<AngularFirestore>;
 let AngularFireStorageStub: Partial<AngularFireStorage>;
 let AuthServiceStub: Partial<AuthService>;
@@ -29,6 +44,8 @@ ressources :
 https://stackoverflow.com/questions/48760093/how-to-provide-mock-angularfirestore-module-inside-angular-component-for-default
 */
 
+/* partie qui decrit les composantes ou les variables de classe
+*/
 describe('AnnotationComponent', () => {
   let component: AnnotationComponent;
   let fixture: ComponentFixture<AnnotationComponent>;
@@ -38,7 +55,7 @@ describe('AnnotationComponent', () => {
   let httpTestingController: HttpTestingController;
   let app: FirebaseApp;
 
-
+//==== a continuer annotation  a partir d'ici, Victor
   beforeEach(async(() => {
 
     AngularFirestoreStub = {

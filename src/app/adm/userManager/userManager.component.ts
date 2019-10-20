@@ -23,7 +23,7 @@ import { User } from '../../shared/user.model';
 export class UserManagerComponent implements OnInit {
 
   displayedColumns = ['email', 'firstname', 'lastname', 'role', 'modify'];
-  // Sert à dire au coposant HTML le colonnes à afficher.
+  // Sert à dire au composant HTML le colonnes à afficher.
   // Voir https://v7.material.angular.io/components/table/overview#3-define-the-row-templates pour plus de detail
   dataSource: UserDataSource | null;
 

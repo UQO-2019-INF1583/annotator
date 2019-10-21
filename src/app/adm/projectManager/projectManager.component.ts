@@ -139,13 +139,93 @@ export class ProjectManagerComponent implements OnInit {
         else if (a.annotators.length < b.annotators.length) return -1;
         else return 0;
       });
+    else if (this.sortValue === "Most entities")
+      this.displayedProjects.sort((a, b) => {
+        if (
+          a.attributes.length +
+            a.entities.length +
+            a.events.length +
+            a.relations.length <
+          b.attributes.length +
+            b.entities.length +
+            b.events.length +
+            b.relations.length
+        )
+          return 1;
+        else if (
+          a.attributes.length +
+            a.entities.length +
+            a.events.length +
+            a.relations.length >
+          b.attributes.length +
+            b.entities.length +
+            b.events.length +
+            b.relations.length
+        )
+          return -1;
+        else return 0;
+      });
+    else if (this.sortValue === "Least entities")
+      this.displayedProjects.sort((a, b) => {
+        if (
+          a.attributes.length +
+            a.entities.length +
+            a.events.length +
+            a.relations.length >
+          b.attributes.length +
+            b.entities.length +
+            b.events.length +
+            b.relations.length
+        )
+          return 1;
+        else if (
+          a.attributes.length +
+            a.entities.length +
+            a.events.length +
+            a.relations.length <
+          b.attributes.length +
+            b.entities.length +
+            b.events.length +
+            b.relations.length
+        )
+          return -1;
+        else return 0;
+      });
+    else if (this.sortValue === "State : 4 - 1")
+      this.displayedProjects.sort((a, b) => {
+        if (a.state < b.state) return 1;
+        else if (a.state > b.state) return 1;
+        else return 0;
+      });
+    else if (this.sortValue === "State : 4 - 1")
+      this.displayedProjects.sort((a, b) => {
+        if (a.state > b.state) return 1;
+        else if (a.state < b.state) return 1;
+        else return 0;
+      });
   }
 
   /*  Title : Change Display
       Description : Affects the value of the chosen display method either simplified or detailed*/
   changeDisplay(value: string) {
-    console.log(value);
     this.viewValue = value;
+  }
+
+  /*  Title : Get State
+      Description : return the corresponding state text depending on the state value*/
+  getState(project: any): string {
+    switch (project.state) {
+      case 1:
+        return "New Project";
+      case 2:
+        return "In Progress";
+      case 3:
+        return "Review";
+      case 4:
+        return "Finish";
+      default:
+        return "";
+    }
   }
 
   /*  Title : Is Admin

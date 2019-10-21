@@ -29,6 +29,10 @@
             <mat-option value="Z - A">Z - A</mat-option>
             <mat-option value="Most annotators">Most annotators</mat-option>
             <mat-option value="Least annotators">Least annotators</mat-option>
+            <mat-option value="Most entities">Most entities</mat-option>
+            <mat-option value="Least entities">Least entities</mat-option>
+            <mat-option value="State : 1 - 4">State : 1 - 4</mat-option>
+            <mat-option value="State : 4 - 1">State : 4 - 1</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -65,21 +69,21 @@
           <mat-card-title>{{ project.title }}</mat-card-title>
           <table style="width: 100%;">
             <tr>
+              <td class="subtitle left">State : {{ getState(project) }}</td>
+              <td class="subtitle right">
+                Annotators : {{ project.annotators.length }}
+              </td>
+            </tr>
+            <tr>
               <td
                 class="subtitle left"
                 *ngIf="!project.hasOwnProperty('date')"
               ></td>
               <td class="subtitle left" *ngIf="project.hasOwnProperty('date')">
-                {{ project.date.seconds * 1000 | date }}
+                Created on : {{ project.date.seconds * 1000 | date }}
               </td>
               <td class="subtitle right">
-                annotators : {{ project.annotators.length }}
-              </td>
-            </tr>
-            <tr>
-              <td class="subtitle left">Etat de projet</td>
-              <td class="subtitle right">
-                entities :
+                Entities :
                 {{
                   project.attributes.length +
                     project.entities.length +

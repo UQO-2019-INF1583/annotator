@@ -34,20 +34,23 @@
 
         <!--Display Type -->
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label
+          <button
+            mat-button
             class="btn btn-secondary"
             [ngClass]="{ active: viewValue == 'simplified' }"
+            (click)="changeDisplay('simplified')"
           >
-            <input type="radio" (input)="changeDisplay('simplified')" />
             Simplified
-          </label>
-          <label
+          </button>
+
+          <button
+            mat-button
             class="btn btn-secondary"
             [ngClass]="{ active: viewValue == 'detailed' }"
+            (click)="changeDisplay('detailed')"
           >
-            <input type="radio" (input)="changeDisplay('detailed')" />
             Detailed
-          </label>
+          </button>
         </div>
       </mat-card>
       <div class="col-xs-12" id="spacer" style="padding: 10px;"></div>
@@ -62,7 +65,13 @@
           <mat-card-title>{{ project.title }}</mat-card-title>
           <table style="width: 100%;">
             <tr>
-              <td class="subtitle left">Date de creation</td>
+              <td
+                class="subtitle left"
+                *ngIf="!project.hasOwnProperty('date')"
+              ></td>
+              <td class="subtitle left" *ngIf="project.hasOwnProperty('date')">
+                {{ project.date.seconds * 1000 | date }}
+              </td>
               <td class="subtitle right">
                 annotators : {{ project.annotators.length }}
               </td>

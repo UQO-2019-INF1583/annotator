@@ -1,7 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "../../shared/security/auth.service";
-import { AngularFirestore } from "@angular/fire/firestore";
+import {
+  AngularFirestore,
+  AngularFirestoreCollection
+} from "@angular/fire/firestore";
 import { ProjectDataSource } from "../../data-sources/projectDataSource";
 import { YesNoDialogBoxComponent } from "../../components/yes-no-dialog-box/yes-no-dialog-box.component";
 import "rxjs/add/observable/of";
@@ -51,6 +54,8 @@ export class ProjectManagerComponent implements OnInit {
       this.projects = data;
       this.displayedProjects = this.projects.slice(0);
     });
+
+    //this.afs.collection()
   }
 
   /*  Title : Create Project Dialog Box
@@ -141,6 +146,7 @@ export class ProjectManagerComponent implements OnInit {
   /*  Title : Change Display
       Description : Affects the value of the chosen display method either simplified or detailed*/
   changeDisplay(value: string) {
+    console.log(value);
     this.viewValue = value;
   }
 

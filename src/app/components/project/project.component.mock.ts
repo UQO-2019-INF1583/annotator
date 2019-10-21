@@ -1,68 +1,71 @@
-import { AngularFirestore } from '@angular/fire/firestore';
-import { EntityAttributeTypes, EntityAttributeValues } from '../../shared/entityAttribute.model';
-import { AuthService } from '../../shared/security/auth.service';
-import { Entity } from '../../shared/entity.model';
-import { ProjectManagerService } from '../../adm/projectManager';
-import { ProjectService } from './project.service';
-import { Relation } from '../../shared/relation.model';
-import { Event } from '../../shared/event.model';
-import { Observable } from 'rxjs/Observable';
+import { AngularFirestore } from "@angular/fire/firestore";
+import {
+  EntityAttributeTypes,
+  EntityAttributeValues
+} from "../../shared/entityAttribute.model";
+import { AuthService } from "../../shared/security/auth.service";
+import { Entity } from "../../shared/entity.model";
+import { ProjectManagerService } from "../../adm/projectManager";
+import { ProjectService } from "./project.service";
+import { Relation } from "../../shared/relation.model";
+import { Event } from "../../shared/event.model";
+import { Observable } from "rxjs/Observable";
 
 // data mocks
 export const entiteMock = {
   valid1: {
-    name: 'Test',
-    type: 'Test',
-    bgColor: '#F44336',
-    labels: ['Test'],
+    name: "Test",
+    type: "Test",
+    bgColor: "#F44336",
+    labels: ["Test"]
   } as Entity,
   valid2: {
-    name: 'Test',
-    type: 'Test',
-    bgColor: '#2196F3',
-    labels: ['Test']
+    name: "Test",
+    type: "Test",
+    bgColor: "#2196F3",
+    labels: ["Test"]
   } as Entity,
   valid3: {
-    name: 'Test3',
-    type: 'Test3',
-    bgColor: '#F44336',
-    labels: ['Test3']
+    name: "Test3",
+    type: "Test3",
+    bgColor: "#F44336",
+    labels: ["Test3"]
   } as Entity
 };
 
 export const attributMock = {
   valid1: {
-    name: 'Test',
-    type: 'Test',
-    valueString: 'tests',
-    values: [new EntityAttributeValues('tests')]
+    name: "Test",
+    type: "Test",
+    valueString: "tests",
+    values: [new EntityAttributeValues("tests")]
   } as EntityAttributeTypes
 };
 
 export const relationMock = {
   valid1: {
-    type: 'Type1',
-    labels: ['Entite1'],
-    color: '#2196F3',
-    dashArray: '3,3',
+    type: "Type1",
+    labels: ["Entite1"],
+    color: "#2196F3",
+    dashArray: "3,3",
     attributes: [],
     args: []
   } as Relation,
   valid2: {
-    name: 'Relation2',
-    type: 'Type2',
-    labels: ['Entite2'],
-    color: '#2196F3',
-    dashArray: '3,3',
+    name: "Relation2",
+    type: "Type2",
+    labels: ["Entite2"],
+    color: "#2196F3",
+    dashArray: "3,3",
     attributes: [],
     args: []
   } as Relation,
   valid3: {
-    name: 'Relation3',
-    type: 'Type3',
-    labels: ['Entite3'],
-    color: '#2196F3',
-    dashArray: '3,3',
+    name: "Relation3",
+    type: "Type3",
+    labels: ["Entite3"],
+    color: "#2196F3",
+    dashArray: "3,3",
     attributes: [],
     args: []
   } as Relation,
@@ -79,19 +82,19 @@ export const relationMock = {
 
 export const eventMock = {
   valid1: {
-    name: 'event',
-    attributes: ['a'],
-    labels: ['a'],
-    type: 'a',
-    bgColor: '#ffffff'
+    name: "event",
+    attributes: ["a"],
+    labels: ["a"],
+    type: "a",
+    bgColor: "#ffffff"
   } as Event
 };
 
 export const annotatorMock = {
   result: {
     valid1: {
-      uid: '1234',
-      email: 'test@UQOAnnotator.ca'
+      uid: "1234",
+      email: "test@UQOAnnotator.ca"
     }
   }
 };
@@ -99,8 +102,8 @@ export const annotatorMock = {
 export const adminMock = {
   result: {
     valid1: {
-      uid: '1234',
-      email: 'test@UQOAnnotator.ca'
+      uid: "1234",
+      email: "test@UQOAnnotator.ca"
     }
   }
 };
@@ -124,7 +127,7 @@ const angularFirestoreMock: Partial<AngularFirestore> = {};
 const projectServiceMock: Partial<ProjectService> = {
   getProject: (id: string) => {
     return new Promise(resolve => {
-      resolve('test');
+      resolve("test");
     });
   }
 };
@@ -132,7 +135,7 @@ const projectServiceMock: Partial<ProjectService> = {
 const projectManagerMock: Partial<ProjectManagerService> = {
   getProject: (id: string) => {
     return new Promise(resolve => {
-      resolve('test');
+      resolve("test");
     });
   }
 };

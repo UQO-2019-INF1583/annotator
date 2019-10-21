@@ -1,17 +1,17 @@
-import { Relation } from "./relation.model";
-import { EntityAttributeTypes } from "./entityAttribute.model";
-import { Entity } from "./entity.model";
-import { Doc } from "./document.model";
-import { Event } from "./event.model";
+import { Relation } from './relation.model';
+import { EntityAttributeTypes } from './entityAttribute.model';
+import { Entity } from './entity.model';
+import { Doc } from './document.model';
+import { Event } from './event.model';
 import {
   DocumentData,
   rawRelation,
   rawEventLink,
   rawAttribute,
   rawEntity
-} from "../annotation/document-data";
-import { Project } from "./project.model";
-import { Arc } from "./arc.model";
+} from '../annotation/document-data';
+import { Project } from './project.model';
+import { Arc } from './arc.model';
 
 // tslint:disable-next-line:interface-over-type-literal
 export type AnnotatedDocument = {
@@ -24,7 +24,7 @@ export type AnnotatedDocument = {
   attributes: AttributeAnnotation[];
   relations: RelationAnnotation[];
   events: EventAnnotation[];
-};
+}
 
 export class AnnotatedDocumentUtils {
   static fromDoc(document: Doc): AnnotatedDocument {
@@ -38,16 +38,16 @@ export class AnnotatedDocumentUtils {
       attributes: [],
       relations: [],
       events: []
-    };
+    }
 
     return annotatedDocument;
   }
 }
 
 interface RangeTextSelection {
-  start: number;
-  end: number;
-}
+  start: number,
+  end: number
+};
 
 type id = string;
 
@@ -62,17 +62,17 @@ export interface EntityAnnotation extends IAnnotation, Entity {
 export class EntityAnnotationUtils {
   static generateEmpty(): EntityAnnotation {
     return {
-      id: "",
+      id: '',
       locations: [],
-      name: "",
-      type: "",
+      name: '',
+      type: '',
       labels: [],
-      bgColor: "",
-      borderColor: "darken",
+      bgColor: '',
+      borderColor: 'darken',
       unused: false,
       arcs: [],
       children: []
-    };
+    }
   }
 }
 
@@ -83,13 +83,13 @@ export interface AttributeAnnotation extends IAnnotation, EntityAttributeTypes {
 export class AttributeAnnotationUtils {
   static generateEmpty(): AttributeAnnotation {
     return {
-      id: "",
-      name: "",
-      type: "",
-      valueString: "",
+      id: '',
+      name: '',
+      type: '',
+      valueString: '',
       values: [],
-      target: ""
-    };
+      target: ''
+    }
   }
 }
 
@@ -101,16 +101,16 @@ export interface RelationAnnotation extends IAnnotation, Relation {
 export class RelationAnnotationUtils {
   static generateEmpty(): RelationAnnotation {
     return {
-      id: "",
-      from: { id: "", role: "" },
-      to: { id: "", role: "" },
-      type: "",
+      id: '',
+      from: { id: '', role: '' },
+      to: { id: '', role: '' },
+      type: '',
       labels: [],
-      dashArray: "3,3",
-      color: "",
+      dashArray: '3,3',
+      color: '',
       attributes: [],
       args: []
-    };
+    }
   }
 }
 
@@ -127,20 +127,20 @@ export interface EventAnnotation extends IAnnotation, Event {
 export class EventAnnotationUtils {
   static generateEmpty(): EventAnnotation {
     return {
-      id: "",
+      id: '',
       locations: [],
       links: [],
-      triggerId: "",
-      name: "",
-      type: "",
+      triggerId: '',
+      name: '',
+      type: '',
       labels: [],
-      bgColor: "",
-      borderColor: "darken",
+      bgColor: '',
+      borderColor: 'darken',
       attributes: [],
       children: [],
       unused: false,
       arcs: []
-    };
+    }
   }
 }
 
@@ -151,8 +151,8 @@ export interface EventLink extends IAnnotation {
 export class EventLinkUtils {
   static generateEmpty(): EventLink {
     return {
-      id: "",
-      type: ""
-    };
+      id: '',
+      type: ''
+    }
   }
 }

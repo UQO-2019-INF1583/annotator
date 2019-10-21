@@ -224,14 +224,16 @@ export class ProjectManagerComponent implements OnInit {
   /*  Title : Get State
       Description : return the corresponding state text depending on the state value*/
   getState(project: any): string {
+    if (!project.hasOwnProperty("state")) return "";
+
     switch (project.state) {
-      case 1:
+      case "1":
         return "New Project";
-      case 2:
+      case "2":
         return "In Progress";
-      case 3:
+      case "3":
         return "Review";
-      case 4:
+      case "4":
         return "Finish";
       default:
         return "";

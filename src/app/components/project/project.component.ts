@@ -14,7 +14,10 @@ import { AddEntityComponent } from "../add-entity/add-entity.component";
 import { AddCorpusComponent } from "../add-corpus/add-corpus.component";
 import { AddEventComponent } from "../add-event/add-event.component";
 import { AddRelationComponent } from "../add-relation/add-relation.component";
-import { Attribute } from "../../shared/attribute.model";
+import {
+  EntityAttributeTypes,
+  EntityAttributeValues
+} from "../../shared/entityAttribute.model";
 import { AuthService } from "../../shared/security/auth.service";
 import { Event } from "../../shared/event.model";
 import { Observable } from "rxjs/Observable";

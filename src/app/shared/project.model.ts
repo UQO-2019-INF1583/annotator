@@ -21,12 +21,6 @@ export interface Project {
 }
 
 export class ProjectUtils {
-  static test(): void {
-    let date = Date.now();
-    console.log(date.toLocaleString);
-  }
-  today = Date.now();
-
   static generateEmpty(): Project {
     return {
       id: "",

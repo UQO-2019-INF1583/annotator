@@ -7,6 +7,7 @@ import { YesNoDialogBoxComponent } from "../../components/yes-no-dialog-box/yes-
 import "rxjs/add/observable/of";
 import { MatDialog } from "@angular/material";
 import { ProjectManagerService } from "./projectManager.service";
+import { CreateProjectComponent } from "../../components/create-project/create-project.component";
 
 import { Project } from "../../shared/project.model";
 
@@ -52,10 +53,22 @@ export class ProjectManagerComponent implements OnInit {
     });
   }
 
+  /*  Title : Create Project Dialog Box
+      Description : Creates the dialog box for the creation of the project when "Create" button is pressed*/
+  createProjectDialogBox() {
+    const dialogRef = this.dialog.open(CreateProjectComponent, {
+      width: "250px"
+    });
+  }
+
+  /*  Title : Modify Project
+      Description : Navigate to the specific project by pressing the corresponding "View" Button*/
   modifyProject(project: any) {
     this.router.navigate(["/project", { id: project.id }]);
   }
 
+  /*  Title : Delete Project
+      Description : Pressing the delete button opens a dialog box asking the user if they want to delete this project*/
   deleteProject(project: any) {
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
       width: "250px",
@@ -72,10 +85,14 @@ export class ProjectManagerComponent implements OnInit {
     });
   }
 
+  /*  Title : Update Display
+      Description : Any changes made in the menu updates the project display correspondingly*/
   updateDisplay() {
+    // Get all projects
     this.displayedProjects = this.projects.slice(0);
 
-    /* search filter */
+    // Search Filter : Compares the value of each project's title, description and annotators with the search input.
+    // if no value matches, the project is removed from the list.
     if (!(this.searchValue === ""))
       for (let i = this.displayedProjects.length - 1; i >= 0; i--) {
         let check = false;
@@ -94,7 +111,7 @@ export class ProjectManagerComponent implements OnInit {
         if (!check) this.displayedProjects.splice(i, 1);
       }
 
-    /* sort by */
+    // Sort by : order the project array according to the chosen sort method.
     if (this.sortValue === "A - Z")
       this.displayedProjects.sort((a, b) => {
         if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
@@ -113,12 +130,22 @@ export class ProjectManagerComponent implements OnInit {
         else if (a.annotators.length > b.annotators.length) return -1;
         else return 0;
       });
+    else if (this.sortValue === "Least annotators")
+      this.displayedProjects.sort((a, b) => {
+        if (a.annotators.length > b.annotators.length) return 1;
+        else if (a.annotators.length < b.annotators.length) return -1;
+        else return 0;
+      });
   }
 
+  /*  Title : Change Display
+      Description : Affects the value of the chosen display method either simplified or detailed*/
   changeDisplay(value: string) {
     this.viewValue = value;
   }
 
+  /*  Title : Is Admin
+      Description : Verify if the user is an admin in this project*/
   isAdmin(project: any) {
     this.idUser = this.authService.currentUserId;
     for (let i = 0; i < project.admin.length; i++)

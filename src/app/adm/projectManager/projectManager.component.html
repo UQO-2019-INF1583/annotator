@@ -2,8 +2,17 @@
   <div class="container">
     <div class="row">
       <mat-card class="col-xs-12">
+        <!--Create Project-->
+        <button
+          *ngIf="isConnected"
+          class="btn btn-success"
+          (click)="createProjectDialogBox()"
+        >
+          Create
+        </button>
+
         <!--Search bar-->
-        <mat-form-field class="example-full-width">
+        <mat-form-field class="menu-search">
           <input
             matInput
             placeholder="Search Projects"
@@ -13,12 +22,13 @@
         </mat-form-field>
 
         <!--Sort by -->
-        <mat-form-field>
+        <mat-form-field class="menu-sortBy">
           <mat-label>Sort by :</mat-label>
           <mat-select [(value)]="sortValue" (valueChange)="updateDisplay()">
             <mat-option value="A - Z">A - Z</mat-option>
             <mat-option value="Z - A">Z - A</mat-option>
             <mat-option value="Most annotators">Most annotators</mat-option>
+            <mat-option value="Least annotators">Least annotators</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -28,34 +38,21 @@
             class="btn btn-secondary"
             [ngClass]="{ active: viewValue == 'simplified' }"
           >
-            <input
-              type="radio"
-              name="options"
-              id="option1"
-              autocomplete="off"
-              (input)="changeDisplay('simplified')"
-            />
+            <input type="radio" (input)="changeDisplay('simplified')" />
             Simplified
           </label>
           <label
             class="btn btn-secondary"
             [ngClass]="{ active: viewValue == 'detailed' }"
           >
-            <input
-              type="radio"
-              name="options"
-              id="option2"
-              autocomplete="off"
-              (input)="changeDisplay('detailed')"
-            />
+            <input type="radio" (input)="changeDisplay('detailed')" />
             Detailed
           </label>
         </div>
       </mat-card>
+      <div class="col-xs-12" id="spacer" style="padding: 10px;"></div>
     </div>
   </div>
-
-  <div class="col-xs-12" id="spacer" style="padding: 10px;"></div>
 
   <!-- Detailed View -->
   <div class="container" [hidden]="viewValue != 'detailed'">
@@ -109,9 +106,11 @@
   <!-- Simplified View -->
   <div class="container" [hidden]="viewValue != 'simplified'">
     <div class="row">
+      <div class=""></div>
+
       <mat-card>
         <mat-card-content>
-          <mat-table #table [dataSource]="dataSource">
+          <mat-table #table [dataSource]="displayedProjects">
             <ng-container matColumnDef="title">
               <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
               <mat-cell *matCellDef="let project">

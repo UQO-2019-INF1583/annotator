@@ -42,7 +42,13 @@ export class ProjectManagerComponent implements OnInit {
   ngOnInit() {
     this.idUser = this.authService.currentUserId;
     this.isConnected = this.authService.isConnected();
-    this.displayedColumns = ["title", "description", "actions"];
+    this.displayedColumns = [
+      "date",
+      "title",
+      "state",
+      "description",
+      "actions"
+    ];
     this.projectDataSource = new ProjectDataSource(this.afs);
 
     this.searchValue = "";
@@ -139,6 +145,22 @@ export class ProjectManagerComponent implements OnInit {
         else if (a.annotators.length < b.annotators.length) return -1;
         else return 0;
       });
+    else if (this.sortValue === "Recent")
+      this.displayedProjects.sort((a, b) => {
+        if (!a.hasOwnProperty("date")) return 1;
+        else if (!b.hasOwnProperty("date")) return -1;
+        else if (a.date < b.date) return 1;
+        else if (a.date > b.date) return -1;
+        else return 0;
+      });
+    else if (this.sortValue === "Oldest")
+      this.displayedProjects.sort((a, b) => {
+        if (!a.hasOwnProperty("date")) return 1;
+        else if (!b.hasOwnProperty("date")) return -1;
+        else if (a.date > b.date) return 1;
+        else if (a.date < b.date) return -1;
+        else return 0;
+      });
     else if (this.sortValue === "Most entities")
       this.displayedProjects.sort((a, b) => {
         if (
@@ -189,18 +211,6 @@ export class ProjectManagerComponent implements OnInit {
             b.relations.length
         )
           return -1;
-        else return 0;
-      });
-    else if (this.sortValue === "State : 4 - 1")
-      this.displayedProjects.sort((a, b) => {
-        if (a.state < b.state) return 1;
-        else if (a.state > b.state) return 1;
-        else return 0;
-      });
-    else if (this.sortValue === "State : 4 - 1")
-      this.displayedProjects.sort((a, b) => {
-        if (a.state > b.state) return 1;
-        else if (a.state < b.state) return 1;
         else return 0;
       });
   }

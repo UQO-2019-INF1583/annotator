@@ -9,6 +9,7 @@ export interface Project {
   id: string;
   title: string;
   description: string;
+  state: number;
   admin: string[]; // user ids
   annotators: string[]; // user ids
   corpus: Doc[];
@@ -24,6 +25,7 @@ export class ProjectUtils {
       id: '',
       title: '',
       description: '',
+      state: 0,
       admin: [],
       annotators: [],
       corpus: [],

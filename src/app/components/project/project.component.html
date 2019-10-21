@@ -2,17 +2,25 @@
   <div class="mat-card project-form">
     <div class="project-form-title" style="padding-left: 10px; padding-right: 10px;">
       <mat-form-field>
-        <input matInput [readonly]="!isConnected" [ngModel]="currentProject.title" placeholder="Project" (ngModelChange)="currentProject.title = $event"
-          name="titre" #titre="ngModel" required />
+        <input matInput [readonly]="!isConnected" [ngModel]="currentProject.title" placeholder="Project"
+          (ngModelChange)="currentProject.title = $event" name="titre" #titre="ngModel" required />
         <mat-error *ngIf="titre.value == '' || titre.value == null">Project title is required</mat-error>
       </mat-form-field>
     </div>
 
+    <div class="project-form-state" style="padding-left: 10px; padding-right: 10px;">
+      <mat-form-field>
+        <mat-label>État du projet</mat-label>
+        <mat-select [(value)]="currentProject.state" required>
+          <mat-option *ngFor="let state of states" value={{state.value}}>{{state.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
     <div class="project-form-description" style="padding-left: 10px; padding-right: 10px;">
       <mat-form-field style="display:inline-block">
-        <textarea matInput [readonly]="!isConnected" [ngModel]="currentProject.description" placeholder="Descriprion"  (ngModelChange)="currentProject.description = $event"
-          name="description" #description="ngModel" required>
+        <textarea matInput [readonly]="!isConnected" [ngModel]="currentProject.description" placeholder="Descriprion"
+          (ngModelChange)="currentProject.description = $event" name="description" #description="ngModel" required>
 
         </textarea>
         <mat-error *ngIf="currentProject.description.value == '' || currentProject.description.value == null">Project
@@ -36,8 +44,10 @@
           <mat-list role="list" class="card-list-project">
             <mat-list-item class="matListItemHover" *ngFor="let item of corpus | async">
               <h4 mat-line>{{item?.title}}</h4>
-              <button *ngIf="isConnected" style="margin-right: 16px;" class="btn btn-primary" (click)="documentSelected(item)">View</button>
-              <button *ngIf="isConnected && isAdmin()" class="btn btn-danger" (click)="deleteCorpus(item)">Delete</button>
+              <button *ngIf="isConnected" style="margin-right: 16px;" class="btn btn-primary"
+                (click)="documentSelected(item)">View</button>
+              <button *ngIf="isConnected && isAdmin()" class="btn btn-danger"
+                (click)="deleteCorpus(item)">Delete</button>
             </mat-list-item>
           </mat-list>
         </mat-card-content>
@@ -57,7 +67,8 @@
           <mat-list role="list" class="card-list-project">
             <mat-list-item class="matListItemHover" *ngFor="let item of annotators">
               <h4 mat-line>{{item.email}}</h4>
-              <button *ngIf="isConnected && isAdmin()" class="btn btn-danger" (click)="deleteAnnotator(item.uid)">Delete</button>
+              <button *ngIf="isConnected && isAdmin()" class="btn btn-danger"
+                (click)="deleteAnnotator(item.uid)">Delete</button>
             </mat-list-item>
           </mat-list>
         </mat-card-content>
@@ -77,7 +88,8 @@
           <mat-list role="list" class="card-list-project">
             <mat-list-item class="matListItemHover" *ngFor="let item of admin">
               <h4 mat-line>{{item.email}}</h4>
-              <button *ngIf="isConnected && isAdmin()" class="btn btn-danger" (click)="deleteAdmin(item.uid)">Delete</button>
+              <button *ngIf="isConnected && isAdmin()" class="btn btn-danger"
+                (click)="deleteAdmin(item.uid)">Delete</button>
             </mat-list-item>
           </mat-list>
         </mat-card-content>
@@ -100,7 +112,8 @@
         </mat-card-header>
         <mat-card-content>
           <mat-list role="list" class="card-list-project">
-            <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.entities" [ngStyle]="{'background-color': item?.bgColor}">
+            <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.entities"
+              [ngStyle]="{'background-color': item?.bgColor}">
               <h4 mat-line>{{item?.name}}</h4>
               <button *ngIf="isAdmin()" class="btn btn-danger" (click)="deleteEntity(item.name)">Delete</button>
             </mat-list-item>
@@ -140,7 +153,8 @@
         </mat-card-header>
         <mat-card-content>
           <mat-list role="list" class="card-list-project">
-            <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.relations" [ngStyle]="{'background-color': item?.color}">
+            <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.relations"
+              [ngStyle]="{'background-color': item?.color}">
               <h4 mat-line>{{item?.type}}</h4>
               <button *ngIf="isAdmin()" class="btn btn-danger" (click)="deleteRelation(item)">Delete</button>
             </mat-list-item>
@@ -160,7 +174,8 @@
         </mat-card-header>
         <mat-card-content>
           <mat-list role="list" class="card-list-project">
-            <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.events" [ngStyle]="{'background-color': item?.bgColor}">
+            <mat-list-item class="matListItemHover" *ngFor="let item of currentProject.events"
+              [ngStyle]="{'background-color': item?.bgColor}">
               <h4 mat-line>{{item?.name}}</h4>
               <button *ngIf="isAdmin()" class="btn btn-danger" (click)="deleteEvent(item)">Delete</button>
             </mat-list-item>

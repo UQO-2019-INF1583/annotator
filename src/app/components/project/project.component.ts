@@ -24,6 +24,7 @@ import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';
 import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
 import { Entity } from '../../shared/entity.model';
+import { ProjectState, StateEnum } from '../../shared/state';
 
 @Component({
   selector: 'app-project',
@@ -40,6 +41,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
   annotators: any[] = []; // {uid: v1, email: v2}[]
   admin: any[] = []; // {uid: v1, email: v2}[]
   isConnected = false;
+
+  //used to display all the choices of states
+  states = [
+    new ProjectState(0, "New project"),
+    new ProjectState(1, "In progress"),
+    new ProjectState(2, "Review"),
+    new ProjectState(3, "Finish")
+  ];
+
+
 
   constructor(
     private authService: AuthService,
@@ -112,7 +123,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.currentProject.title != null &&
       this.currentProject.title !== '' &&
       this.currentProject.description != null &&
-      this.currentProject.description !== ''
+      this.currentProject.description !== '' &&
+      this.currentProject.state > -1 && //this makes sure that a value is associated with a state
+      this.currentProject.state < this.states.length
     ) {
       this.ps.saveProject(this.currentProject);
 

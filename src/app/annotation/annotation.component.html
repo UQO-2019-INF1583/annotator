@@ -3,13 +3,24 @@
   <h3 style="display:inline-block">Document: </h3> {{currentDoc?.title}}
   <p *ngIf="isConnected">To add an annotation, highlight the text and choose the category.</p>
 
-  <!-- S'occupe du filtrage des annotations -->
-  <app-filter></app-filter>
+
 
   <mat-card>
-    <!-- L'éditeur graphique de brat -->
-    <div id="brat"></div>
-    <div id="myText" style="display: none;"></div>
+    <mat-grid-list cols="7" rowHeight="1000">
+		
+			<mat-grid-tile colspan="5">
+				<!-- L'éditeur graphique de brat -->
+				<div id="brat"></div>
+				<div id="myText" style="display: none;"></div>
+			</mat-grid-tile>
+		
+		
+			<mat-grid-tile colspan="2">
+				<!-- S'occupe du filtrage des annotations -->
+				<app-filter></app-filter>
+			</mat-grid-tile>
+		
+    </mat-grid-list>
   </mat-card>
 
   <br />

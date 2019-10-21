@@ -2,7 +2,6 @@
 // Dans le cas de ce module, il s'agit de permettre de visualiser les données du projet et de sauvegarder les
 // différents changements que l’utilisateur peut faire.
 
-<<<<<<< HEAD
 import "rxjs/Rx";
 import "rxjs/add/operator/mergeMap";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -15,10 +14,7 @@ import { AddEntityComponent } from "../add-entity/add-entity.component";
 import { AddCorpusComponent } from "../add-corpus/add-corpus.component";
 import { AddEventComponent } from "../add-event/add-event.component";
 import { AddRelationComponent } from "../add-relation/add-relation.component";
-import {
-  EntityAttributeTypes,
-  EntityAttributeValues
-} from "../../shared/entityAttribute.model";
+import { Attribute } from "../../shared/attribute.model";
 import { AuthService } from "../../shared/security/auth.service";
 import { Event } from "../../shared/event.model";
 import { Observable } from "rxjs/Observable";
@@ -28,31 +24,7 @@ import { Relation } from "../../shared/relation.model";
 import { User } from "./../../shared/user.model";
 import { YesNoDialogBoxComponent } from "../yes-no-dialog-box/yes-no-dialog-box.component";
 import { Entity } from "../../shared/entity.model";
-=======
-import 'rxjs/Rx';
-import 'rxjs/add/operator/mergeMap';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { AddAdminComponent } from '../add-admin/add-admin.component';
-import { AddAnnotatorComponent } from '../add-annotator/add-annotator.component';
-import { AddAttributeComponent } from '../add-attribute/add-attribute.component';
-import { AddEntityComponent } from '../add-entity/add-entity.component';
-import { AddCorpusComponent } from '../add-corpus/add-corpus.component';
-import { AddEventComponent } from '../add-event/add-event.component';
-import { AddRelationComponent } from '../add-relation/add-relation.component';
-import { Attribute } from '../../shared/attribute.model';
-import { AuthService } from '../../shared/security/auth.service';
-import { Event } from '../../shared/event.model';
-import { Observable } from 'rxjs/Observable';
-import { Project, ProjectUtils } from '../../shared/project.model';
-import { ProjectService } from './project.service';
-import { Relation } from '../../shared/relation.model';
-import { User } from './../../shared/user.model';
-import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
-import { Entity } from '../../shared/entity.model';
-import { ProjectState, StateEnum } from '../../shared/state';
->>>>>>> gr1_projectState
+import { ProjectState, StateEnum } from "../../shared/state";
 
 @Component({
   selector: "app-project",
@@ -77,8 +49,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     new ProjectState(2, "Review"),
     new ProjectState(3, "Finish")
   ];
-
-
 
   constructor(
     private authService: AuthService,
@@ -151,13 +121,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.currentProject.title != null &&
       this.currentProject.title !== "" &&
       this.currentProject.description != null &&
-<<<<<<< HEAD
-      this.currentProject.description !== ""
-=======
-      this.currentProject.description !== '' &&
+      this.currentProject.description !== "" &&
       this.currentProject.state > -1 && //this makes sure that a value is associated with a state
       this.currentProject.state < this.states.length
->>>>>>> gr1_projectState
     ) {
       this.ps.saveProject(this.currentProject);
 

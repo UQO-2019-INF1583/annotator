@@ -9,7 +9,11 @@ export interface Project {
   id: string;
   title: string;
   description: string;
+<<<<<<< HEAD
   date: Date;
+=======
+  state: number;
+>>>>>>> gr1_projectState
   admin: string[]; // user ids
   annotators: string[]; // user ids
   corpus: Doc[];
@@ -28,10 +32,17 @@ export class ProjectUtils {
 
   static generateEmpty(): Project {
     return {
+<<<<<<< HEAD
       id: "",
       title: "",
       date: new Date(),
       description: "",
+=======
+      id: '',
+      title: '',
+      description: '',
+      state: 0,
+>>>>>>> gr1_projectState
       admin: [],
       annotators: [],
       corpus: [],

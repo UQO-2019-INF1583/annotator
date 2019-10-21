@@ -1,4 +1,4 @@
-
+//Attribut d'un événement
 export class EventAttributeTypes {
   name: string;
   type: string;

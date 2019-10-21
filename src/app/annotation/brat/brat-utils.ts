@@ -136,7 +136,7 @@ export class BratUtils {
 
     return collectionData;
   }
-
+  //Méthode qui reçoit le tableau de valeur et les transforme en Json pour Brat
   static formatValues(values: EntityAttributeValues[]) {
     let result = {};
 

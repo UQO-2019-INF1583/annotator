@@ -1,3 +1,4 @@
+//Attribut d'un entité
 export class EntityAttributeTypes {
     name: string;
     type: string;
@@ -12,6 +13,7 @@ export class EntityAttributeTypes {
     }
 }
 
+// Classe qui représente une valeur contenue par un attribut
 export class EntityAttributeValues {
     box: string;
     glyph: string;
@@ -25,6 +27,8 @@ export class EntityAttributeValues {
         this.name = name;
     }
 
+    //méthode qui génère l'objet EntityAttributeValues
+    //Cette méthode remplace l'utilisation du mot clé new, car firebase ne supporte pas les objets créés avec ce mot clé
     static generateAttributeValues(name): EntityAttributeValues {
         return {
             box: 'none',

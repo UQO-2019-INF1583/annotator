@@ -82,11 +82,13 @@ interface IRelation {
   args: IRelationArgument[];
 }
 
+//mapper les attributs d'un événement
 interface IEventAttribute extends IUsable, IBase {
   labels: string[];
   values: IAttributeValueList;
 }
 
+//mapper les attributs d'un entité
 interface IEntityAttribute extends IBase {
   values: IAttributeValueList;
 }

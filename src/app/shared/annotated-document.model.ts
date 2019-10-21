@@ -80,6 +80,7 @@ export interface AttributeAnnotation extends IAnnotation, EntityAttributeTypes {
   target: id;
 }
 
+//Attributs des entités
 export class AttributeAnnotationUtils {
   static generateEmpty(): AttributeAnnotation {
     return {

@@ -10,9 +10,9 @@ export type CollectionData = {
   unconfigured_types: any[];
   items: any[];
   ui_names: IUIName;
-  event_attribute_types: IAttribute[];
-  entity_attribute_types: IAttribute[];
-  relation_attribute_types: IAttribute[];
+  event_attribute_types: IEventAttribute[];
+  entity_attribute_types: IEntityAttribute[];
+  relation_attribute_types: IEventAttribute[];
 }
 
 interface IUsable {
@@ -82,10 +82,13 @@ interface IRelation {
   args: IRelationArgument[];
 }
 
-interface IAttribute extends IUsable, IBase {
+interface IEventAttribute extends IUsable, IBase {
   labels: string[];
   values: IAttributeValueList;
+}
 
+interface IEntityAttribute extends IBase {
+  values: IAttributeValueList;
 }
 
 interface IAttributeValueList {

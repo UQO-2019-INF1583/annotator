@@ -1,5 +1,5 @@
 
-export class Attribute {
+export class EventAttributeTypes {
   name: string;
   type: string;
   labels: string[];

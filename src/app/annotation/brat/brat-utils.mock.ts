@@ -4,7 +4,7 @@ import { AnnotatedDocument } from '../../shared/annotated-document.model';
 import { CollectionData } from '../collection-data';
 
 export const docData = {
-  annotDocData : {
+  annotDocData: {
     text: 'Ed O\'Kelley was the man who shot the man who shot Jesse James.\nJ\'ai castor le plus petit, mais le plus fort.',
     entities: [
       ['N1', 'Person', [[0, 2]]],
@@ -17,7 +17,7 @@ export const docData = {
       ['R1', 'Friend', [['From', 'N1'], ['To', 'N2']]]
     ],
     triggers: [
-      ['T1', 'Greeting', [[3, 4]] ]
+      ['T1', 'Greeting', [[3, 4]]]
     ],
     events: [
       ['E1', 'T1', [['Greeter', 'N1'], ['Greeted', 'N2']]]
@@ -30,8 +30,8 @@ export const docData = {
     modifications: [],
     normalizations: [],
     source_files: []
-  }as DocumentData,
-  doc1DocData : {
+  } as DocumentData,
+  doc1DocData: {
     text: 'Ed O\'Kelley was the man who shot the man who shot Jesse James.\nJ\'ai castor le plus petit, mais le plus fort.',
     entities: [
       ['N1', 'Person', [[0, 2]]],
@@ -44,7 +44,7 @@ export const docData = {
       ['R1', 'Friend', [['From', 'N1'], ['To', 'N2']]]
     ],
     triggers: [
-      ['T1', 'Greeting', [[3, 4]] ]
+      ['T1', 'Greeting', [[3, 4]]]
     ],
     events: [
       ['E1', 'T1', [['Greeter', 'N1'], ['Greeted', 'N2']]]
@@ -55,7 +55,7 @@ export const docData = {
     modifications: [],
     normalizations: [],
     source_files: []
-  }as DocumentData
+  } as DocumentData
 }
 
 export const annotDoc = {
@@ -106,8 +106,6 @@ export const annotDoc = {
         id: 'A1',
         name: 'testA',
         type: 'Notorious',
-        labels: [],
-        unused: false,
         values: {},
         target: 'N1'
       }
@@ -162,7 +160,7 @@ export const annotDoc = {
         arcs: []
       }
     ]
-  }as AnnotatedDocument,
+  } as AnnotatedDocument,
   aDocInit: {
     documentId: 'test1',
     title: 'test1',
@@ -173,7 +171,7 @@ export const annotDoc = {
     attributes: [],
     relations: [],
     events: []
-  }as AnnotatedDocument
+  } as AnnotatedDocument
 }
 
 export const project = {
@@ -200,9 +198,7 @@ export const project = {
       {
         name: 'testA',
         type: 'Notorious',
-        labels: [],
-        unused: false,
-        values: {}
+        values: {},
       }
     ],
     events: [
@@ -228,11 +224,11 @@ export const project = {
         args: []
       }
     ]
-  }as Project
+  } as Project
 }
 
 export const colData = {
-  stdColData : {
+  stdColData: {
     items: [],
     messages: [],
     search_config: [
@@ -290,12 +286,10 @@ export const colData = {
       {
         name: 'testA',
         type: 'Notorious',
-        labels: [],
-        unused: false,
-        values: {}
+        values: {},
       }
     ],
     event_attribute_types: [],
     relation_attribute_types: []
-  }as CollectionData
+  } as CollectionData
 }

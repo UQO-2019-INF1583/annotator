@@ -1,5 +1,5 @@
 import { Relation } from './relation.model';
-import { Attribute } from './attribute.model';
+import { EntityAttributeTypes } from './entityAttribute.model';
 import { Entity } from './entity.model';
 import { Doc } from './document.model';
 import { Event } from './event.model';
@@ -76,7 +76,7 @@ export class EntityAnnotationUtils {
   }
 }
 
-export interface AttributeAnnotation extends IAnnotation, Attribute {
+export interface AttributeAnnotation extends IAnnotation, EntityAttributeTypes {
   target: id;
 }
 
@@ -86,9 +86,8 @@ export class AttributeAnnotationUtils {
       id: '',
       name: '',
       type: '',
-      labels: [],
-      unused: false,
-      values: '',
+      valueString: '',
+      values: [],
       target: ''
     }
   }

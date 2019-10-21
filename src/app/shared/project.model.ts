@@ -2,7 +2,7 @@
 import { Doc } from './document.model';
 import { Entity } from './entity.model';
 import { Event } from './event.model';
-import { Attribute } from './attribute.model'
+import { EntityAttributeTypes } from './entityAttribute.model';
 import { Relation } from './relation.model';
 
 export interface Project {
@@ -13,7 +13,7 @@ export interface Project {
   annotators: string[]; // user ids
   corpus: Doc[];
   entities: Entity[];
-  attributes: Attribute[];
+  attributes: EntityAttributeTypes[];
   events: Event[];
   relations: Relation[];
 }

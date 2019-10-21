@@ -27,27 +27,34 @@
           <mat-select [(value)]="sortValue" (valueChange)="updateDisplay()">
             <mat-option value="A - Z">A - Z</mat-option>
             <mat-option value="Z - A">Z - A</mat-option>
+            <mat-option value="Recent">Recent</mat-option>
+            <mat-option value="Oldest">Oldest</mat-option>
             <mat-option value="Most annotators">Most annotators</mat-option>
             <mat-option value="Least annotators">Least annotators</mat-option>
+            <mat-option value="Most entities">Most entities</mat-option>
+            <mat-option value="Least entities">Least entities</mat-option>
           </mat-select>
         </mat-form-field>
 
         <!--Display Type -->
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label
+          <button
+            mat-button
             class="btn btn-secondary"
             [ngClass]="{ active: viewValue == 'simplified' }"
+            (click)="changeDisplay('simplified')"
           >
-            <input type="radio" (input)="changeDisplay('simplified')" />
             Simplified
-          </label>
-          <label
+          </button>
+
+          <button
+            mat-button
             class="btn btn-secondary"
             [ngClass]="{ active: viewValue == 'detailed' }"
+            (click)="changeDisplay('detailed')"
           >
-            <input type="radio" (input)="changeDisplay('detailed')" />
             Detailed
-          </label>
+          </button>
         </div>
       </mat-card>
       <div class="col-xs-12" id="spacer" style="padding: 10px;"></div>
@@ -62,23 +69,35 @@
           <mat-card-title>{{ project.title }}</mat-card-title>
           <table style="width: 100%;">
             <tr>
-              <td class="subtitle left">Date de creation</td>
+              <td class="subtitle left">State : {{ getState(project) }}</td>
               <td class="subtitle right">
-                annotators : {{ project.annotators.length }}
+                Annotators : {{ project.annotators.length }}
               </td>
             </tr>
             <tr>
-              <td class="subtitle left">Etat de projet</td>
-              <td class="subtitle right"># annotations</td>
+              <td
+                class="subtitle left"
+                *ngIf="!project.hasOwnProperty('date')"
+              ></td>
+              <td class="subtitle left" *ngIf="project.hasOwnProperty('date')">
+                Created on : {{ project.date.seconds * 1000 | date }}
+              </td>
+              <td class="subtitle right">
+                Entities :
+                {{
+                  project.attributes.length +
+                    project.entities.length +
+                    project.events.length +
+                    project.relations.length
+                }}
+              </td>
             </tr>
           </table>
 
           <hr class="horizontal-line" />
           <table style="width: 100%;">
             <tr>
-              <td class="left">
-                {{ project.description }}
-              </td>
+              <td class="left">{{ project.description | slice: 0:100 }}</td>
               <td class="right">
                 <button
                   *ngIf="isConnected"
@@ -111,6 +130,16 @@
       <mat-card>
         <mat-card-content>
           <mat-table #table [dataSource]="displayedProjects">
+            <ng-container matColumnDef="date">
+              <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+              <mat-cell *matCellDef="let project">
+                <div *ngIf="!project.hasOwnProperty('date')"></div>
+                <div *ngIf="project.hasOwnProperty('date')">
+                  {{ project.date.seconds * 1000 | date }}
+                </div>
+              </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="title">
               <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
               <mat-cell *matCellDef="let project">
@@ -118,10 +147,17 @@
               </mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="state">
+              <mat-header-cell *matHeaderCellDef>State</mat-header-cell>
+              <mat-cell *matCellDef="let project">
+                {{ getState(project) }}
+              </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="description">
               <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
               <mat-cell *matCellDef="let project">
-                {{ project.description }}
+                {{ project.description | slice: 0:100 }}
               </mat-cell>
             </ng-container>
 
@@ -159,55 +195,4 @@
       </mat-card>
     </div>
   </div>
-
-  <!--
-  <mat-card>
-    <mat-card-title>
-      <h2>List of projects</h2>
-    </mat-card-title>
-    <mat-card-content>
-      <mat-table #table [dataSource]="dataSource">
-        <ng-container matColumnDef="title">
-          <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
-          <mat-cell *matCellDef="let project"> {{ project.title }} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="description">
-          <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-          <mat-cell *matCellDef="let project">
-            {{ project.description }}
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
-          <mat-cell *matCellDef="let project">
-            <div style="display: flex;flex-wrap: nowrap;">
-              <button
-                *ngIf="isConnected"
-                class="btn btn-primary"
-                (click)="modifyProject(project)"
-              >
-                View
-              </button>
-              <span *ngFor="let idAdmin of project.admin">
-                <button
-                  *ngIf="isConnected && idAdmin === idUser"
-                  id="delete"
-                  class="btn btn-danger"
-                  (click)="deleteProject(project)"
-                >
-                  Delete
-                </button>
-              </span>
-            </div>
-          </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-      </mat-table>
-    </mat-card-content>
-  </mat-card>
-  -->
 </div>

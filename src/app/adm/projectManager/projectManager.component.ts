@@ -21,7 +21,7 @@ import { Project } from "../../shared/project.model";
 })
 export class ProjectManagerComponent implements OnInit {
   displayedColumns = [];
-  dataSource: ProjectDataSource | null;
+  projectDataSource: ProjectDataSource | null;
   projects: Project[];
   displayedProjects: Project[];
   isConnected = false;
@@ -43,19 +43,17 @@ export class ProjectManagerComponent implements OnInit {
     this.idUser = this.authService.currentUserId;
     this.isConnected = this.authService.isConnected();
     this.displayedColumns = ["title", "description", "actions"];
-    this.dataSource = new ProjectDataSource(this.afs);
+    this.projectDataSource = new ProjectDataSource(this.afs);
 
     this.searchValue = "";
     this.sortValue = "A - Z";
     this.viewValue = "simplified";
 
-    this.dataSource.connect().subscribe(data => {
+    this.projectDataSource.connect().subscribe(data => {
       this.viewValue = "simplified";
       this.projects = data;
       this.displayedProjects = this.projects.slice(0);
     });
-
-    //this.afs.collection()
   }
 
   /*  Title : Create Project Dialog Box

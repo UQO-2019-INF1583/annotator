@@ -78,7 +78,15 @@
             </tr>
             <tr>
               <td class="subtitle left">Etat de projet</td>
-              <td class="subtitle right"># annotations</td>
+              <td class="subtitle right">
+                entities :
+                {{
+                  project.attributes.length +
+                    project.entities.length +
+                    project.events.length +
+                    project.relations.length
+                }}
+              </td>
             </tr>
           </table>
 

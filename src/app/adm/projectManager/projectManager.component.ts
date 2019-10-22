@@ -62,22 +62,30 @@ export class ProjectManagerComponent implements OnInit {
     });
   }
 
-  /*  Title : Create Project Dialog Box
-      Description : Creates the dialog box for the creation of the project when "Create" button is pressed*/
+  /**
+   *  Title : Create Project Dialog Box
+   * Description : Creates the dialog box for the creation of the project when "Create" button is pressed
+   */
   createProjectDialogBox() {
     const dialogRef = this.dialog.open(CreateProjectComponent, {
       width: "250px"
     });
   }
 
-  /*  Title : Modify Project
-      Description : Navigate to the specific project by pressing the corresponding "View" Button*/
+  /**
+   *  Title : Modify Project
+   * Description : Navigate to the specific project by pressing the corresponding "View" Button
+   * @param project : specific projet
+   */
   modifyProject(project: any) {
     this.router.navigate(["/project", { id: project.id }]);
   }
 
-  /*  Title : Delete Project
-      Description : Pressing the delete button opens a dialog box asking the user if they want to delete this project*/
+  /**
+   *  Title : Delete Project
+   * Description : Pressing the delete button opens a dialog box asking the user if they want to delete this project
+   * @param project : specific projet
+   */
   deleteProject(project: any) {
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
       width: "250px",
@@ -94,8 +102,10 @@ export class ProjectManagerComponent implements OnInit {
     });
   }
 
-  /*  Title : Update Display
-      Description : Any changes made in the menu updates the project display correspondingly*/
+  /**
+   *  Title : Update Display
+   * Description : Any changes made in the menu updates the project display correspondingly
+   */
   updateDisplay() {
     // Get all projects
     this.displayedProjects = this.projects.slice(0);
@@ -215,33 +225,41 @@ export class ProjectManagerComponent implements OnInit {
       });
   }
 
-  /*  Title : Change Display
-      Description : Affects the value of the chosen display method either simplified or detailed*/
+  /**
+   *  Title : Change Display
+   * Description : Affects the value of the chosen display method either simplified or detailed
+   * @param value : display value (either simplified or detailed)
+   */
   changeDisplay(value: string) {
     this.viewValue = value;
   }
 
-  /*  Title : Get State
-      Description : return the corresponding state text depending on the state value*/
+  /**
+   *  Title : Get State
+   * Description : return the corresponding state text depending on the state value
+   * @param project : specific project
+   */
   getState(project: any): string {
     if (!project.hasOwnProperty("state")) return "";
-
     switch (project.state) {
-      case "1":
+      case "0":
         return "New Project";
-      case "2":
+      case "1":
         return "In Progress";
-      case "3":
+      case "2":
         return "Review";
-      case "4":
+      case "3":
         return "Finish";
       default:
         return "";
     }
   }
 
-  /*  Title : Is Admin
-      Description : Verify if the user is an admin in this project*/
+  /**
+   *  Title : Is Admin
+   * Description : Verify if the user is an admin in this project
+   * @param project : specific project
+   */
   isAdmin(project: any) {
     this.idUser = this.authService.currentUserId;
     for (let i = 0; i < project.admin.length; i++)

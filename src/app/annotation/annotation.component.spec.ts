@@ -47,7 +47,8 @@ ressources :
 https://stackoverflow.com/questions/48760093/how-to-provide-mock-angularfirestore-module-inside-angular-component-for-default
 */
 
-/* partie qui decrit les composantes ou les variables de classe
+/* fonction annotation component
+variables locales de la fonction: component, fxture, debugComponent, htmlcomponent, httpClient,httpTestingControler,app
 */
 describe('AnnotationComponent', () => {
   let component: AnnotationComponent;
@@ -58,7 +59,7 @@ describe('AnnotationComponent', () => {
   let httpTestingController: HttpTestingController;
   let app: FirebaseApp;
 
-//Assignation des valeurs aux variables, avant la synchronisation du programme
+//Assignation des valeurs aux variables de classe, avant la synchronisation du programme
   beforeEach(async(() => {
 
     AngularFirestoreStub = {
@@ -77,7 +78,28 @@ describe('AnnotationComponent', () => {
     AnnotationServiceStub = {
     };
 
-    // configuration du module de test pour la modification AnnotationComponent qui est une composante ajoutee au systeme d'Annotations
+    // configuration du module de test pour la modification AnnotationComponent 
+    /* 
+    type de fonction: configuration d'un module de test
+    nom de la fonction: TestBed.configureTestingModule
+    qui sert a tester le fonctionemtnt de la configuraton du module d'annotation
+    modules importees par cette fonction:         
+         ReactiveFormsModule,
+        MatCardModule,
+        RouterTestingModule,
+        MatSelectModule,
+        MatToolbarModule,
+        AngularFireModule,
+        HttpClientTestingModule,
+        AngularFireModule.
+        variables et valeures utilisees par cette fonction: 
+        AngularFirestore, useValue: AngularFirestoreStub },
+        Variable: AngularFireStorage,  Valeur prise de:  AngularFireStorageStub, 
+         Variable: AuthService,  Valeur prise de: AuthServiceStub 
+       Variable:  ProjectService,  Valeur prise de: ProjectServiceStub 
+        Variable:  AnnotationService,  Valeur prise de: AnnotationServiceStub
+
+*/
     TestBed.configureTestingModule({
       declarations: [AnnotationComponent],
       imports: [
@@ -101,6 +123,8 @@ describe('AnnotationComponent', () => {
       .compileComponents();
   }));
 
+  // fonctionalite qui definie la valeur de la variable app avant le commencement du FirebaseApp
+  
   beforeEach(() => {
     inject([FirebaseApp], (_app: FirebaseApp) => {
       app = _app;
@@ -115,14 +139,20 @@ describe('AnnotationComponent', () => {
     httpTestingController = TestBed.get(HttpTestingController);
   });
 
+  
+  
   it('should create', () => {
     expect(component).toBeDefined();
   });
 
+  // fonctionalite qui fait un exit lorsqu'il verifie que le repertoire dom existe ou pas
+  
   xit('check if brat div exist in dom', () => {
     expect(debugComponent.query(By.css('#brat'))).toBeTruthy();
   });
 
+  // fonctionalite qui verifie si l'editeur brat et chargee , si non tu fais un exit
+  
   xit('check if brat front end editor is loaded', () => {
     expect(component.getBrat).toBeTruthy();
   });

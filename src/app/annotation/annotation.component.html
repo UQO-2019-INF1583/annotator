@@ -3,31 +3,24 @@
   <h3 style="display:inline-block">Document: </h3> {{currentDoc?.title}}
   <p *ngIf="isConnected">To add an annotation, highlight the text and choose the category.</p>
 
+  <!-- S'occupe du filtrage des annotations -->
+  <div id="filter_element">
+    <app-filter></app-filter>
+  </div>
 
-
-  <mat-card>
-    <mat-grid-list cols="7" rowHeight="1000">
-		
-			<mat-grid-tile colspan="5">
-				<!-- L'éditeur graphique de brat -->
-				<div id="brat"></div>
-				<div id="myText" style="display: none;"></div>
-			</mat-grid-tile>
-		
-		
-			<mat-grid-tile colspan="2">
-				<!-- S'occupe du filtrage des annotations -->
-				<app-filter></app-filter>
-			</mat-grid-tile>
-		
-    </mat-grid-list>
-  </mat-card>
+  <div id="brat_element">
+    <mat-card>
+      <!-- L'éditeur graphique de brat -->
+      <div id="brat"></div>
+      <div id="myText" style="display: none;"></div>
+    </mat-card>
+  </div>
 
   <br />
 </div>
 
 <!-- S'assure que l'utilisateur soit connecté afin qu'il puisse enregistrer des modifications au document-->
-<div *ngIf="isConnected" style="padding-left: 10px; padding-right: 10px;">
+<div *ngIf="isConnected" style="padding-left: 10px; padding-right: 10px;" id="button_element">
   <!-- Bouton "Save", engesistre les modifications de l'utilisateur-->
   <button class="btn btn-primary" (click)="saveTextModification()">Save</button>
   <!-- Bouton "Cancel", annule les modifications de l'utilisateur et le redirige vers la page du project -->

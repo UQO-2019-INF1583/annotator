@@ -1,14 +1,21 @@
-.column {
+
+#brat_element {
+  position: relative;
+  margin: auto;
+  width: 80%;
   float: left;
-  width: 33%;
-  height: 80%;
-  overflow-y: auto;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  padding-top: 10px;
 }
 
-main {
-  overflow-y: auto;
+#filter_element {
+  position: relative;
+  margin: auto;
+  width: 20%;
+  float: right;
+  padding-left: 1%;
+}
+
+#button_element {
+  overflow: hidden;
+  bottom: 0;
+  width: 100%;
 }

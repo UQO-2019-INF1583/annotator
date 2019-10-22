@@ -29,6 +29,8 @@ ressources :
 https://stackoverflow.com/questions/48760093/how-to-provide-mock-angularfirestore-module-inside-angular-component-for-default
 */
 
+/* infos du code hello 2
+*/
 describe('AnnotationComponent', () => {
   let component: AnnotationComponent;
   let fixture: ComponentFixture<AnnotationComponent>;

@@ -6,6 +6,7 @@ export class Doc {
   file: any;
   text: string;
   projectId: string;
+  etatDocument: any;
 
   constructor(docId: string, title: string, projectId: string) {
     this.documentId = docId;
@@ -13,6 +14,7 @@ export class Doc {
     this.projectId = projectId;
     this.file = '';
     this.projectId = '';
+    this.etatDocument = 0;
   }
 
 }

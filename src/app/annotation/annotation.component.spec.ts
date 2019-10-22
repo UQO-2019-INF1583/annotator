@@ -59,7 +59,7 @@ describe('AnnotationComponent', () => {
   let httpTestingController: HttpTestingController;
   let app: FirebaseApp;
 
-//Assignation des valeurs aux variables de classe, avant la synchronisation du programme
+//Assignation des valeurs nulles ou vides ou vraies aux variables de classe, avant la synchronisation du programme
   beforeEach(async(() => {
 
     AngularFirestoreStub = {

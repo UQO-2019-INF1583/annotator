@@ -59,7 +59,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private router: Router,
     private ps: ProjectService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
@@ -351,7 +351,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.addAttributesAfterClosedHandler(result);
     });
   }
-
+  //Quand le bouton Add est appuyé, l'attribut est ajouté au projet
   addAttributesAfterClosedHandler(result: EntityAttributeTypes) {
     let attributeExists = false;
     if (result !== undefined) {

@@ -66,7 +66,6 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     });
 
     await this.as.getProject(this.projectId).then(p => this.project = p.data());
-
     const URL = await firebase
       .storage()
       .ref()
@@ -77,64 +76,90 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
     await this.as.getAnnotatedDocument(this.currentDoc.documentId).then(d => {
       const data = d.data()
+    }
 
+
+      //const currentUserId = firebase.auth().currentUser.uid;
+      // const ProjectAdmin = await this.as.getAdmin.then
+
+      /* 
+            
+            // trouver/voir la permission de l'utilisateur
+            if (currentUserId === ProjectAdmin) {
+              etat = 2
+            }//premier filtre si utilisateur est admin
+            data.entities = data.entities.filter(function (value, index, arr) {
+              return value.etatAnnotation == 1;
+            });//deuxième filtre si l'utilisateur fait partie des annotateurs du projet
+            else if ()
+              data.entities = data.entities.filter(function (value, index, arr) {
+                return value.etatAnnotation == 1;
+              });//troisième filtre si l'utilisateur n'est aucun des deux conditions précédentes ()
+            else ()
+            data.entities = data.entities.filter(function (value, index, arr) {
+              return value.etatAnnotation == 1;
+            });
+      
+      */
       if (data === undefined) {
-        this.annotatedDocument = AnnotatedDocumentUtils.fromDoc(this.currentDoc);
-      } else {
-        this.annotatedDocument = data;
-      }
-    });
+      this.annotatedDocument = AnnotatedDocumentUtils.fromDoc(this.currentDoc);
+    } else {
+      this.annotatedDocument = data;
+    }
+  });
+
+
 
     this.brat = new BratFrontendEditor(
-      document.getElementById('brat'),
-      BratUtils.getColDataFromProject(this.project),
-      BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument),
-      options);
+    document.getElementById('brat'),
+    BratUtils.getColDataFromProject(this.project),
+    BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument),
+    options);
 
-	this.filterBrat = new FilterBrat();
-	this.filterOptions = FilterOptionsList;
+this.filterBrat = new FilterBrat();
+this.filterOptions = FilterOptionsList;
 
-	this.isDataLoaded = true;
+this.isDataLoaded = true;
 
+
+
+ngOnInit() {
+  this.isConnected = this.authService.isConnected();
+  this.getInterfaceData();
+};
+
+ngOnDestroy() {
+  this.sub.unsubscribe();
+  this.brat = null;
+};
+
+saveTextModification() {
+  const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
+    this.brat.docData,
+    this.project,
+    AnnotatedDocumentUtils.fromDoc(this.currentDoc)
+  );
+
+  this.as.saveAnnotatedDocument(aDoc);
+
+  alert('Annotation saved');
+};
+
+customCSS() {
+  const head = document.getElementsByTagName('head')[0];
+  const oldFilter = document.getElementById("custom-css");
+  if (oldFilter) {
+    head.removeChild(oldFilter);
   }
-
-  ngOnInit() {
-    this.isConnected = this.authService.isConnected();
-
-    this.getInterfaceData();
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-    this.brat = null;
-  }
-
-  saveTextModification() {
-    const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
-      this.brat.docData,
-      this.project,
-      AnnotatedDocumentUtils.fromDoc(this.currentDoc)
-    );
-
-    this.as.saveAnnotatedDocument(aDoc);
-
-    alert('Annotation saved');
-  }
-
-  customCSS () {
-	const head=document.getElementsByTagName('head')[0];
-	const oldFilter=document.getElementById("custom-css");
-	if (oldFilter){
-		head.removeChild(oldFilter);
-	}
-	const newFilter=document.createElement("style");
-	newFilter.type="text/css";
-	newFilter.id="custom-css";
-    this.customCssHtml = '';
-    this.customCssHtml += "#brat .span_"+this.filterBrat.value+"{";
-    this.customCssHtml += "stroke-width: 3 !important;";
-    this.customCssHtml += "}";
-    newFilter.appendChild(document.createTextNode(this.customCssHtml));
-	head.appendChild(newFilter);
-  }
+  const newFilter = document.createElement("style");
+  newFilter.type = "text/css";
+  newFilter.id = "custom-css";
+  this.customCssHtml = '';
+  this.customCssHtml += "#brat .span_" + this.filterBrat.value + "{";
+  this.customCssHtml += "stroke-width: 3 !important;";
+  this.customCssHtml += "}";
+  newFilter.appendChild(document.createTextNode(this.customCssHtml));
+  head.appendChild(newFilter);
+};
+  };
 }

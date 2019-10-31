@@ -14,6 +14,10 @@ export class AnnotationService {
   getProject(projectId): Promise<any> {
     return this.afs.collection('Projects/').doc(projectId).ref.get();
   }
+  getAdmin(projectId): Promise<any> {
+    return this.afs.collection('Projects/').doc(projectId.admin).ref.get()
+  }
+
 
   saveAnnotatedDocument(annotatedDocument: AnnotatedDocument): void {
     if (annotatedDocument.documentId === null) {

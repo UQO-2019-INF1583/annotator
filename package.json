@@ -27,6 +27,8 @@
     "@angular/platform-server": "^8.2.2",
     "@angular/router": "^8.2.2",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
+    "@types/jest": "^24.0.20",
+    "@types/mocha": "^5.2.7",
     "acorn": "^6.0.0",
     "core-js": "^3.2.1",
     "firebase": "^6.3.5",

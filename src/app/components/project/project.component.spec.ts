@@ -1,11 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 import {
-  MatCardModule, MatDialog,
+  MatCardModule,
+  MatDialog,
   MatDialogModule,
   MatInputModule,
   MatListModule,
   MatToolbarModule
-} from '@angular/material';
+} from "@angular/material";
 import {
   projectMocks,
   relationMock,
@@ -15,20 +16,20 @@ import {
   adminMock,
   annotatorMock,
   MatDialogMock
-} from './project.component.mock';
+} from "./project.component.mock";
 
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AuthService } from '../../shared/security/auth.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
-import { MatSelectModule } from '@angular/material/select';
-import { ProjectComponent } from './project.component';
-import { ProjectManagerService } from '../../adm';
-import { ProjectService } from './project.service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import {Observable} from 'rxjs/Observable';
+import { AngularFirestore } from "@angular/fire/firestore";
+import { AuthService } from "../../tools/security/auth.service";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { FormsModule } from "@angular/forms";
+import { MatSelectModule } from "@angular/material/select";
+import { ProjectComponent } from "./project.component";
+import { ProjectManagerService } from "../../services/project/projectManager.service";
+import { ProjectService } from "../../services/project/project.service";
+import { RouterTestingModule } from "@angular/router/testing";
+import { YesNoDialogBoxComponent } from "./yes-no-dialog-box/yes-no-dialog-box.component";
+import { BrowserDynamicTestingModule } from "@angular/platform-browser-dynamic/testing";
+import { Observable } from "rxjs/Observable";
 
 /* trop d'erreurs
 describe('Projet', () => {

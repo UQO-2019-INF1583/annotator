@@ -14,10 +14,16 @@ export class AnnotationService {
   getProject(projectId): Promise<any> {
     return this.afs.collection('Projects/').doc(projectId).ref.get();
   }
+  getUserID(uid): Promise<any> {
+    return this.afs.collection('Users/').doc(uid).ref.get();
+  }
 
   saveAnnotatedDocument(annotatedDocument: AnnotatedDocument): void {
     if (annotatedDocument.documentId === null) {
       annotatedDocument.documentId = this.afs.createId();
+      //assigner le userID au document lorsque l'annotateur y accède pour la 1re fois
+      // annotatedDocument.userId = firebase.auth().currentUser.uid;
+
     }
 
     this.afs
@@ -28,6 +34,11 @@ export class AnnotationService {
 
   getAnnotatedDocument(documentId: string): Promise<any> {
     return this.afs.collection('AnnotatedDocument/').doc(documentId).ref.get();
+  }
+
+  //fonction qui devrait aller chercher le document associé a l'annotateur
+  getAnnotatorDocument(documentId: string): Promise<any> {
+    return this.afs.collection('AnnotatatedDocument/').doc(documentId).ref.get();
   }
 
 }

@@ -82,22 +82,13 @@ export class AnnotationComponent implements OnInit, OnDestroy {
         this.annotatedDocument = AnnotatedDocumentUtils.fromDoc(this.currentDoc);
       } else {
         // Application des filtres ici
+        // Le document est en version finale, afficher seulement les annotation approuvées
         if (data.etatDocument == 2) {
           data.entities = data.entities.filter(x => x.EtatAnnotation == 1);
-        }
-        /*
-        for (let entitiesKey in data.entities) {
-          console.log(data.entities[entitiesKey]);
 
-          // Le document est en version finale, afficher seulement les annotation approuvées
-          if (data.etatDocument == 2) {
-            // Supprimer les annotation qui ont été rejetées
-            if (data.entitites[entitiesKey].EtatAnnotation == "1") {
-              data.entitites.splice(entitiesKey, 1);
-            }
-          }
+          // Le document est vérouillé, désactiver l'enregistrement
+          document.getElementById("btnSave").setAttribute("disabled", "disabled");
         }
-        */
 
         this.annotatedDocument = data;
       }

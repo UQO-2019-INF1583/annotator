@@ -100,10 +100,10 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument),
       options);
 
-	this.filterBrat = new FilterBrat();
-	this.filterOptions = FilterOptionsList;
+    this.filterBrat = new FilterBrat();
+    this.filterOptions = FilterOptionsList;
 
-	this.isDataLoaded = true;
+    this.isDataLoaded = true;
   }
 
   ngOnInit() {
@@ -118,15 +118,20 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   saveTextModification() {
-    const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
-      this.brat.docData,
-      this.project,
-      AnnotatedDocumentUtils.fromDoc(this.currentDoc)
-    );
+    // Empêche l'utilisateur d'enregistrer si le document est vérouillé
+    if (this.currentDoc.etatDocument == 2){
+      const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
+        this.brat.docData,
+        this.project,
+        AnnotatedDocumentUtils.fromDoc(this.currentDoc)
+      );
 
-    this.as.saveAnnotatedDocument(aDoc);
+      this.as.saveAnnotatedDocument(aDoc);
 
-    alert('Annotation saved');
+      alert('Annotation saved');
+    } else {
+      alert('You can\'t save a locked and finished document.');
+    }
   }
 
   customCSS () {

@@ -1,19 +1,25 @@
 <!-- Title -->
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xs-12"><h3>Entity Types</h3></div>
+    <div class="col-xs-12"><h3>Relation Types</h3></div>
+  </div>
+</div>
+
+<!-- Labels -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-2"><label for="new-type">Action:</label></div>
+    <div class="col-xs-2"><label for="new-type">Type:</label></div>
+    <div class="col-xs-3"><label for="new-type">Labels:</label></div>
+    <div class="col-xs-1"><label for="new-type">DashArray:</label></div>
+    <div class="col-xs-2"><label for="new-type">Role:</label></div>
+    <div class="col-xs-2"><label for="new-type">Target:</label></div>
   </div>
 </div>
 
 <!-- Input -->
 <div class="container-fluid">
   <form class="row">
-    <div class="col-xs-2"><label for="new-type">Action:</label></div>
-    <div class="col-xs-3"><label for="new-type">Type:</label></div>
-    <div class="col-xs-3"><label for="new-type">Labels:</label></div>
-    <div class="col-xs-2"><label for="new-type">Background:</label></div>
-    <div class="col-xs-2"><label for="new-type">Border:</label></div>
-
     <!-- Actions -->
     <div class="form-group col-xs-2">
       <button
@@ -28,30 +34,30 @@
         type="submit"
         class="btn btn-success"
         (click)="create()"
-        [disabled]="entityData.error"
+        [disabled]="relationData.error"
       >
         <span class="glyphicon glyphicon-plus"></span>
       </button>
       <br />
       <small
-        *ngIf="isValid(newEntity, entityData, -1)"
+        *ngIf="isValid(newRelation, relationData, -1)"
         class="form-text text-muted text-danger"
-        >{{ entityData.message }}</small
+        >{{ relationData.message }}</small
       >
     </div>
 
     <!-- Type -->
-    <div class="form-group col-xs-3">
+    <div class="form-group col-xs-2">
       <input
         class="form-control"
-        placeholder="Type (ex : Person)"
-        [(ngModel)]="newEntity.type"
+        placeholder="ex : Anaphora"
+        [(ngModel)]="newRelation.type"
         name="type"
         #type="ngModel"
         required="true"
       />
       <small
-        *ngIf="newEntity.type == '' || newEntity.type == null"
+        *ngIf="newRelation.type == '' || newRelation.type == null"
         class="form-text text-muted text-danger"
         >*Type is obligatory</small
       >
@@ -62,12 +68,12 @@
       <div>
         <table style="width: 100%;">
           <!-- Defined Labels -->
-          <tr *ngFor="let label of newEntity.labels; let i = index">
+          <tr *ngFor="let label of newRelation.labels; let i = index">
             <td>
               <button
                 type="submit"
                 class="btn btn-danger"
-                (click)="removeLabel(newEntity, i)"
+                (click)="removeLabel(newRelation, i)"
               >
                 <span class="glyphicon glyphicon-minus"></span>
               </button>
@@ -75,7 +81,7 @@
             <td>
               <input
                 class="form-control"
-                placeholder="Labels (ex : Person, Per)"
+                placeholder="ex : Anaphora, Ana"
                 [(ngModel)]="label"
                 name="label"
                 #type="ngModel"
@@ -89,8 +95,8 @@
               <button
                 type="submit"
                 class="btn btn-success"
-                (click)="addLabel(newEntity, entityData)"
-                [disabled]="isInvalidLabel(entityData)"
+                (click)="addLabel(newRelation, relationData)"
+                [disabled]="isInvalidLabel(relationData)"
               >
                 <span class="glyphicon glyphicon-plus"></span>
               </button>
@@ -98,8 +104,8 @@
             <td>
               <input
                 class="form-control"
-                placeholder="Labels (ex : Person, Per)"
-                [(ngModel)]="entityData.label"
+                placeholder="ex : Anaphora, Ana"
+                [(ngModel)]="relationData.label"
                 name="label"
                 #type="ngModel"
                 required="true"
@@ -109,42 +115,89 @@
         </table>
 
         <small
-          *ngIf="newEntity.labels == '' || newEntity.labels == null"
+          *ngIf="newRelation.labels == '' || newRelation.labels == null"
           class="form-text text-muted text-danger"
           >*Labels are obligatory</small
         >
       </div>
     </div>
-    <!-- Background Color -->
-    <div class="form-group col-xs-2">
+
+    <!-- DashArray -->
+    <div class="form-group col-xs-1">
       <input
-        class="form-control form-color"
-        type="color"
-        [(ngModel)]="newEntity.bgColor"
-        name="bgColor"
+        class="form-control"
+        placeholder="3,3"
+        [(ngModel)]="newRelation.type"
+        name="type"
         #type="ngModel"
         required="true"
       />
       <small
-        *ngIf="newEntity.bgColor == '' || newEntity.bgColor == null"
+        *ngIf="newRelation.type == '' || newRelation.type == null"
         class="form-text text-muted text-danger"
-        >*Color is obligatory</small
+        >*Type is obligatory</small
       >
     </div>
-    <!-- Border Color -->
+
+    <!-- Args : Role -->
     <div class="form-group col-xs-2">
       <input
-        class="form-control form-color"
-        type="color"
-        [(ngModel)]="newEntity.borderColor"
-        name="borderColor"
+        class="form-control"
+        placeholder="3,3"
+        [(ngModel)]="newRelation.type"
+        name="type"
         #type="ngModel"
         required="true"
       />
       <small
-        *ngIf="newEntity.borderColor == '' || newEntity.borderColor == null"
+        *ngIf="newRelation.type == '' || newRelation.type == null"
         class="form-text text-muted text-danger"
-        >*Color is obligatory</small
+        >*Type is obligatory</small
+      >
+      <br />
+      <input
+        class="form-control"
+        placeholder="3,3"
+        [(ngModel)]="newRelation.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newRelation.type == '' || newRelation.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
+      >
+    </div>
+
+    <!-- Args : Targets -->
+    <div class="form-group col-xs-2">
+      <input
+        class="form-control"
+        placeholder="3,3"
+        [(ngModel)]="newRelation.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newRelation.type == '' || newRelation.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
+      >
+      <br />
+      <input
+        class="form-control"
+        placeholder="3,3"
+        [(ngModel)]="newRelation.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newRelation.type == '' || newRelation.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
       >
     </div>
   </form>

@@ -13,11 +13,16 @@ export class Relation {
   args: any[];
 
   constructor() {
-    this.type = '';
+    this.type = "";
     this.labels = [];
-    this.dashArray = '3,3';
-    this.color = '';
+    this.dashArray = "3,3";
+    this.color = "";
     this.attributes = [];
     this.args = [];
   }
+}
+
+export class Args {
+  role: string;
+  targets: string[];
 }

@@ -9,3 +9,5 @@ export * from "./yes-no-dialog-box/yes-no-dialog-box.component";
 export * from "./project.component";
 
 export * from "./entity-type/entity-type.component";
+export * from "./attribute-type/attribute-type.component";
+export * from "./relation-type/relation-type.component";

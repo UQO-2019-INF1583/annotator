@@ -7,17 +7,17 @@ import { AuthService } from "../../../tools/security/auth.service";
 
 import { Project, ProjectUtils } from "../../../models/project.model";
 import { ProjectService } from "../../../services/project/project.service";
-import { EntityType } from "../../../models/project/";
+import { Relation } from "../../../models/relation.model";
 
 /**************************************************************************************
  *    Main :
  * ***********************************************************************************/
 @Component({
-  selector: "entity-type",
-  templateUrl: "./entity-type.component.html",
-  styleUrls: ["./entity-type.component.scss"]
+  selector: "relation-type",
+  templateUrl: "./relation-type.component.html",
+  styleUrls: ["./relation-type.component.scss"]
 })
-export class EntityTypeComponent implements OnInit {
+export class RelationTypeComponent implements OnInit {
   /**************************************************************************************
    *    Variables :
    * ***********************************************************************************/
@@ -30,10 +30,10 @@ export class EntityTypeComponent implements OnInit {
   isConnected: boolean;
 
   // Create New Entity
-  newEntity: EntityType = new EntityType();
+  newRelation: Relation = new Relation();
   newLabel: String = "";
-  entityData: EntityData = { error: true, message: "*Warning!", label: "" };
-  entitiesData: EntityData[] = [];
+  relationData: RelationData = { error: true, message: "*Warning!", label: "" };
+  relationsData: RelationData[] = [];
 
   constructor(
     private authService: AuthService,
@@ -51,9 +51,9 @@ export class EntityTypeComponent implements OnInit {
         .subscribe(data => {
           this.project = data;
 
-          this.entitiesData = [];
+          this.relationsData = [];
           for (let i = 0; i < this.project.entities.length; i++) {
-            this.entitiesData.push({
+            this.relationsData.push({
               error: true,
               message: "*Warning!",
               label: ""
@@ -73,24 +73,24 @@ export class EntityTypeComponent implements OnInit {
   create() {
     this.ps.getProject(this.projectId).then(project => {
       // Save Project
-      this.project.entities.push(JSON.parse(
-        JSON.stringify(this.newEntity)
-      ) as EntityType);
+      this.project.relations.push(JSON.parse(
+        JSON.stringify(this.newRelation)
+      ) as Relation);
       this.ps.saveProject(this.project);
 
       // Reset entityData
-      this.entityData = { error: true, message: "*Warning!", label: "" };
+      this.relationData = { error: true, message: "*Warning!", label: "" };
 
       // Add new entitiesData
-      this.entitiesData.push({ error: true, message: "*Warning!", label: "" });
+      this.relationsData.push({ error: true, message: "*Warning!", label: "" });
     });
   }
 
   save(index: number) {
     this.ps.getProject(this.projectId).then(project => {
-      for (let i = 0; i < project.entities; i++) {
+      for (let i = 0; i < project.relations; i++) {
         if (i != index) {
-          this.project.entities[i] = project.entities[i];
+          this.project.relations[i] = project.relations[i];
         }
       }
       this.ps.saveProject(this.project);
@@ -99,10 +99,10 @@ export class EntityTypeComponent implements OnInit {
 
   remove(index: number) {
     if (
-      this.project.entities.length >= 0 ||
-      index < this.project.entities.length
+      this.project.relations.length >= 0 ||
+      index < this.project.relations.length
     ) {
-      this.project.entities.splice(index, 1);
+      this.project.relations.splice(index, 1);
     }
     this.ps.saveProject(this.project);
   }
@@ -113,9 +113,9 @@ export class EntityTypeComponent implements OnInit {
       .valueChanges()
       .subscribe(data => {
         this.project = data;
-        this.entitiesData = [];
-        for (let i = 0; i < this.project.entities.length; i++) {
-          this.entitiesData.push({
+        this.relationsData = [];
+        for (let i = 0; i < this.project.relations.length; i++) {
+          this.relationsData.push({
             error: true,
             message: "*Warning!",
             label: ""
@@ -124,20 +124,20 @@ export class EntityTypeComponent implements OnInit {
       });
   }
 
-  addLabel(entity: EntityType, data: EntityData): void {
-    entity.labels.push(data.label);
+  addLabel(relation: Relation, data: RelationData): void {
+    relation.labels.push(data.label);
     data.label = "";
   }
 
-  removeLabel(entity: EntityType, index: number): void {
-    entity.labels.splice(index, 1);
+  removeLabel(relation: Relation, index: number): void {
+    relation.labels.splice(index, 1);
   }
 
   trackBy(index, label) {
     return index;
   }
 
-  isInvalidLabel(data: EntityData): boolean {
+  isInvalidLabel(data: RelationData): boolean {
     if (data != null) {
       if (data.label === "" || data.label === null) {
         return true;
@@ -149,8 +149,9 @@ export class EntityTypeComponent implements OnInit {
     }
   }
 
-  isValid(entity: EntityType, data: EntityData, index: number): boolean {
+  isValid(entity: Relation, data: RelationData, index: number): boolean {
     // Check if every entry is valid
+    /*
     data.error = true;
     if (entity.type === "" || entity.type === null) {
       data.message = "*Missing Type";
@@ -172,8 +173,10 @@ export class EntityTypeComponent implements OnInit {
       data.message = "*Missing Border Color";
       return true;
     }
+    */
 
     // Check for duplicates except for itself
+    /*
     if (index >= 0) {
       for (let i = 0; i < this.project.entities.length; i++) {
         if (i != index) {
@@ -207,6 +210,7 @@ export class EntityTypeComponent implements OnInit {
         }
       }
     }
+    */
 
     data.message = "";
     data.error = false;
@@ -214,7 +218,7 @@ export class EntityTypeComponent implements OnInit {
   }
 }
 
-export interface EntityData {
+export interface RelationData {
   error: boolean;
   message: string;
   label: string;

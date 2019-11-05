@@ -1,30 +1,28 @@
 // structure de données utilisée pour représenter un projet
 import { Doc } from "../document.model";
 
-import {
-  EntityAttributeType,
-  EntityType,
-  EventType,
-  RelationType
-} from "./index";
+import { AttributeType, EntityType, EventType, RelationType } from "./index";
 
 export class Project {
-  id: string;
-  title: string;
-  description: string;
-  state: number;
-  date: Date;
+  // Basic project parameters
+  id?: string;
+  title?: string;
+  description?: string;
+  state?: number;
+  date?: Date;
 
-  admin: string[]; // user ids
-  annotators: string[]; // user ids
+  // Users
+  admin?: string[]; // user ids
+  annotators?: string[]; // user ids
 
-  corpus: Doc[];
+  // Corpus
+  corpus?: Doc[];
 
-  // Types
-  entity_types: EntityType[];
-  entity_attribute_types: EntityAttributeType[];
-  relation_types: RelationType[];
-  event_types: EventType[];
+  // Type Declarations
+  entities?: EntityType[];
+  attributes?: AttributeType[];
+  relations?: RelationType[];
+  events?: EventType[];
 }
 
 export class ProjectUtils {
@@ -41,10 +39,10 @@ export class ProjectUtils {
 
       corpus: [],
 
-      entity_types: [],
-      entity_attribute_types: [],
-      relation_types: [],
-      event_types: []
+      entities: [],
+      attributes: [],
+      relations: [],
+      events: []
     };
   }
 }

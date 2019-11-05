@@ -1,0 +1,235 @@
+<!-- Title -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12"><h3>Attribute Types</h3></div>
+  </div>
+</div>
+
+<!-- Labels -->
+<div class="container-fluid">
+  <div class="col-xs-2"><label for="new-type">Action:</label></div>
+  <div class="col-xs-3"><label for="new-type">Type:</label></div>
+  <div class="col-xs-3"><label for="new-type">Glyph:</label></div>
+</div>
+
+<!-- Input -->
+<div class="container-fluid">
+  <form class="row">
+    <!-- Actions -->
+    <div class="form-group col-xs-2">
+      <button
+        type="submit"
+        class="btn btn-warning"
+        (click)="reset()"
+        style="margin-right: 2px;"
+      >
+        <span class="glyphicon glyphicon-refresh"></span>
+      </button>
+      <button
+        type="submit"
+        class="btn btn-success"
+        (click)="create()"
+        [disabled]="attributeData.error"
+      >
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+      <br />
+      <small
+        *ngIf="isValid(newAttribute, attributeData, -1)"
+        class="form-text text-muted text-danger"
+        >{{ attributeData.message }}</small
+      >
+    </div>
+
+    <!-- Type -->
+    <div class="form-group col-xs-3">
+      <input
+        class="form-control"
+        placeholder="Type (ex : Notorious)"
+        [(ngModel)]="newAttribute.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newAttribute.type == '' || newAttribute.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
+      >
+    </div>
+
+    <!-- Glyphs -->
+    <div class="form-group col-xs-3">
+      <div>
+        <table style="width: 100%;">
+          <!-- Defined glyph -->
+          <tr *ngFor="let glyph of newAttribute.values; let i = index">
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeGlyph(newAttribute, i)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Glyph (ex : ★)"
+                [(ngModel)]="glyph.glyph"
+                name="glyph"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+          <!-- New glyph -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addGlyph(newAttribute, attributeData)"
+                [disabled]="isInvalidGlyph(attributeData)"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Glyph (ex : ★)"
+                [(ngModel)]="attributeData.glyph"
+                name="glyph"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+        </table>
+
+        <small
+          *ngIf="newAttribute.glyph == '' || newAttribute.glyph == null"
+          class="form-text text-muted text-danger"
+          >*Glyphs are obligatory</small
+        >
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- List -->
+<div
+  class="container-fluid"
+  *ngFor="let attribute of project.attributes; let i = index"
+>
+  <form class="row entity-row">
+    <!-- Actions -->
+    <div class="form-group col-xs-2">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        (click)="save(i)"
+        [disabled]="attributesData[i].error"
+        style="margin-right: 2px;"
+      >
+        <span class="glyphicon glyphicon-floppy-disk"></span>
+      </button>
+      <button type="submit" class="btn btn-danger" (click)="remove(i)">
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
+      <br />
+      <small
+        *ngIf="isValid(attribute, attributesData[i], i)"
+        class="form-text text-muted text-danger"
+        >{{ attributesData[i].message }}</small
+      >
+    </div>
+
+    <!-- Type -->
+    <div class="form-group col-xs-3">
+      <input
+        class="form-control"
+        placeholder="Type (ex : Notorious)"
+        [(ngModel)]="attribute.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="attribute.type == '' || attribute.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
+      >
+    </div>
+
+    <!-- Glyphs -->
+    <div class="form-group col-xs-3">
+      <div>
+        <table style="width: 100%;">
+          <tr
+            *ngFor="
+              let glyph of attribute.values;
+              let j = index;
+              trackBy: trackBy
+            "
+          >
+            <!-- Created Glyphs -->
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeGlyph(attribute, j)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Glyph (ex : ★)"
+                [(ngModel)]="attribute.values[j].glyph"
+                name="value[{{ j }}]"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+          <!-- New Glyph -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addGlyph(attribute, attributesData[i])"
+                [disabled]="isInvalidGlyph(attributesData[i])"
+                name="invalid-btn"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Glyph (ex : ★)"
+                [(ngModel)]="attributesData[i].label"
+                name="newLabel"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+        </table>
+
+        <small
+          *ngIf="
+            attributesData[i].label == '' || attributesData[i].label == null
+          "
+          class="form-text text-muted text-danger"
+          >*Glyphs is obligatory</small
+        >
+      </div>
+    </div>
+  </form>
+</div>

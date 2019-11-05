@@ -6,6 +6,7 @@ import { DataSource } from "@angular/cdk/collections";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { HttpModule } from "@angular/http";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -98,7 +99,8 @@ import {
   AddEntityComponent,
   AddEventComponent,
   AddRelationComponent,
-  YesNoDialogBoxComponent
+  YesNoDialogBoxComponent,
+  EntityTypeComponent
 } from "./components/project";
 
 import { CreateProjectComponent } from "./components/projectManager";
@@ -132,7 +134,8 @@ import { EditUserComponent } from "./components/userManager";
     YesNoDialogBoxComponent,
     ProfileComponent,
     ResetPasswordComponent,
-    EditUserComponent
+    EditUserComponent,
+    EntityTypeComponent
   ],
   entryComponents: [
     AddAdminComponent,

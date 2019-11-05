@@ -1,13 +1,49 @@
 import { Injectable } from "@angular/core";
-import { AngularFirestore } from "@angular/fire/firestore";
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument
+} from "@angular/fire/firestore";
 import { Observable } from "rxjs/Observable";
 import * as firebase from "firebase";
 import { User } from "../../models/user.model";
-import { Project } from "../../models/project.model";
+import { Project, ProjectUtils } from "../../models/project.model";
+
+import { Entity } from "../../models/entity.model";
 
 @Injectable()
 export class ProjectService {
-  constructor(private afs: AngularFirestore) {}
+  projectCollection: AngularFirestoreCollection<Project>;
+  projectDoc: AngularFirestoreDocument<Project>;
+  projects: Observable<Project[]>;
+
+  constructor(private afs: AngularFirestore) {
+    this.projectCollection = this.afs.collection("Projects/");
+    this.projects = this.afs.collection("Projects/").valueChanges();
+  }
+
+  getProjectDocument(id: string) {
+    return this.afs.doc("Projects/" + id);
+  }
+
+  getProjectCollection() {
+    return this.projectCollection;
+  }
+
+  getProjects() {
+    return this.projects;
+  }
+
+  getProjectsOrderBy(orderBy: string, dir: boolean) {
+    if (dir)
+      return this.afs.collection("Projects/", ref => {
+        return ref.orderBy(orderBy, "asc");
+      });
+    else
+      return this.afs.collection("Projects/", ref => {
+        return ref.orderBy(orderBy, "desc");
+      });
+  }
 
   getProject(projectId: string): Promise<any> {
     return this.afs

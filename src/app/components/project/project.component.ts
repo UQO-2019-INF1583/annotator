@@ -24,6 +24,9 @@ import {
 } from "../../models/entityAttribute.model";
 import { YesNoDialogBoxComponent } from "./yes-no-dialog-box/yes-no-dialog-box.component";
 
+// Sub Components :
+
+
 // Services
 import { ProjectService } from "../../services/project/project.service";
 
@@ -36,6 +39,9 @@ import { ProjectState, StateEnum } from "../../models/state.model";
 import { Entity } from "../../models/entity.model"; // to delete
 //import { EntityType } from "../../models";
 
+/**************************************************************************************
+ *    MAIN :
+ * ***********************************************************************************/
 @Component({
   selector: "app-project",
   templateUrl: "./project.component.html",

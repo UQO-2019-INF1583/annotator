@@ -1,4 +1,4 @@
-import { Arc } from './arc.model';
+import { Arc } from "./arc.model";
 
 export class Entity {
   name: string;
@@ -10,8 +10,16 @@ export class Entity {
   arcs: Arc[];
   children: Entity[];
 
-  constructor(name: string = '', type: string = '', labels: string[] = [], bgColor: string = ''
-    , borderColor: string = 'darken', unused: boolean = false, arcs: Arc[] = [], children: Entity[] = []) {
+  constructor(
+    name: string = "",
+    type: string = "",
+    labels: string[] = [],
+    bgColor: string = "",
+    borderColor: string = "",
+    unused: boolean = false,
+    arcs: Arc[] = [],
+    children: Entity[] = []
+  ) {
     this.name = name;
     this.type = type;
     this.labels = labels;

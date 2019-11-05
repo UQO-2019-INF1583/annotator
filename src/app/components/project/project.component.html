@@ -28,6 +28,78 @@
 </main>
 -->
 
+<!-- 
+  Project : 
+    - Title
+    - Description
+    - State
+    - Date of creation
+    - 
+
+  Users : 
+    - Add User
+    - Administrators
+    - Annotators
+    - Promote to administrators
+
+  Entity : 
+    - Preview - Type  - Background color  - Action
+              - Label - border color      - Message
+
+
+    Action : 
+      message
+      Create, reset
+      save, reset, delete
+
+
+-->
+
+<main flex *ngIf="isDataLoaded">
+  <!-- Project Menu -->
+  <div class="container" style="display:block;justify-content: center">
+    <div class="row">
+      <!-- Project Information : Admin -->
+      <div class="col-xs-4 mat-card">
+        <h1>Project Name</h1>
+      </div>
+
+      <!-- Project Description : Admin -->
+      <div class="col-xs-4 mat-card">
+        <h2>Project Description</h2>
+      </div>
+
+      <!-- Project Corpus : Admin -->
+      <div class="col-xs-4 mat-card"><h2>Corpus</h2></div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- Project Data -->
+  <div class="container-fluid project-container">
+    <div class="row">
+      <div class="col-xs-8 mat-card">
+        <entity-type></entity-type>
+
+        <!-- Attribute types -->
+        <h2>Attribute Types</h2>
+
+        <!-- Relation types -->
+        <h2>Relation Types</h2>
+
+        <!-- Events types -->
+        <h2>Event Types</h2>
+      </div>
+
+      <!-- Project Users : Admin -->
+      <div class="col-xs-4 mat-card">
+        <h2>Users</h2>
+      </div>
+    </div>
+  </div>
+</main>
+
 <main flex *ngIf="isDataLoaded">
   <div class="mat-card project-form">
     <div

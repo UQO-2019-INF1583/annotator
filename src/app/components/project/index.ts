@@ -7,3 +7,5 @@ export * from "./add-event/add-event.component";
 export * from "./add-relation/add-relation.component";
 export * from "./yes-no-dialog-box/yes-no-dialog-box.component";
 export * from "./project.component";
+
+export * from "./entity-type/entity-type.component";

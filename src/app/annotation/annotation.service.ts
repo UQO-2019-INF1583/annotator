@@ -4,7 +4,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AnnotatedDocument } from '../shared/annotated-document.model';
 import { BratUtils } from './brat/brat-utils';
 import * as firebase from 'firebase';
-import { config } from 'rxjs';
 
 
 // import { Entity } from '../shared/security/auth.service.ts'
@@ -14,7 +13,7 @@ import { config } from 'rxjs';
 export class AnnotationService {
 
   currentUserId: string;
-
+  AnnotatedDocument1: AnnotatedDocument;
 
   constructor(private readonly afs: AngularFirestore) {
     this.currentUserId = firebase.auth().currentUser.uid;
@@ -48,7 +47,11 @@ export class AnnotationService {
   }
 
 
-
+  //Fonctionne qui sera utilise pour cherhcer un annotatedDocument specifique a un projet et utilisateur
+  getSpecificAnnotatedDocument(documentId: string, userIDspecific: string): Promise<any> {
+    // On lui envoie la copie qui lui est associe.  Cette copie a ete cree lorsqu'il a clique sur view
+    return this.afs.collection('AnnotatedDocument/').doc(documentId + userIDspecific).ref.get();
+  }
 
 
 
@@ -63,11 +66,14 @@ export class AnnotationService {
     // Variable qui va contenir le nom de tous les AnnotatedDocuments qui se trouvent dans mon corpus
     var AllAnnotatedDocumentsIds = new Array();
 
-
+    // Ici on lit tous les AnotatedDocuments qui se trouvent dans le AnnotatedDocument
     db.collection('AnnotatedDocument/').get().then((snapshot) => {
       snapshot.docs.forEach(doc => {
 
+        // On verifie si le documeent lu appartient a notre corpus
         if (corpusId === doc.data().documentId) {
+
+          // On ajoute l'utilisateur dans notre tableau afin de pouvoir faire un documentId + this.currentUserId pour aller lire le document specifique
           AllAnnotatedDocumentsIds.push(doc.data().userId);
           console.log('userIds: ' + doc.data().userId);
         }
@@ -82,27 +88,3 @@ export class AnnotationService {
   }
 
 }
-
-
-    // On a accee aux information general des element de la collections
-/*
-    db.collection('AnnotatedDocument/').get().then((snapshot) => {
-      console.log(snapshot.docs);
-    })
-*/
-
-
-/*
-// Accee au document complet
-console.log('Doc Data:  ');
-console.log(doc.data());
-
-// Accee au document id (nom du document dans la BD)
-console.log('Doc.id: ');
-console.log(doc.id);
-
-// Accee a un champ precis document Id
-console.log('documentId: ');
-console.log(doc.data().documentId);
-
-*/

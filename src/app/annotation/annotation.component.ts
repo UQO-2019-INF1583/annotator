@@ -59,6 +59,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
    * les uns après les autres.
    */
   async getInterfaceData() {
+
     this.sub = await this.activeRouter.params.subscribe(params => {
       this.currentProjectTitle = params.projectTitle;
       this.currentDoc = new Doc(params.id, params.title, params.projectId);
@@ -76,19 +77,28 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     this.currentDoc.text = await this.http.get(URL, { responseType: 'text' }).toPromise();
 
     await this.as.getAnnotatedDocument(this.currentDoc.documentId).then(d => {
-      var data = d.data()
+      const data = d.data()
 
       if (data === undefined) {
-        this.annotatedDocument = AnnotatedDocumentUtils.fromDoc(this.currentDoc);
+        this.annotatedDocument = AnnotatedDocumentUtils.initialiseAnnotatedDocument(this.currentDoc);
       } else {
         // Application des filtres ici
-        // Le document est en version finale, afficher seulement les annotation approuvées
-        if (data.etatDocument == 2) {
-          data.entities = data.entities.filter(x => x.EtatAnnotation == 1);
-
-          // Le document est vérouillé, désactiver l'enregistrement
-          document.getElementById("btnSave").setAttribute("disabled", "disabled");
+        if (data.etatDocument === 2) {
+          data.entities = data.entities.filter(x => x.EtatAnnotation === 1);
         }
+        /*
+        for (let entitiesKey in data.entities) {
+          console.log(data.entities[entitiesKey]);
+
+          // Le document est en version finale, afficher seulement les annotation approuvées
+          if (data.etatDocument == 2) {
+            // Supprimer les annotation qui ont été rejetées
+            if (data.entitites[entitiesKey].EtatAnnotation == "1") {
+              data.entitites.splice(entitiesKey, 1);
+            }
+          }
+        }
+        */
 
         this.annotatedDocument = data;
       }
@@ -106,6 +116,37 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     this.isDataLoaded = true;
   }
 
+
+
+
+
+
+
+  // Cette fonctionne n'est pas complet
+
+  async mergeAll() {
+
+    //On va aller chercher les nom des documents (AnnotatedDocuments) qui sont relie au corpus
+    await this.as.getAnnotatedDocument(this.currentDoc.documentId).then(d => {
+      const data = d.data()
+      if (data === undefined) {
+        this.annotatedDocument = AnnotatedDocumentUtils.initialiseAnnotatedDocument(this.currentDoc);
+      } else {
+      }
+    });
+
+    // Nous allons merger cherhcer tous les AnnotatedDocuments desire puis on les merge dans une nouvelle AnnotatedDocuments 
+    // ...
+    // ..
+
+
+
+
+  }
+
+
+
+
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
 
@@ -118,36 +159,29 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   saveTextModification() {
-    // Empêche l'utilisateur d'enregistrer si le document est vérouillé
-    if (this.currentDoc.etatDocument == 2){
-      const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
-        this.brat.docData,
-        this.project,
-        AnnotatedDocumentUtils.fromDoc(this.currentDoc)
-      );
-
-      this.as.saveAnnotatedDocument(aDoc);
-
-      alert('Annotation saved');
-    } else {
-      alert('You can\'t save a locked and finished document.');
-    }
+    const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
+      this.brat.docData,
+      this.project,
+      AnnotatedDocumentUtils.initialiseAnnotatedDocument(this.currentDoc)
+    );
+    this.as.saveAnnotatedDocument(aDoc);
+    alert('Annotation saved');
   }
 
-  customCSS () {
-	const head=document.getElementsByTagName('head')[0];
-	const oldFilter=document.getElementById("custom-css");
-	if (oldFilter){
-		head.removeChild(oldFilter);
-	}
-	const newFilter=document.createElement("style");
-	newFilter.type="text/css";
-	newFilter.id="custom-css";
+  customCSS() {
+    const head = document.getElementsByTagName('head')[0];
+    const oldFilter = document.getElementById('custom-css');
+    if (oldFilter) {
+      head.removeChild(oldFilter);
+    }
+    const newFilter = document.createElement('style');
+    newFilter.type = 'text/css';
+    newFilter.id = 'custom-css';
     this.customCssHtml = '';
-    this.customCssHtml += "#brat .span_"+this.filterBrat.value+"{";
-    this.customCssHtml += "stroke-width: 3 !important;";
-    this.customCssHtml += "}";
+    this.customCssHtml += '#brat .span_' + this.filterBrat.value + '{';
+    this.customCssHtml += 'stroke-width: 3 !important;';
+    this.customCssHtml += '}';
     newFilter.appendChild(document.createTextNode(this.customCssHtml));
-	head.appendChild(newFilter);
+    head.appendChild(newFilter);
   }
 }

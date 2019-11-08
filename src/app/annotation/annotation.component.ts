@@ -59,6 +59,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
    * les uns après les autres.
    */
   async getInterfaceData() {
+
     this.sub = await this.activeRouter.params.subscribe(params => {
       this.currentProjectTitle = params.projectTitle;
       this.currentDoc = new Doc(params.id, params.title, params.projectId);
@@ -79,8 +80,26 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       const data = d.data()
 
       if (data === undefined) {
-        this.annotatedDocument = AnnotatedDocumentUtils.fromDoc(this.currentDoc);
+        this.annotatedDocument = AnnotatedDocumentUtils.initialiseAnnotatedDocument(this.currentDoc);
       } else {
+        // Application des filtres ici
+        if (data.etatDocument === 2) {
+          data.entities = data.entities.filter(x => x.EtatAnnotation === 1);
+        }
+        /*
+        for (let entitiesKey in data.entities) {
+          console.log(data.entities[entitiesKey]);
+
+          // Le document est en version finale, afficher seulement les annotation approuvées
+          if (data.etatDocument == 2) {
+            // Supprimer les annotation qui ont été rejetées
+            if (data.entitites[entitiesKey].EtatAnnotation == "1") {
+              data.entitites.splice(entitiesKey, 1);
+            }
+          }
+        }
+        */
+
         this.annotatedDocument = data;
       }
     });
@@ -91,12 +110,13 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument),
       options);
 
-	this.filterBrat = new FilterBrat();
-	this.filterOptions = FilterOptionsList;
+    this.filterBrat = new FilterBrat();
+    this.filterOptions = FilterOptionsList;
 
-	this.isDataLoaded = true;
-
+    this.isDataLoaded = true;
   }
+
+
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
@@ -113,28 +133,46 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
       this.brat.docData,
       this.project,
-      AnnotatedDocumentUtils.fromDoc(this.currentDoc)
+      AnnotatedDocumentUtils.initialiseAnnotatedDocument(this.currentDoc)
     );
-
     this.as.saveAnnotatedDocument(aDoc);
-
     alert('Annotation saved');
   }
 
-  customCSS () {
-	const head=document.getElementsByTagName('head')[0];
-	const oldFilter=document.getElementById("custom-css");
-	if (oldFilter){
-		head.removeChild(oldFilter);
-	}
-	const newFilter=document.createElement("style");
-	newFilter.type="text/css";
-	newFilter.id="custom-css";
+  customCSS() {
+    const head = document.getElementsByTagName('head')[0];
+    const oldFilter = document.getElementById('custom-css');
+    if (oldFilter) {
+      head.removeChild(oldFilter);
+    }
+    const newFilter = document.createElement('style');
+    newFilter.type = 'text/css';
+    newFilter.id = 'custom-css';
     this.customCssHtml = '';
-    this.customCssHtml += "#brat .span_"+this.filterBrat.value+"{";
-    this.customCssHtml += "stroke-width: 3 !important;";
-    this.customCssHtml += "}";
+    this.customCssHtml += '#brat .span_' + this.filterBrat.value + '{';
+    this.customCssHtml += 'stroke-width: 3 !important;';
+    this.customCssHtml += '}';
     newFilter.appendChild(document.createTextNode(this.customCssHtml));
-	head.appendChild(newFilter);
+    head.appendChild(newFilter);
   }
+
+
+  // Cette fonctionne n'est pas complet/fonctionel
+  async mergeAll() {
+
+    var users = Array;
+    // On trouve tous les userID associe a notre corpus/corpus specifique
+    // this.as.getAllUserID(this.projectId);
+
+
+    // On demande a la base de donne de nous retourner dans un tableau tous les AnnotatedDocuments qui appartient a notre Corpus
+    // getSpecificAnnotatedDocument(this.projectId, users[i]);
+
+
+    // On cree un AnnotatedDocument vide et on le remplie avec tous les AnnotatedDocuments qui nous a ete retourne plus haut
+
+
+  }
+
+
 }

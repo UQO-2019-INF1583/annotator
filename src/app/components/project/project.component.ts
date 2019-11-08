@@ -7,7 +7,6 @@ import 'rxjs/add/operator/mergeMap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { AddAdminComponent } from '../add-admin/add-admin.component';
 import { AddAnnotatorComponent } from '../add-annotator/add-annotator.component';
 import { AddAttributeComponent } from '../add-attribute/add-attribute.component';
 import { AddEntityComponent } from '../add-entity/add-entity.component';
@@ -21,19 +20,23 @@ import { Observable } from 'rxjs/Observable';
 import { Project, ProjectUtils } from '../../shared/project.model';
 import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
-import { User } from './../../shared/user.model';
+import { User } from '../../shared/user.model';
 import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
 import { Entity } from '../../shared/entity.model';
+import { Injectable } from '@angular/core';
 
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss']
 })
+@Injectable()
 export class ProjectComponent implements OnInit, OnDestroy {
   currentProject: Project = ProjectUtils.generateEmpty();
   private sub: any;
   isDataLoaded = false;
+
+
 
   users: Observable<User[]>;
   corpus: Observable<any[]>;
@@ -65,6 +68,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
     this.isDataLoaded = true;
   }
+
+  // Fonction qui permet d'indiquer au HTML quelle couleur de texte a utiliser afin d'afficher les couleurs
+  choseTextColor(backgroundColor: string): boolean {
+    // Palettes des couleurs fonce qui necessitent du texte blanc pour une meilleur visibilite
+    const darkColors = ['black', 'blue', 'red', 'darkblue', 'indigo', 'purple'];
+    console.log(backgroundColor);
+    if (darkColors.includes(backgroundColor)) {
+      return true;  // Text color will be white
+    }
+    return false; // Text color will be black
+  }
+
+
+
+
 
   ngOnDestroy() {
     this.sub.unsubscribe();
@@ -267,7 +285,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // ouvre la boîte de dialogue pour ajouter un administrateur
   addAdminDialogBox() {
-    const dialogRef = this.dialog.open(AddAdminComponent, {
+    const dialogRef = this.dialog.open(AddAnnotatorComponent, {
       width: '600px',
       height: '600px',
       data: { UserId: undefined },

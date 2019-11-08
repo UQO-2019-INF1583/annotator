@@ -12,7 +12,7 @@ import {
 import { Project } from '../../shared/project.model';
 import { AnnotatedDocument } from '../../shared/annotated-document.model';
 
-describe ('getDocDataFromAnnotatedDocument', () => {
+describe('getDocDataFromAnnotatedDocument', () => {
   let bratUtil: BratUtils;
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe ('getDocDataFromAnnotatedDocument', () => {
   });
 });
 
-describe ('getColDataFromProject', () => {
+describe('getColDataFromProject', () => {
   let bratUtil: BratUtils;
 
   beforeEach(() => {
@@ -42,7 +42,7 @@ describe ('getColDataFromProject', () => {
   });
 });
 
-describe ('getAnnotatedDocumentfromDocData', () => {
+describe('getAnnotatedDocumentfromDocData', () => {
   let bratUtil: BratUtils;
 
   beforeEach(() => {
@@ -56,4 +56,3 @@ describe ('getAnnotatedDocumentfromDocData', () => {
     expect(BratUtils.getAnnotatedDocumentfromDocData(docData.annotDocData, project.proj1, annotDoc.aDocInit)).toEqual(annotDoc.doc1);
   });
 });
-

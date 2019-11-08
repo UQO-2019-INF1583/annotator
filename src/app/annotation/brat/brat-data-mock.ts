@@ -13,7 +13,7 @@ export let collData = {
     ['Wikipedia', 'http://en.wikipedia.org/wiki/Special:Search?search=%s'],
     ['UniProt', 'http://www.uniprot.org/uniprot/?sort=score&query=%s'],
     ['EntrezGene', 'http://www.ncbi.nlm.nih.gov/gene?term=%s'],
-    ['GeneOntology', 'http://amigo.geneontology.org/cgi-bin/amigo/search.cgi?search_query=%s&action=new-search&search_constraint=term'],
+    ['GeneOntology', 'http://amigo.geneontology.org/amigo/medial_search?q=%s&searchtype=all'],
     ['ALC', 'http://eow.alc.co.jp/%s']
   ],
   'disambiguator_config': [],

@@ -74,7 +74,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   choseTextColor(backgroundColor: string): boolean {
     // Palettes des couleurs fonce qui necessitent du texte blanc pour une meilleur visibilite
     const darkColors = ['black', 'blue', 'red', 'darkblue', 'indigo', 'purple'];
-    console.log(backgroundColor);
+
     if (darkColors.includes(backgroundColor)) {
       return true;  // Text color will be white
     }

@@ -70,6 +70,17 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
+  // Fonction qui permet d'indiquer au HTML quelle couleur de texte a utiliser afin d'afficher les couleurs
+  choseTextColor(backgroundColor: string): boolean {
+    // Palettes des couleurs fonce qui necessitent du texte blanc pour une meilleur visibilite
+    const darkColors = ['black', 'blue', 'red', 'darkblue', 'indigo', 'purple'];
+    console.log(backgroundColor);
+    if (darkColors.includes(backgroundColor)) {
+      return true;  // Text color will be white
+    }
+    return false; // Text color will be black
+  }
+
   getAnnotatorEmail() {
     this.annotators = [];
     this.currentProject.annotators.forEach((uid, i) => {

@@ -160,7 +160,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   // Cette fonctionne n'est pas complet/fonctionel
   async mergeAll() {
 
-    var users = Array;
+    // var users = Array;
     // On trouve tous les userID associe a notre corpus/corpus specifique
     // this.as.getAllUserID(this.projectId);
 

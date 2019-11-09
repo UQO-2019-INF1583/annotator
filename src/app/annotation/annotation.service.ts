@@ -58,14 +58,12 @@ export class AnnotationService {
   // Fonction qui devrait retourner le nom de tous les Annotated Document corespondant a un Corpus specific
   getAllUserID(corpusId: string): Promise<any> {
 
-    var userIDs = Array;
+    // var userIDs = Array;
 
     // On demande a la BD de nous envoyer tous les userIDs associe a notre corpus
-
 
 
     // On renvoie le tableau userIDs;
     return;
   }
-
 }

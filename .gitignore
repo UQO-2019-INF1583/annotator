@@ -32,7 +32,7 @@
 npm-debug.log
 testem.log
 /typings
-/src/environments/**
+/src/enviro
 **/firestore-export.json
 
 # e2e

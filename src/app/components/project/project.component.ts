@@ -34,12 +34,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
   currentProject: Project = ProjectUtils.generateEmpty();
   private sub: any;
   isDataLoaded = false;
-
   users: Observable<User[]>;
   corpus: Observable<any[]>;
   annotators: any[] = []; // {uid: v1, email: v2}[]
   admin: any[] = []; // {uid: v1, email: v2}[]
   isConnected = false;
+  isProjectModified = false;
 
   constructor(
     private authService: AuthService,
@@ -125,6 +125,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.currentProject.description != null &&
       this.currentProject.description !== ''
     ) {
+      this.isProjectModified = false;
       this.ps.saveProject(this.currentProject);
 
       alert('Modification sauvegardé');
@@ -168,6 +169,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addEntitiesAfterClosedHandler(result: Entity) {
+    this.isProjectModified = true;
     let entityExists = false;
     if (result !== undefined) {
       if (
@@ -201,6 +203,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime la catégorie spécifiée dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteEntity(entityName: string) {
+    this.isProjectModified = true;
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
       width: '250px',
       data: {
@@ -351,6 +354,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addAttributesAfterClosedHandler(result: Attribute) {
+    this.isProjectModified = true;
     let attributeExists = false;
     if (result !== undefined) {
       if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
@@ -371,6 +375,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAttribute(target: Attribute) {
+    this.isProjectModified = true;
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
       width: '250px',
       data: {
@@ -414,6 +419,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
    * @param data la donnée à ajouter
    */
   public addRelation(data: Relation) {
+    this.isProjectModified = true;
     if (data.type !== undefined &&
       data.labels !== [] &&
       data.color !== undefined) {
@@ -464,6 +470,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
    *  @param target
    * */
   deleteRelation(target: Relation) {
+    this.isProjectModified = true;
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
       width: '250px',
       data: {
@@ -588,8 +595,25 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Événement lorsqu'un texte est sélectionné
   documentSelected(doc: any) {
-    doc.projectTitle = this.currentProject.title;
-    this.router.navigate(['/annotation', doc]);
+    const cpenl = this.currentProject.entities.length;        // Nombre d'elements de type Entites dans le project
+    const cpevl = this.currentProject.events.length;          // Nombre d'elements de type Events dans le project
+    const cprel = this.currentProject.relations.length;       // Nombre d'elements de type Relations dans le project
+    const cpatl = this.currentProject.attributes.length;      // Nombre d'elements de type Attributes dans le project
+
+    // tslint:disable-next-line: max-line-length
+    // On alerte l'usager s'il a oublie de sauvgarder ses modifications au projet tel que ajout ou retrait des entities, relations ou events et on alerte l'usager
+    if (this.isProjectModified === true) {
+      alert('Vous avez fait des modifications.  Vous devez sauvgarder le projet afin que les changements puissent s\'appliquer au projet');
+    } else {
+
+      // Verifier si le projet contient au moins un entities, relations ou events afin de pouvoir faire des annotations
+      if (cpenl === 0 && cpevl === 0 && cprel === 0 && cpatl === 0) {
+        alert('Vous ne pouvez pas annoter si vous n\'avez pas au moins un (Entities/Relation/Events)!!!');
+      } else {
+        doc.projectTitle = this.currentProject.title;
+        this.router.navigate(['/annotation', doc]);
+      }
+    }
   }
 
   // Supprime un texte

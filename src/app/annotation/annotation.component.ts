@@ -83,22 +83,13 @@ export class AnnotationComponent implements OnInit, OnDestroy {
         this.annotatedDocument = AnnotatedDocumentUtils.initialiseAnnotatedDocument(this.currentDoc);
       } else {
         // Application des filtres ici
+        // Le document est en version finale, afficher seulement les annotations approuvées
         if (data.etatDocument === 2) {
-          data.entities = data.entities.filter(x => x.EtatAnnotation === 1);
-        }
-        /*
-        for (let entitiesKey in data.entities) {
-          console.log(data.entities[entitiesKey]);
+          data.entities = data.entities.filter(x => x.EtatAnnotation === 1)
 
-          // Le document est en version finale, afficher seulement les annotation approuvées
-          if (data.etatDocument == 2) {
-            // Supprimer les annotation qui ont été rejetées
-            if (data.entitites[entitiesKey].EtatAnnotation == "1") {
-              data.entitites.splice(entitiesKey, 1);
-            }
-          }
+          // Le document est vérouillé, désactiver l'enregistrement
+          document.getElementById('btnSave').setAttribute('disabled', 'disabled');
         }
-        */
 
         this.annotatedDocument = data;
       }
@@ -130,13 +121,18 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   saveTextModification() {
-    const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
-      this.brat.docData,
-      this.project,
-      AnnotatedDocumentUtils.initialiseAnnotatedDocument(this.currentDoc)
-    );
-    this.as.saveAnnotatedDocument(aDoc);
-    alert('Annotation saved');
+    // Empêche l'utilisateur d'enregistrer si le document est vérouillé
+    if (this.currentDoc.etatDocument === 2) {
+      const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
+        this.brat.docData,
+        this.project,
+        AnnotatedDocumentUtils.initialiseAnnotatedDocument(this.currentDoc)
+      );
+      this.as.saveAnnotatedDocument(aDoc);
+      alert('Annotation saved');
+    } else {
+      alert('You can\'t save a locked and finished document.')
+    }
   }
 
   customCSS() {

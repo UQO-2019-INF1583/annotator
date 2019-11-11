@@ -1,0 +1,735 @@
+<!-- Title -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12"><h3>Event Types</h3></div>
+  </div>
+</div>
+
+<!-- Labels -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-1"></div>
+    <div class="col-xs-6">
+      <label for="new-type"><u>Event:</u></label>
+    </div>
+    <div class="col-xs-5">
+      <label for="new-type"><u>Arcs:</u></label>
+    </div>
+
+    <div class="col-xs-1"><label for="new-type">Action:</label></div>
+    <div class="col-xs-2"><label for="new-type">Type:</label></div>
+    <div class="col-xs-2"><label for="new-type">Labels:</label></div>
+    <div class="col-xs-1"><label for="new-type">Background:</label></div>
+    <div class="col-xs-1"><label for="new-type">Border:</label></div>
+    <div class="col-xs-2"><label for="new-type">Type:</label></div>
+    <div class="col-xs-2"><label for="new-type">Labels:</label></div>
+    <div class="col-xs-1"><label for="new-type">Color:</label></div>
+  </div>
+</div>
+
+<!-- Input -->
+<div class="container-fluid">
+  <form class="row">
+    <!-- Actions -->
+    <div class="form-group col-xs-1">
+      <button
+        type="submit"
+        class="btn btn-warning"
+        (click)="reset()"
+        style="margin-right: 2px;"
+      >
+        <span class="glyphicon glyphicon-refresh"></span>
+      </button>
+      <button
+        type="submit"
+        class="btn btn-success"
+        (click)="create()"
+        [disabled]="eventData.error"
+      >
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+      <br />
+      <small
+        *ngIf="isValid(newEvent, eventData, -1)"
+        class="form-text text-muted text-danger"
+        >{{ eventData.message }}</small
+      >
+    </div>
+
+    <!-- Type -->
+    <div class="form-group col-xs-2">
+      <input
+        class="form-control"
+        placeholder="ex : Assassination"
+        [(ngModel)]="newEvent.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newEvent.type == '' || newEvent.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
+      >
+    </div>
+
+    <!-- Labels -->
+    <div class="form-group col-xs-2">
+      <div>
+        <table style="width: 100%;">
+          <!-- Defined Labels -->
+          <tr
+            *ngFor="
+              let label of newEvent.labels;
+              let i = index;
+              trackBy: trackBy
+            "
+          >
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeLabel(newEvent, i)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="ex : Assassination, Assas"
+                [(ngModel)]="label"
+                name="label[{{ i }}]"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+          <!-- New Label -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addLabel(newEvent, eventData)"
+                [disabled]="isInvalidLabel(eventData)"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="ex : Assassination, Assas"
+                [(ngModel)]="eventData.label"
+                name="newlabel"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+        </table>
+
+        <small
+          *ngIf="newEvent.labels == '' || newEvent.labels == null"
+          class="form-text text-muted text-danger"
+          >*Labels are obligatory</small
+        >
+      </div>
+    </div>
+
+    <!-- Background Color -->
+    <div class="form-group col-xs-1">
+      <input
+        class="form-control form-color"
+        type="color"
+        [(ngModel)]="newEvent.bgColor"
+        name="bgColor"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newEvent.bgColor == '' || newEvent.bgColor == null"
+        class="form-text text-muted text-danger"
+        >*Color is obligatory</small
+      >
+    </div>
+
+    <!-- Border Color -->
+    <div class="form-group col-xs-1">
+      <input
+        class="form-control form-color"
+        type="color"
+        [(ngModel)]="newEvent.borderColor"
+        name="borderColor"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newEvent.borderColor == '' || newEvent.borderColor == null"
+        class="form-text text-muted text-danger"
+        >*Color is obligatory</small
+      >
+    </div>
+
+    <!-- Arcs -->
+    <div class="form-group col-xs-5">
+      <table style="width: 100%;">
+        <!-- Defined Arcs -->
+        <tr *ngFor="let arc of newEvent.arcs; let i = index; trackBy: trackBy">
+          <!-- Actions -->
+          <td>
+            <button
+              type="submit"
+              class="btn btn-danger"
+              (click)="removeArc(newEvent, i)"
+            >
+              <span class="glyphicon glyphicon-minus"></span>
+            </button>
+          </td>
+
+          <!-- Type -->
+          <td>
+            <input
+              class="form-control"
+              placeholder="ex : Perpetrator"
+              [(ngModel)]="arc.type"
+              name="newArc[{{ i }}]"
+              #type="ngModel"
+              required="true"
+            />
+          </td>
+
+          <!-- Labels -->
+          <td>
+            <!-- New Arc Labels -->
+            <table style="width: 100%;">
+              <tr
+                *ngFor="
+                  let label of arc.labels;
+                  let j = index;
+                  trackBy: trackBy
+                "
+              >
+                <td>
+                  <button
+                    type="submit"
+                    class="btn btn-danger"
+                    (click)="removeArcLabel(arc, eventData, j)"
+                  >
+                    <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                </td>
+                <td>
+                  <input
+                    class="form-control"
+                    placeholder="ex : Assassination, Assas"
+                    [(ngModel)]="label"
+                    name="label[{{ i }}]-[{{ j }}]"
+                    #type="ngModel"
+                    required="true"
+                  />
+                </td>
+              </tr>
+
+              <!-- Add new Labels-->
+              <tr>
+                <td>
+                  <button
+                    type="submit"
+                    class="btn btn-success"
+                    (click)="addArcLabel(arc, eventData, i)"
+                    [disabled]="
+                      eventData.arcLabels[i] == '' ||
+                      eventData.arcLabels[i] == null
+                    "
+                  >
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                </td>
+                <td>
+                  <input
+                    class="form-control"
+                    placeholder="ex : Assassination, Assas"
+                    [(ngModel)]="eventData.arcLabels[i]"
+                    name="newArcLabel[{{ i }}]-[{{ j }}]"
+                    #type="ngModel"
+                    required="true"
+                  />
+                </td>
+              </tr>
+            </table>
+          </td>
+
+          <!-- Color -->
+          <td>
+            <input
+              class="form-control form-color"
+              type="color"
+              [(ngModel)]="arc.color"
+              name="newColor[{{ i }}]"
+              #type="ngModel"
+              required="true"
+            />
+          </td>
+        </tr>
+
+        <!-- New Arcs -->
+        <tr>
+          <!-- Actions -->
+          <td>
+            <button
+              type="submit"
+              class="btn btn-success"
+              (click)="addArc(newEvent, eventData)"
+              [disabled]="isInvalidArc(eventData.newArc)"
+            >
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+          </td>
+
+          <!-- Type -->
+          <td>
+            <input
+              class="form-control"
+              placeholder="ex : Perpetrator"
+              [(ngModel)]="eventData.newArc.type"
+              name="newArc-type"
+              #type="ngModel"
+              required="true"
+            />
+          </td>
+
+          <td>
+            <!-- New Arc Labels -->
+            <table style="width: 100%;">
+              <tr
+                *ngFor="
+                  let label of eventData.newArc.labels;
+                  let j = index;
+                  trackBy: trackBy
+                "
+              >
+                <td>
+                  <button
+                    type="submit"
+                    class="btn btn-danger"
+                    (click)="removeLabel(eventData.newArc, j)"
+                  >
+                    <span class="glyphicon glyphicon-minus"></span>
+                  </button>
+                </td>
+                <td>
+                  <input
+                    class="form-control"
+                    placeholder="ex : Assassination, Assas"
+                    [(ngModel)]="label"
+                    name="newLabel[{{ j }}]"
+                    #type="ngModel"
+                    required="true"
+                  />
+                </td>
+              </tr>
+
+              <!-- Add new Labels-->
+              <tr>
+                <td>
+                  <button
+                    type="submit"
+                    class="btn btn-success"
+                    (click)="addArcNewLabel(eventData)"
+                    [disabled]="
+                      eventData.newLabel == '' || eventData.newLabel == null
+                    "
+                  >
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </button>
+                </td>
+                <td>
+                  <input
+                    class="form-control"
+                    placeholder="ex : Assassination, Assas"
+                    [(ngModel)]="eventData.newLabel"
+                    name="newlabel"
+                    #type="ngModel"
+                    required="true"
+                  />
+                </td>
+              </tr>
+            </table>
+          </td>
+
+          <!-- Color -->
+          <td>
+            <input
+              class="form-control form-color"
+              type="color"
+              [(ngModel)]="eventData.newArc.color"
+              name="newColor"
+              #type="ngModel"
+              required="true"
+            />
+            <small
+              *ngIf="
+                eventData.newArc.color == '' || eventData.newArc.color == null
+              "
+              class="form-text text-muted text-danger"
+              >*Color is obligatory</small
+            >
+          </td>
+        </tr>
+      </table>
+    </div>
+  </form>
+</div>
+
+<!-- List -->
+<div
+  class="container-fluid"
+  *ngFor="let event of project.events; let i = index"
+>
+  <form class="row entity-row">
+    <!-- Actions -->
+    <div class="form-group col-xs-1">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        (click)="save(i)"
+        [disabled]="eventsData[i].error"
+        style="margin-right: 2px;"
+      >
+        <span class="glyphicon glyphicon-floppy-disk"></span>
+      </button>
+      <button type="submit" class="btn btn-danger" (click)="remove(i)">
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
+      <br />
+      <small
+        *ngIf="isValid(event, eventsData[i], i)"
+        class="form-text text-muted text-danger"
+        >{{ eventsData[i].message }}</small
+      >
+    </div>
+
+    <!-- Type -->
+    <div class="form-group col-xs-2">
+      <input
+        class="form-control"
+        placeholder="ex : Assassination"
+        [(ngModel)]="event.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="event.type == '' || event.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
+      >
+    </div>
+
+    <!-- Labels -->
+    <div class="form-group col-xs-2">
+      <div>
+        <table style="width: 100%;">
+          <tr
+            *ngFor="let label of event.labels; let j = index; trackBy: trackBy"
+          >
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeLabel(event, j)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="ex : Assassination"
+                [(ngModel)]="event.labels[j]"
+                name="label[{{ j }}]"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addLabel(event, eventsData[i])"
+                [disabled]="isInvalidLabel(eventsData[i])"
+                name="invalid-btn"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Labels (ex : Anaphora)"
+                [(ngModel)]="eventsData[i].label"
+                name="newLabel"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+        </table>
+
+        <small
+          *ngIf="eventsData[i].label == '' || eventsData[i].label == null"
+          class="form-text text-muted text-danger"
+          >*Labels are obligatory</small
+        >
+      </div>
+    </div>
+
+    <!-- Background Color -->
+    <div class="form-group col-xs-1">
+      <input
+        class="form-control form-color"
+        type="color"
+        [(ngModel)]="event.bgColor"
+        name="bgColor"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="event.bgColor == '' || event.bgColor == null"
+        class="form-text text-muted text-danger"
+        >*Color is obligatory</small
+      >
+    </div>
+
+    <!-- Border Color -->
+    <div class="form-group col-xs-1">
+      <input
+        class="form-control form-color"
+        type="color"
+        [(ngModel)]="event.borderColor"
+        name="borderColor"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="event.borderColor == '' || event.borderColor == null"
+        class="form-text text-muted text-danger"
+        >*Color is obligatory</small
+      >
+    </div>
+
+    <!-- Arcs -->
+    <div class="form-group col-xs-5">
+        <table style="width: 100%;">
+          <!-- Defined Arcs -->
+          <tr *ngFor="let arc of event.arcs; let j = index; trackBy: trackBy">
+            <!-- Actions -->
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeArc(event, j)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+  
+            <!-- Type -->
+            <td>
+              <input
+                class="form-control"
+                placeholder="ex : Perpetrator"
+                [(ngModel)]="arc.type"
+                name="newArc[{{ j }}]"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+  
+            <!-- Labels -->
+            <td>
+              <!-- New Arc Labels -->
+              <table style="width: 100%;">
+                <tr
+                  *ngFor="
+                    let label of arc.labels;
+                    let k = index;
+                    trackBy: trackBy
+                  "
+                >
+                  <td>
+                    <button
+                      type="submit"
+                      class="btn btn-danger"
+                      (click)="removeArcLabel(arc, eventsData[i], k)"
+                    >
+                      <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                  </td>
+                  <td>
+                    <input
+                      class="form-control"
+                      placeholder="ex : Assassination, Assas"
+                      [(ngModel)]="label"
+                      name="label[{{ j }}]-[{{ k }}]"
+                      #type="ngModel"
+                      required="true"
+                    />
+                  </td>
+                </tr>
+  
+                <!-- Add new Labels-->
+                <tr>
+                  <td>
+                    <button
+                      type="submit"
+                      class="btn btn-success"
+                      (click)="addArcLabel(arc, eventsData[i], j)"
+                      [disabled]="
+                      eventsData[i].arcLabels[j] == '' ||
+                      eventsData[i].arcLabels[j] == null
+                      "
+                    >
+                      <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                  </td>
+                  <td>
+                    <input
+                      class="form-control"
+                      placeholder="ex : Assassination, Assas"
+                      [(ngModel)]="eventsData[i].arcLabels[j]"
+                      name="newArcLabel[{{ j }}]-[{{ k }}]"
+                      #type="ngModel"
+                      required="true"
+                    />
+                  </td>
+                </tr>
+              </table>
+            </td>
+  
+            <!-- Color -->
+            <td>
+              <input
+                class="form-control form-color"
+                type="color"
+                [(ngModel)]="arc.color"
+                name="newColor[{{ j }}]"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+  
+          <!-- New Arcs -->
+          <tr>
+            <!-- Actions -->
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addArc(event, eventsData[i])"
+                [disabled]="isInvalidArc(eventsData[i].newArc)"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+  
+            <!-- Type -->
+            <td>
+              <input
+                class="form-control"
+                placeholder="ex : Perpetrator"
+                [(ngModel)]="eventsData[i].newArc.type"
+                name="newArc-type"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+  
+            <td>
+              <!-- New Arc Labels -->
+              <table style="width: 100%;">
+                <tr
+                  *ngFor="
+                    let label of eventsData[i].newArc.labels;
+                    let k = index;
+                    trackBy: trackBy
+                  "
+                >
+                  <td>
+                    <button
+                      type="submit"
+                      class="btn btn-danger"
+                      (click)="removeLabel(eventsData[i].newArc, k)"
+                    >
+                      <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                  </td>
+                  <td>
+                    <input
+                      class="form-control"
+                      placeholder="ex : Assassination, Assas"
+                      [(ngModel)]="label"
+                      name="newLabel[{{ k }}]"
+                      #type="ngModel"
+                      required="true"
+                    />
+                  </td>
+                </tr>
+  
+                <!-- Add new Labels-->
+                <tr>
+                  <td>
+                    <button
+                      type="submit"
+                      class="btn btn-success"
+                      (click)="addArcNewLabel(eventsData[i])"
+                      [disabled]="
+                      eventsData[i].newLabel == '' || eventsData[i].newLabel == null
+                      "
+                    >
+                      <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                  </td>
+                  <td>
+                    <input
+                      class="form-control"
+                      placeholder="ex : Assassination, Assas"
+                      [(ngModel)]="eventsData[i].newLabel"
+                      name="newlabel"
+                      #type="ngModel"
+                      required="true"
+                    />
+                  </td>
+                </tr>
+              </table>
+            </td>
+  
+            <!-- Color -->
+            <td>
+              <input
+                class="form-control form-color"
+                type="color"
+                [(ngModel)]="eventsData[i].newArc.color"
+                name="newColor"
+                #type="ngModel"
+                required="true"
+              />
+              <small
+                *ngIf="
+                eventsData[i].newArc.color == '' || eventsData[i].newArc.color == null
+                "
+                class="form-text text-muted text-danger"
+                >*Color is obligatory</small
+              >
+            </td>
+          </tr>
+        </table>
+      </div>
+  </form>
+</div>

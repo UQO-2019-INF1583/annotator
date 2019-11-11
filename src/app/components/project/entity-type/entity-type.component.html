@@ -1,7 +1,7 @@
 <!-- Title -->
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xs-12"><h3>Entity Types</h3></div>
+    <div class="col-xs-12"><h3>Event Types</h3></div>
   </div>
 </div>
 
@@ -62,7 +62,13 @@
       <div>
         <table style="width: 100%;">
           <!-- Defined Labels -->
-          <tr *ngFor="let label of newEntity.labels; let i = index">
+          <tr
+            *ngFor="
+              let label of newEntity.labels;
+              let i = index;
+              trackBy: trackBy
+            "
+          >
             <td>
               <button
                 type="submit"
@@ -77,7 +83,7 @@
                 class="form-control"
                 placeholder="Labels (ex : Person, Per)"
                 [(ngModel)]="label"
-                name="label"
+                name="label[{{ i }}]"
                 #type="ngModel"
                 required="true"
               />
@@ -167,12 +173,20 @@
       >
         <span class="glyphicon glyphicon-floppy-disk"></span>
       </button>
-      <button type="submit" class="btn btn-danger" (click)="remove(i)">
+      <button
+        type="submit"
+        class="btn btn-danger"
+        [disabled]="entitiesData[i].delete"
+        (click)="remove(i)"
+      >
         <span class="glyphicon glyphicon-remove"></span>
       </button>
       <br />
       <small
-        *ngIf="isValid(entity, entitiesData[i], i)"
+        *ngIf="
+          isValid(entity, entitiesData[i], i) ||
+          isRelated(entity, entitiesData[i])
+        "
         class="form-text text-muted text-danger"
         >{{ entitiesData[i].message }}</small
       >
@@ -187,6 +201,7 @@
         name="type"
         #type="ngModel"
         required="true"
+        [disabled]="entitiesData[i].delete"
       />
       <small
         *ngIf="entity.type == '' || entity.type == null"

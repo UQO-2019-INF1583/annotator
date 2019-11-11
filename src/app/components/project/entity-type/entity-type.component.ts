@@ -32,7 +32,12 @@ export class EntityTypeComponent implements OnInit {
   // Create New Entity
   newEntity: EntityType = new EntityType();
   newLabel: String = "";
-  entityData: EntityData = { error: true, message: "*Warning!", label: "" };
+  entityData: EntityData = {
+    error: true,
+    message: "*Warning!",
+    label: "",
+    delete: true
+  };
   entitiesData: EntityData[] = [];
 
   constructor(
@@ -56,7 +61,8 @@ export class EntityTypeComponent implements OnInit {
             this.entitiesData.push({
               error: true,
               message: "*Warning!",
-              label: ""
+              label: "",
+              delete: true
             });
           }
         });
@@ -79,10 +85,20 @@ export class EntityTypeComponent implements OnInit {
       this.ps.saveProject(this.project);
 
       // Reset entityData
-      this.entityData = { error: true, message: "*Warning!", label: "" };
+      this.entityData = {
+        error: true,
+        message: "*Warning!",
+        label: "",
+        delete: true
+      };
 
       // Add new entitiesData
-      this.entitiesData.push({ error: true, message: "*Warning!", label: "" });
+      this.entitiesData.push({
+        error: true,
+        message: "*Warning!",
+        label: "",
+        delete: true
+      });
     });
   }
 
@@ -118,7 +134,8 @@ export class EntityTypeComponent implements OnInit {
           this.entitiesData.push({
             error: true,
             message: "*Warning!",
-            label: ""
+            label: "",
+            delete: true
           });
         }
       });
@@ -149,6 +166,24 @@ export class EntityTypeComponent implements OnInit {
     }
   }
 
+  isRelated(entity: EntityType, data: EntityData): boolean {
+    // check if the entity is used by a relation
+    for (let i = 0; i < this.project.relations.length; i++) {
+      for (let j = 0; j < this.project.relations[i].args.length; j++) {
+        if (this.project.relations[i].args[j].targets[0] == entity.type) {
+          data.message = "*Entity is used in a relation";
+          data.delete = true;
+          return true;
+        }
+      }
+    }
+
+    // Check if entity is used by an event
+    data.message = "";
+    data.delete = false;
+    return false;
+  }
+
   isValid(entity: EntityType, data: EntityData, index: number): boolean {
     // Check if every entry is valid
     data.error = true;
@@ -165,7 +200,8 @@ export class EntityTypeComponent implements OnInit {
           return true;
         }
       }
-    } else if (entity.bgColor === "" || entity.bgColor === null) {
+    }
+    if (entity.bgColor === "" || entity.bgColor === null) {
       data.message = "*Missing Background Color";
       return true;
     } else if (entity.borderColor === "" || entity.borderColor === null) {
@@ -216,6 +252,7 @@ export class EntityTypeComponent implements OnInit {
 
 export interface EntityData {
   error: boolean;
+  delete: boolean;
   message: string;
   label: string;
 }

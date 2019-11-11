@@ -74,7 +74,7 @@ export class AttributeTypeComponent implements OnInit {
   }
 
   /**************************************************************************************
-   *    Entity functions :
+   *    Attribute functions :
    * ***********************************************************************************/
 
   create() {
@@ -107,7 +107,6 @@ export class AttributeTypeComponent implements OnInit {
           this.project.attributes[i].bool = this.project.attributes[i].type;
         }
       }
-
       this.ps.saveProject(this.project);
     });
   }
@@ -140,10 +139,10 @@ export class AttributeTypeComponent implements OnInit {
   }
 
   addGlyph(attribute: EntityAttributeTypes, data: AttributeData): void {
-    let glyph: EntityAttributeValues = new EntityAttributeValues();
-    glyph.glyph = data.glyph;
+    let g: EntityAttributeValues = new EntityAttributeValues();
+    g.glyph = data.glyph;
 
-    attribute.values.push(glyph);
+    attribute.values.push(JSON.parse(JSON.stringify(g)));
     data.glyph = "";
   }
 

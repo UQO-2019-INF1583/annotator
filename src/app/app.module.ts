@@ -102,7 +102,8 @@ import {
   YesNoDialogBoxComponent,
   EntityTypeComponent,
   AttributeTypeComponent,
-  RelationTypeComponent
+  RelationTypeComponent,
+  EventTypeComponent
 } from "./components/project";
 
 import { CreateProjectComponent } from "./components/projectManager";
@@ -139,7 +140,8 @@ import { EditUserComponent } from "./components/userManager";
     EditUserComponent,
     EntityTypeComponent,
     AttributeTypeComponent,
-    RelationTypeComponent
+    RelationTypeComponent,
+    EventTypeComponent
   ],
   entryComponents: [
     AddAdminComponent,

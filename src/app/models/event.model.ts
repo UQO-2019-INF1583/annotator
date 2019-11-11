@@ -1,3 +1,5 @@
+import { Arc } from "./arc.model";
+
 export class Event {
   name: string;
   type: string;
@@ -7,7 +9,7 @@ export class Event {
   attributes: string[];
   children: any[];
   unused: boolean;
-  arcs: any[];
+  arcs: Arc[];
 
   constructor() {
     this.name = "";

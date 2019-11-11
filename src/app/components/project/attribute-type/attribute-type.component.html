@@ -63,7 +63,13 @@
       <div>
         <table style="width: 100%;">
           <!-- Defined glyph -->
-          <tr *ngFor="let glyph of newAttribute.values; let i = index">
+          <tr
+            *ngFor="
+              let glyph of newAttribute.values;
+              let i = index;
+              trackBy: trackBy
+            "
+          >
             <td>
               <button
                 type="submit"
@@ -78,7 +84,7 @@
                 class="form-control"
                 placeholder="Glyph (ex : ★)"
                 [(ngModel)]="glyph.glyph"
-                name="glyph"
+                name="glyph[{{ i }}]"
                 #type="ngModel"
                 required="true"
               />
@@ -190,7 +196,7 @@
                 class="form-control"
                 placeholder="Glyph (ex : ★)"
                 [(ngModel)]="attribute.values[j].glyph"
-                name="value[{{ j }}]"
+                name="glyph[{{ j }}]"
                 #type="ngModel"
                 required="true"
               />
@@ -213,7 +219,7 @@
               <input
                 class="form-control"
                 placeholder="Glyph (ex : ★)"
-                [(ngModel)]="attributesData[i].label"
+                [(ngModel)]="attributesData[i].glyph"
                 name="newLabel"
                 #type="ngModel"
                 required="true"
@@ -224,7 +230,7 @@
 
         <small
           *ngIf="
-            attributesData[i].label == '' || attributesData[i].label == null
+            attributesData[i].glyph == '' || attributesData[i].glyph == null
           "
           class="form-text text-muted text-danger"
           >*Glyphs is obligatory</small

@@ -89,7 +89,8 @@ export class AttributeAnnotationUtils {
       type: "",
       valueString: "",
       values: [],
-      target: ""
+      target: "",
+      bool: ""
     };
   }
 }

@@ -52,7 +52,7 @@ export class RelationTypeComponent implements OnInit {
           this.project = data;
 
           this.relationsData = [];
-          for (let i = 0; i < this.project.entities.length; i++) {
+          for (let i = 0; i < this.project.relations.length; i++) {
             this.relationsData.push({
               error: true,
               message: "*Warning!",
@@ -67,7 +67,7 @@ export class RelationTypeComponent implements OnInit {
   }
 
   /**************************************************************************************
-   *    Entity functions :
+   *    Relation functions :
    * ***********************************************************************************/
 
   create() {
@@ -149,68 +149,74 @@ export class RelationTypeComponent implements OnInit {
     }
   }
 
-  isValid(entity: Relation, data: RelationData, index: number): boolean {
+  isValidDashArray(dasharray: string): boolean {
+    let regex = new RegExp("^[0-9],[0-9]$");
+
+    if (regex.test(dasharray)) {
+      return true;
+    } else return false;
+  }
+
+  isValid(relation: Relation, data: RelationData, index: number): boolean {
     // Check if every entry is valid
-    /*
+
     data.error = true;
-    if (entity.type === "" || entity.type === null) {
+    if (relation.type === "" || relation.type === null) {
       data.message = "*Missing Type";
       return true;
-    } else if (entity.labels.length === 0) {
+    } else if (relation.labels.length === 0) {
       data.message = "*Missing Labels";
       return true;
-    } else if (entity.labels.length > 0) {
-      for (let i = 0; i < entity.labels.length; i++) {
-        if (entity.labels[i] === "" || entity.labels[i] === null) {
+    } else if (relation.labels.length > 0) {
+      for (let i = 0; i < relation.labels.length; i++) {
+        if (relation.labels[i] === "" || relation.labels[i] === null) {
           data.message = "*Invalid Labels";
           return true;
         }
       }
-    } else if (entity.bgColor === "" || entity.bgColor === null) {
-      data.message = "*Missing Background Color";
+    }
+    if (relation.dashArray === "" || relation.dashArray === null) {
+      data.message = "*Missing Dash Array";
       return true;
-    } else if (entity.borderColor === "" || entity.borderColor === null) {
-      data.message = "*Missing Border Color";
+    } else if (!this.isValidDashArray(relation.dashArray)) {
+      data.message = "*Invalid Dash Array";
+      return true;
+    } else if (
+      relation.args[0].role === "" ||
+      relation.args[0].role === null ||
+      relation.args[1].role === "" ||
+      relation.args[1].role === null
+    ) {
+      data.message = "*Missing Arg Role";
+      return true;
+    } else if (
+      relation.args[0].targets[0] === "" ||
+      relation.args[0].targets[0] === null ||
+      relation.args[1].targets[0] === "" ||
+      relation.args[1].targets[0] === null
+    ) {
+      data.message = "*Missing Arg Target";
       return true;
     }
-    */
 
     // Check for duplicates except for itself
-    /*
     if (index >= 0) {
-      for (let i = 0; i < this.project.entities.length; i++) {
+      for (let i = 0; i < this.project.relations.length; i++) {
         if (i != index) {
-          if (entity.type === this.project.entities[i].type) {
+          if (relation.type === this.project.relations[i].type) {
             data.message = "*Type already exist";
-            return true;
-          } else if (entity.bgColor === this.project.entities[i].bgColor) {
-            data.message = "*Background color already exist";
-            return true;
-          } else if (
-            entity.borderColor === this.project.entities[i].borderColor
-          ) {
-            data.message = "*Border color already exist";
             return true;
           }
         }
       }
     } else {
-      for (let i = 0; i < this.project.entities.length; i++) {
-        if (entity.type === this.project.entities[i].type) {
+      for (let i = 0; i < this.project.relations.length; i++) {
+        if (relation.type === this.project.relations[i].type) {
           data.message = "*Type already exist";
-          return true;
-        } else if (entity.bgColor === this.project.entities[i].bgColor) {
-          data.message = "*Background color already exist";
-          return true;
-        } else if (
-          entity.borderColor === this.project.entities[i].borderColor
-        ) {
-          data.message = "*Border color already exist";
           return true;
         }
       }
     }
-    */
 
     data.message = "";
     data.error = false;

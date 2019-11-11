@@ -15,14 +15,23 @@ export class Relation {
   constructor() {
     this.type = "";
     this.labels = [];
-    this.dashArray = "3,3";
+    this.dashArray = "";
     this.color = "";
     this.attributes = [];
     this.args = [];
+
+    this.args.push(new Args("", ""));
+    this.args.push(new Args("", ""));
   }
 }
 
 export class Args {
   role: string;
   targets: string[];
+
+  constructor(role: string, target: string) {
+    this.role = role;
+    this.targets = [];
+    this.targets.push(target);
+  }
 }

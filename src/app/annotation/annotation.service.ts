@@ -56,14 +56,13 @@ export class AnnotationService {
 
 
   // Fonction qui devrait retourner le nom de tous les Annotated Document corespondant a un Corpus specific
-  getAllUserID(corpusId: string): Promise<any> {
-
-    // var userIDs = Array;
+  getAllUserID_william(corpusId: string): Promise<any> {
+    // Utilisation
+    //console.log('Getting uids');
+    //const test = await this.as.getAllUserID('VR51w02UKoPsOL133djf');
+    //console.log(test.docs[0].data());
 
     // On demande a la BD de nous envoyer tous les userIDs associe a notre corpus
-
-
-    // On renvoie le tableau userIDs;
-    return;
+    return this.afs.collection('AnnotatedDocument/', ref => ref.where('documentId', '==', corpusId)).ref.get();
   }
 }

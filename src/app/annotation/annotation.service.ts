@@ -27,7 +27,7 @@ export class AnnotationService {
 
 
 
-  saveAnnotatedDocument(annotatedDocument: AnnotatedDocument): void {
+  saveAnnotatedDocument(annotatedDocument: AnnotatedDocument, suffix: string = ''): void {
 
     // On initie le chmapps le userID s'il n'ete pas deja fait
     // this.currentUserId = firebase.auth().currentUser.uid;
@@ -36,7 +36,7 @@ export class AnnotationService {
     /* If the document does not exist, it will be created. If the document does exist, its
       contents will be overwritten with the newly provided data */
     const Adoc = this.afs.collection('AnnotatedDocument');
-    Adoc.doc(annotatedDocument.documentId + this.currentUserId).set(annotatedDocument);
+    Adoc.doc(annotatedDocument.documentId + this.currentUserId + suffix).set(annotatedDocument);
   }
 
 
@@ -56,13 +56,14 @@ export class AnnotationService {
 
 
   // Fonction qui devrait retourner le nom de tous les Annotated Document corespondant a un Corpus specific
-  getAllUserID_william(corpusId: string): Promise<any> {
+  async getAllAnnotatedDocumentsForCorpus(corpusId: string): Promise<any> {
     // Utilisation
     //console.log('Getting uids');
     //const test = await this.as.getAllUserID('VR51w02UKoPsOL133djf');
     //console.log(test.docs[0].data());
 
     // On demande a la BD de nous envoyer tous les userIDs associe a notre corpus
-    return this.afs.collection('AnnotatedDocument/', ref => ref.where('documentId', '==', corpusId)).ref.get();
+    const snap = await this.afs.collection('AnnotatedDocument/', ref => ref.where('documentId', '==', corpusId)).ref.get()
+    return snap.docs.map(doc => doc.data());
   }
 }

@@ -41,5 +41,6 @@
   <div *ngIf="isConnected" style="padding-left: 10px; padding-right: 10px;">
     <button class="btn btn-primary" (click)="saveTextModification()">Save</button>
     <button class="btn btn-primary" [routerLink]="['/project', {id:projectId}]">Cancel</button>
+    <button class="btn btn-primary" (click)="mergeAll()">Merge</button>
   </div>
 </main>

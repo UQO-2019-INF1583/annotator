@@ -162,12 +162,24 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
 
     // On demande a la base de donne de nous retourner dans un tableau tous les AnnotatedDocuments qui appartient a notre Corpus
-    // getSpecificAnnotatedDocument(this.projectId, users[i]);
+    const annotatedDocuments = await this.as.getAllAnnotatedDocumentsForCorpus('VR51w02UKoPsOL133djf');
+    var mergedDocument = AnnotatedDocumentUtils.initialiseAnnotatedDocument(this.currentDoc);
 
+    // Place tout les entities, relation, event et attributes dans un nouveau document
+    for (let docKey in annotatedDocuments) {
+      mergedDocument.entities = mergedDocument.entities.concat(annotatedDocuments[docKey].entities)
+      mergedDocument.relations = mergedDocument.relations.concat(annotatedDocuments[docKey].relations);
+      mergedDocument.events = mergedDocument.events.concat(annotatedDocuments[docKey].events);
+      mergedDocument.attributes = mergedDocument.attributes.concat(annotatedDocuments[docKey].attributes);
+    }
 
-    // On cree un AnnotatedDocument vide et on le remplie avec tous les AnnotatedDocuments qui nous a ete retourne plus haut
+    // Marque le document comme étant barré et final
+    mergedDocument.etatDocument = 2;
 
+    // Enregistre le document dans la  avec le suffix _MERGED and la clé
+    this.as.saveAnnotatedDocument(mergedDocument, '_MERGED');
 
+    // TODO: Avertire l' que le document est enregistré
   }
 
 

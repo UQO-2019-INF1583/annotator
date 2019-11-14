@@ -22,41 +22,61 @@ export class RegisterComponent {
   };
   errorMessage = '';
 
-  constructor(private router: Router, public authService: AuthService, public afAuth: AngularFireAuth, private afs: AngularFirestore) { }
+  constructor(
+    private router: Router,
+    public authService: AuthService,
+    public afAuth: AngularFireAuth,
+    private afs: AngularFirestore) { }
 
-  register() {
-    firebase.auth().createUserWithEmailAndPassword(this.userInfo.email, this.userInfo.password)
-      .then((user) => {
-        this.userInfo.uid = user.user.uid;
-        user.user.updateProfile({
-          displayName: this.userInfo.firstname,
-          photoURL: ''
-        }).then(() => {
-          // Update successful. Add the user to ..
-        }).catch(function (error) {
-          console.log(error);
-        });
-        // added to get correctly the displayName
-        this.authService.signIn(this.userInfo.email, this.userInfo.password);
-        // update Cloud Firestore
-        this.afs.collection('Users/').doc(this.userInfo.uid).set({
-          uid: this.userInfo.uid,
-          email: this.userInfo.email,
-          firstname: this.userInfo.firstname,
-          lastname: this.userInfo.lastname,
-          role: Role.Visitor
-        });
-        this.authService.logout();
-        this.router.navigate(['/login']);
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        this.errorMessage = error.message;
-        console.log(this.errorMessage);
-        // ...
+
+  async register() {
+    try {
+      await this.registerWithEmailAndPassword();
+      this.signIn();
+      this.updateUserInfo();
+      this.redirectToLoginPage();
+    } catch (error) {
+      // Handle Errors here.
+      this.errorMessage = error.message;
+      console.log(this.errorMessage);
+    }
+  }
+
+  async registerWithEmailAndPassword() {
+    try {
+      const user = await firebase.auth().createUserWithEmailAndPassword(this.userInfo.email, this.userInfo.password);
+      this.userInfo.uid = user.user.uid;
+      await user.user.updateProfile({
+        displayName: this.userInfo.firstname,
+        photoURL: ''
       });
+    } catch (err) {
+      throw err;
+    }
+  }
 
+  signIn() {
+    try {
+      // added to get correctly the displayName
+      this.authService.signIn(this.userInfo.email, this.userInfo.password);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  updateUserInfo() {
+    this.afs.collection('Users/').doc(this.userInfo.uid).set({
+      uid: this.userInfo.uid,
+      email: this.userInfo.email,
+      firstname: this.userInfo.firstname,
+      lastname: this.userInfo.lastname,
+      role: Role.Visitor
+    });
+    this.authService.logout();
+  }
+
+  redirectToLoginPage() {
+    this.router.navigate(['/login']);
   }
 
   emailInvalid() {

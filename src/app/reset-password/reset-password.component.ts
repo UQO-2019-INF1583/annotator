@@ -24,6 +24,7 @@ export class ResetPasswordComponent implements OnInit {
   .catch(error => {
       //TODO: Error handling
     this.emailSent = false;
+    this.successMessage = "This email account does not exist ";
     });
   }
 }

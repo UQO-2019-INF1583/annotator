@@ -101,16 +101,17 @@ describe('Projet', () => {
       );
       expect(window.alert).toHaveBeenCalledWith('The chosen color is already used');
     });
+    /* not sure what this test is about for i believe two entities cannot have the same name
 
-    it('should alert the user when trying to add an entities using an already used name and change the color if it\'s different', () => {
-      spyOn(window, 'alert');
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid1);
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid2);
-      expect(window.alert).toHaveBeenCalledWith('Replacing color');
-      /*expect(projectComponent.currentProject.entities).toContain(
-        entiteMock.valid3//jasmine.objectContaining(entiteMock.valid2)
-      );*/
-    });
+        it('should alert the user when trying to add an entities using an already used name and change the color if it\'s different', () => {
+          spyOn(window, 'alert');
+          projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid1);
+          projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid2);
+          expect(window.alert).toHaveBeenCalledWith('Replacing color');
+          /*expect(projectComponent.currentProject.entities).toContain(
+            entiteMock.valid3//jasmine.objectContaining(entiteMock.valid2)
+          );
+        });*/
 
     it('should be able to delete an entity', () => {
       projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid3);
@@ -224,66 +225,66 @@ describe('Projet', () => {
           expect(window.alert).toHaveBeenCalledWith('This event already exists');
         });
       });
-    /*
-      describe('Annotators', () => {
-        it('should be able to add an annotator', () => {
-          projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
-          expect(projectComponent.currentProject.annotators).toContain(
-            annotatorMock.result.valid1.uid
-          );
-          expect(projectComponent.annotators).toContain(annotatorMock.result.valid1);
-        });
-    
-        it('should be able to delete an annotator', () => {
-          projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
-          expect(projectComponent.currentProject.annotators).toContain(
-            annotatorMock.result.valid1.uid
-          );
-          expect(projectComponent.annotators).toContain(annotatorMock.result.valid1);
-          projectComponent.deleteAnnotator(annotatorMock.result.valid1.uid);
-          expect(projectComponent.currentProject.annotators).not.toContain(
-            annotatorMock.result.valid1.uid
-          );
-          expect(projectComponent.annotators).not.toContain(annotatorMock.result.valid1);
-        });
-    
-        it('should alert the user when trying to add an annotator that already exists', () => {
-          spyOn(window, 'alert');
-          projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
-          projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
-          expect(window.alert).toHaveBeenCalledWith(
-            'This annotator already exists'
-          );
-        });
-      });
-    /*
-      describe('Administrators', () => {
-        it('should be able to add an admin', () => {
-          projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
-          expect(projectComponent.currentProject.admin).toContain(
-            adminMock.result.valid1.uid
-          );
-          expect(projectComponent.admin).toContain(adminMock.result.valid1);
-        });
-    
-        it('should be able to delete an admin', () => {
-          projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
-          expect(projectComponent.currentProject.admin).toContain(
-            adminMock.result.valid1.uid
-          );
-          expect(projectComponent.admin).toContain(adminMock.result.valid1);
-          projectComponent.deleteAdmin(adminMock.result.valid1.uid);
-          expect(projectComponent.currentProject.admin).not.toContain(
-            adminMock.result.valid1.uid
-          );
-          expect(projectComponent.admin).not.toContain(adminMock.result.valid1);
-        });
-    
-        it('should alert the user when trying to add an admin that already exists', () => {
-          spyOn(window, 'alert');
-          projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
-          projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
-          expect(window.alert).toHaveBeenCalledWith('This admin already exists');
-        });
-      });*/
+    */
+  describe('Annotators', () => {
+    it('should be able to add an annotator', () => {
+      projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
+      expect(projectComponent.currentProject.annotators).toContain(
+        annotatorMock.result.valid1.uid
+      );
+      expect(projectComponent.annotators).toContain(annotatorMock.result.valid1);
+    });
+
+    it('should be able to delete an annotator', () => {
+      projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
+      expect(projectComponent.currentProject.annotators).toContain(
+        annotatorMock.result.valid1.uid
+      );
+      expect(projectComponent.annotators).toContain(annotatorMock.result.valid1);
+      projectComponent.deleteAnnotator(annotatorMock.result.valid1.uid);
+      expect(projectComponent.currentProject.annotators).not.toContain(
+        annotatorMock.result.valid1.uid
+      );
+      expect(projectComponent.annotators).not.toContain(annotatorMock.result.valid1);
+    });
+
+    it('should alert the user when trying to add an annotator that already exists', () => {
+      spyOn(window, 'alert');
+      projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
+      projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
+      expect(window.alert).toHaveBeenCalledWith(
+        'This annotator already exists'
+      );
+    });
+  });
+
+  describe('Administrators', () => {
+    it('should be able to add an admin', () => {
+      projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
+      expect(projectComponent.currentProject.admin).toContain(
+        adminMock.result.valid1.uid
+      );
+      expect(projectComponent.admin).toContain(adminMock.result.valid1);
+    });
+
+    it('should be able to delete an admin', () => {
+      projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
+      expect(projectComponent.currentProject.admin).toContain(
+        adminMock.result.valid1.uid
+      );
+      expect(projectComponent.admin).toContain(adminMock.result.valid1);
+      projectComponent.deleteAdmin(adminMock.result.valid1.uid);
+      expect(projectComponent.currentProject.admin).not.toContain(
+        adminMock.result.valid1.uid
+      );
+      expect(projectComponent.admin).not.toContain(adminMock.result.valid1);
+    });
+
+    it('should alert the user when trying to add an admin that already exists', () => {
+      spyOn(window, 'alert');
+      projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
+      projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
+      expect(window.alert).toHaveBeenCalledWith('This admin already exists');
+    });
+  });
 }); 

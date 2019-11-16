@@ -165,14 +165,16 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     const userInfo = await this.as.getUserInfo();
     if (userInfo.data().role === 2) {
       this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
     }
+
     return false;
-    this.isAdmin = false;
   }
 
   // Fonction utilise pour mettre les boutons Merge et Load Merged Version en Enable/Diable
   isAdminUser() {
-    return !(this.isAdmin);
+    return !this.isAdmin;
   }
 
   // Cette fonctionne permet de fussioner tous les AnnotatedDocuments corespondant a un Corpus specifique.

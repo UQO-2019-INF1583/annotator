@@ -64,7 +64,11 @@ export class AnnotationService {
   // Fonction qui retourne le nom de tous les Annotated Document corespondant a un Corpus specific
   async getAllAnnotatedDocumentsForCorpus(corpusId: string): Promise<any> {
     // On demande a la BD de nous envoyer tous les userIDs associe a notre corpus
-    const snap = await this.afs.collection('AnnotatedDocument/', ref => ref.where('documentId', '==', corpusId)).ref.get()
+    const snap = await this.afs.collection('AnnotatedDocument/')
+      .ref
+      .where('documentId', '==', corpusId)
+      .get()
+
     return snap.docs.map(doc => doc.data());
   }
 

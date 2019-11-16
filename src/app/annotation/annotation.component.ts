@@ -76,6 +76,10 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
     this.currentDoc.text = await this.http.get(URL, { responseType: 'text' }).toPromise();
 
+    // Vérifier si un document final existe pour se corpus et s'il existe, afficher
+    // le document final et bloquer le bouton enregistrer
+    // const test = await this.as.getFinalDocumentForCorpus('VR51w02UKoPsOL133djf');
+
     await this.as.getAnnotatedDocument(this.currentDoc.documentId).then(d => {
       const data = d.data()
 
@@ -107,8 +111,6 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     this.isDataLoaded = true;
   }
 
-
-
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
 
@@ -123,6 +125,8 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   saveTextModification() {
     // Empêche l'utilisateur d'enregistrer si le document est vérouillé
     if (this.currentDoc.etatDocument === 2) {
+      alert('You can\'t save a locked and finished document.')
+    } else {
       const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
         this.brat.docData,
         this.project,
@@ -130,8 +134,6 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       );
       this.as.saveAnnotatedDocument(aDoc);
       alert('Annotation saved');
-    } else {
-      alert('You can\'t save a locked and finished document.')
     }
   }
 

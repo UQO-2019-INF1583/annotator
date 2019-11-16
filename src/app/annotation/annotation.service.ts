@@ -41,6 +41,7 @@ export class AnnotationService {
 
 
   getAnnotatedDocument(documentId: string): Promise<any> {
+    // TODO: Vérifier si cette ligne est encore utile vu qu'elle est dans le constructeur
     this.currentUserId = firebase.auth().currentUser.uid;
     // On lui envoie la copie qui lui est associe.  Cette copie a ete cree lorsqu'il a clique sur view
     return this.afs.collection('AnnotatedDocument/').doc(documentId + this.currentUserId).ref.get();
@@ -49,9 +50,9 @@ export class AnnotationService {
 
 
   // Fonctionne qui sera utilise pour cherhcer un annotatedDocument specifique a un corpus et un utilisateur specifique
-  getSpecificAnnotatedDocument(documentId: string, specificUserId: string): Promise<any> {
-    return this.afs.collection('AnnotatedDocument/').doc(documentId + specificUserId).ref.get();
-  }
+  //getSpecificAnnotatedDocument(documentId: string, specificUserId: string): Promise<any> {
+  //  return this.afs.collection('AnnotatedDocument/').doc(documentId + specificUserId).ref.get();
+  //}
 
 
 
@@ -63,7 +64,22 @@ export class AnnotationService {
     //console.log(test.docs[0].data());
 
     // On demande a la BD de nous envoyer tous les userIDs associe a notre corpus
-    const snap = await this.afs.collection('AnnotatedDocument/', ref => ref.where('documentId', '==', corpusId)).ref.get()
+    const snap = await this.afs.collection('AnnotatedDocument/')
+      .ref
+      .where('documentId', '==', corpusId)
+      .get()
+
+    return snap.docs.map(doc => doc.data());
+  }
+
+  // Retourne le document final appartenant à un corpus, s'il existe
+  async getFinalDocumentForCorpus(corpusId: string): Promise<any> {
+    const snap = await this.afs.collection('AnnotatedDocument/')
+      .ref
+      .where('documentId', '==', corpusId)
+      .where('etatDocument', '==', 2)
+      .get()
+
     return snap.docs.map(doc => doc.data());
   }
 }

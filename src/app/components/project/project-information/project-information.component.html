@@ -1,0 +1,93 @@
+<h1>Project Information :</h1>
+
+<form>
+  <!-- Title -->
+  <div class="form-group">
+    <label class="col-form-label">Title : </label>
+    <input
+      type="text"
+      class="form-control"
+      [readonly]="getAdmin() == false || getAdmin() == null"
+      [(ngModel)]="project.title"
+      placeholder="Enter the title"
+      name="title"
+      #titre="ngModel"
+      required="true"
+    />
+    <small
+      class="form-text text-muted text-danger"
+      *ngIf="project.title == '' || project.title == null"
+      >Project title is required</small
+    >
+  </div>
+
+  <!-- Date of Creation -->
+  <div class="form-group">
+    <label class="col-form-label">Date of Creation : </label>
+    <input
+      *ngIf="project.hasOwnProperty('date')"
+      type="text"
+      class="form-control"
+      [readonly]="true"
+      [ngModel]="project.date.seconds * 1000 | date"
+      placeholder="Enter the date"
+      name="date"
+      #titre="ngModel"
+      required="true"
+    />
+  </div>
+
+  <!-- State -->
+  <div class="form-group">
+    <label class="col-form-label">State : </label>
+    <select
+      class="form-control"
+      [(ngModel)]="project.state"
+      placeholder="Choose a state"
+      name="state"
+      #titre="ngModel"
+      required="true"
+    >
+      <option *ngFor="let state of states" value="{{ state.value }}">{{
+        state.name
+      }}</option>
+    </select>
+    <small
+      class="form-text text-muted text-danger"
+      *ngIf="project.state == '' || project.state == null"
+      >Project state is required</small
+    >
+  </div>
+
+  <!-- Description -->
+  <div class="form-group">
+    <label class="col-form-label">Description : </label>
+    <textarea
+      type="text"
+      class="form-control"
+      [readonly]="getAdmin() == false || getAdmin() == null"
+      [(ngModel)]="project.description"
+      placeholder="Enter the description"
+      name="description"
+      #titre="ngModel"
+      required
+      rows="3"
+    ></textarea>
+    <small
+      class="form-text text-muted text-danger"
+      *ngIf="project.description == '' || project.description == null"
+      >Project description is required</small
+    >
+  </div>
+
+  <div
+    *ngIf="isConnected"
+    class="button-row"
+    style="padding-left: 10px; padding-right: 10px; text-align: right;"
+  >
+    <button class="btn btn-primary" (click)="save()" style="margin-right: 5px;">
+      Save
+    </button>
+    <button class="btn btn btn-danger" (click)="reset()">Cancel</button>
+  </div>
+</form>

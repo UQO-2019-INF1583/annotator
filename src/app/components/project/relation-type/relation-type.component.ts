@@ -8,6 +8,8 @@ import { AuthService } from "../../../tools/security/auth.service";
 import { Project, ProjectUtils } from "../../../models/project.model";
 import { ProjectService } from "../../../services/project/project.service";
 import { Relation } from "../../../models/relation.model";
+import { RelationType } from "../../../models/project";
+import { Arc } from "../../../models";
 
 /**************************************************************************************
  *    Main :
@@ -32,7 +34,12 @@ export class RelationTypeComponent implements OnInit {
   // Create New Entity
   newRelation: Relation = new Relation();
   newLabel: String = "";
-  relationData: RelationData = { error: true, message: "*Warning!", label: "" };
+  relationData: RelationData = {
+    error: true,
+    message: "*Warning!",
+    label: "",
+    targets: ["", ""]
+  };
   relationsData: RelationData[] = [];
 
   constructor(
@@ -56,7 +63,11 @@ export class RelationTypeComponent implements OnInit {
             this.relationsData.push({
               error: true,
               message: "*Warning!",
-              label: ""
+              label: "",
+              targets: [
+                this.project.relations[i].args[0].targets[0],
+                this.project.relations[i].args[1].targets[0]
+              ]
             });
           }
         });
@@ -76,13 +87,30 @@ export class RelationTypeComponent implements OnInit {
       this.project.relations.push(JSON.parse(
         JSON.stringify(this.newRelation)
       ) as Relation);
+
+      // Add Relation
+      this.addRelationToProject(this.newRelation, this.relationData);
+
       this.ps.saveProject(this.project);
 
-      // Reset entityData
-      this.relationData = { error: true, message: "*Warning!", label: "" };
-
       // Add new entitiesData
-      this.relationsData.push({ error: true, message: "*Warning!", label: "" });
+      this.relationsData.push({
+        error: true,
+        message: "*Warning!",
+        label: "",
+        targets: [
+          this.newRelation.args[0].targets[0],
+          this.newRelation.args[1].targets[0]
+        ]
+      });
+
+      // Reset entityData
+      this.relationData = {
+        error: true,
+        message: "*Warning!",
+        label: "",
+        targets: ["", ""]
+      };
     });
   }
 
@@ -93,11 +121,33 @@ export class RelationTypeComponent implements OnInit {
           this.project.relations[i] = project.relations[i];
         }
       }
+
+      // Remove Relation
+      this.removeRelationToProject(
+        this.project.relations[index],
+        this.relationsData[index]
+      );
+
+      // Add Relation
+      this.addRelationToProject(
+        this.project.relations[index],
+        this.relationsData[index]
+      );
+
+      this.relationsData[index].targets[0] = this.project.relations[
+        index
+      ].args[0].targets[0];
+      this.relationsData[index].targets[1] = this.project.relations[
+        index
+      ].args[1].targets[0];
+
       this.ps.saveProject(this.project);
     });
   }
 
   remove(index: number) {
+    this.removeAllRelationToProject(this.project.relations[index], index);
+
     if (
       this.project.relations.length >= 0 ||
       index < this.project.relations.length
@@ -118,10 +168,135 @@ export class RelationTypeComponent implements OnInit {
           this.relationsData.push({
             error: true,
             message: "*Warning!",
-            label: ""
+            label: "",
+            targets: [
+              this.project.relations[i].args[0].targets[0],
+              this.project.relations[i].args[1].targets[0]
+            ]
           });
         }
       });
+  }
+
+  addRelationToProject(relation: RelationType, data: RelationData): void {
+    if (relation.args[1].targets[0] != relation.args[0].targets[0]) {
+      for (let i = 0; i < relation.args.length; i++) {
+        for (let j = 0; j < this.project.entities.length; j++) {
+          if (relation.args[i].targets[0] === this.project.entities[j].type) {
+            let check: boolean = true;
+            for (
+              let k = this.project.entities[j].arcs.length - 1;
+              k >= 0;
+              k--
+            ) {
+              if (
+                data.targets[i] === this.project.entities[j].arcs[k].targets[0]
+              ) {
+                this.project.entities[j].arcs.splice(k, 1);
+                continue;
+              }
+              if (relation.type === this.project.entities[j].arcs[k].targets[0])
+                check = false;
+            }
+            if (check) {
+              let arc = new Arc();
+              arc = {
+                arrowHead: "triangle,5",
+                color: "black",
+                labels: relation.labels,
+                dashArray: ",",
+                hotkey: "T",
+                type: relation.type,
+                targets: [relation.args[i].targets[0]]
+              };
+              this.project.entities[j].arcs.push(arc);
+            }
+          }
+        }
+      }
+    } else if (relation.args[1].targets[0] == relation.args[0].targets[0]) {
+      for (let j = 0; j < this.project.entities.length; j++) {
+        if (relation.args[0].targets[0] === this.project.entities[j].type) {
+          let check: boolean = true;
+          for (let k = this.project.entities[j].arcs.length - 1; k >= 0; k--) {
+            if (
+              data.targets[0] === this.project.entities[j].arcs[k].targets[0] ||
+              data.targets[1] === this.project.entities[j].arcs[k].targets[0]
+            ) {
+              this.project.entities[j].arcs.splice(k, 1);
+              continue;
+            }
+            if (relation.type === this.project.entities[j].arcs[k].targets[0])
+              check = false;
+          }
+          if (check) {
+            let arc = new Arc();
+            arc = {
+              arrowHead: "triangle,5",
+              color: "black",
+              labels: relation.labels,
+              dashArray: ",",
+              hotkey: "T",
+              type: relation.type,
+              targets: [relation.args[0].targets[0]]
+            };
+            this.project.entities[j].arcs.push(arc);
+          }
+        }
+      }
+    }
+  }
+
+  removeRelationToProject(relation: RelationType, data: RelationData): void {
+    let relations: string[] = [];
+    for (let i = 0; i < this.project.entities.length; i++)
+      if (
+        !(
+          this.project.entities[i].type == relation.args[0].targets[0] ||
+          this.project.entities[i].type == relation.args[1].targets[0]
+        )
+      )
+        relations.push(this.project.entities[i].type);
+
+    for (let i = 0; i < relations.length; i++) {
+      for (let j = 0; j < this.project.entities.length; j++) {
+        if (relations[i] === this.project.entities[j].type) {
+          let check: number = -1;
+          for (let k = this.project.entities[j].arcs.length - 1; k >= 0; k--) {
+            if (
+              data.targets[0] === this.project.entities[j].arcs[k].targets[0] ||
+              data.targets[1] === this.project.entities[j].arcs[k].targets[0]
+            ) {
+              this.project.entities[j].arcs.splice(k, 1);
+              continue;
+            }
+            if (
+              data.targets[0] === this.project.entities[j].arcs[k].targets[0] ||
+              data.targets[1] === this.project.entities[j].arcs[k].targets[0]
+            )
+              check = k;
+          }
+          if (check >= 0) this.project.entities[j].arcs.splice(check, 1);
+        }
+      }
+    }
+  }
+
+  removeAllRelationToProject(relation: RelationType, index: number): void {
+    for (let j = 0; j < this.project.entities.length; j++) {
+      for (let k = this.project.entities[j].arcs.length - 1; k >= 0; k--) {
+        if (
+          this.relationsData[index].targets[0] ===
+          this.project.entities[j].arcs[k].targets[0]
+        )
+          this.project.entities[j].arcs[k].splice(k, 1);
+        else if (
+          this.relationsData[index].targets[1] ===
+          this.project.entities[j].arcs[k].targets[0]
+        )
+          this.project.entities[j].arcs[k].splice(k, 1);
+      }
+    }
   }
 
   addLabel(relation: Relation, data: RelationData): void {
@@ -228,4 +403,5 @@ export interface RelationData {
   error: boolean;
   message: string;
   label: string;
+  targets: string[];
 }

@@ -5,19 +5,22 @@ export class EntityAttributeTypes {
   valueString: string;
   bool: string; // same as the type. ex : "Notorious"
   name: string;
+  entities: string[];
 
   constructor(
     name: string = "",
     type: string = "",
     valueString: string = "",
     values: EntityAttributeValues[] = [],
-    bool: string = ""
+    bool: string = "",
+    entities: string[] = []
   ) {
     this.name = name;
     this.type = type;
     this.valueString = valueString;
     this.values = values;
     this.bool = bool;
+    this.entities = entities;
   }
 }
 

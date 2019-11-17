@@ -81,6 +81,9 @@ export class BratUtils {
       ]);
     });
 
+    console.log("Get Doc Data");
+    console.log(docData);
+
     return docData;
   }
 
@@ -100,7 +103,19 @@ export class BratUtils {
         ["ALC", "http://eow.alc.co.jp/%s"]
       ],
       disambiguator_config: [],
-      unconfigured_types: [],
+      unconfigured_types: [
+        {
+          borderColor: "darken",
+          arrowHead: "triangle,5",
+          name: "Cause",
+          color: "#007700",
+          labels: ["Cause"],
+          unused: true,
+          bgColor: "lightgreen",
+          type: "Cause",
+          fgColor: "black"
+        }
+      ],
       ui_names: {
         entities: "entités",
         events: "événements",
@@ -108,42 +123,43 @@ export class BratUtils {
         attributes: "attributs"
       },
       entity_types: project.entities.map(x => ({
-        name: x.name,
+        name: x.type,
         type: x.type,
         labels: x.labels,
         bgColor: x.bgColor,
-        borderColor: "darken",
+        borderColor: x.borderColor,
         unused: false,
         // TODO: Fill
-        attributes: [],
+        attributes: x.attributes,
         // TODO: Fill
-        arcs: [],
+        arcs: x.arcs,
         // TODO: Fill
         children: []
       })),
       event_types: project.events.map(x => ({
-        name: x.name,
+        name: x.type,
         type: x.type,
         labels: x.labels,
         bgColor: x.bgColor,
-        borderColor: "darken",
+        borderColor: x.borderColor,
         unused: false,
         attributes: [],
         children: [],
-        arcs: []
+        arcs: x.arcs
       })),
       relation_types: project.relations.map(x => ({
         type: x.type,
         labels: x.labels,
-        dashArray: "3,3",
+        dashArray: x.dashArray,
         color: x.color,
-        args: []
+        args: x.args
         // attribute: []
       })),
       entity_attribute_types: project.attributes.map(x => ({
-        name: x.name,
+        bool: x.bool,
+        name: x.type,
         type: x.type,
-        values: BratUtils.formatValues(x.values)
+        values: BratUtils.formatValues(x.values, x.type)
       })),
       // TODO: Have something in project to represent this attribute
       event_attribute_types: [],
@@ -151,17 +167,17 @@ export class BratUtils {
       relation_attribute_types: []
     };
 
-    console.log("get coll");
+    console.log("Get Col Date");
     console.log(collectionData);
     return collectionData;
   }
 
   //Méthode qui reçoit le tableau de valeur et les transforme en Json pour Brat
-  static formatValues(values: EntityAttributeValues[]) {
+  static formatValues(values: EntityAttributeValues[], name: string) {
     let result = {};
 
     values.forEach(value => {
-      result[value.name] = {
+      result[name] = {
         box: value.box,
         glyph: value.glyph,
         dashArray: value.dashArray
@@ -176,6 +192,7 @@ export class BratUtils {
     project: Project,
     annotatedDocument: AnnotatedDocument
   ): AnnotatedDocument {
+    // Entities :
     annotatedDocument.entities = docData.entities.map(docEntity => {
       const entity: EntityAnnotation = EntityAnnotationUtils.generateEmpty();
       const project_entity = project.entities.find(
@@ -194,10 +211,12 @@ export class BratUtils {
       entity.type = project_entity.type;
       entity.bgColor = project_entity.bgColor;
       entity.labels = project_entity.labels;
+      entity.borderColor = project_entity.borderColor;
 
       return entity;
     });
 
+    // Attributes :
     annotatedDocument.attributes = docData.attributes.map(docAttribute => {
       const attribute: AttributeAnnotation = AttributeAnnotationUtils.generateEmpty();
       const project_attribute = project.attributes.find(
@@ -212,10 +231,12 @@ export class BratUtils {
       // Project attribute
       attribute.name = project_attribute.name;
       attribute.values = project_attribute.values;
+      attribute.bool = project_attribute.bool;
 
       return attribute;
     });
 
+    // Relations :
     annotatedDocument.relations = docData.relations.map(docRelation => {
       const relation: RelationAnnotation = RelationAnnotationUtils.generateEmpty();
       const project_relation = project.relations.find(
@@ -234,10 +255,13 @@ export class BratUtils {
       relation.color = project_relation.color;
       relation.labels = project_relation.labels;
       relation.type = project_relation.type;
+      relation.args = project_relation.args;
+      relation.dashArray = project_relation.dashArray;
 
       return relation;
     });
 
+    // Events :
     annotatedDocument.events = [];
     for (let i = 0; i < docData.events.length; i++) {
       const docTrigger = docData.triggers[i];
@@ -273,6 +297,9 @@ export class BratUtils {
 
       annotatedDocument.events.push(event);
     }
+
+    console.log("Annotated Document");
+    console.log(annotatedDocument);
 
     return annotatedDocument;
   }

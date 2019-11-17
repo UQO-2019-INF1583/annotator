@@ -1,0 +1,49 @@
+<h1>Users :</h1>
+
+<!-- Annotators -->
+<h2>Annotators :</h2>
+<button
+  *ngIf="getAdmin()"
+  class="btn btn btn-primary"
+  (click)="addAnnotatorDialogBox()"
+>
+  +
+</button>
+<mat-card-content>
+  <mat-list role="list" class="card-list-project">
+    <mat-list-item class="matListItemHover" *ngFor="let item of annotators">
+      <h4 mat-line>{{ item.email }}</h4>
+      <button
+        *ngIf="isConnected && getAdmin()"
+        class="btn btn-danger"
+        (click)="deleteAnnotator(item.uid)"
+      >
+        Delete
+      </button>
+    </mat-list-item>
+  </mat-list>
+</mat-card-content>
+
+<!-- Admin -->
+<h2>Administrators :</h2>
+<button
+  *ngIf="getAdmin()"
+  class="btn btn btn-primary"
+  (click)="addAdminDialogBox()"
+>
+  +
+</button>
+<mat-card-content>
+  <mat-list role="list" class="card-list-project">
+    <mat-list-item class="matListItemHover" *ngFor="let item of admin">
+      <h4 mat-line>{{ item.email }}</h4>
+      <button
+        *ngIf="isConnected && getAdmin()"
+        class="btn btn-danger"
+        (click)="deleteAdmin(item.uid)"
+      >
+        Delete
+      </button>
+    </mat-list-item>
+  </mat-list>
+</mat-card-content>

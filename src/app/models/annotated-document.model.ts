@@ -1,6 +1,6 @@
 import { Relation } from "./relation.model";
 import { EntityAttributeTypes } from "./entityAttribute.model";
-import { Entity } from "./entity.model";
+import { EntityType } from "./entity.model";
 import { Doc } from "./document.model";
 import { Event } from "./event.model";
 import {
@@ -55,7 +55,7 @@ interface IAnnotation {
   id: id;
 }
 
-export interface EntityAnnotation extends IAnnotation, Entity {
+export interface EntityAnnotation extends IAnnotation, EntityType {
   locations: RangeTextSelection[];
 }
 
@@ -65,6 +65,7 @@ export class EntityAnnotationUtils {
       id: "",
       locations: [],
       name: "",
+      attributes: [],
       type: "",
       labels: [],
       bgColor: "",
@@ -90,7 +91,8 @@ export class AttributeAnnotationUtils {
       valueString: "",
       values: [],
       target: "",
-      bool: ""
+      bool: "",
+      entities: []
     };
   }
 }

@@ -1,15 +1,12 @@
 <!-- Title -->
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-xs-12"><h3>Attribute Types</h3></div>
-  </div>
-</div>
+<h1>Entity Attribute Types :</h1>
 
 <!-- Labels -->
 <div class="container-fluid">
   <div class="col-xs-2"><label for="new-type">Action:</label></div>
   <div class="col-xs-3"><label for="new-type">Type:</label></div>
   <div class="col-xs-3"><label for="new-type">Glyph:</label></div>
+  <div class="col-xs-3"><label for="new-type">Entity:</label></div>
 </div>
 
 <!-- Input -->
@@ -122,13 +119,100 @@
         >
       </div>
     </div>
+
+    <!-- Entity -->
+    <div class="form-group col-xs-3">
+      <div>
+        <table style="width: 100%;">
+          <!-- Defined entity -->
+          <tr
+            *ngFor="
+              let entity of newAttribute.entities;
+              let i = index;
+              trackBy: trackBy
+            "
+          >
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeEntity(newAttribute, i)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <select
+                class="form-control"
+                placeholder="ex : Person"
+                [(ngModel)]="newAttribute.entities[i]"
+                name="new entity[{{ i }}]"
+                #type="ngModel"
+                required="true"
+                (ngModelChange)="getEntitiesWithSelf(newAttribute, i)"
+              >
+                <option
+                  *ngFor="
+                    let ent of getEntitiesWithSelf(newAttribute, i);
+                    let j = index;
+                    trackBy: trackBy
+                  "
+                  value="{{ ent }}"
+                  >{{ ent }}</option
+                >
+              </select>
+            </td>
+          </tr>
+          <!-- New entity -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addEntity(newAttribute, attributeData)"
+                [disabled]="isInvalidEntity(newAttribute, attributeData)"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <select
+                class="form-control"
+                placeholder="ex : Person"
+                [(ngModel)]="attributeData.entity"
+                name="new-entity"
+                #type="ngModel"
+                required="true"
+                (ngModelChange)="getEntities(newAttribute, i)"
+              >
+                <option
+                  *ngFor="
+                    let ent of getEntities(newAttribute);
+                    let i = index;
+                    trackBy: trackBy
+                  "
+                  value="{{ ent }}"
+                  >{{ ent }}</option
+                ><option value="" disabled selected hidden>ex : Person</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+
+        <small
+          *ngIf="newAttribute.glyph == '' || newAttribute.glyph == null"
+          class="form-text text-muted text-danger"
+          >*Glyphs are obligatory</small
+        >
+      </div>
+    </div>
   </form>
 </div>
 
 <!-- List -->
 <div
   class="container-fluid"
-  *ngFor="let attribute of project.attributes; let i = index"
+  *ngFor="let attribute of project.attributes; let i = index; trackBy: trackBy"
 >
   <form class="row entity-row">
     <!-- Actions -->
@@ -235,6 +319,87 @@
           class="form-text text-muted text-danger"
           >*Glyphs is obligatory</small
         >
+      </div>
+    </div>
+
+    <!-- Entity -->
+    <div class="form-group col-xs-3">
+      <div>
+        <table style="width: 100%;">
+          <!-- Defined entity -->
+          <tr
+            *ngFor="
+              let entity of attribute.entities;
+              let j = index;
+              trackBy: trackBy
+            "
+          >
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeEntity(attribute, j)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <select
+                class="form-control"
+                placeholder="ex : Person"
+                [(ngModel)]="attribute.entities[j]"
+                name="new entity[{{ j }}]"
+                #type="ngModel"
+                required="true"
+                (ngModelChange)="getEntitiesWithSelf(attribute, j)"
+              >
+                <option
+                  *ngFor="
+                    let ent of getEntitiesWithSelf(attribute, j);
+                    let k = index;
+                    trackBy: trackBy
+                  "
+                  value="{{ ent }}"
+                  >{{ ent }}</option
+                >
+              </select>
+            </td>
+          </tr>
+          <!-- New entity -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addEntity(attribute, attributesData[i])"
+                [disabled]="isInvalidEntity(attribute, attributesData[i])"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <select
+                class="form-control"
+                placeholder="ex : Person"
+                [(ngModel)]="attributesData[i].entity"
+                name="new-entity"
+                #type="ngModel"
+                required="true"
+                (ngModelChange)="getEntities(attribute, i)"
+              >
+                <option
+                  *ngFor="
+                    let ent of getEntities(attribute);
+                    let k = index;
+                    trackBy: trackBy
+                  "
+                  value="{{ ent }}"
+                  >{{ ent }}</option
+                ><option value="" disabled selected hidden>ex : Person</option>
+              </select>
+            </td>
+          </tr>
+        </table>
       </div>
     </div>
   </form>

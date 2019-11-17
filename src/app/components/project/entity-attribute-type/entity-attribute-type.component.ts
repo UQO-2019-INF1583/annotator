@@ -16,11 +16,11 @@ import {
  *    Main :
  * ***********************************************************************************/
 @Component({
-  selector: "attribute-type",
-  templateUrl: "./attribute-type.component.html",
-  styleUrls: ["./attribute-type.component.scss"]
+  selector: "entity-attribute-type",
+  templateUrl: "./entity-attribute-type.component.html",
+  styleUrls: ["./entity-attribute-type.component.scss"]
 })
-export class AttributeTypeComponent implements OnInit {
+export class EntityAttributeTypeComponent implements OnInit {
   /**************************************************************************************
    *    Variables :
    * ***********************************************************************************/
@@ -38,7 +38,9 @@ export class AttributeTypeComponent implements OnInit {
   attributeData: AttributeData = {
     error: true,
     message: "*Warning!",
-    glyph: ""
+    glyph: "",
+    entity: "",
+    oldName: ""
   };
   attributesData: AttributeData[] = [];
 
@@ -63,7 +65,9 @@ export class AttributeTypeComponent implements OnInit {
             this.attributesData.push({
               error: true,
               message: "*Warning!",
-              glyph: ""
+              glyph: "",
+              entity: "",
+              oldName: this.project.attributes[i].type
             });
           }
         });
@@ -84,17 +88,29 @@ export class AttributeTypeComponent implements OnInit {
       this.project.attributes.push(JSON.parse(
         JSON.stringify(this.newAttribute)
       ) as EntityAttributeTypes);
-      this.ps.saveProject(this.project);
 
-      // Reset entityData
-      this.attributeData = { error: true, message: "*Warning!", glyph: "" };
+      // Add Entities
+      this.addAttributeToProject(this.newAttribute, this.attributeData.oldName);
+
+      this.ps.saveProject(this.project);
 
       // Add new entitiesData
       this.attributesData.push({
         error: true,
         message: "*Warning!",
-        glyph: ""
+        glyph: "",
+        entity: "",
+        oldName: this.newAttribute.type
       });
+
+      // Reset entityData
+      this.attributeData = {
+        error: true,
+        message: "*Warning!",
+        glyph: "",
+        entity: "",
+        oldName: ""
+      };
     });
   }
 
@@ -107,18 +123,107 @@ export class AttributeTypeComponent implements OnInit {
           this.project.attributes[i].bool = this.project.attributes[i].type;
         }
       }
+
+      // Remove Entities
+      this.removeAttributeToProject(this.project.attributes[index], index);
+
+      // Add Entities
+      this.addAttributeToProject(
+        this.project.attributes[index],
+        this.attributesData[index].oldName
+      );
+
+      this.attributesData[index].oldName = this.project.attributes[index].type;
+
       this.ps.saveProject(this.project);
     });
   }
 
   remove(index: number) {
+    // Remove Entities
+    this.removeAllAttributeToProject(this.project.attributes[index], index);
+
     if (
       this.project.attributes.length >= 0 ||
       index < this.project.attributes.length
     ) {
       this.project.attributes.splice(index, 1);
+      this.attributesData.splice(index, 1);
     }
+
     this.ps.saveProject(this.project);
+  }
+
+  addAttributeToProject(
+    attribute: EntityAttributeTypes,
+    oldName: string
+  ): void {
+    for (let i = 0; i < attribute.entities.length; i++) {
+      for (let j = 0; j < this.project.entities.length; j++) {
+        if (attribute.entities[i] === this.project.entities[j].type) {
+          let check: boolean = true;
+          for (
+            let k = this.project.entities[j].attributes.length - 1;
+            k >= 0;
+            k--
+          ) {
+            if (oldName === this.project.entities[j].attributes[k]) {
+              this.project.entities[j].attributes.splice(k, 1);
+              continue;
+            }
+            if (attribute.type === this.project.entities[j].attributes[k])
+              check = false;
+          }
+          if (check) this.project.entities[j].attributes.push(attribute.type);
+        }
+      }
+    }
+  }
+
+  removeAttributeToProject(
+    attribute: EntityAttributeTypes,
+    index: number
+  ): void {
+    let entities: string[] = [];
+    for (let i = 0; i < this.project.entities.length; i++)
+      if (!attribute.entities.includes(this.project.entities[i].type))
+        entities.push(this.project.entities[i].type);
+
+    for (let i = 0; i < entities.length; i++) {
+      for (let j = 0; j < this.project.entities.length; j++) {
+        if (entities[i] === this.project.entities[j].type) {
+          let check: number = -1;
+          for (let k = 0; k < this.project.entities[j].attributes.length; k++) {
+            if (
+              this.attributesData[index].oldName ===
+              this.project.entities[j].attributes[k]
+            ) {
+              this.project.entities[j].attributes.splice(k, 1);
+              continue;
+            }
+            if (
+              this.attributesData[index] ===
+              this.project.entities[j].attributes[k]
+            )
+              check = k;
+          }
+          if (check >= 0) this.project.entities[j].attributes.splice(check, 1);
+        }
+      }
+    }
+  }
+
+  removeAllAttributeToProject(
+    attribute: EntityAttributeTypes,
+    index: number
+  ): void {
+    for (let j = 0; j < this.project.entities.length; j++)
+      for (let k = this.project.entities[j].attributes.length - 1; k >= 0; k--)
+        if (
+          this.attributesData[index].oldName ===
+          this.project.entities[j].attributes[k]
+        )
+          this.project.entities[j].attributes.splice(k, 1);
   }
 
   reset() {
@@ -128,11 +233,13 @@ export class AttributeTypeComponent implements OnInit {
       .subscribe(data => {
         this.project = data;
         this.attributesData = [];
-        for (let i = 0; i < this.project.entities.length; i++) {
+        for (let i = 0; i < this.project.attributes.length; i++) {
           this.attributesData.push({
             error: true,
             message: "*Warning!",
-            glyph: ""
+            glyph: "",
+            entity: "",
+            oldName: this.project.attributes[i].type
           });
         }
       });
@@ -148,6 +255,50 @@ export class AttributeTypeComponent implements OnInit {
 
   removeGlyph(attribute: EntityAttributeTypes, index: number): void {
     attribute.values.splice(index, 1);
+  }
+
+  getEntities(attribute: EntityAttributeTypes) {
+    let entities: string[] = [];
+
+    for (let i = 0; i < this.project.entities.length; i++)
+      if (!attribute.entities.includes(this.project.entities[i].type))
+        entities.push(this.project.entities[i].type);
+
+    return entities;
+  }
+
+  getEntitiesWithSelf(attribute: EntityAttributeTypes, index: number) {
+    let entities: string[] = [];
+
+    for (let i = 0; i < this.project.entities.length; i++)
+      if (!attribute.entities.includes(this.project.entities[i].type))
+        entities.push(this.project.entities[i].type);
+
+    entities.push(attribute.entities[index]);
+    return entities;
+  }
+
+  isInvalidEntity(
+    attribute: EntityAttributeTypes,
+    data: AttributeData
+  ): boolean {
+    let entities: string[] = [];
+
+    for (let i = 0; i < this.project.entities.length; i++)
+      if (!attribute.entities.includes(this.project.entities[i].type))
+        entities.push(this.project.entities[i].type);
+
+    if (!entities.includes(data.entity)) return true;
+    else return false;
+  }
+
+  addEntity(attribute: EntityAttributeTypes, data: AttributeData): void {
+    attribute.entities.push(data.entity);
+    data.entity = "";
+  }
+
+  removeEntity(attribute: EntityAttributeTypes, index: number): void {
+    attribute.entities.splice(index, 1);
   }
 
   trackBy(index, label) {
@@ -189,6 +340,9 @@ export class AttributeTypeComponent implements OnInit {
           return true;
         }
       }
+    } else if (attribute.entities.length == 0 || attribute.entities == null) {
+      data.message = "*Invalid Entities";
+      return true;
     }
 
     // Check for duplicates except for itself
@@ -217,7 +371,9 @@ export class AttributeTypeComponent implements OnInit {
 }
 
 export interface AttributeData {
+  oldName: string;
   error: boolean;
   message: string;
   glyph: string;
+  entity: string;
 }

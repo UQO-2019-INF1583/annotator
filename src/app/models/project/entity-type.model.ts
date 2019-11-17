@@ -7,6 +7,7 @@ export class EntityType {
   bgColor: string;
   borderColor: string;
   unused: boolean;
+  attributes: string[];
   arcs: Arc[];
   children: EntityType[];
 
@@ -18,7 +19,8 @@ export class EntityType {
     borderColor: string = "",
     unused: boolean = false,
     arcs: Arc[] = [],
-    children: EntityType[] = []
+    children: EntityType[] = [],
+    attributes: string[] = []
   ) {
     this.name = name;
     this.type = type;
@@ -28,5 +30,6 @@ export class EntityType {
     this.children = children;
     this.unused = unused;
     this.borderColor = borderColor;
+    this.attributes = attributes;
   }
 }

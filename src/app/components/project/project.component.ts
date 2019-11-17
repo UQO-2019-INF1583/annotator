@@ -36,7 +36,7 @@ import { Project, ProjectUtils } from "../../models/project.model";
 import { Relation } from "../../models/relation.model";
 import { User } from "./../../models/user.model";
 import { ProjectState, StateEnum } from "../../models/state.model";
-import { Entity } from "../../models/entity.model"; // to delete
+import { EntityType } from "../../models/entity.model"; // to delete
 //import { EntityType } from "../../models";
 
 /**************************************************************************************
@@ -178,12 +178,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }
     });
 
-    dialogRef.afterClosed().subscribe((result: Entity) => {
+    dialogRef.afterClosed().subscribe((result: EntityType) => {
       this.addEntitiesAfterClosedHandler(result);
     });
   }
 
-  addEntitiesAfterClosedHandler(result: Entity) {
+  addEntitiesAfterClosedHandler(result: EntityType) {
     let entityExists = false;
     if (result !== undefined) {
       if (
@@ -216,7 +216,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
   }
 
-  editEntity(entityType: Entity, index: number) {
+  editEntity(entityType: EntityType, index: number) {
     const dialogRef = this.dialog.open(AddEntityComponent, {
       data: {
         type: entityType.type,
@@ -226,7 +226,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }
     });
 
-    dialogRef.afterClosed().subscribe((result: Entity) => {
+    dialogRef.afterClosed().subscribe((result: EntityType) => {
       this.currentProject.entities.splice(index, 1);
       this.addEntitiesAfterClosedHandler(result);
     });

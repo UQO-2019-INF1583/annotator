@@ -1,14 +1,15 @@
 import { Arc } from "./arc.model";
 
-export class Entity {
+export class EntityType {
   name: string;
   type: string;
   labels: string[];
   bgColor: string;
   borderColor: string;
   unused: boolean;
+  attributes: string[];
   arcs: Arc[];
-  children: Entity[];
+  children: EntityType[];
 
   constructor(
     name: string = "",
@@ -18,7 +19,8 @@ export class Entity {
     borderColor: string = "",
     unused: boolean = false,
     arcs: Arc[] = [],
-    children: Entity[] = []
+    children: EntityType[] = [],
+    attributes: string[] = []
   ) {
     this.name = name;
     this.type = type;
@@ -28,5 +30,6 @@ export class Entity {
     this.children = children;
     this.unused = unused;
     this.borderColor = borderColor;
+    this.attributes = attributes;
   }
 }

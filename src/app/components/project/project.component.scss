@@ -36,8 +36,6 @@ main {
 }
 
 .example-fill-remaining-space {
-  /* This fills the remaining space, by using flexbox.
-     Every toolbar row uses a flexbox row layout. */
   flex: 1 1 auto;
 }
 
@@ -57,10 +55,15 @@ main {
   }
 }
 
-/* Fix for the alignment of Description textarea title */
 textarea[name="description"] {
   vertical-align: top;
   resize: both;
+}
+
+@media (max-width: 1200px) {
+  .col-xs-4 {
+    width: 100%;
+  }
 }
 
 @media (max-width: 767px) {
@@ -73,6 +76,7 @@ textarea[name="description"] {
   }
 }
 
+/*
 .btn-secondary {
   color: #fff;
   background-color: #6c757d;
@@ -1038,3 +1042,4 @@ tbody.collapse.in {
   clip: rect(0, 0, 0, 0);
   pointer-events: none;
 }
+*/

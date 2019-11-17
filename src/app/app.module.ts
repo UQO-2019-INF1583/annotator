@@ -101,9 +101,12 @@ import {
   AddRelationComponent,
   YesNoDialogBoxComponent,
   EntityTypeComponent,
-  AttributeTypeComponent,
+  EntityAttributeTypeComponent,
   RelationTypeComponent,
-  EventTypeComponent
+  EventTypeComponent,
+  ProjectInformationComponent,
+  CorpusComponent,
+  AnnotatorsComponent
 } from "./components/project";
 
 import { CreateProjectComponent } from "./components/projectManager";
@@ -139,9 +142,12 @@ import { EditUserComponent } from "./components/userManager";
     ResetPasswordComponent,
     EditUserComponent,
     EntityTypeComponent,
-    AttributeTypeComponent,
+    EntityAttributeTypeComponent,
     RelationTypeComponent,
-    EventTypeComponent
+    EventTypeComponent,
+    ProjectInformationComponent,
+    CorpusComponent,
+    AnnotatorsComponent
   ],
   entryComponents: [
     AddAdminComponent,

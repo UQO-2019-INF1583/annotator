@@ -124,8 +124,8 @@ describe('RegisterComponent', () => {
     });
 
     it('should verify that there are 5 divs IN the input form', () => {
-        let divs = document.querySelectorAll('form  div').length;
-        let condition = (divs == 5);
+        const divs = document.querySelectorAll('form  div').length;
+        const condition = (divs === 5);
         expect(condition).toBe(true);
     });
 

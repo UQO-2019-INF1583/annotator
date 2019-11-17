@@ -115,7 +115,7 @@ describe('RegisterComponent', () => {
         expect(comp).toBeTruthy();
     });
 
-    it('should have H2 title tag \'Register\'', () => {
+    it('should have H2 title tag "Register"', () => {
         expect(de.query(By.css('h2')).nativeElement.innerText).toBe('Register');
     });
 

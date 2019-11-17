@@ -27,6 +27,7 @@ import {
 import { switchMap } from "rxjs/operators";
 
 import { Role, User } from "../user.model";
+import { Project } from "../project.model";
 
 @Injectable()
 export class AuthService {
@@ -77,7 +78,7 @@ export class AuthService {
           );
           resolve();
         })
-        .catch(function(error: Error) {
+        .catch(function (error: Error) {
           reject(error);
         });
     });
@@ -169,12 +170,20 @@ export class AuthService {
   }
 
   signOut() {
-    this.afAuth.auth.signOut().then(() => {});
+    this.afAuth.auth.signOut().then(() => { });
     localStorage.removeItem("currentUser");
   }
 
   isConnected(): boolean {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     return currentUser != null;
+  }
+
+  isAdmin(project: Project) {
+    return (project.admin.indexOf(this.currentUserId) === -1) ? false : true;
+  }
+
+  isAnnotator(project: Project) {
+    return (project.annotators.indexOf(this.currentUserId) === -1) ? false : true;
   }
 }

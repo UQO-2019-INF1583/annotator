@@ -129,6 +129,21 @@ describe('RegisterComponent', () => {
         expect(condition).toBe(true);
     });
 
+    describe('Minimun one button to save user registration should be one the page ', () => {
+        it('should have a minimun of one button on the page  and it should be <Register>', () => {
+            const buttons = fixture.debugElement
+                .queryAll(By.css('button'));
+            expect(buttons.length >= 1).toBeTruthy();
+        })
+        it('The page should contain one "Register" button', () => {
+            const buttons = fixture.debugElement
+                .queryAll(By.css('button'));
+            const nativeButton: HTMLButtonElement = buttons[0].nativeElement;
+            expect(nativeButton.textContent).toBe('Register');
+        });
+    });
+
+
     describe('emailInvalid()', () => {
         it('should return true if error message is not empty', () => {
             comp.errorMessage = 'test message';

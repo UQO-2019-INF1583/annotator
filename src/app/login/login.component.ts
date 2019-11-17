@@ -21,6 +21,10 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem("errorAuth");
   }
 
+  needsLogin() {
+    return !this.authService.isAuthenticated();
+  }
+
   private handleError(error: Error): void {
     this.loading = false;
     this.errorMessage = error.message;
@@ -93,7 +97,7 @@ export class LoginComponent implements OnInit {
 
   signInWithTwitterLogin() {
     this.authService.twitterLogin()
-     .then((data) => this.afterSignIn());
+      .then((data) => this.afterSignIn());
   }
 
   /// Shared

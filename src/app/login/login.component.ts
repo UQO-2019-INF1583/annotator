@@ -21,6 +21,10 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem("errorAuth");
   }
 
+needsLogin() {
+    return !this.authService.isAuthenticated();
+  }
+  
   private handleError(error: Error): void {
     this.loading = false;
     this.errorMessage = error.message;

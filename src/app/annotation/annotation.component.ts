@@ -168,7 +168,6 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     } else {
       this.isAdmin = false;
     }
-
     return false;
   }
 
@@ -190,7 +189,6 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     let eventsN = 1;
     let attributesN = 1;
 
-
     // Place tout les entities, relation, event et attributes dans un nouveau document
     // tslint:disable-next-line: forin
     for (const docKey in annotatedDocuments) {
@@ -205,7 +203,6 @@ export class AnnotationComponent implements OnInit, OnDestroy {
         for (const entry of mergedDocument.relations) { entry.id = 'N' + relationsN++; }
         for (const entry of mergedDocument.events) { entry.id = 'N' + eventsN++; }
         for (const entry of mergedDocument.attributes) { entry.id = 'N' + attributesN++; }
-
       } // end if
     } // end for
 

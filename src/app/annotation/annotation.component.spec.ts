@@ -1,6 +1,16 @@
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  TestBed,
+  inject
+} from '@angular/core/testing';
 import { AnnotationComponent } from './annotation.component';
-import { MatCardModule, MatSelectModule, MatToolbarModule } from '@angular/material';
+import {
+  MatCardModule,
+  MatSelectModule,
+  MatToolbarModule
+} from '@angular/material';
+import * as sinon from 'sinon';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -9,19 +19,25 @@ import { ProjectService } from '../components/project/project.service';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 import { environment } from '../../environments/environment';
 import { FirebaseApp, AngularFireModule } from '@angular/fire';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController
+} from '@angular/common/http/testing';
 import { HttpClient } from '@angular/common/http';
 import { AnnotationService } from './annotation.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { annotationDocument, document } from './annotation.service.MOCKDATA';
+import * as firebase from 'firebase';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 let AngularFirestoreStub: Partial<AngularFirestore>;
 let AngularFireStorageStub: Partial<AngularFireStorage>;
 let AuthServiceStub: Partial<AuthService>;
 let ProjectServiceStub: Partial<ProjectService>;
 let AnnotationServiceStub: Partial<AnnotationService>;
-
 
 /*
 Prochaines étapes: Doit créer les stubs pour mocker les interactions entre le component et ses services injectés
@@ -37,25 +53,22 @@ describe('AnnotationComponent', () => {
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
   let app: FirebaseApp;
-
-
+  let auth;
   beforeEach(async(() => {
+    AngularFirestoreStub = {};
 
-    AngularFirestoreStub = {
-    };
-
-    AngularFireStorageStub = {
-    };
+    AngularFireStorageStub = {};
 
     AuthServiceStub = {
-      isConnected: function () { return true; },
+      _userId: '1222',
+      isConnected: function () {
+        return true;
+      }
     };
 
-    ProjectServiceStub = {
-    };
+    ProjectServiceStub = {};
 
-    AnnotationServiceStub = {
-    };
+    AnnotationServiceStub = {};
 
     TestBed.configureTestingModule({
       declarations: [AnnotationComponent],
@@ -68,20 +81,20 @@ describe('AnnotationComponent', () => {
         MatToolbarModule,
         AngularFireModule,
         HttpClientTestingModule,
-        AngularFireModule.initializeApp(environment.firebase),
+        AngularFireModule.initializeApp(environment.firebase)
       ],
       providers: [
         { provide: AngularFirestore, useValue: AngularFirestoreStub },
         { provide: AngularFireStorage, useValue: AngularFireStorageStub },
         { provide: AuthService, useValue: AuthServiceStub },
         { provide: ProjectService, useValue: ProjectServiceStub },
-        { provide: AnnotationService, useValue: AnnotationServiceStub }]
-    })
-      .compileComponents();
+        { provide: AnnotationService, useValue: AnnotationServiceStub }
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
-    inject([FirebaseApp], (_app: FirebaseApp) => {
+    inject([firebase], (_app: FirebaseApp) => {
       app = _app;
     })();
     fixture = TestBed.createComponent(AnnotationComponent);
@@ -98,12 +111,13 @@ describe('AnnotationComponent', () => {
     expect(component).toBeDefined();
   });
 
-  it('should verify the users information', () => {
+  xit('should verify the users information', () => {
     expect(component.getUserInfo).toBeTruthy();
-  })
-  it('should verify the call of the alert', () => {
+  });
+
+  xit('should verify the call of the alert', () => {
     expect(component.LoadMergedDocument).toBeDefined();
-  })
+  });
 
   xit('check if brat div exist in dom', () => {
     expect(debugComponent.query(By.css('#brat'))).toBeTruthy();
@@ -113,11 +127,52 @@ describe('AnnotationComponent', () => {
     expect(component.getBrat).toBeTruthy();
   });
 
-  // TODO Corriger l'application ou le test : cause un timeout - ne fait pas partie des tests remis lors de l'itération 1
+
   xit('should have a paragraph in a p tag if user is connected', async(() => {
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
     component.isConnected = true;
-    expect(compiled.querySelector('p').textContent).toContain('To add an annotation, highlight the text and choose the category.');
+    expect(compiled.querySelector('p').textContent).toContain(
+      'To add an annotation, highlight the text and choose the category.'
+    );
   }));
+
+
+  xit('should have mergeAll', async(() => {
+    const firebaseMock = TestBed.get(AngularFirestore);
+    // firebaseMock = sinon.stub({firebase: sinon.stub.return(auth: return .currentUser.uid});
+    let afAuth, afs, router;
+    let auth = new AuthService(afAuth, afs);
+    const annotationService = new AnnotationService(firebaseMock, auth);
+    component.currentDoc = document;
+
+    // annotationService.getAllAnnotatedDocumentsForCorpus = () =>
+    //   of(annotationDocument);
+
+    annotationService.getAllAnnotatedDocumentsForCorpus = sinon.stub(() => {
+      return annotationDocument;
+    });
+    annotationService.saveMergedAnnotatedDocument = sinon.stub(() => {
+      return {};
+    });
+
+    component.mergeAll();
+  }));
+
+  xit('should be getUserInfo administrator', () => {
+    const firebaseMock = TestBed.get(AngularFirestore);
+
+    const afAuth = TestBed.get(AngularFireAuth);
+    const afs = TestBed.get(AngularFirestore);
+    const router = TestBed.get(Router);
+
+    let auth = new AuthService(afAuth, afs);
+    const annotationService = new AnnotationService(firebaseMock, auth);
+    const data = sinon.stub(() => {
+      role: 2;
+    });
+    annotationService.getUserInfo = sinon.stub.returns(data);
+
+    expect(component.isAdmin).toEqual(true);
+  });
 });

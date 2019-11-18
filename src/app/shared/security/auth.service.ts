@@ -10,23 +10,22 @@
 // Secret​ ​:​ la correspondance entre l’identifant de l’utilisateur et du token
 // validant son authentification.
 
-import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
-import * as firebase from 'firebase';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/delay';
+import { Injectable } from "@angular/core";
+import { AngularFireDatabase } from "@angular/fire/database";
+import { AngularFireAuth } from "@angular/fire/auth";
+import * as firebase from "firebase";
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/observable/of";
+import "rxjs/add/operator/do";
+import "rxjs/add/operator/delay";
 import {
   AngularFirestore,
   AngularFirestoreDocument,
   AngularFirestoreCollection
-} from '@angular/fire/firestore';
-import { switchMap } from 'rxjs/operators';
+} from "@angular/fire/firestore";
+import { switchMap } from "rxjs/operators";
 
-import { Role, User } from '../user.model';
+import { Role, User } from "../user.model";
 
 @Injectable()
 export class AuthService {
@@ -34,23 +33,21 @@ export class AuthService {
   authState: any = null;
   currentUser: string = null;
   email: string;
-  private UserCollection: AngularFirestoreCollection<User>;
+  // private UserCollection: AngularFirestoreCollection<User>;
 
-  constructor(
-    private afAuth: AngularFireAuth,
-    private afs: AngularFirestore,
-    private router: Router
-  ) {
+  constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
     //// Get auth data, then get firestore user document || null
-    this.user = this.afAuth.authState.pipe(switchMap(user => {
-      if (user) {
-        return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
-      } else {
-        return Observable.of(null);
-      }
-    }));
-    this.afAuth.authState.subscribe((auth) => {
-      this.authState = auth
+    this.user = this.afAuth.authState.pipe(
+      switchMap(user => {
+        if (user) {
+          return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+        } else {
+          return Observable.of(null);
+        }
+      })
+    );
+    this.afAuth.authState.subscribe(auth => {
+      this.authState = auth;
     });
   }
 
@@ -61,7 +58,11 @@ export class AuthService {
 
   // Returns current user UID
   get currentUserId(): string {
-    return this.authenticated ? this.authState.uid : '';
+    return this.authenticated ? this.authState.uid : "";
+  }
+
+  get _userId(): string {
+    return firebase.auth().currentUser.uid;
   }
 
   signIn(email, password): Promise<any> {
@@ -70,7 +71,7 @@ export class AuthService {
         .signInWithEmailAndPassword(email, password)
         .then(credentials => {
           localStorage.setItem(
-            'currentUser',
+            "currentUser",
             JSON.stringify(credentials.user.displayName)
           );
           resolve();
@@ -84,12 +85,12 @@ export class AuthService {
   logout(): void {
     this.afAuth.auth.signOut();
     // clear token remove user from local storage to log user out
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem("currentUser");
   }
 
   resetPassword(email: string) {
     var auth = firebase.auth();
-    return auth.sendPasswordResetEmail(email)
+    return auth.sendPasswordResetEmail(email);
   }
 
   getUser() {
@@ -123,23 +124,23 @@ export class AuthService {
         .then(result => {
           this.email = result.user.email;
           this.afs
-            .collection('Users')
-            .ref.where('email', '==', this.email)
+            .collection("Users")
+            .ref.where("email", "==", this.email)
             .get()
             .then(snapshot => {
               if (snapshot.size === 0) {
-                this.afs.collection('Users').ref.add({
+                this.afs.collection("Users").ref.add({
                   id: firebase.auth().currentUser.uid,
                   email: this.email,
-                  firstname: '?',
-                  lastname: '?'
+                  firstname: "?",
+                  lastname: "?"
                 });
               }
             });
 
           // let userContent: Array<Object> = [this.username,this.email];
           localStorage.setItem(
-            'currentUser',
+            "currentUser",
             JSON.stringify(result.user.displayName)
           );
           resolve();
@@ -152,12 +153,14 @@ export class AuthService {
 
   private updateUserData(user) {
     // Sets user data to firestore on login
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+      `users/${user.uid}`
+    );
     const data: User = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
-      password: '',
+      password: "",
       role: Role.Visitor
       // lastname:"???"
     };
@@ -166,11 +169,11 @@ export class AuthService {
 
   signOut() {
     this.afAuth.auth.signOut().then(() => {});
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem("currentUser");
   }
 
   isConnected(): boolean {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     return currentUser != null;
   }
 }

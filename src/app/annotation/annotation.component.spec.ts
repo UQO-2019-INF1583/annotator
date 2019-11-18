@@ -98,6 +98,13 @@ describe('AnnotationComponent', () => {
     expect(component).toBeDefined();
   });
 
+  it('should verify the users information', () => {
+    expect(component.getUserInfo).toBeTruthy();
+  })
+  it('should verify the call of the alert', () => {
+    expect(component.LoadMergedDocument).toBeDefined();
+  })
+
   xit('check if brat div exist in dom', () => {
     expect(debugComponent.query(By.css('#brat'))).toBeTruthy();
   });

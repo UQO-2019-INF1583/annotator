@@ -186,8 +186,4 @@ export class AuthService {
   isAnnotator(project: Project) {
     return (project.annotators.indexOf(this.currentUserId) === -1) ? false : true;
   }
-
-  isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
-  }
 }

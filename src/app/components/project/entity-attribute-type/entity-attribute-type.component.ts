@@ -202,7 +202,7 @@ export class EntityAttributeTypeComponent implements OnInit {
               continue;
             }
             if (
-              this.attributesData[index] ===
+              this.attributesData[index].oldName ===
               this.project.entities[j].attributes[k]
             )
               check = k;

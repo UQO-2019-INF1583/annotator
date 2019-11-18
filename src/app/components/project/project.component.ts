@@ -26,7 +26,6 @@ import { YesNoDialogBoxComponent } from "./yes-no-dialog-box/yes-no-dialog-box.c
 
 // Sub Components :
 
-
 // Services
 import { ProjectService } from "../../services/project/project.service";
 
@@ -36,7 +35,7 @@ import { Project, ProjectUtils } from "../../models/project.model";
 import { Relation } from "../../models/relation.model";
 import { User } from "./../../models/user.model";
 import { ProjectState, StateEnum } from "../../models/state.model";
-import { EntityType } from "../../models/entity.model"; // to delete
+import { Entity } from "../../models/entity.model"; // to delete
 //import { EntityType } from "../../models";
 
 /**************************************************************************************
@@ -178,12 +177,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }
     });
 
-    dialogRef.afterClosed().subscribe((result: EntityType) => {
+    dialogRef.afterClosed().subscribe((result: Entity) => {
       this.addEntitiesAfterClosedHandler(result);
     });
   }
 
-  addEntitiesAfterClosedHandler(result: EntityType) {
+  addEntitiesAfterClosedHandler(result: Entity) {
     let entityExists = false;
     if (result !== undefined) {
       if (
@@ -216,7 +215,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
   }
 
-  editEntity(entityType: EntityType, index: number) {
+  editEntity(entityType: Entity, index: number) {
     const dialogRef = this.dialog.open(AddEntityComponent, {
       data: {
         type: entityType.type,
@@ -226,7 +225,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }
     });
 
-    dialogRef.afterClosed().subscribe((result: EntityType) => {
+    dialogRef.afterClosed().subscribe((result: Entity) => {
       this.currentProject.entities.splice(index, 1);
       this.addEntitiesAfterClosedHandler(result);
     });

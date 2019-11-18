@@ -1,20 +1,23 @@
-export const ENTITIES: any[] = [
-  {
-    type: "Person",
-    labels: ["Person", "Per"],
-    bgColor: "#ff0000",
-    borderColor: "#ff0000"
-  },
-  {
-    type: "Person1",
-    labels: ["Person1", "Per1"],
-    bgColor: "#ffff00",
-    borderColor: "#ff0000"
-  },
-  {
-    type: "Person2",
-    labels: ["Person2", "Per2"],
-    bgColor: "#fff0f0",
-    borderColor: "#ff0000"
-  }
-];
+import { Entity } from "../../../models/entity.model";
+
+// data mocks
+export const entiteMock = {
+  valid1: {
+    name: "Test",
+    type: "Test",
+    bgColor: "#F44336",
+    labels: ["Test"]
+  } as Entity,
+  valid2: {
+    name: "Test",
+    type: "Test",
+    bgColor: "#2196F3",
+    labels: ["Test"]
+  } as Entity,
+  valid3: {
+    name: "Test3",
+    type: "Test3",
+    bgColor: "#F44336",
+    labels: ["Test3"]
+  } as Entity
+};

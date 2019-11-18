@@ -289,12 +289,12 @@ export class RelationTypeComponent implements OnInit {
           this.relationsData[index].targets[0] ===
           this.project.entities[j].arcs[k].targets[0]
         )
-          this.project.entities[j].arcs[k].splice(k, 1);
+          this.project.entities[j].arcs.splice(k, 1);
         else if (
           this.relationsData[index].targets[1] ===
           this.project.entities[j].arcs[k].targets[0]
         )
-          this.project.entities[j].arcs[k].splice(k, 1);
+          this.project.entities[j].arcs.splice(k, 1);
       }
     }
   }

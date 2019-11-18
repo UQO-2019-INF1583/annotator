@@ -33,18 +33,20 @@ export class AnnotationService {
 
 
   // Sauvgarde de l'annotatedDocument
-  saveAnnotatedDocument(
-    annotatedDocument: AnnotatedDocument,
-    suffix: string = ''
-  ): void {
+  saveAnnotatedDocument(annotatedDocument: AnnotatedDocument, suffix: string = ''): boolean  {
     // On initie le chmapps le userID s'il n'ete pas deja fait
     annotatedDocument.userId = this.currentUserId;
 
     // On enregistre le AnnotatedDocument dans la base de donnee
     const Adoc = this.afs.collection('AnnotatedDocument');
-    Adoc.doc(annotatedDocument.documentId + this.currentUserId + suffix).set(
-      annotatedDocument
-    );
+    // Adoc.doc(annotatedDocument.documentId + this.currentUserId + suffix).set(annotatedDocument);
+
+    Adoc.doc(annotatedDocument.documentId + this.currentUserId + suffix).set(annotatedDocument).then(function () {
+      return true;
+    }).catch(function (error) {
+      return false;
+    });
+    return true;
   }
 
   // Sauvgarde de l'annotatedDocument fussione

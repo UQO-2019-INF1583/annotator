@@ -142,18 +142,22 @@ export class AnnotationComponent implements OnInit, OnDestroy {
 
 
   // Fonction pour sauvgarder le AnnotatedDocument dans la BD.  Si le document est une copie fusionne alors on affiche une message d'erreur.
-  saveTextModification() {
-    console.log(this.annotatedDocument.projectId);
-    if (this.annotatedDocument.etatDocument === 2) {
-      alert('Vous ne pouvez pas ajouter des annotations dans la version fussioné du document');
-    } else {
+  saveTextModification(): boolean {
+      if (this.annotatedDocument.etatDocument === 2) {
+        alert('Vous ne pouvez pas ajouter des annotations dans la version fussioné du document');
+      } else {
       const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
         this.brat.docData,
         this.project,
         AnnotatedDocumentUtils.initialiseAnnotatedDocument(this.currentDoc)
       );
-      this.as.saveAnnotatedDocument(aDoc);
-      alert('Annotation enregistrée');
+      if (this.as.saveAnnotatedDocument(aDoc) === true) {
+        alert('Data Saved');
+        return true;
+      } else {
+        alert('Fail');
+        return false;
+      }
     }
   }
 

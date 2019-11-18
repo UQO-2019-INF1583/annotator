@@ -52,4 +52,9 @@ describe('Annotation', () => {
     //test pour sauvegarder un document annoté dans la base de données
     // expect()
   })
+  it('should save a merged annotated document to the db', () => {
+    //mock annotated document(s)
+    //appeler la fonction saveannotateddocument
+    //vérifier si le nom du document contient le _MERGED
+  })
 });

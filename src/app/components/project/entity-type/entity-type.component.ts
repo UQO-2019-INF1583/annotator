@@ -7,7 +7,7 @@ import { AuthService } from "../../../tools/security/auth.service";
 
 import { Project, ProjectUtils } from "../../../models/project.model";
 import { ProjectService } from "../../../services/project/project.service";
-import { EntityType } from "../../../models/project/";
+import { Entity } from "../../../models/entity.model";
 
 /**************************************************************************************
  *    Main :
@@ -30,7 +30,7 @@ export class EntityTypeComponent implements OnInit {
   isConnected: boolean;
 
   // Create New Entity
-  newEntity: EntityType = new EntityType();
+  newEntity: Entity = new Entity();
   newLabel: String = "";
   entityData: EntityData = {
     error: true,
@@ -81,7 +81,7 @@ export class EntityTypeComponent implements OnInit {
       // Save Project
       this.project.entities.push(JSON.parse(
         JSON.stringify(this.newEntity)
-      ) as EntityType);
+      ) as Entity);
       this.ps.saveProject(this.project);
 
       // Reset entityData
@@ -141,12 +141,12 @@ export class EntityTypeComponent implements OnInit {
       });
   }
 
-  addLabel(entity: EntityType, data: EntityData): void {
+  addLabel(entity: Entity, data: EntityData): void {
     entity.labels.push(data.label);
     data.label = "";
   }
 
-  removeLabel(entity: EntityType, index: number): void {
+  removeLabel(entity: Entity, index: number): void {
     entity.labels.splice(index, 1);
   }
 
@@ -166,7 +166,7 @@ export class EntityTypeComponent implements OnInit {
     }
   }
 
-  isRelated(entity: EntityType, data: EntityData): boolean {
+  isRelated(entity: Entity, data: EntityData): boolean {
     // check if the entity is used by a relation
     for (let i = 0; i < this.project.relations.length; i++) {
       for (let j = 0; j < this.project.relations[i].args.length; j++) {
@@ -184,7 +184,7 @@ export class EntityTypeComponent implements OnInit {
     return false;
   }
 
-  isValid(entity: EntityType, data: EntityData, index: number): boolean {
+  isValid(entity: Entity, data: EntityData, index: number): boolean {
     // Check if every entry is valid
     data.error = true;
     if (entity.type === "" || entity.type === null) {

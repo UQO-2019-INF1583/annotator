@@ -1,202 +1,214 @@
+/**************************************************************************************
+ *    Imports :
+ * ***********************************************************************************/
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
+import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { BrowserDynamicTestingModule } from "@angular/platform-browser-dynamic/testing";
 
-import { TestBed, async } from "@angular/core/testing";
+import { TestBed, async, inject } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { EntityTypeComponent } from "./entity-type.component";
-import { entiteMock } from "./entity-type.mock-data";
+import { EntityTypeComponent, EntityData } from "./entity-type.component";
+import { EntityTypesMock } from "./entity-type.mock";
+import { Project, ProjectUtils } from "../../../models/project.model";
+import { Entity } from "../../../models/entity.model";
 
-/*
-describe("AppComponent", () => {
+import { AuthService } from "../../../tools/security/auth.service";
+import { ProjectService } from "../../../services/project/project.service";
+import { AngularFirestore } from "@angular/fire/firestore";
+
+import {
+  projectMocks,
+  relationMock,
+  attributMock,
+  eventMock,
+  adminMock,
+  annotatorMock,
+  MatDialogMock
+} from "./../project.component.mock";
+import { Observable } from "rxjs";
+
+/**************************************************************************************
+ *    Mock Project Service :
+ * ***********************************************************************************/
+const projectServiceMock: Partial<ProjectService> = {
+  getProject: (id: string) => {
+    return new Promise(resolve => {
+      resolve(EntityTypesMock.validProject);
+    });
+  },
+
+  saveProject: () => {
+    return new Promise(resolve => {
+      resolve(EntityTypesMock.validProject);
+    });
+  }
+};
+
+/**************************************************************************************
+ *    Entity Type Component Testing
+ * ***********************************************************************************/
+describe("EntityTypeComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        CommonModule,
         RouterTestingModule,
         BrowserModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        BrowserDynamicTestingModule
       ],
-      declarations: [EntityTypeComponent]
+      declarations: [EntityTypeComponent],
+      providers: [
+        { provide: AngularFirestore, useValue: projectMocks.angularFirestore },
+        { provide: AuthService, useValue: projectMocks.authService },
+        { provide: ProjectService, useValue: projectServiceMock }
+      ]
     }).compileComponents();
   }));
 
+  /**************************************************************************************
+   *    Entity Component Creation Test
+   *    - This test if the entity component has been created.
+   * ***********************************************************************************/
   it("should create the Entity SubComponent", () => {
     const fixture = TestBed.createComponent(EntityTypeComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  /*
-  it("should create the app", () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  });
+  /**************************************************************************************
+   *    Entity Component Project Load Test
+   *    - This test checks if the project is correctly assignable
+   * ***********************************************************************************/
+  it("should load a project", () => {
+    const entityComponentTesting = TestBed.createComponent(EntityTypeComponent);
 
-  it(`should have as title 'tutoriel'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual("tutoriel");
-  });
+    entityComponentTesting.componentInstance.project =
+      EntityTypesMock.emptyProject;
 
-  it("should render title", () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector(".content span").textContent).toContain(
-      "tutoriel app is running!"
+    expect(entityComponentTesting.componentInstance.project).toBe(
+      EntityTypesMock.emptyProject as Project
     );
   });
-  
-});
 
-/*
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-import {
-  MatCardModule,
-  MatDialog,
-  MatDialogModule,
-  MatInputModule,
-  MatListModule,
-  MatToolbarModule
-} from "@angular/material";
-import { projectMocks, MatDialogMock } from "./../project.component.mock";
-import { entiteMock } from "./entity-type.mock-data";
+  /**************************************************************************************
+   *    Create new Entity Test
+   *    - This test checks if the create() methods adds a new Entity to mock-project
+   * ***********************************************************************************/
+  it("should add a new Entity", () => {
+    // Load test project
+    const entityComponentTesting = TestBed.createComponent(EntityTypeComponent);
+    entityComponentTesting.componentInstance.project =
+      EntityTypesMock.emptyProject;
 
-import { AngularFirestore } from "@angular/fire/firestore";
-import { AuthService } from "../../../tools/security/auth.service";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { FormsModule } from "@angular/forms";
-import { MatSelectModule } from "@angular/material/select";
-import { ProjectComponent } from "./../project.component";
-import { ProjectManagerService } from "../../../services/project/projectManager.service";
-import { ProjectService } from "../../../services/project/project.service";
-import { RouterTestingModule } from "@angular/router/testing";
-import { YesNoDialogBoxComponent } from "./../yes-no-dialog-box/yes-no-dialog-box.component";
-import { BrowserDynamicTestingModule } from "@angular/platform-browser-dynamic/testing";
-import { Observable } from "rxjs/Observable";
+    // create a duplicate
+    let projects = EntityTypesMock.emptyProject;
 
-describe("Projet", () => {
-  let projectComponent: ProjectComponent;
-  let projectFixture: ComponentFixture<ProjectComponent>;
+    // set the newEntity values
+    const newEntity = {
+      name: "Test",
+      type: "Test",
+      labels: ["Test", "T"],
+      bgColor: "#FE2E2E",
+      borderColor: "darken",
+      arcs: []
+    } as Entity;
+    entityComponentTesting.componentInstance.newEntity = newEntity;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        MatInputModule,
-        MatToolbarModule,
-        MatListModule,
-        MatCardModule,
-        RouterTestingModule,
-        MatDialogModule,
-        BrowserAnimationsModule,
-        BrowserDynamicTestingModule,
-        MatSelectModule
-      ],
-      declarations: [ProjectComponent, YesNoDialogBoxComponent],
-      providers: [
-        { provide: AngularFirestore, useValue: projectMocks.angularFirestore },
-        { provide: AuthService, useValue: projectMocks.authService },
-        { provide: ProjectService, useValue: projectMocks.projectService },
-        {
-          provide: ProjectManagerService,
-          useValue: projectMocks.projectManagerService
-        },
-        { provide: MatDialog, useClass: MatDialogMock }
-      ]
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: {
-          entryComponents: [YesNoDialogBoxComponent]
-        }
-      })
-      .compileComponents();
+    // use the create method that adds the newEntity to the project
+    entityComponentTesting.componentInstance.create();
 
-    projectFixture = TestBed.createComponent(ProjectComponent);
-    projectFixture.detectChanges();
-    projectComponent = projectFixture.componentInstance;
-    //import db from '../../../../firestore-export.json';
-    //const Projects = Object.values(db.Projects);
-    //let project = Projects.find(p => p.title === "Test");
-    //projectComponent.annotators = project.annotators;
-    //projectComponent.admin = project.admin;  });
+    projects.entities.push(newEntity);
+    expect(entityComponentTesting.componentInstance.project).toBe(projects);
   });
 
-  describe("Entities", () => {
-    it("should add the entite to the current project's entities if provided { with a valid } result", () => {
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid3);
-      expect(projectComponent.currentProject.entities).toContain(
-        jasmine.objectContaining(entiteMock.valid3)
+  /**************************************************************************************
+   *    Remove Entity Test
+   *    - This test checks if the remove() method removes the last element of mock-projectangular
+   * ***********************************************************************************/
+  it("should remove an Entity", () => {
+    // Load test project
+    const entityComponentTesting = TestBed.createComponent(EntityTypeComponent);
+
+    // Set project
+    entityComponentTesting.componentInstance.project =
+      EntityTypesMock.validProject;
+
+    // Remove the last entity using the remove() method
+    entityComponentTesting.componentInstance.remove(
+      EntityTypesMock.validProject.entities.length - 1
+    );
+
+    // Remove the last entity
+    let validProject = EntityTypesMock.validProject;
+    validProject.entities.splice(validProject.entities.length - 1, 1);
+
+    expect(entityComponentTesting.componentInstance.project).toBe(
+      validProject as Project
+    );
+  });
+
+  /**************************************************************************************
+   *    Add Label to Entity
+   *    - This test checks if the addLabel() adds a new label to an entity
+   * ***********************************************************************************/
+  it("should add a Label to an Entity", async () => {
+    // Load test project
+    let entityComponentTesting = TestBed.createComponent(EntityTypeComponent);
+    entityComponentTesting.componentInstance.project =
+      EntityTypesMock.validProject;
+
+    // Wait for the Component to be stable
+    entityComponentTesting.whenStable().then(() => {
+      // Use the EntityData structure to set the new label value
+      let entityData = { label: "New Label" } as EntityData;
+
+      // use the addLabel to add a label
+      entityComponentTesting.componentInstance.addLabel(
+        entityComponentTesting.componentInstance.project.entities[0],
+        entityData
+      );
+
+      // Add the label to entity
+      let validProject = EntityTypesMock.validProject;
+      validProject.entities[0].labels.push(entityData.label);
+
+      expect(entityComponentTesting.componentInstance.project).toBe(
+        validProject
       );
     });
+  });
 
-    it("should alert the user when trying to add an entities using an already used name", () => {
-      spyOn(window, "alert");
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid1);
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid1);
-      expect(window.alert).toHaveBeenCalledWith("The entity already exists");
-    });
+  /**************************************************************************************
+   *    Remove Label to Entity
+   *    - This test checks if the removeLabel() method removes a label from an entity
+   * ***********************************************************************************/
+  it("should remove a Label to an Entity", async () => {
+    // Load test project
+    let entityComponentTesting = TestBed.createComponent(EntityTypeComponent);
+    entityComponentTesting.componentInstance.project =
+      EntityTypesMock.validProject;
 
-    it("should alert the user when trying to add an entities using an already used color", () => {
-      spyOn(window, "alert");
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid1);
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid3);
-      expect(window.alert).toHaveBeenCalledWith(
-        "The chosen color is already used"
-      );
-      expect(projectComponent.currentProject.entities).not.toContain(
-        jasmine.objectContaining(entiteMock.valid3)
-      );
-    });
+    // Wait for the Component to be stable
+    entityComponentTesting.whenStable().then(() => {
+      let entity = EntityTypesMock.validProject.entities[0];
 
-    it("should alert the user when trying to add an entities using an already used name and change the color if it's different", () => {
-      spyOn(window, "alert");
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid1);
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid2);
-      expect(window.alert).toHaveBeenCalledWith("Replacing color");
-      expect(projectComponent.currentProject.entities).toContain(
-        jasmine.objectContaining(entiteMock.valid2)
+      // Remove the first label of the first entity using removeLabel()
+      entityComponentTesting.componentInstance.removeLabel(
+        entityComponentTesting.componentInstance.project.entities[0],
+        0
       );
-    });
 
-    it("should be able to delete an entity", () => {
-      projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid3);
-      expect(projectComponent.currentProject.entities).toContain(
-        jasmine.objectContaining(entiteMock.valid3)
-      );
-      projectComponent.deleteEntity(entiteMock.valid3.name);
-      expect(projectComponent.currentProject.entities).not.toContain(
-        jasmine.objectContaining(entiteMock.valid3)
+      // Remove the label of entity
+      let validProject = EntityTypesMock.validProject;
+      validProject.entities[0].labels.splice(0, 1);
+
+      expect(entityComponentTesting.componentInstance.project).toBe(
+        validProject
       );
     });
   });
 });
-
-// Straight Jasmine testing without Angular's testing support
-describe("ValueService", () => {
-  let service: ValueService;
-  beforeEach(() => {
-    service = new ValueService();
-  });
-
-  it("#getValue should return real value", () => {
-    expect(service.getValue()).toBe("real value");
-  });
-
-  it("#getObservableValue should return value from observable", (done: DoneFn) => {
-    service.getObservableValue().subscribe(value => {
-      expect(value).toBe("observable value");
-      done();
-    });
-  });
-
-  it("#getPromiseValue should return value from a promise", (done: DoneFn) => {
-    service.getPromiseValue().then(value => {
-      expect(value).toBe("promise value");
-      done();
-    });
-  });
-});
-*/

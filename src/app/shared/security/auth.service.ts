@@ -113,7 +113,6 @@ export class AuthService {
       }
       console.log(error);
     });
-
   }
 
   getUser() {

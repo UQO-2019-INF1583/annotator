@@ -91,7 +91,7 @@ export class RelationTypeComponent implements OnInit {
       ) as Relation);
 
       // Add Relation
-      this.addRelationToProject(this.newRelation, this.relationData);
+      this.setRelationsToEntities();
 
       this.ps.saveProject(this.project);
 
@@ -119,46 +119,33 @@ export class RelationTypeComponent implements OnInit {
   }
 
   save(index: number) {
-    this.ps.getProject(this.projectId).then(project => {
-      for (let i = 0; i < project.relations; i++) {
-        if (i != index) {
-          this.project.relations[i] = project.relations[i];
+    this.ps
+      .getProjectDocument(this.projectId)
+      .valueChanges()
+      .subscribe(data => {
+        let project: Project = JSON.parse(JSON.stringify(data));
+
+        for (let i = 0; i < project.relations.length; i++) {
+          if (i != index) {
+            this.project.relations[i] = project.relations[i];
+          }
         }
-      }
+        this.setRelationsToEntities();
 
-      // Remove Relation
-      this.removeRelationToProject(
-        this.project.relations[index],
-        this.relationsData[index]
-      );
-
-      // Add Relation
-      this.addRelationToProject(
-        this.project.relations[index],
-        this.relationsData[index]
-      );
-
-      this.relationsData[index].type = this.project.relations[index].type;
-      this.relationsData[index].targets[0] = this.project.relations[
-        index
-      ].args[0].targets[0];
-      this.relationsData[index].targets[1] = this.project.relations[
-        index
-      ].args[1].targets[0];
-
-      this.ps.saveProject(this.project);
-    });
+        this.ps.saveProject(this.project);
+      });
   }
 
   remove(index: number) {
-    this.removeAllRelationToProject(this.project.relations[index], index);
-
     if (
       this.project.relations.length >= 0 ||
       index < this.project.relations.length
     ) {
       this.project.relations.splice(index, 1);
     }
+
+    this.setRelationsToEntities();
+
     this.ps.saveProject(this.project);
   }
 
@@ -184,125 +171,59 @@ export class RelationTypeComponent implements OnInit {
       });
   }
 
-  addRelationToProject(relation: RelationType, data: RelationData): void {
-    if (relation.args[1].targets[0] != relation.args[0].targets[0]) {
-      for (let i = 0; i < relation.args.length; i++) {
-        for (let j = 0; j < this.project.entities.length; j++) {
-          if (relation.args[i].targets[0] === this.project.entities[j].type) {
-            let check: boolean = true;
-            for (
-              let k = this.project.entities[j].arcs.length - 1;
-              k >= 0;
-              k--
+  // Add the relations arguments to theirs respective entity's arcs
+  setRelationsToEntities() {
+
+    // Remove all arcs
+    for (let i = 0; i < this.project.entities.length; i++) {
+      for (let j = this.project.entities[i].arcs.length - 1; j >= 0; j--) {
+        this.project.entities[i].arcs.splice(j, 1);
+      }
+    }
+
+    // Add all arcs
+    for (let i = 0; i < this.project.relations.length; i++) {
+      for (let j = 0; j < this.project.entities.length; j++) {
+        if (
+          this.project.relations[i].args[0].targets[0] !=
+          this.project.relations[i].args[1].targets[0]
+        ) {
+          for (let k = 0; k < this.project.relations[i].args.length; k++) {
+            if (
+              this.project.relations[i].args[k].targets[0] ===
+              this.project.entities[j].type
             ) {
-              if (
-                data.targets[i] ===
-                  this.project.entities[j].arcs[k].targets[0] &&
-                data.type === this.project.entities[j].arcs[k].type
-              ) {
-                this.project.entities[j].arcs.splice(k, 1);
-                continue;
-              }
-              if (relation.type === this.project.entities[j].arcs[k].targets[0])
-                check = false;
-            }
-            if (check) {
               let arc = new Arc();
               arc = {
                 arrowHead: "triangle,5",
                 color: "black",
-                labels: relation.labels,
+                labels: this.project.relations[i].labels,
                 dashArray: ",",
                 hotkey: "T",
-                type: relation.type,
-                targets: [relation.args[i].targets[0]]
+                type: this.project.relations[i].type,
+                targets: [this.project.relations[i].args[k].targets[0]]
               };
               this.project.entities[j].arcs.push(arc);
             }
           }
-        }
-      }
-    } else if (relation.args[1].targets[0] == relation.args[0].targets[0]) {
-      for (let j = 0; j < this.project.entities.length; j++) {
-        if (relation.args[0].targets[0] === this.project.entities[j].type) {
-          let check: boolean = true;
-          for (let k = this.project.entities[j].arcs.length - 1; k >= 0; k--) {
-            if (
-              data.targets[0] === this.project.entities[j].arcs[k].targets[0] ||
-              data.targets[1] === this.project.entities[j].arcs[k].targets[0]
-            ) {
-              this.project.entities[j].arcs.splice(k, 1);
-              continue;
-            }
-            if (relation.type === this.project.entities[j].arcs[k].targets[0])
-              check = false;
-          }
-          if (check) {
+        } else {
+          if (
+            this.project.relations[i].args[0].targets[0] ===
+            this.project.entities[j].type
+          ) {
             let arc = new Arc();
             arc = {
               arrowHead: "triangle,5",
               color: "black",
-              labels: relation.labels,
+              labels: this.project.relations[i].labels,
               dashArray: ",",
               hotkey: "T",
-              type: relation.type,
-              targets: [relation.args[0].targets[0]]
+              type: this.project.relations[i].type,
+              targets: [this.project.relations[i].args[0].targets[0]]
             };
             this.project.entities[j].arcs.push(arc);
           }
         }
-      }
-    }
-  }
-
-  removeRelationToProject(relation: RelationType, data: RelationData): void {
-    let relations: string[] = [];
-    for (let i = 0; i < this.project.entities.length; i++)
-      if (
-        !(
-          this.project.entities[i].type == relation.args[0].targets[0] ||
-          this.project.entities[i].type == relation.args[1].targets[0]
-        )
-      )
-        relations.push(this.project.entities[i].type);
-
-    for (let i = 0; i < relations.length; i++) {
-      for (let j = 0; j < this.project.entities.length; j++) {
-        if (relations[i] === this.project.entities[j].type) {
-          let check: number = -1;
-          for (let k = this.project.entities[j].arcs.length - 1; k >= 0; k--) {
-            if (
-              data.targets[0] === this.project.entities[j].arcs[k].targets[0] ||
-              data.targets[1] === this.project.entities[j].arcs[k].targets[0]
-            ) {
-              this.project.entities[j].arcs.splice(k, 1);
-              continue;
-            }
-            if (
-              data.targets[0] === this.project.entities[j].arcs[k].targets[0] ||
-              data.targets[1] === this.project.entities[j].arcs[k].targets[0]
-            )
-              check = k;
-          }
-          if (check >= 0) this.project.entities[j].arcs.splice(check, 1);
-        }
-      }
-    }
-  }
-
-  removeAllRelationToProject(relation: RelationType, index: number): void {
-    for (let j = 0; j < this.project.entities.length; j++) {
-      for (let k = this.project.entities[j].arcs.length - 1; k >= 0; k--) {
-        if (
-          this.relationsData[index].targets[0] ===
-          this.project.entities[j].arcs[k].targets[0]
-        )
-          this.project.entities[j].arcs.splice(k, 1);
-        else if (
-          this.relationsData[index].targets[1] ===
-          this.project.entities[j].arcs[k].targets[0]
-        )
-          this.project.entities[j].arcs.splice(k, 1);
       }
     }
   }

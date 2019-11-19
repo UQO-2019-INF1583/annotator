@@ -4,6 +4,7 @@ import { } from 'jasmine';
 import { MOCK_ENTITIES } from './annotation.service.MOCKDATA';
 
 import { AnnotationService } from './annotation.service';
+import { annotDoc } from './brat/brat-utils.mock';
 
 describe('Annotation', () => {
 
@@ -45,5 +46,15 @@ describe('Annotation', () => {
   xit('should only return entities for projects associated with the user\'s level of permission',
     inject([AnnotationService], (service: AnnotationService) => {
       // TODO Needs a better understanding of the Database
-    })); 
+    }));
+
+  it('should save a new annotated document to the db', () => {
+    //test pour sauvegarder un document annoté dans la base de données
+    // expect()
+  })
+  it('should save a merged annotated document to the db', () => {
+    //mock annotated document(s)
+    //appeler la fonction saveannotateddocument
+    //vérifier si le nom du document contient le _MERGED
+  })
 });

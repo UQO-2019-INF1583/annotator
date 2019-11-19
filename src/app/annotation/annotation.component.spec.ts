@@ -98,6 +98,13 @@ describe('AnnotationComponent', () => {
     expect(component).toBeDefined();
   });
 
+  it('should verify the users information', () => {
+    expect(component.getUserInfo).toBeTruthy();
+  })
+  it('should verify the call of the alert', () => {
+    expect(component.LoadMergedDocument).toBeDefined();
+  })
+
   xit('check if brat div exist in dom', () => {
     expect(debugComponent.query(By.css('#brat'))).toBeTruthy();
   });
@@ -113,4 +120,17 @@ describe('AnnotationComponent', () => {
     component.isConnected = true;
     expect(compiled.querySelector('p').textContent).toContain('To add an annotation, highlight the text and choose the category.');
   }));
+
+  it('vérifier si le bouton merge est présent pour un administrateur', () => {
+    //faux administrateur?  l'élément est faux sinon
+    //expect(component.mergeAll).toBeDefined();
+
+    //devrait vérifier le dom si le bouton est affiché (je pense)
+    expect(debugComponent.query(By.caller('#mergeAll()'))).toBeTruthy();
+  })
+  it('vérifier si le bouton load merged document apparait pour un administrateur', () => {
+    //expect(component.LoadMergedDocument).to
+    expect(debugComponent.query(By.caller('#LoadMergedDocument()'))).toBeTruthy();
+  })
+
 });

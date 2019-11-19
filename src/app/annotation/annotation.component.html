@@ -14,7 +14,8 @@
         </mat-form-field>
 
         <mat-form-field *ngIf="filterBrat.filter == 'Entities'">
-          <mat-select id="filter-brat-value" placeholder="Entity..." [(ngModel)]="filterBrat.value" (change)="customCSS()">
+          <mat-select id="filter-brat-value" placeholder="Entity..." [(ngModel)]="filterBrat.value"
+            (change)="customCSS()">
             <mat-option *ngFor="let item of project.entities" [value]="item.type">
               {{item.labels}}
             </mat-option>
@@ -22,7 +23,8 @@
         </mat-form-field>
 
         <mat-form-field *ngIf="filterBrat.filter == 'Events'">
-          <mat-select id="filter-brat-value" placeholder="Event..." [(ngModel)]="filterBrat.value" (change)="customCSS()">
+          <mat-select id="filter-brat-value" placeholder="Event..." [(ngModel)]="filterBrat.value"
+            (change)="customCSS()">
             <mat-option *ngFor="let item of project.events" [value]="item.type">
               {{item.labels}}
             </mat-option>
@@ -41,5 +43,10 @@
   <div *ngIf="isConnected" style="padding-left: 10px; padding-right: 10px;">
     <button class="btn btn-primary" (click)="saveTextModification()">Save</button>
     <button class="btn btn-primary" [routerLink]="['/project', {id:projectId}]">Cancel</button>
+
+    <button [disabled]="isAdminUser()" class="btn btn-primary" (click)="mergeAll()">Merge</button>
+    <button [disabled]="isAdminUser()" class="btn btn-primary" (click)="LoadMergedDocument()">Load Merged
+      Version</button>
+
   </div>
 </main>

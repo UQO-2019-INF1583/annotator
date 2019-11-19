@@ -48,8 +48,8 @@ export class AuthGuard implements CanActivate {
                 }
               }
               if (good === -1) {
-                this.router.navigate(["/"]);
-                return false;
+                this.router.navigate(["/index"]);
+                return false; 
               }
             });
           });

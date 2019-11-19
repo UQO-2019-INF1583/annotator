@@ -81,7 +81,6 @@ export class BratUtils {
       ]);
     });
 
-    console.log("Get Doc Data");
     console.log(docData);
 
     return docData;
@@ -167,8 +166,8 @@ export class BratUtils {
       relation_attribute_types: []
     };
 
-    console.log("Get Col Date");
     console.log(collectionData);
+
     return collectionData;
   }
 
@@ -298,7 +297,6 @@ export class BratUtils {
       annotatedDocument.events.push(event);
     }
 
-    console.log("Annotated Document");
     console.log(annotatedDocument);
 
     return annotatedDocument;

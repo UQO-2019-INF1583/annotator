@@ -38,6 +38,7 @@ export class RelationTypeComponent implements OnInit {
     error: true,
     message: "*Warning!",
     label: "",
+    type: "",
     targets: ["", ""]
   };
   relationsData: RelationData[] = [];
@@ -64,6 +65,7 @@ export class RelationTypeComponent implements OnInit {
               error: true,
               message: "*Warning!",
               label: "",
+              type: this.project.relations[i].type,
               targets: [
                 this.project.relations[i].args[0].targets[0],
                 this.project.relations[i].args[1].targets[0]
@@ -98,6 +100,7 @@ export class RelationTypeComponent implements OnInit {
         error: true,
         message: "*Warning!",
         label: "",
+        type: this.newRelation.type,
         targets: [
           this.newRelation.args[0].targets[0],
           this.newRelation.args[1].targets[0]
@@ -109,6 +112,7 @@ export class RelationTypeComponent implements OnInit {
         error: true,
         message: "*Warning!",
         label: "",
+        type: "",
         targets: ["", ""]
       };
     });
@@ -134,6 +138,7 @@ export class RelationTypeComponent implements OnInit {
         this.relationsData[index]
       );
 
+      this.relationsData[index].type = this.project.relations[index].type;
       this.relationsData[index].targets[0] = this.project.relations[
         index
       ].args[0].targets[0];
@@ -169,6 +174,7 @@ export class RelationTypeComponent implements OnInit {
             error: true,
             message: "*Warning!",
             label: "",
+            type: this.project.relations[i].type,
             targets: [
               this.project.relations[i].args[0].targets[0],
               this.project.relations[i].args[1].targets[0]
@@ -190,7 +196,9 @@ export class RelationTypeComponent implements OnInit {
               k--
             ) {
               if (
-                data.targets[i] === this.project.entities[j].arcs[k].targets[0]
+                data.targets[i] ===
+                  this.project.entities[j].arcs[k].targets[0] &&
+                data.type === this.project.entities[j].arcs[k].type
               ) {
                 this.project.entities[j].arcs.splice(k, 1);
                 continue;
@@ -403,5 +411,6 @@ export interface RelationData {
   error: boolean;
   message: string;
   label: string;
+  type: string;
   targets: string[];
 }

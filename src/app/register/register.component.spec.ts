@@ -10,6 +10,10 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { By } from '@angular/platform-browser';
 
 
+// Test pour l'interface Register
+
+// Travail effectué par: Zenkouar Amine, Chadi Harb, Ray Lamour
+
 describe('RegisterComponent', () => {
     let comp: RegisterComponent;
     let fixture: ComponentFixture<RegisterComponent>;
@@ -19,11 +23,17 @@ describe('RegisterComponent', () => {
     let afs: AngularFirestore;
     let de: DebugElement;
 
+    // Création de constantes utilisées commes 'Mocks'
+
+
     const testCred = {
         uid: 'test',
         email: 'test@gmail.com',
         password: 'Test@1234'
     };
+
+    // Des objets qui représentent des combinaisons valides d'entrées
+
     const validTestCred = [
         {
             uid: 'test',
@@ -37,6 +47,9 @@ describe('RegisterComponent', () => {
             email: 'hello123@gmail.com',
             password: 'Test@1234'
         }];
+
+    // Des objets qui représentent des combinaisons invalides d'entrées
+
     const invalidTestCred = [
         {
             uid: 'test',
@@ -59,7 +72,9 @@ describe('RegisterComponent', () => {
 
     ];
 
-
+    // Fonction qui se déclenche avant tout test.
+    // - Declaration des composants nécessaires
+    // - Declaration des providers (le routeur, les services responsables de l'authentification Firebase, etc)
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [RegisterComponent],
@@ -69,20 +84,20 @@ describe('RegisterComponent', () => {
                 {
                     provide: Router,
                     useValue: {
-                        navigate: jasmine.createSpy()
+                        navigate: jasmine.createSpy() // Spy pour Routeur
                     }
                 },
                 {
                     provide: AngularFireAuth,
                     useValue: {
-                        navigate: jasmine.createSpy()
+                        navigate: jasmine.createSpy()// Spy pour AngularFireAuth
                     }
                 },
                 {
                     provide: AuthService,
                     useValue: {
-                        signIn: jasmine.createSpy(),
-                        logout: jasmine.createSpy()
+                        signIn: jasmine.createSpy(),// Spy pour la fonctionnalité de connexion d'AuthService
+                        logout: jasmine.createSpy() // Spy pour la fonctionnalité de déconnexion d'AuthService
                     }
                 },
                 {
@@ -100,10 +115,11 @@ describe('RegisterComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(RegisterComponent);
+        fixture = TestBed.createComponent(RegisterComponent); // Création du composant en soi
         comp = fixture.componentInstance;
         de = fixture.debugElement;
 
+        // Utilisation du TestBed pour récupérer les "services"
         router = TestBed.get(Router);
         authService = TestBed.get(AuthService);
         afs = TestBed.get(AngularFirestore);
@@ -111,10 +127,12 @@ describe('RegisterComponent', () => {
         fixture.detectChanges();
     });
 
+    // Test pour voir si le composant est crée
     it('should create', () => {
         expect(comp).toBeTruthy();
     });
 
+    // Tester l'existence d'éléments HTML divers.
     it('should have H2 title tag "Register"', () => {
         expect(de.query(By.css('h2')).nativeElement.innerText).toBe('Register');
     });

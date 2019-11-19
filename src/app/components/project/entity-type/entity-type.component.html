@@ -1,0 +1,305 @@
+<!-- Title -->
+<h1>Entity Types :</h1>
+
+<!-- Input -->
+<div class="container-fluid">
+  <form class="row">
+    <div class="col-xs-2"><label for="new-type">Action:</label></div>
+    <div class="col-xs-3"><label for="new-type">Type:</label></div>
+    <div class="col-xs-3"><label for="new-type">Labels:</label></div>
+    <div class="col-xs-2"><label for="new-type">Background:</label></div>
+    <div class="col-xs-2"><label for="new-type">Border:</label></div>
+
+    <!-- Actions -->
+    <div class="form-group col-xs-2">
+      <button
+        type="submit"
+        class="btn btn-warning"
+        (click)="reset()"
+        style="margin-right: 2px;"
+      >
+        <span class="glyphicon glyphicon-refresh"></span>
+      </button>
+      <button
+        type="submit"
+        class="btn btn-success"
+        (click)="create()"
+        [disabled]="entityData.error"
+      >
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+      <br />
+      <small
+        *ngIf="isValid(newEntity, entityData, -1)"
+        class="form-text text-muted text-danger"
+        >{{ entityData.message }}</small
+      >
+    </div>
+
+    <!-- Type -->
+    <div class="form-group col-xs-3">
+      <input
+        class="form-control"
+        placeholder="Type (ex : Person)"
+        [(ngModel)]="newEntity.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newEntity.type == '' || newEntity.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
+      >
+    </div>
+
+    <!-- Labels -->
+    <div class="form-group col-xs-3">
+      <div>
+        <table style="width: 100%;">
+          <!-- Defined Labels -->
+          <tr
+            *ngFor="
+              let label of newEntity.labels;
+              let i = index;
+              trackBy: trackBy
+            "
+          >
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeLabel(newEntity, i)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Labels (ex : Person, Per)"
+                [(ngModel)]="label"
+                name="label[{{ i }}]"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+          <!-- New Label -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addLabel(newEntity, entityData)"
+                [disabled]="isInvalidLabel(entityData)"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Labels (ex : Person, Per)"
+                [(ngModel)]="entityData.label"
+                name="label"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+        </table>
+
+        <small
+          *ngIf="newEntity.labels == '' || newEntity.labels == null"
+          class="form-text text-muted text-danger"
+          >*Labels are obligatory</small
+        >
+      </div>
+    </div>
+    <!-- Background Color -->
+    <div class="form-group col-xs-2">
+      <input
+        class="form-control form-color"
+        type="color"
+        [(ngModel)]="newEntity.bgColor"
+        name="bgColor"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newEntity.bgColor == '' || newEntity.bgColor == null"
+        class="form-text text-muted text-danger"
+        >*Color is obligatory</small
+      >
+    </div>
+    <!-- Border Color -->
+    <div class="form-group col-xs-2">
+      <input
+        class="form-control form-color"
+        type="color"
+        [(ngModel)]="newEntity.borderColor"
+        name="borderColor"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newEntity.borderColor == '' || newEntity.borderColor == null"
+        class="form-text text-muted text-danger"
+        >*Color is obligatory</small
+      >
+    </div>
+  </form>
+</div>
+
+<!-- List -->
+<div
+  class="container-fluid"
+  *ngFor="let entity of project.entities; let i = index"
+>
+  <form class="row entity-row">
+    <!-- Actions -->
+    <div class="form-group col-xs-2">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        (click)="save(i)"
+        [disabled]="entitiesData[i].error"
+        style="margin-right: 2px;"
+      >
+        <span class="glyphicon glyphicon-floppy-disk"></span>
+      </button>
+      <button
+        type="submit"
+        class="btn btn-danger"
+        [disabled]="entitiesData[i].delete"
+        (click)="remove(i)"
+      >
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
+      <br />
+      <small
+        *ngIf="
+          isValid(entity, entitiesData[i], i) ||
+          isRelated(entity, entitiesData[i])
+        "
+        class="form-text text-muted text-danger"
+        >{{ entitiesData[i].message }}</small
+      >
+    </div>
+
+    <!-- Type -->
+    <div class="form-group col-xs-3">
+      <input
+        class="form-control"
+        placeholder="Type (ex : Person)"
+        [(ngModel)]="entity.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+        [disabled]="entitiesData[i].delete"
+      />
+      <small
+        *ngIf="entity.type == '' || entity.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
+      >
+    </div>
+
+    <!-- Labels -->
+    <div class="form-group col-xs-3">
+      <div>
+        <table style="width: 100%;">
+          <tr
+            *ngFor="let label of entity.labels; let j = index; trackBy: trackBy"
+          >
+            <!-- Created Labels -->
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeLabel(entity, j)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Labels (ex : Person, Per)"
+                [(ngModel)]="entity.labels[j]"
+                name="label[{{ j }}]"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+          <!-- New Label -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addLabel(entity, entitiesData[i])"
+                [disabled]="isInvalidLabel(entitiesData[i])"
+                name="invalid-btn"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Labels (ex : Person, Per)"
+                [(ngModel)]="entitiesData[i].label"
+                name="newLabel"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+        </table>
+
+        <small
+          *ngIf="entitiesData[i].label == '' || entitiesData[i].label == null"
+          class="form-text text-muted text-danger"
+          >*Labels are obligatory</small
+        >
+      </div>
+    </div>
+
+    <!-- Background Color -->
+    <div class="form-group col-xs-2">
+      <input
+        class="form-control form-color"
+        type="color"
+        [(ngModel)]="entity.bgColor"
+        name="bgColor"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="entity.bgColor == '' || entity.bgColor == null"
+        class="form-text text-muted text-danger"
+        >*Color is obligatory</small
+      >
+    </div>
+
+    <!-- Border Color -->
+    <div class="form-group col-xs-2">
+      <input
+        class="form-control form-color"
+        type="color"
+        [(ngModel)]="entity.borderColor"
+        name="borderColor"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="entity.borderColor == '' || entity.borderColor == null"
+        class="form-text text-muted text-danger"
+        >*Color is obligatory</small
+      >
+    </div>
+  </form>
+</div>

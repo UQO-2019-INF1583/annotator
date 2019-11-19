@@ -1,0 +1,460 @@
+<!-- Title -->
+<h1>Relation Types : </h1>
+
+<!-- Labels -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-2"><label for="new-type">Action:</label></div>
+    <div class="col-xs-2"><label for="new-type">Type:</label></div>
+    <div class="col-xs-3"><label for="new-type">Labels:</label></div>
+    <div class="col-xs-1"><label for="new-type">DashArray:</label></div>
+    <div class="col-xs-2"><label for="new-type">Role:</label></div>
+    <div class="col-xs-2"><label for="new-type">Target:</label></div>
+  </div>
+</div>
+
+<!-- Input -->
+<div class="container-fluid">
+  <form class="row">
+    <!-- Actions -->
+    <div class="form-group col-xs-2">
+      <button
+        type="submit"
+        class="btn btn-warning"
+        (click)="reset()"
+        style="margin-right: 2px;"
+      >
+        <span class="glyphicon glyphicon-refresh"></span>
+      </button>
+      <button
+        type="submit"
+        class="btn btn-success"
+        (click)="create()"
+        [disabled]="relationData.error"
+      >
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+      <br />
+      <small
+        *ngIf="isValid(newRelation, relationData, -1)"
+        class="form-text text-muted text-danger"
+        >{{ relationData.message }}</small
+      >
+    </div>
+
+    <!-- Type -->
+    <div class="form-group col-xs-2">
+      <input
+        class="form-control"
+        placeholder="ex : Anaphora"
+        [(ngModel)]="newRelation.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newRelation.type == '' || newRelation.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
+      >
+    </div>
+
+    <!-- Labels -->
+    <div class="form-group col-xs-3">
+      <div>
+        <table style="width: 100%;">
+          <!-- Defined Labels -->
+          <tr
+            *ngFor="
+              let label of newRelation.labels;
+              let i = index;
+              trackBy: trackBy
+            "
+          >
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeLabel(newRelation, i)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="ex : Anaphora, Ana"
+                [(ngModel)]="label"
+                name="label[{{ i }}]"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+          <!-- New Label -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addLabel(newRelation, relationData)"
+                [disabled]="isInvalidLabel(relationData)"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="ex : Anaphora, Ana"
+                [(ngModel)]="relationData.label"
+                name="newlabel"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+        </table>
+
+        <small
+          *ngIf="newRelation.labels == '' || newRelation.labels == null"
+          class="form-text text-muted text-danger"
+          >*Labels are obligatory</small
+        >
+      </div>
+    </div>
+
+    <!-- DashArray -->
+    <div class="form-group col-xs-1">
+      <input
+        class="form-control"
+        placeholder="3,3"
+        [(ngModel)]="newRelation.dashArray"
+        name="dasharray"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="
+          newRelation.dashArray == '' ||
+          newRelation.dashArray == null ||
+          !isValidDashArray(newRelation.dashArray)
+        "
+        class="form-text text-muted text-danger"
+        >*DashArray is obligatory</small
+      >
+    </div>
+
+    <!-- Args : Role -->
+    <div class="form-group col-xs-2">
+      <input
+        class="form-control"
+        placeholder="ex : Anaphor"
+        [(ngModel)]="newRelation.args[0].role"
+        name="arg-role-0"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="
+          newRelation.args[0].role == '' || newRelation.args[0].role == null
+        "
+        class="form-text text-muted text-danger"
+        >*Role is obligatory</small
+      >
+      <br />
+      <input
+        class="form-control"
+        placeholder="ex : Entity"
+        [(ngModel)]="newRelation.args[1].role"
+        name="arg-role-1"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="
+          newRelation.args[1].role == '' || newRelation.args[1].role == null
+        "
+        class="form-text text-muted text-danger"
+        >*Role is obligatory</small
+      >
+    </div>
+
+    <!-- Args : Targets -->
+    <div class="form-group col-xs-2">
+      <select
+        class="form-control"
+        placeholder="ex : Person"
+        [(ngModel)]="newRelation.args[0].targets[0]"
+        name="arg-target-0"
+        #type="ngModel"
+        required="true"
+      >
+        <option
+          *ngFor="
+            let entity of project.entities;
+            let i = index;
+            trackBy: trackBy
+          "
+          value="{{ entity.type }}"
+          >{{ entity.type }}</option
+        ><option value="" disabled selected hidden>ex : Person</option>
+      </select>
+      <small
+        *ngIf="
+          newRelation.args[0].targets[0] == '' ||
+          newRelation.args[0].targets == null
+        "
+        class="form-text text-muted text-danger"
+        >*Target is obligatory</small
+      >
+      <br />
+      <select
+        class="form-control"
+        placeholder="ex : Person"
+        [(ngModel)]="newRelation.args[1].targets[0]"
+        name="arg-target-1"
+        #type="ngModel"
+        required="true"
+      >
+        <option
+          *ngFor="
+            let entity of project.entities;
+            let i = index;
+            trackBy: trackBy
+          "
+          value="{{ entity.type }}"
+          >{{ entity.type }}</option
+        ><option value="" disabled selected hidden>ex : Person</option>
+      </select>
+      <small
+        *ngIf="
+          newRelation.args[1].targets[0] == '' ||
+          newRelation.args[1].targets == null
+        "
+        class="form-text text-muted text-danger"
+        >*Target is obligatory</small
+      >
+    </div>
+  </form>
+</div>
+
+<!-- List -->
+<div
+  class="container-fluid"
+  *ngFor="let relation of project.relations; let i = index"
+>
+  <form class="row entity-row">
+    <!-- Actions -->
+    <div class="form-group col-xs-2">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        (click)="save(i)"
+        [disabled]="relationsData[i].error"
+        style="margin-right: 2px;"
+      >
+        <span class="glyphicon glyphicon-floppy-disk"></span>
+      </button>
+      <button type="submit" class="btn btn-danger" (click)="remove(i)">
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
+      <br />
+      <small
+        *ngIf="isValid(relation, relationsData[i], i)"
+        class="form-text text-muted text-danger"
+        >{{ relationsData[i].message }}</small
+      >
+    </div>
+
+    <!-- Type -->
+    <div class="form-group col-xs-2">
+      <input
+        class="form-control"
+        placeholder="Type (ex : Anaphora)"
+        [(ngModel)]="relation.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="relation.type == '' || relation.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
+      >
+    </div>
+
+    <!-- Labels -->
+    <div class="form-group col-xs-3">
+      <div>
+        <table style="width: 100%;">
+          <tr
+            *ngFor="
+              let label of relation.labels;
+              let j = index;
+              trackBy: trackBy
+            "
+          >
+            <!-- Created Labels -->
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeLabel(relation, j)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Labels (ex : Anaphora)"
+                [(ngModel)]="relation.labels[j]"
+                name="label[{{ j }}]"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+          <!-- New Label -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addLabel(relation, relationsData[i])"
+                [disabled]="isInvalidLabel(relationsData[i])"
+                name="invalid-btn"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Labels (ex : Anaphora)"
+                [(ngModel)]="relationsData[i].label"
+                name="newLabel"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+        </table>
+
+        <small
+          *ngIf="relationsData[i].label == '' || relationsData[i].label == null"
+          class="form-text text-muted text-danger"
+          >*Labels are obligatory</small
+        >
+      </div>
+    </div>
+
+    <!-- DashArray -->
+    <div class="form-group col-xs-1">
+      <input
+        class="form-control"
+        placeholder="3,3"
+        [(ngModel)]="relation.dashArray"
+        name="dasharray"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="
+          relation.dashArray == '' ||
+          relation.dashArray == null ||
+          !isValidDashArray(relation.dashArray)
+        "
+        class="form-text text-muted text-danger"
+        >*DashArray is obligatory</small
+      >
+    </div>
+
+    <!-- Args : Role -->
+    <div class="form-group col-xs-2">
+      <input
+        class="form-control"
+        placeholder="ex : Anaphor"
+        [(ngModel)]="relation.args[0].role"
+        name="arg-role-0"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="relation.args[0].role == '' || relation.args[0].role == null"
+        class="form-text text-muted text-danger"
+        >*Role is obligatory</small
+      >
+      <br />
+      <input
+        class="form-control"
+        placeholder="ex : Entity"
+        [(ngModel)]="relation.args[1].role"
+        name="arg-role-1"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="relation.args[1].role == '' || relation.args[1].role == null"
+        class="form-text text-muted text-danger"
+        >*Role is obligatory</small
+      >
+    </div>
+
+    <!-- Args : Targets -->
+    <div class="form-group col-xs-2">
+      <select
+        class="form-control"
+        placeholder="ex : Person"
+        [(ngModel)]="relation.args[0].targets[0]"
+        name="arg-target-0"
+        #type="ngModel"
+        required="true"
+      >
+        <option
+          *ngFor="
+            let entity of project.entities;
+            let i = index;
+            trackBy: trackBy
+          "
+          value="{{ entity.type }}"
+          >{{ entity.type }}</option
+        ><option value="" disabled selected hidden>ex : Person</option>
+      </select>
+      <small
+        *ngIf="
+          relation.args[0].targets[0] == '' || relation.args[0].targets == null
+        "
+        class="form-text text-muted text-danger"
+        >*Target is obligatory</small
+      >
+      <br />
+      <select
+        class="form-control"
+        placeholder="ex : Person"
+        [(ngModel)]="relation.args[1].targets[0]"
+        name="arg-target-1"
+        #type="ngModel"
+        required="true"
+      >
+        <option
+          *ngFor="
+            let entity of project.entities;
+            let i = index;
+            trackBy: trackBy
+          "
+          value="{{ entity.type }}"
+          >{{ entity.type }}</option
+        ><option value="" disabled selected hidden>ex : Person</option>
+      </select>
+      <small
+        *ngIf="
+          relation.args[1].targets[0] == '' || relation.args[1].targets == null
+        "
+        class="form-text text-muted text-danger"
+        >*Target is obligatory</small
+      >
+    </div>
+  </form>
+</div>

@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CdkTableModule } from '@angular/cdk/table';
-import { DataSource } from '@angular/cdk/collections';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { CdkTableModule } from "@angular/cdk/table";
+import { DataSource } from "@angular/cdk/collections";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
+import { HttpModule } from "@angular/http";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -40,50 +41,78 @@ import {
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule
-} from '@angular/material';
+} from "@angular/material";
 
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireModule } from '@angular/fire';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { environment } from '../environments/environment';
-import { NgxFileDropModule } from 'ngx-file-drop';
+// Main Angular Components
+import { AppComponent } from "./app.component";
+import { routing } from "./app.routing";
 
-import { AppComponent } from './app.component';
-import { AuthGuard } from './shared/security/auth.guard';
-import { AuthService } from './shared/security/auth.service';
-import { ProjectManagerService, UserManagerService } from './adm';
-import { routing } from './app.routing';
-import { FooterComponent, HeaderComponent } from './shared';
-import { HomeComponent } from './home/home.component';
-import { HomeWelcomeComponent } from './home-welcome';
-import { LoginComponent } from './login';
-import { RegisterComponent } from './register';
-import { ProjectDataSource } from './data-sources/projectDataSource';
-import { ProjectManagerComponent, UserManagerComponent } from './adm';
-import { PageNotFoundComponent } from './not-found/not-found.component';
-import { UserComponent } from './adm';
-import { UsersDataSource } from './data-sources/usersDataSource';
-import { AnnotationComponent } from './annotation/annotation.component';
+// Angular Firebase Components : database
+import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { AngularFireModule } from "@angular/fire";
+import { AngularFireStorageModule } from "@angular/fire/storage";
+import { AngularFireAuthModule } from "@angular/fire/auth";
+import { AngularFireDatabaseModule } from "@angular/fire/database";
+import { AngularFirestore } from "@angular/fire/firestore";
+import { environment } from "../environments/environment";
+import { NgxFileDropModule } from "ngx-file-drop";
+
+// Interface Components : All views available on the Annotator platform
 import {
-  CreateProjectComponent,
+  AnnotationComponent,
+  HomeComponent,
+  HomeWelcomeComponent,
+  LoginComponent,
+  PageNotFoundComponent,
+  ProfileComponent,
   ProjectComponent,
-  AddEntityComponent,
-  AddCorpusComponent,
+  ProjectManagerComponent,
+  RegisterComponent,
+  ResetPasswordComponent,
+  UserComponent,
+  UserManagerComponent
+} from "./components";
+
+// Services : Database Manipulations
+import {
+  ProjectManagerService,
+  UserService,
+  ProjectDataSource,
+  UsersDataSource,
+  ProjectService,
+  CreateProjectService
+} from "./services";
+
+// Partial Views Components : header and footer
+import { FooterComponent, HeaderComponent } from "./views";
+
+// Tool Components : security
+import { AuthGuard } from "./tools/security/auth.guard";
+import { AuthService } from "./tools/security/auth.service";
+
+// Project Manager Subcomponents
+import {
   AddAdminComponent,
   AddAnnotatorComponent,
-  ProjectService
-} from './components/index';
-import { AddRelationComponent } from './components/add-relation/add-relation.component';
-import { AddEventComponent } from './components/add-event/add-event.component';
-import { AddAttributeComponent } from './components/add-attribute/add-attribute.component';
-import { YesNoDialogBoxComponent } from './components/yes-no-dialog-box/yes-no-dialog-box.component';
-import { CreateProjectService } from './components/create-project/create-project.service';
-import { ProfileComponent } from './profile/profile.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { EditUserComponent } from './components/edit-user/edit-user.component';
+  AddAttributeComponent,
+  AddCorpusComponent,
+  AddEntityComponent,
+  AddEventComponent,
+  AddRelationComponent,
+  YesNoDialogBoxComponent,
+  EntityTypeComponent,
+  EntityAttributeTypeComponent,
+  RelationTypeComponent,
+  EventTypeComponent,
+  ProjectInformationComponent,
+  CorpusComponent,
+  AnnotatorsComponent
+} from "./components/project";
+
+import { CreateProjectComponent } from "./components/projectManager";
+
+// User Manager Subcomponents
+import { EditUserComponent } from "./components/userManager";
 
 @NgModule({
   declarations: [
@@ -111,7 +140,14 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
     YesNoDialogBoxComponent,
     ProfileComponent,
     ResetPasswordComponent,
-    EditUserComponent
+    EditUserComponent,
+    EntityTypeComponent,
+    EntityAttributeTypeComponent,
+    RelationTypeComponent,
+    EventTypeComponent,
+    ProjectInformationComponent,
+    CorpusComponent,
+    AnnotatorsComponent
   ],
   entryComponents: [
     AddAdminComponent,
@@ -167,11 +203,11 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
     AuthService,
     ProjectDataSource,
     ProjectManagerService,
-    UserManagerService,
+    UserService,
     ProjectService,
     CreateProjectService
   ],
 
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

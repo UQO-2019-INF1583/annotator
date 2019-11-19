@@ -1,0 +1,198 @@
+<div style="display:block;justify-content: center">
+  <div class="container">
+    <div class="row">
+      <mat-card class="col-xs-12">
+        <!--Create Project-->
+        <button
+          *ngIf="isConnected"
+          class="btn btn-success"
+          (click)="createProjectDialogBox()"
+        >
+          Create
+        </button>
+
+        <!--Search bar-->
+        <mat-form-field class="menu-search">
+          <input
+            matInput
+            placeholder="Search Projects"
+            [(ngModel)]="searchValue"
+            (ngModelChange)="updateDisplay()"
+          />
+        </mat-form-field>
+
+        <!--Sort by -->
+        <mat-form-field class="menu-sortBy">
+          <mat-label>Sort by :</mat-label>
+          <mat-select [(value)]="sortValue" (valueChange)="updateDisplay()">
+            <mat-option value="A - Z">A - Z</mat-option>
+            <mat-option value="Z - A">Z - A</mat-option>
+            <mat-option value="Recent">Recent</mat-option>
+            <mat-option value="Oldest">Oldest</mat-option>
+            <mat-option value="Most annotators">Most annotators</mat-option>
+            <mat-option value="Least annotators">Least annotators</mat-option>
+            <mat-option value="Most entities">Most entities</mat-option>
+            <mat-option value="Least entities">Least entities</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!--Display Type -->
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <button
+            mat-button
+            class="btn btn-secondary"
+            [ngClass]="{ active: viewValue == 'simplified' }"
+            (click)="changeDisplay('simplified')"
+          >
+            Simplified
+          </button>
+
+          <button
+            mat-button
+            class="btn btn-secondary"
+            [ngClass]="{ active: viewValue == 'detailed' }"
+            (click)="changeDisplay('detailed')"
+          >
+            Detailed
+          </button>
+        </div>
+      </mat-card>
+      <div class="col-xs-12" id="spacer" style="padding: 10px;"></div>
+    </div>
+  </div>
+
+  <!-- Detailed View -->
+  <div class="container" [hidden]="viewValue != 'detailed'">
+    <div class="row">
+      <div class="col-xs-4" *ngFor="let project of displayedProjects">
+        <div class="project-card">
+          <mat-card-title>{{ project.title }}</mat-card-title>
+          <table style="width: 100%;">
+            <tr>
+              <td class="subtitle left">State : {{ getState(project) }}</td>
+              <td class="subtitle right">
+                Annotators : {{ project.annotators.length }}
+              </td>
+            </tr>
+            <tr>
+              <td
+                class="subtitle left"
+                *ngIf="!project.hasOwnProperty('date')"
+              ></td>
+              <td class="subtitle left" *ngIf="project.hasOwnProperty('date')">
+                Created on : {{ project.date.seconds * 1000 | date }}
+              </td>
+              <td class="subtitle right">
+                Types declaration :
+                {{
+                  project.attributes.length +
+                    project.entities.length +
+                    project.events.length +
+                    project.relations.length
+                }}
+              </td>
+            </tr>
+          </table>
+
+          <hr class="horizontal-line" />
+          <table style="width: 100%;">
+            <tr>
+              <td class="left">{{ project.description | slice: 0:100 }}</td>
+              <td class="right">
+                <button
+                  *ngIf="isConnected"
+                  class="btn btn-primary"
+                  (click)="modifyProject(project)"
+                >
+                  View
+                </button>
+                <button
+                  *ngIf="isConnected && isAdmin(project)"
+                  id="delete"
+                  class="btn btn-danger"
+                  (click)="deleteProject(project)"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simplified View -->
+  <div class="container" [hidden]="viewValue != 'simplified'">
+    <div class="row">
+      <div class=""></div>
+
+      <mat-card>
+        <mat-card-content>
+          <mat-table #table [dataSource]="displayedProjects">
+            <ng-container matColumnDef="date">
+              <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+              <mat-cell *matCellDef="let project">
+                <div *ngIf="!project.hasOwnProperty('date')"></div>
+                <div *ngIf="project.hasOwnProperty('date')">
+                  {{ project.date.seconds * 1000 | date }}
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="title">
+              <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+              <mat-cell *matCellDef="let project">
+                {{ project.title }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="state">
+              <mat-header-cell *matHeaderCellDef>State</mat-header-cell>
+              <mat-cell *matCellDef="let project">
+                {{ getState(project) }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+              <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+              <mat-cell *matCellDef="let project">
+                {{ project.description | slice: 0:100 }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+              <mat-cell *matCellDef="let project">
+                <div style="display: flex;flex-wrap: nowrap;">
+                  <button
+                    *ngIf="isConnected"
+                    class="btn btn-primary"
+                    (click)="modifyProject(project)"
+                  >
+                    View
+                  </button>
+                  <span *ngFor="let idAdmin of project.admin">
+                    <button
+                      *ngIf="isConnected && idAdmin === idUser"
+                      id="delete"
+                      class="btn btn-danger"
+                      (click)="deleteProject(project)"
+                    >
+                      Delete
+                    </button>
+                  </span>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row
+              *matHeaderRowDef="displayedColumns"
+            ></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+          </mat-table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

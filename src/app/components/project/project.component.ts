@@ -7,28 +7,40 @@ import "rxjs/add/operator/mergeMap";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material";
-import { AddAdminComponent } from "../add-admin/add-admin.component";
-import { AddAnnotatorComponent } from "../add-annotator/add-annotator.component";
-import { AddAttributeComponent } from "../add-attribute/add-attribute.component";
-import { AddEntityComponent } from "../add-entity/add-entity.component";
-import { AddCorpusComponent } from "../add-corpus/add-corpus.component";
-import { AddEventComponent } from "../add-event/add-event.component";
-import { AddRelationComponent } from "../add-relation/add-relation.component";
+import { AuthService } from "../../tools/security/auth.service";
+import { Observable } from "rxjs/Observable";
+
+// SubComponents
+import { AddAdminComponent } from "./add-admin/add-admin.component";
+import { AddAnnotatorComponent } from "./add-annotator/add-annotator.component";
+import { AddAttributeComponent } from "./add-attribute/add-attribute.component";
+import { AddCorpusComponent } from "./add-corpus/add-corpus.component";
+import { AddEventComponent } from "./add-event/add-event.component";
+import { AddEntityComponent } from "./add-entity/add-entity.component";
+import { AddRelationComponent } from "./add-relation/add-relation.component";
 import {
   EntityAttributeTypes,
   EntityAttributeValues
-} from "../../shared/entityAttribute.model";
-import { AuthService } from "../../shared/security/auth.service";
-import { Event } from "../../shared/event.model";
-import { Observable } from "rxjs/Observable";
-import { Project, ProjectUtils } from "../../shared/project.model";
-import { ProjectService } from "./project.service";
-import { Relation } from "../../shared/relation.model";
-import { User } from "./../../shared/user.model";
-import { YesNoDialogBoxComponent } from "../yes-no-dialog-box/yes-no-dialog-box.component";
-import { Entity } from "../../shared/entity.model";
-import { ProjectState, StateEnum } from "../../shared/state";
+} from "../../models/entityAttribute.model";
+import { YesNoDialogBoxComponent } from "./yes-no-dialog-box/yes-no-dialog-box.component";
 
+// Sub Components :
+
+// Services
+import { ProjectService } from "../../services/project/project.service";
+
+// Models
+import { Event } from "../../models/event.model";
+import { Project, ProjectUtils } from "../../models/project.model";
+import { Relation } from "../../models/relation.model";
+import { User } from "./../../models/user.model";
+import { ProjectState, StateEnum } from "../../models/state.model";
+import { Entity } from "../../models/entity.model"; // to delete
+//import { EntityType } from "../../models";
+
+/**************************************************************************************
+ *    MAIN :
+ * ***********************************************************************************/
 @Component({
   selector: "app-project",
   templateUrl: "./project.component.html",
@@ -59,7 +71,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private router: Router,
     private ps: ProjectService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
@@ -154,14 +166,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ouvre la boîte de dialogue pour ajouter une catégorie
+  // Open a Dialog Box to create a new Entity Type
   addEntityDialogBox() {
     const dialogRef = this.dialog.open(AddEntityComponent, {
       data: {
-        name: undefined,
         type: undefined,
         labels: [],
-        bgColor: undefined
+        bgColor: undefined,
+        borderColor: undefined
       }
     });
 
@@ -174,13 +186,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
     let entityExists = false;
     if (result !== undefined) {
       if (
-        result.name !== undefined &&
         result.bgColor !== undefined &&
+        result.borderColor !== undefined &&
         result.type !== undefined &&
-        result.labels !== undefined
+        result.labels.length !== 0
       ) {
+        console.log(this.currentProject);
         this.currentProject.entities.forEach(item => {
-          if (item.name === result.name) {
+          if (item.type === result.type) {
             entityExists = true;
             if (item.bgColor === result.bgColor) {
               alert("The entity already exists");
@@ -202,8 +215,24 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
   }
 
+  editEntity(entityType: Entity, index: number) {
+    const dialogRef = this.dialog.open(AddEntityComponent, {
+      data: {
+        type: entityType.type,
+        labels: entityType.type,
+        bgColor: entityType.bgColor,
+        borderColor: entityType.borderColor
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: Entity) => {
+      this.currentProject.entities.splice(index, 1);
+      this.addEntitiesAfterClosedHandler(result);
+    });
+  }
+
   // Supprime la catégorie spécifiée dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteEntity(entityName: string) {
+  deleteEntity(entityType: string) {
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
       width: "250px",
       data: {
@@ -215,7 +244,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result.response === true) {
         this.currentProject.entities.forEach((item, index) => {
-          if (item.name === entityName) {
+          if (item.type === entityType) {
             this.currentProject.entities.splice(index, 1);
           }
         });
@@ -351,6 +380,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.addAttributesAfterClosedHandler(result);
     });
   }
+
   //Quand le bouton Add est appuyé, l'attribut est ajouté au projet
   addAttributesAfterClosedHandler(result: EntityAttributeTypes) {
     let attributeExists = false;

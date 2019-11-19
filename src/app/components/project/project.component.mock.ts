@@ -2,13 +2,13 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import {
   EntityAttributeTypes,
   EntityAttributeValues
-} from "../../shared/entityAttribute.model";
-import { AuthService } from "../../shared/security/auth.service";
-import { Entity } from "../../shared/entity.model";
-import { ProjectManagerService } from "../../adm/projectManager";
-import { ProjectService } from "./project.service";
-import { Relation } from "../../shared/relation.model";
-import { Event } from "../../shared/event.model";
+} from "../../models/entityAttribute.model";
+import { AuthService } from "../../tools/security/auth.service";
+import { Entity } from "../../models/entity.model";
+import { ProjectManagerService } from "../../services/project/projectManager.service";
+import { ProjectService } from "../../services/project/project.service";
+import { Relation } from "../../models/relation.model";
+import { Event } from "../../models/event.model";
 import { Observable } from "rxjs/Observable";
 
 // data mocks

@@ -1,0 +1,78 @@
+<h1>Corpus :</h1>
+
+<!-- Corpus -->
+
+<button
+  *ngIf="isConnected && getAdmin() == true"
+  class="btn btn btn-primary"
+  (click)="addCorpusDialogBox()"
+>
+  +
+</button>
+
+<mat-card-content>
+  <mat-list role="list" class="card-list-project">
+    <mat-list-item class="matListItemHover" *ngFor="let item of corpus | async">
+      <h4 mat-line>{{ item?.title }}</h4>
+      <button
+        *ngIf="isConnected"
+        style="margin-right: 16px;"
+        class="btn btn-primary"
+        (click)="documentSelected(item)"
+      >
+        View
+      </button>
+      <button
+        *ngIf="isConnected && getAdmin() == true"
+        class="btn btn-danger"
+        (click)="deleteCorpus(item)"
+      >
+        Delete
+      </button>
+    </mat-list-item>
+  </mat-list>
+</mat-card-content>
+
+<!--
+<div class="item-project">
+  <mat-card>
+    <mat-card-header class="card-header-project">
+      <mat-card-title>
+        <h2>Corpus</h2>
+      </mat-card-title>
+      <button
+        *ngIf="isConnected && getAdmin()"
+        class="btn btn btn-primary"
+        (click)="addCorpusDialogBox()"
+      >
+        +
+      </button>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list role="list" class="card-list-project">
+        <mat-list-item
+          class="matListItemHover"
+          *ngFor="let item of corpus | async"
+        >
+          <h4 mat-line>{{ item?.title }}</h4>
+          <button
+            *ngIf="isConnected"
+            style="margin-right: 16px;"
+            class="btn btn-primary"
+            (click)="documentSelected(item)"
+          >
+            View
+          </button>
+          <button
+            *ngIf="isConnected && getAdmin()"
+            class="btn btn-danger"
+            (click)="deleteCorpus(item)"
+          >
+            Delete
+          </button>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>
+-->

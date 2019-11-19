@@ -1,0 +1,406 @@
+<!-- Title -->
+<h1>Entity Attribute Types :</h1>
+
+<!-- Labels -->
+<div class="container-fluid">
+  <div class="col-xs-2"><label for="new-type">Action:</label></div>
+  <div class="col-xs-3"><label for="new-type">Type:</label></div>
+  <div class="col-xs-3"><label for="new-type">Glyph:</label></div>
+  <div class="col-xs-3"><label for="new-type">Entity:</label></div>
+</div>
+
+<!-- Input -->
+<div class="container-fluid">
+  <form class="row">
+    <!-- Actions -->
+    <div class="form-group col-xs-2">
+      <button
+        type="submit"
+        class="btn btn-warning"
+        (click)="reset()"
+        style="margin-right: 2px;"
+      >
+        <span class="glyphicon glyphicon-refresh"></span>
+      </button>
+      <button
+        type="submit"
+        class="btn btn-success"
+        (click)="create()"
+        [disabled]="attributeData.error"
+      >
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+      <br />
+      <small
+        *ngIf="isValid(newAttribute, attributeData, -1)"
+        class="form-text text-muted text-danger"
+        >{{ attributeData.message }}</small
+      >
+    </div>
+
+    <!-- Type -->
+    <div class="form-group col-xs-3">
+      <input
+        class="form-control"
+        placeholder="Type (ex : Notorious)"
+        [(ngModel)]="newAttribute.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newAttribute.type == '' || newAttribute.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
+      >
+    </div>
+
+    <!-- Glyphs -->
+    <div class="form-group col-xs-3">
+      <div>
+        <table style="width: 100%;">
+          <!-- Defined glyph -->
+          <tr
+            *ngFor="
+              let glyph of newAttribute.values;
+              let i = index;
+              trackBy: trackBy
+            "
+          >
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeGlyph(newAttribute, i)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Glyph (ex : ★)"
+                [(ngModel)]="glyph.glyph"
+                name="glyph[{{ i }}]"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+          <!-- New glyph -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addGlyph(newAttribute, attributeData)"
+                [disabled]="isInvalidGlyph(attributeData)"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Glyph (ex : ★)"
+                [(ngModel)]="attributeData.glyph"
+                name="glyph"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+        </table>
+
+        <small
+          *ngIf="newAttribute.glyph == '' || newAttribute.glyph == null"
+          class="form-text text-muted text-danger"
+          >*Glyphs are obligatory</small
+        >
+      </div>
+    </div>
+
+    <!-- Entity -->
+    <div class="form-group col-xs-3">
+      <div>
+        <table style="width: 100%;">
+          <!-- Defined entity -->
+          <tr
+            *ngFor="
+              let entity of newAttribute.entities;
+              let i = index;
+              trackBy: trackBy
+            "
+          >
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeEntity(newAttribute, i)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <select
+                class="form-control"
+                placeholder="ex : Person"
+                [(ngModel)]="newAttribute.entities[i]"
+                name="new entity[{{ i }}]"
+                #type="ngModel"
+                required="true"
+                (ngModelChange)="getEntitiesWithSelf(newAttribute, i)"
+              >
+                <option
+                  *ngFor="
+                    let ent of getEntitiesWithSelf(newAttribute, i);
+                    let j = index;
+                    trackBy: trackBy
+                  "
+                  value="{{ ent }}"
+                  >{{ ent }}</option
+                >
+              </select>
+            </td>
+          </tr>
+          <!-- New entity -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addEntity(newAttribute, attributeData)"
+                [disabled]="isInvalidEntity(newAttribute, attributeData)"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <select
+                class="form-control"
+                placeholder="ex : Person"
+                [(ngModel)]="attributeData.entity"
+                name="new-entity"
+                #type="ngModel"
+                required="true"
+                (ngModelChange)="getEntities(newAttribute, i)"
+              >
+                <option
+                  *ngFor="
+                    let ent of getEntities(newAttribute);
+                    let i = index;
+                    trackBy: trackBy
+                  "
+                  value="{{ ent }}"
+                  >{{ ent }}</option
+                ><option value="" disabled selected hidden>ex : Person</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+
+        <small
+          *ngIf="newAttribute.glyph == '' || newAttribute.glyph == null"
+          class="form-text text-muted text-danger"
+          >*Glyphs are obligatory</small
+        >
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- List -->
+<div
+  class="container-fluid"
+  *ngFor="let attribute of project.attributes; let i = index; trackBy: trackBy"
+>
+  <form class="row entity-row">
+    <!-- Actions -->
+    <div class="form-group col-xs-2">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        (click)="save(i)"
+        [disabled]="attributesData[i].error"
+        style="margin-right: 2px;"
+      >
+        <span class="glyphicon glyphicon-floppy-disk"></span>
+      </button>
+      <button type="submit" class="btn btn-danger" (click)="remove(i)">
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
+      <br />
+      <small
+        *ngIf="isValid(attribute, attributesData[i], i)"
+        class="form-text text-muted text-danger"
+        >{{ attributesData[i].message }}</small
+      >
+    </div>
+
+    <!-- Type -->
+    <div class="form-group col-xs-3">
+      <input
+        class="form-control"
+        placeholder="Type (ex : Notorious)"
+        [(ngModel)]="attribute.type"
+        name="type"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="attribute.type == '' || attribute.type == null"
+        class="form-text text-muted text-danger"
+        >*Type is obligatory</small
+      >
+    </div>
+
+    <!-- Glyphs -->
+    <div class="form-group col-xs-3">
+      <div>
+        <table style="width: 100%;">
+          <tr
+            *ngFor="
+              let glyph of attribute.values;
+              let j = index;
+              trackBy: trackBy
+            "
+          >
+            <!-- Created Glyphs -->
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeGlyph(attribute, j)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Glyph (ex : ★)"
+                [(ngModel)]="attribute.values[j].glyph"
+                name="glyph[{{ j }}]"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+          <!-- New Glyph -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addGlyph(attribute, attributesData[i])"
+                [disabled]="isInvalidGlyph(attributesData[i])"
+                name="invalid-btn"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                placeholder="Glyph (ex : ★)"
+                [(ngModel)]="attributesData[i].glyph"
+                name="newLabel"
+                #type="ngModel"
+                required="true"
+              />
+            </td>
+          </tr>
+        </table>
+
+        <small
+          *ngIf="
+            attributesData[i].glyph == '' || attributesData[i].glyph == null
+          "
+          class="form-text text-muted text-danger"
+          >*Glyphs is obligatory</small
+        >
+      </div>
+    </div>
+
+    <!-- Entity -->
+    <div class="form-group col-xs-3">
+      <div>
+        <table style="width: 100%;">
+          <!-- Defined entity -->
+          <tr
+            *ngFor="
+              let entity of attribute.entities;
+              let j = index;
+              trackBy: trackBy
+            "
+          >
+            <td>
+              <button
+                type="submit"
+                class="btn btn-danger"
+                (click)="removeEntity(attribute, j)"
+              >
+                <span class="glyphicon glyphicon-minus"></span>
+              </button>
+            </td>
+            <td>
+              <select
+                class="form-control"
+                placeholder="ex : Person"
+                [(ngModel)]="attribute.entities[j]"
+                name="new entity[{{ j }}]"
+                #type="ngModel"
+                required="true"
+                (ngModelChange)="getEntitiesWithSelf(attribute, j)"
+              >
+                <option
+                  *ngFor="
+                    let ent of getEntitiesWithSelf(attribute, j);
+                    let k = index;
+                    trackBy: trackBy
+                  "
+                  value="{{ ent }}"
+                  >{{ ent }}</option
+                >
+              </select>
+            </td>
+          </tr>
+          <!-- New entity -->
+          <tr>
+            <td>
+              <button
+                type="submit"
+                class="btn btn-success"
+                (click)="addEntity(attribute, attributesData[i])"
+                [disabled]="isInvalidEntity(attribute, attributesData[i])"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+            <td>
+              <select
+                class="form-control"
+                placeholder="ex : Person"
+                [(ngModel)]="attributesData[i].entity"
+                name="new-entity"
+                #type="ngModel"
+                required="true"
+                (ngModelChange)="getEntities(attribute, i)"
+              >
+                <option
+                  *ngFor="
+                    let ent of getEntities(attribute);
+                    let k = index;
+                    trackBy: trackBy
+                  "
+                  value="{{ ent }}"
+                  >{{ ent }}</option
+                ><option value="" disabled selected hidden>ex : Person</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,99 @@
+<h2 mat-dialog-title style="text-align: center;">Add a new Brat Entity Type</h2>
+<form #entityvalidate="ngForm">
+  <!-- Preview -->
+  <div
+    class="preview"
+    style="text-align: center;"
+    [ngStyle]="{
+      'background-color': data.bgColor,
+      'border-color': data.borderColor
+    }"
+  >
+    <b>{{ data.type }} : </b>
+    <span *ngFor="let label of data.labels">{{ label }}, </span>
+  </div>
+
+  <!-- Type Name -->
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Name of the Entity Type"
+      [(ngModel)]="data.type"
+      name="type"
+      #type="ngModel"
+      required
+    />
+    <mat-error *ngIf="type.value == '' || type.value == null"
+      >Name is obligatory</mat-error
+    >
+  </mat-form-field>
+
+  <!-- Labels inputs -->
+  <button mat-line class="btn btn btn-primary" (click)="addLabel()">+</button>
+  <button mat-line class="btn btn btn-danger" (click)="removeLabel()">-</button>
+  <h4 mat-line>Labels :</h4>
+  <div *ngFor="let label of labels; let i = index">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Label {{ i }} : "
+        [(ngModel)]="data.labels[i]"
+        name="labels{{ i }}"
+        #label="ngModel"
+        required
+      />
+      <mat-error *ngIf="label.value == '' || label.value == null"
+        >Label is Obligatory</mat-error
+      >
+    </mat-form-field>
+  </div>
+
+  <!-- Background Color -->
+  <mat-form-field>
+    <mat-select
+      placeholder="Background Color"
+      [(ngModel)]="data.bgColor"
+      name="bgColor"
+      #color="ngModel"
+      required
+    >
+      <mat-option *ngFor="let item of availableColors" [value]="item">
+        {{ item }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="color.value == null"
+      >Background Color is Obligatory</mat-error
+    >
+  </mat-form-field>
+
+  <!-- Border Color -->
+  <mat-form-field>
+    <mat-select
+      placeholder="Border Color"
+      [(ngModel)]="data.borderColor"
+      name="borderColor"
+      #color="ngModel"
+      required
+    >
+      <mat-option *ngFor="let item of availableColors" [value]="item">
+        {{ item }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="color.value == null"
+      >Border Color is Obligatory</mat-error
+    >
+  </mat-form-field>
+
+  <!-- Buttons -->
+  <mat-dialog-actions>
+    <button
+      class="btn btn btn-primary"
+      [disabled]="!entityvalidate.valid"
+      [mat-dialog-close]="data"
+    >
+      Add
+    </button>
+    <div style="width: 10px"></div>
+    <button class="btn btn btn-primary" mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
+</form>

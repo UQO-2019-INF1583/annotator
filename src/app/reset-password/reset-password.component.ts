@@ -7,7 +7,7 @@ import { AuthService } from '../shared/security/auth.service';
 })
 export class ResetPasswordComponent implements OnInit {
   userInfo: any = {};
-  constructor(public auth: AuthService,) { }
+  constructor(public auth: AuthService, ) { }
   successMessage: String;
   emailSent: boolean = false;
 
@@ -16,15 +16,15 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   resetPassword(email: string) {
-  this.emailSent = true;
+    this.emailSent = true;
     this.auth.resetPassword(this.userInfo.email)
-    .then(() => {
-      this.successMessage = "A password reset email has been sent.";
-  })
-  .catch(error => {
-      //TODO: Error handling
-    this.emailSent = false;
-    this.successMessage = "This email account does not exist ";
-    });
+      .then(() => {
+        this.successMessage = "A password reset email has been sent.";
+      })
+      .catch(error => {
+        //TODO: Error handling
+        this.emailSent = false;
+        this.successMessage = error.message; //Show error message.
+      });
   }
 }

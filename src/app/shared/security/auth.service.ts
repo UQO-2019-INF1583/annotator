@@ -92,7 +92,28 @@ export class AuthService {
 
   resetPassword(email: string) {
     var auth = firebase.auth();
-    return auth.sendPasswordResetEmail(email);
+    return auth.sendPasswordResetEmail(email).catch(function (error) {
+
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      if (errorCode == 'auth/user-not-found') { //If the user isn't registerd.
+        alert('This email is not registered, so we send the Sign-In message to this email...');
+        // var actionCodeSettings = {
+        //   // The URL to redirect to for sign-in completion. This is also the deep
+        //   // link for mobile redirects. The domain (www.example.com) for this URL
+        //   // must be whitelisted in the Firebase Console.
+        //   url: 'https://localhost:4200/regist/', //Redirect to Sign In,but this should be changed to real domain.
+
+        //   handleCodeInApp: true
+        // };
+        return auth.sendSignInLinkToEmail(email, { url: 'http://localhost:4200/regist', handleCodeInApp: true }); //Send Sign In message with redirecting URL to email address
+      } else {
+        alert(errorMessage); //Alert error message
+      }
+      console.log(error);
+    });
+
   }
 
   getUser() {

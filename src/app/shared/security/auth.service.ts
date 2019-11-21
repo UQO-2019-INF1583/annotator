@@ -94,22 +94,24 @@ export class AuthService {
     var auth = firebase.auth();
     return auth.sendPasswordResetEmail(email).catch(function (error) {
 
-      // Handle Errors here.
+      // Gérer l'erreur
       var errorCode = error.code;
       var errorMessage = error.message;
-      if (errorCode == 'auth/user-not-found') { //If the user isn't registerd.
-        alert('This email is not registered, so we send the Sign-In message to this email...');
-        // var actionCodeSettings = {
-        //   // The URL to redirect to for sign-in completion. This is also the deep
-        //   // link for mobile redirects. The domain (www.example.com) for this URL
-        //   // must be whitelisted in the Firebase Console.
-        //   url: 'https://localhost:4200/regist/', //Redirect to Sign In,but this should be changed to real domain.
+      if (errorCode == 'auth/user-not-found') { //si l'utilisateur n'est pas enregistré
 
-        //   handleCodeInApp: true
-        // };
-        return auth.sendSignInLinkToEmail(email, { url: 'http://localhost:4200/regist', handleCodeInApp: true }); //Send Sign In message with redirecting URL to email address
+        // Alerter le message non enregistré
+        alert('This email is not registered, so we send the Sign-In message to this email...');
+
+        // URL à rediriger pour la fin de la connexion pour les redirections mobiles.
+        //Le domaine (www.example.com) de cette URL doit être ajouté à la liste blanche dans la console Firebase.
+        // url:'https://localhost:4200/regist/', //Rediriger au Sign In, mais ceci devrait être changé en domaine réel.
+
+
+        // Envoyer un message de connexion avec une URL de redirection vers une adresse électronique
+        return auth.sendSignInLinkToEmail(email, { url: 'http://localhost:4200/regist', handleCodeInApp: true });
       } else {
-        alert(errorMessage); //Alert error message
+        //Message d'erreur d'alerte
+        alert(errorMessage);
       }
       console.log(error);
     });

@@ -14,17 +14,19 @@ export class ResetPasswordComponent implements OnInit {
   ngOnInit() {
 
   }
-
+  //Si l'utilistateur est enregistré
   resetPassword(email: string) {
     this.emailSent = true;
     this.auth.resetPassword(this.userInfo.email)
+      //Envoyer un URL à l'utilisateur
       .then(() => {
         this.successMessage = "A password reset email has been sent.";
       })
       .catch(error => {
-        //TODO: Error handling
+        //TODO: Traitement des erreurs
         this.emailSent = false;
-        this.successMessage = error.message; //Show error message.
+        // Afficher le message d'erreur.
+        this.successMessage = error.message;
       });
   }
 }

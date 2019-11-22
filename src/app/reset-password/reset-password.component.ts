@@ -20,7 +20,8 @@ export class ResetPasswordComponent implements OnInit {
     this.auth.resetPassword(this.userInfo.email)
       //Envoyer un URL à l'utilisateur
       .then(() => {
-        this.successMessage = "A password reset email has been sent.";
+        // this.successMessage = "A password reset email has been sent.";
+        this.successMessage = "We sent you a message to this email.";
       })
       .catch(error => {
         //TODO: Traitement des erreurs

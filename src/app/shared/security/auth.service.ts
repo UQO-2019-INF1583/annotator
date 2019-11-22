@@ -98,10 +98,6 @@ export class AuthService {
       var errorCode = error.code;
       var errorMessage = error.message;
       if (errorCode == 'auth/user-not-found') { //si l'utilisateur n'est pas enregistré
-
-        // Alerter le message non enregistré
-        alert('This email is not registered, so we send the Sign-In message to this email...');
-
         // URL à rediriger pour la fin de la connexion pour les redirections mobiles.
         //Le domaine (www.example.com) de cette URL doit être ajouté à la liste blanche dans la console Firebase.
         // url:'https://localhost:4200/regist/', //Rediriger au Sign In, mais ceci devrait être changé en domaine réel.

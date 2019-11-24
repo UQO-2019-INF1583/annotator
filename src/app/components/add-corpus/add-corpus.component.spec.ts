@@ -16,7 +16,7 @@ import {
   FileSystemDirectoryEntry
 } from "ngx-file-drop";
 
-fdescribe("AddCorpusComponent", () => {
+describe("AddCorpusComponent", () => {
   let component: AddCorpusComponent;
   let fixture: ComponentFixture<AddCorpusComponent>;
 

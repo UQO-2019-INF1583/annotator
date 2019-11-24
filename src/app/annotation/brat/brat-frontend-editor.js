@@ -19177,6 +19177,11 @@
         };
 
         var fillSpanTypesAndDisplayForm = function (evt, spanText, span) {
+          // console.log('here');
+          // console.log(evt);
+          // console.log(spanText);
+          // console.log(span);
+          // console.log('here end');
           keymap = spanKeymap;
 
           // Figure out whether we should show or hide one of the two
@@ -19502,6 +19507,9 @@
             var $label = $('<label class="span_type_label"/>').attr('for', 'rapid_span_' + (typeNo + 1)).text(name + ' (' + (100.0 * prob).toFixed(1) + '%)');
             $label.css('background-color', spanBgColor);
             // TODO: check for unnecessary extra wrapping here
+            // console.log('test-point-2');
+            // console.log($label);
+
             var $content = $('<div class="item_content"/>').append($numlabel).append($input).append($label);
             $spanTypeDiv.append($content);
             // highlight configured hotkey (if any) in text.
@@ -19541,6 +19549,9 @@
           var $numlabel = $('<span class="accesskey">0</span><span>:</span>');
           var $input = $('<input type="radio" name="rapid_span_type" id="rapid_span_0" value=""/>');
           var $label = $('<label class="span_type_label" for="rapid_span_0" style="background-color:lightgray">Other...</label>');
+          // console.log('test-point-3');
+          // console.log($label);
+
           var $content = $('<div class="item_content"/>').append($numlabel).append($input).append($label);
           $spanTypeDiv.append($content);
 
@@ -19827,6 +19838,7 @@
         }
 
         var arcFormSubmit = function (evt, typeRadio) {
+          console.log('test-point-40');
           typeRadio = typeRadio || $('#arc_form input:radio:checked');
           var type = typeRadio.val();
           dispatcher.post('hideForm', [arcForm]);
@@ -19838,6 +19850,7 @@
         };
 
         var fillArcTypesAndDisplayForm = function (evt, originType, targetType, arcType, arcId) {
+          console.log('test-point-41');
           var noArcs = true;
           keymap = {};
 
@@ -20022,6 +20035,8 @@
           var eventDataId = $(evt.target).attr('data-arc-ed');
           dispatcher.post('hideForm');
           arcOptions.action = 'deleteArc';
+          console.log('test-point-31');
+          console.log(arcOptions);
           dispatcher.post('ajax', [arcOptions, 'edited']);
         };
 
@@ -20343,8 +20358,15 @@
 
         var addSpanTypesToDivInner = function ($parent, types, category) {
           if (!types) return;
-
+// console.log(types);
           $.each(types, function (typeNo, type) {
+
+            if(category == 'event'){
+              console.log(type);
+              type.labels[0]= type.name;
+            }
+
+
             if (type === null) {
               $parent.append('<hr/>');
             } else {
@@ -20367,6 +20389,12 @@
                 $label.css('background-color', spanBgColor);
               }
               var $collapsible = $('<div class="collapsible open"/>');
+              // console.log('test-point-1');
+              // console.log($label);
+
+
+
+              // console.log($input);
               var $content = $('<div class="item_content"/>').append($input).append($label).append($collapsible);
               var $collapser = $('<div class="collapser open"/>');
               var $div = $('<div class="item"/>');
@@ -20374,6 +20402,8 @@
                 $div.append($collapser)
               }
               $div.append($content);
+              // console.log('tets-point-10');
+              // console.log(type.children);
               addSpanTypesToDivInner($collapsible, type.children, category);
               $parent.append($div);
               if (type.hotkey) {
@@ -20401,6 +20431,9 @@
           $legend = $('<legend/>').text(heading);
           $fieldset = $('<fieldset/>').append($legend).append($scroller);
           $top.append($fieldset);
+          // console.log('tets-point-11');
+          // console.log(types);
+
           addSpanTypesToDivInner($scroller, types);
         };
         var addAttributeTypesToDiv = function ($top, types, category) {
@@ -20490,13 +20523,21 @@
         };
 
         var rememberSpanSettings = function (response) {
+
+          console.log(response)
           spanKeymap = {};
 
           // TODO: check for exceptions in response
 
           // fill in entity and event types
           var $entityScroller = $('#entity_types div.scroller').empty();
+          // console.log('tets-point-12');
+          // console.log(response.entity_types);
+
           addSpanTypesToDivInner($entityScroller, response.entity_types, 'entity');
+          // console.log('tets-point-13');
+          // console.log(response.event_types);
+
           var $eventScroller = $('#event_types div.scroller').empty();
           addSpanTypesToDivInner($eventScroller, response.event_types, 'event');
 
@@ -20801,11 +20842,32 @@
           if (Configuration.confirmModeOn && !confirm("Are you sure you want to delete this annotation?")) {
             return;
           }
+          if(spanOptions.type == 'event') {
+            for (var t in doc.triggers) {
+              for (var e in doc.events) {
+                if (doc.triggers[t][0] == doc.events[e][1] && doc.events[e][2].length == 0) {
+                  doc.events[e][2] = doc.triggers[t][2];
+                  // doc.events[e][1] = 'event';
+                }
+
+                // if (doc.events[e][0] == spanOptions.id) {
+                //   spanOptions.type = doc.events[e][1];
+                // }
+              }
+              ;
+            }
+            ;
+          }
+
+          console.log('test-point-30');
           $.extend(spanOptions, {
             action: 'deleteSpan',
             collection: coll,
             'document': doc,
           });
+          console.log('test-point-30');
+          console.log(spanOptions);
+
           spanOptions.offsets = JSON.stringify(spanOptions.offsets);
           dispatcher.post('ajax', [spanOptions, 'edited']);
           dispatcher.post('hideForm');
@@ -20950,18 +21012,27 @@
         }]);
 
         var spanFormSubmit = function (evt, typeRadio) {
+          // console.log($('#span_notes'));
+
+          // console.log(typeRadio);
+          // console.log($('#span_form input:radio:checked'));
           typeRadio = typeRadio || $('#span_form input:radio:checked');
+          // console.log(typeRadio);
           var type = typeRadio.val();
-          $('#span_form-ok').blur();
-          dispatcher.post('hideForm');
-          $.extend(spanOptions, {
+
+          var data = {
             action: 'createSpan',
             collection: coll,
             'document': doc,
             type: type,
             comment: $('#span_notes').val()
-          });
+          };
+          //
+          console.log(data);
 
+          $('#span_form-ok').blur();
+          dispatcher.post('hideForm');
+          $.extend(spanOptions, data);
           spanOptions.attributes = $.toJSON(spanAttributes());
 
           spanOptions.normalizations = $.toJSON(spanNormalizations());
@@ -20975,6 +21046,7 @@
           spanForm.parent().find('*').blur();
 
           $('#waiter').dialog('open');
+          console.log(spanOptions);
           dispatcher.post('ajax', [spanOptions, 'edited']);
           return false;
         };
@@ -21176,6 +21248,19 @@
 
         var requestRenderData = function (docData) {
           doc = docData;
+          for (var t in doc.triggers) {
+            for (var e in doc.events) {
+              if (doc.triggers[t][0] == doc.events[e][1] && doc.events[e][2].length == 0) {
+                doc.events[e][2] = doc.triggers[t][2];
+                // doc.events[e][1] = 'event';
+              }
+
+              // if (doc.events[e][0] == spanOptions.id) {
+              //   spanOptions.type = doc.events[e][1];
+              // }
+            }
+            ;
+          }
         };
 
         dispatcher.on('init', init).on('getValidArcTypesForDrag', getValidArcTypesForDrag).on('dataReady', rememberData).on('requestRenderData', requestRenderData).on('collectionLoaded', collectionLoaded).on('collectionLoaded', rememberSpanSettings).on('collectionLoaded', setupTaggerUI).on('collectionLoaded', setupNormalizationUI).on('spanAndAttributeTypesLoaded', spanAndAttributeTypesLoaded).on('newSourceData', onNewSourceData).on('hideForm', hideForm).on('user', userReceived).on('edited', edited).on('current', gotCurrent).on('isReloadOkay', isReloadOkay).on('keydown', onKeyDown).on('dblclick', onDblClick).on('dragstart', preventDefault).on('mousedown', onMouseDown).on('mouseup', onMouseUp).on('mousemove', onMouseMove).on('annotationSpeed', setAnnotationSpeed).on('suggestedSpanTypes', receivedSuggestedSpanTypes).on('normGetNameResult', setSpanNormText).on('normSearchResult', setSpanNormSearchResults);

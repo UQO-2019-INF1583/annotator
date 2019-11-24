@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+body {
+  background: #eee;
+}
+
+.cdk-overlay-pane{
+  min-width: 400px;
+}
+
+.cdk-overlay-pane mat-form-field{
+  width: 100%;
+  padding-right: 10px;
+}
+
+@media(max-width: 767px){
+  .cdk-overlay-pane{
+    min-width: 50vw;
+  }
+}

@@ -1,0 +1,39 @@
+<div>
+  <h3>Choose a user</h3>
+  <div class="example-container mat-elevation-z8">
+    <mat-table #table [dataSource]="datasource">
+
+      <ng-container matColumnDef="uid">
+        <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.uid}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.email}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="firstname">
+        <mat-header-cell *matHeaderCellDef> First name </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.firstname}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="lastname">
+        <mat-header-cell *matHeaderCellDef> Last name </mat-header-cell>
+        <mat-cell *matCellDef="let user"> {{user.lastname}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="add">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let user">
+          <button class="btn btn-primary" [mat-dialog-close]="user">Add</button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+  <br />
+  <button class="btn btn-primary" [mat-dialog-close]>Close</button>
+</div>

@@ -1,0 +1,35 @@
+<div class="create-project-container">
+  <mat-card>
+    <mat-card-title>
+      <h2>Create a new project</h2>
+    </mat-card-title>
+    <mat-card-content>
+      <form name="form" #f="ngForm">
+        <div class="example-container">
+          <mat-form-field class="example-full-width">
+            <input matInput type="text" class="form-control" name="title" [(ngModel)]="project.title" #title="ngModel"
+              required placeholder="Project title" />
+            <mat-error *ngIf="title.value == ''">Project title is required</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="text" class="form-control" name="Description" [(ngModel)]="project.description"
+              #description="ngModel" required placeholder="Description" />
+            <mat-error *ngIf="description.value == ''">Project description is required</mat-error>
+          </mat-form-field>
+          <br />
+          <div class="button-row">
+            <button [disabled]="!f.form.valid" (click)="create()" class="btn btn-primary" mat-raised-button color="primary">
+              Create
+            </button>
+            <button class="btn btn-link" mat-raised-button color="primary" [routerLink]="['']">Cancel</button>
+          </div>
+          <div>
+            <p [style.color]="creationDetails.status == creationStatus.Error ? 'red' : creationDetails.status == creationStatus.Success ? 'green' : 'black'">
+              {{creationDetails.message}}
+            </p>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

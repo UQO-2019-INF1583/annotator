@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Attribute</h2>
+<form #attributevalidate ="ngForm">
+<mat-form-field>
+  <input matInput placeholder="Name" [(ngModel)]="data.name" name="nom" #nom="ngModel" required />
+  <mat-error *ngIf="nom.value == '' || nom.value == null">nom obligatoire</mat-error>
+</mat-form-field>
+
+<mat-form-field>
+  <input matInput placeholder="Type" [(ngModel)]="data.type" name="type" #type="ngModel" required />
+  <mat-error *ngIf="type.value == '' || type.value == null">type obligatoire</mat-error>
+</mat-form-field>
+
+<mat-form-field>
+  <input matInput placeholder="Labels" [(ngModel)]="data.labels[0]" name="labels" #labels="ngModel" required />
+  <mat-error *ngIf="labels.value == '' || labels.value == null">Étiquette obligatoire</mat-error>
+</mat-form-field>
+
+<mat-dialog-actions>
+<button class="btn btn btn-primary" [disabled]="!attributevalidate.valid" [mat-dialog-close]="data">Add</button>
+  <div style="width: 10px"></div>
+  <button class="btn btn btn-primary" mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
+</form>

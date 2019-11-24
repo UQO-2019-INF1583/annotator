@@ -1,0 +1,6 @@
+<h3>Filtres</h3>
+<!-- Liste d'éléments filtrable -->
+<li *ngFor="let element of filterElements" style="list-style-type:none;">
+    <input type="checkbox" value="{{ 'check_' + element}}" (change)="checkBoxEventChecker($event, element)" checked>
+    <span class='filterOption'>{{ element }}</span>
+</li>

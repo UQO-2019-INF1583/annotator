@@ -1,0 +1,21 @@
+{
+  // Disable default VSCode formatting for JavaScript
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  // Allow formatting for other languages
+  "editor.formatOnSave": true,
+  // Enable ESLint (with Prettier plugin) to format code on save
+  "eslint.autoFixOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  "editor.autoIndent": true,
+  "files.autoSave": "onFocusChange",
+  "tslint.autoFixOnSave": true,
+  // "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
+  // "typescript.updateImportsOnFileMove.enabled": ,
+  "gitlens.advanced.messages": {
+    "suppressShowKeyBindingsNotice": true
+  },
+  "git.confirmSync": false,
+  "git.autofetch": true
+}

@@ -1,0 +1,47 @@
+<!--
+  La vue associée à la connexion d’un utilisateur.
+  Le composant affiche des messages de validation pour les champs non valides
+  lorsque qu’un usager clique sur le bouton de connexion.
+-->
+
+<div class="col-md-6 col-md-offset-3">
+  <h2>Login</h2>
+  <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
+      <label for="email">E-mail</label>
+      <input [disabled]="loading" type="email" class="form-control" name="email"
+             [(ngModel)]="userInfo.email" #email="ngModel" required />
+      <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
+    </div>
+    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+      <label for="password">Password</label>
+      <input [disabled]="loading" type="password" class="form-control" name="password"
+             [(ngModel)]="userInfo.password" #password="ngModel" required />
+      <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
+    </div>
+    <div class="form-group">
+      <button [disabled]="loading" class="btn btn-primary">Login</button>
+      <a [routerLink]="['/register']" class="btn btn-link">Register</a>
+      <a [routerLink]="['/reset']" class="btn btn-link" id="reset">Reset</a>
+    </div>
+    <div *ngIf="errorMessage.length" class="login_error"> {{ errorMessage }}</div>
+  </form>
+</div>
+
+<div>
+  <h4>Connect with social media:</h4>
+  <div style="float: left;">
+    <a (click)="facebookLogin()" class="socialIcon" style="background-image:url(./assets/flat_facebook32x32.png)">
+      Facebook
+    </a>
+    <a (click)="signInWithGoogle()" class="socialIcon" style="background-image:url(./assets/flat_googleplus32x32.png)">
+      Google Plus
+    </a>
+    <a (click)="signInWithTwitterLogin()" class="socialIcon" style="background-image:url(./assets/flat_twitter32x32.png)">
+      Twitter
+    </a>
+    <a (click)="signInWithGithub()" class="socialIcon" style="background-image:url(./assets/flat_github32x32.png)">
+      Twitter
+    </a>
+  </div>
+</div>

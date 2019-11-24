@@ -1,0 +1,45 @@
+<!-- to do: corriger le code de file-drop -->
+<h2 mat-dialog-title>Nouveau texte</h2>
+
+<mat-dialog-content>
+  <div>
+    <ngx-file-drop
+      (onFileDrop)="fileDropped($event)"
+      (onFileOver)="fileOver($event)"
+      (onFileLeave)="fileLeave($event)">
+      <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+	    Déposer un fichier ici.
+	    <button type="button" (click)="openFileSelector()">Browse Files</button>
+      </ng-template>
+    </ngx-file-drop>
+    <div class="upload-table">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Fichier</th>
+          </tr>
+        </thead>
+        <tbody class="upload-name-style">
+          <tr *ngFor="let item of files; let i=index">
+            <td><strong>{{ item.relativePath }}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-form-field>
+  <input matInput placeholder="Titre" [(ngModel)]="data.corpusTitle" name="titre" #titre="ngModel" required />
+  <mat-error *ngIf="titre.value == '' || titre.value == null">Titre obligatoire</mat-error>
+</mat-form-field>
+
+<mat-dialog-actions>
+  <button class="btn btn-primary" [mat-dialog-close]="data" [disabled]="isNotValid">Ajouter</button>
+  <div style="width: 10px"></div>
+  <button class="btn btn btn-primary" mat-dialog-close>Annuler</button>
+</mat-dialog-actions>
+<br/>
+<mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
+<span *ngIf="progress" style="color:green">Validation du fichier en cours</span>
+

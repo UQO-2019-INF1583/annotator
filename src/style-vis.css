@@ -1,0 +1,530 @@
+/* -*- Mode: CSS; tab-width: 2; indent-tabs-mode: nil; -*- */
+/* vim:set ft=css ts=2 sw=2 sts=2 autoindent: */
+
+/* Styling for annotations */
+
+/* alternative font test */
+/*
+#brat-frontend-editor text {
+  font-size: 13px;
+  font-family: helvetica,arial,freesans,clean,sans-serif;
+}
+*/
+
+#brat-frontend-editor #svg {
+  margin: 34px auto 100px;
+  padding-top: 15px;
+}
+
+#brat-frontend-editor .center_wrapper {
+  display: table;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+#brat-frontend-editor .center_wrapper > div {
+  display: table-cell;
+  vertical-align: middle;
+}
+#brat-frontend-editor .center_wrapper > div > div {
+  /* match jQuery UI .ui-widget-content color */
+  color: #2e6e9e;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30em;
+  font-size: 12px;
+  font-family: 'Liberation Sans', Verdana, Arial, Helvetica, sans-serif;
+}
+#brat-frontend-editor .center_wrapper > div > div h1 {
+  text-align: center;
+  font-size: 14px;
+}
+#brat-frontend-editor #no_svg_wrapper {
+  display: none;
+}
+
+#brat-frontend-editor svg {
+  width: 100%;
+  height: 1px;
+  border: 1px solid #7fa2ff;
+  font-size: 15px;
+  /* font-size: 14px; */
+}
+#brat-frontend-editor svg.reselect {
+  border: 1px solid #ff3333;
+}
+
+/* "basic" font */
+#brat-frontend-editor text {
+  font-size: 13px;
+  font-family: 'Liberation Sans', Verdana, Arial, Helvetica, sans-serif;
+}
+
+#brat-frontend-editor @-webkit-keyframes pulse {
+  0% { color: #9999ff; margin-top: 0; }
+  50% { color: #ffffff; margin-top: 7px; }
+  100% { color: #9999ff; margin-top: 0; }
+}
+
+#brat-frontend-editor path {
+  pointer-events: none;
+}
+
+/* "basic" font */
+#brat-frontend-editor .span text {
+  /*  font-size: 10.5px; */
+  font-size: 10px;
+  text-anchor: middle;
+  font-family: 'PT Sans Caption', sans-serif;
+  pointer-events: none;
+}
+
+/* this should likely match span font */
+#brat-frontend-editor .span_type_label {
+  font-size: 11px;
+  font-family: 'PT Sans Caption', sans-serif;
+}
+/* this should likely match arc font */
+#brat-frontend-editor .arc_type_label {
+  font-size: 11px;
+  font-family: 'PT Sans Caption', sans-serif;
+}
+#brat-frontend-editor .attribute_type_label .ui-button-text {
+  font-size: 11px;
+  font-family: 'PT Sans Caption', sans-serif;
+}
+
+#brat-frontend-editor .span rect {
+  stroke-width: 0.75;
+}
+
+#brat-frontend-editor .glyph {
+  fill: #444444;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+#brat-frontend-editor .attribute_warning {
+  stroke: red;
+}
+
+#brat-frontend-editor .span rect.False_positive {
+  stroke: #ff4141;
+  stroke-width: 2;
+}
+
+#brat-frontend-editor .shadow_True_positive {
+  fill: #00ff00;
+}
+
+#brat-frontend-editor .shadow_False_positive {
+  fill: #ff4141;
+}
+
+#brat-frontend-editor #commentpopup.comment_False_positive {
+  background-color: #ff4141;
+}
+
+#brat-frontend-editor .span rect.False_negative {
+  stroke: #c20000;
+  fill: #ffffff;
+  stroke-width: 2;
+}
+
+#brat-frontend-editor .shadow_False_negative {
+  fill: #c20000;
+}
+
+#brat-frontend-editor #commentpopup.comment_False_negative {
+  background-color: #c20000;
+}
+
+#brat-frontend-editor .span rect.AnnotationError {
+  stroke-width: 1;
+}
+
+#brat-frontend-editor .shadow_AnnotationError {
+  fill: #ff0000;
+}
+
+#brat-frontend-editor #commentpopup.comment_AnnotationError {
+  background-color: #ff7777;
+}
+
+#brat-frontend-editor .span rect.AnnotationWarning {
+  stroke-width: 1;
+}
+
+#brat-frontend-editor .shadow_AnnotationWarning {
+  fill: #ff8800;
+}
+
+#brat-frontend-editor #commentpopup.comment_AnnotationWarning {
+  background-color: #ff9900;
+}
+
+#brat-frontend-editor .shadow_AnnotatorNotes {
+  /* fill: #00cc00; */
+  fill: #3ab7ee;
+}
+#brat-frontend-editor #commentpopup.comment_AnnotatorNotes {
+  /* background-color: #00cc00; */
+  /* background-color: #DAF7DC; */
+  background-color: #d7e7ee;
+}
+
+#brat-frontend-editor .shadow_Normalized {
+  /* fill: #00cc00; */
+  fill: #3aee37;
+}
+#brat-frontend-editor #commentpopup.comment_Normalized {
+  /* background-color: #00cc00; */
+  /* background-color: #DAF7DC; */
+  background-color: #d7eee7;
+}
+rect.Normalized {
+  stroke-width: 1.5;
+}
+
+#brat-frontend-editor .shadow_AnnotationIncomplete {
+  fill: #aaaaaa;
+}
+#brat-frontend-editor .span rect.AnnotationIncomplete {
+  stroke: #002200;
+  stroke-width: 0.5;
+  fill: #ffffff;
+}
+#brat-frontend-editor #commentpopup.comment_AnnotationIncomplete {
+  background-color: #ffff77;
+}
+
+#brat-frontend-editor .shadow_AnnotationUnconfirmed {
+  fill: #eeeeee;
+}
+#brat-frontend-editor .span rect.AnnotationUnconfirmed {
+  stroke: #002200;
+  stroke-width: 0.5;
+  opacity : 0.5;
+}
+#brat-frontend-editor #commentpopup.comment_AnnotationUnconfirmed {
+  background-color: #ddddff;
+}
+
+#brat-frontend-editor .span rect.True_positive {
+  /* stroke: #007700; */
+}
+
+#brat-frontend-editor rect.shadow_EditHighlight {
+  fill: #ffff99;
+}
+#brat-frontend-editor .shadow_EditHighlight_arc {
+  stroke: #ffff99;
+}
+
+#brat-frontend-editor .span path {
+  fill: none;
+}
+
+#brat-frontend-editor .span path.curly {
+  /* 'stroke' def here blocks 'stroke' set in JS..? */
+  /* stroke: grey; */
+  stroke-width: 0.5;
+}
+
+#brat-frontend-editor .span path.boxcross {
+  stroke: black;
+  opacity: 0.5;
+}
+
+#brat-frontend-editor .arcs path {
+  stroke: #989898;
+  fill: none;
+  stroke-width: 1;
+}
+
+#brat-frontend-editor .arcs .highlight path {
+  stroke: #000000;
+  stroke-width: 1.5;
+  opacity: 1;
+}
+#brat-frontend-editor .arcs .highlight text {
+  stroke: black;
+  fill: black;
+  stroke-width: 0.5;
+}
+#brat-frontend-editor .span.highlight rect {
+  stroke-width: 2px;
+}
+#brat-frontend-editor .span rect.reselect {
+  stroke-width: 2px;
+}
+#brat-frontend-editor .span rect.reselectTarget {
+  stroke-width: 2px;
+}
+#brat-frontend-editor .arcs .reselect path {
+  stroke-width: 2px;
+  stroke: #ff0000 !important;
+}
+#brat-frontend-editor .arcs .reselect text {
+  fill: #ff0000 !important;
+}
+
+#brat-frontend-editor .span rect.badTarget {
+  stroke: #f00;
+}
+
+#brat-frontend-editor .arcs text {
+  font-size: 9px;
+  text-anchor: middle;
+  font-family: 'PT Sans Caption', sans-serif;
+  /* dominant-baseline: central; */
+  cursor: default;
+}
+
+#brat-frontend-editor .background0 {
+  stroke: none;
+  fill: #ffffff;
+}
+
+#brat-frontend-editor .background1 {
+  stroke: none;
+  fill: #eeeeee;
+}
+
+#brat-frontend-editor .backgroundHighlight {
+  stroke: none;
+  fill: #ffff99;
+}
+
+#brat-frontend-editor .sentnum text {
+  fill: #999999;
+  text-anchor: end;
+}
+
+#brat-frontend-editor .sentnum path {
+  stroke: #999999;
+  stroke-width: 1px;
+}
+
+#brat-frontend-editor .span_cue {
+  fill: #eeeeee !important;
+}
+
+#brat-frontend-editor .drag_stroke {
+  stroke: black;
+}
+#brat-frontend-editor .drag_fill {
+  fill: black;
+}
+
+
+#brat-frontend-editor .dialog {
+  display: none;
+}
+#brat-frontend-editor #span_free_div, #arc_free_div {
+  float: left;
+}
+#brat-frontend-editor fieldset {
+  /* match relevant parts of jQuery UI .ui-widget-content */
+  border: 1px solid #a6c9e2;
+  /* round corners, same as jQuery UI .ui-corner-all */
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  /* to prevent border from running into legend */
+  margin-top: 5px;
+}
+#brat-frontend-editor fieldset legend {
+  font-weight: bold;
+  font-size: 90%;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #70a8d2;
+  color: white;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+#brat-frontend-editor .label-like {
+   /* for UI consistency, this should match the "fieldset legend" style;
+      sorry about the duplication. */
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 90%;
+  /* match jQuery UI .ui-widget-content color */
+  color: #2e6e9e;
+}
+
+#brat-frontend-editor .accesskey {
+  text-decoration: underline;
+}
+
+
+#brat-frontend-editor .shadow {
+  -moz-box-shadow: 5px 5px 5px #444444;
+  -webkit-box-shadow: 5px 5px 5px #444444;
+  box-shadow: 5px 5px 5px #444444;
+}
+
+#brat-frontend-editor #span_selected, #arc_origin, #arc_target {
+  font-weight: bold;
+}
+
+#brat-frontend-editor #commentpopup {
+  font-family: 'Liberation Sans', Verdana, Arial, Helvetica, sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0.95;
+  padding: 10px;
+  display: none;
+  border: 1px outset #000000;
+  background-color: #f5f5f9;
+  /* background-color: #d7e7ee; */
+  /* background-color: #eeeeee; */
+  color: #000000;
+  z-index: 20;
+  -moz-box-shadow: 5px 5px 5px #aaaaaa;
+  -webkit-box-shadow: 5px 5px 5px #aaaaaa;
+  box-shadow: 5px 5px 5px #aaaaaa;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  max-width: 80%;
+}
+#brat-frontend-editor #more_info_readme {
+  height: 350px;
+}
+#brat-frontend-editor #readme_container {
+  position: relative;
+}
+#brat-frontend-editor #more_readme_button {
+  padding: 2px 5px;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+}
+
+#brat-frontend-editor .comment_id {
+  vertical-align: top;
+  float:right;
+  font-size: 75%;
+  font-family: monospace;
+  color: #333333;
+}
+#brat-frontend-editor .comment_type {
+  /* font-weight: bold; */
+}
+#brat-frontend-editor .comment_text {
+  font-weight: bold;
+}
+#brat-frontend-editor .comment_type_id_wrapper {
+  /* padding for floating ID */
+  padding-right: 2em;
+}
+#brat-frontend-editor .norm_info_label {
+  font-weight: bold;
+  font-size: 80%;
+}
+#brat-frontend-editor .norm_info_value {
+  font-size: 80%;
+}
+#brat-frontend-editor .norm_info_img {
+  float: right;
+  margin-left: 1em;
+}
+
+#brat-frontend-editor #search_form select {
+  width: 100%; /* deal with overflowing selectboxes */
+}
+
+#brat-frontend-editor .scroll_fset {
+  height: 200px;
+}
+#brat-frontend-editor .scroll_fset fieldset {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+/* HACK to display <legend> properly */
+#brat-frontend-editor .scroll_fset {
+  margin-bottom: 2.5em;
+}
+#brat-frontend-editor .scroll_fset fieldset {
+  padding-bottom: 2em;
+}
+/* end HACK */
+#brat-frontend-editor .scroll_fset div.scroller {
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+}
+
+#brat-frontend-editor #span_highlight_link, #arc_highlight_link, #viewspan_highlight_link {
+  float: right;
+}
+
+#brat-frontend-editor .unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -o-user-select: none;
+   user-select: none;
+   cursor: default;
+}
+@font-face {
+  font-family: 'Liberation Sans';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Liberation Sans'), local('Liberation-Sans'), url('assets/brat-client/static/fonts/Liberation_Sans-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'PT Sans Caption';
+  font-style: normal;
+  font-weight: normal;
+  src: local('PT Sans Caption'), local('PTSans-Caption'), url('assets/brat-client/static/fonts/PT_Sans-Caption-Web-Regular.ttf') format('truetype');
+}
+
+/* Apple iPad, iPhone, iPod */
+
+#brat-frontend-editor * {
+   -webkit-tap-highlight-color: rgba(0,0,0,0);
+   -webkit-text-size-adjust: none;
+   select: none;
+}
+
+#brat-frontend-editor .span rect.AddedAnnotation {
+  stroke: #ff4141;
+  stroke-width: 2;
+}
+#brat-frontend-editor .shadow_AddedAnnotation {
+  fill: #ff4141;
+}
+#brat-frontend-editor #commentpopup.comment_AddedAnnotation {
+  background-color: #ffcccc;
+}
+#brat-frontend-editor .span rect.MissingAnnotation {
+  stroke: #ffffff;
+  stroke-width: 2;
+}
+#brat-frontend-editor .shadow_MissingAnnotation {
+  fill: #ff4141;
+  opacity: 0.3;
+}
+#brat-frontend-editor #commentpopup.comment_MissingAnnotation {
+  background-color: #ffcccc;
+}
+#brat-frontend-editor .span rect.MissingAnnotation + text {
+  opacity: 0.5;
+}
+#brat-frontend-editor .span rect.ChangedAnnotation {
+  stroke: #ffff99;
+  stroke-width: 2;
+}
+#brat-frontend-editor .shadow_ChangedAnnotation {
+  fill: #ff4141;
+}
+#brat-frontend-editor #commentpopup.comment_ChangedAnnotation {
+  background-color: #ffcccc;
+}

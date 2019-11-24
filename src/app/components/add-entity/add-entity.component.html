@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Nouvelle Entitée Brat</h2>
+<form #entityvalidate="ngForm">
+<mat-form-field>
+  <input matInput placeholder="Name" [(ngModel)]="data.name" name="name" #name="ngModel" required />
+  <mat-error *ngIf="name.value == '' || name.value == null">nom obligatoire</mat-error>
+</mat-form-field>
+
+<mat-form-field>
+  <input matInput placeholder="Type" [(ngModel)]="data.type" name="type" #type="ngModel" required />
+  <mat-error *ngIf="type.value == '' || type.value == null">type obligatoire</mat-error>
+</mat-form-field>
+
+<mat-form-field>
+  <input matInput placeholder="Labels" [(ngModel)]="data.labels[0]" name="labels" #labels="ngModel" required />
+  <mat-error *ngIf="labels.value == '' || labels.value == null">Étiquette obligatoire</mat-error>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-select placeholder="Color" [(ngModel)]="data.bgColor" name="color" #color="ngModel" required>
+    <mat-option *ngFor="let item of availableColors" [value]="item">
+      {{item}}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="color.value == null">couleur obligatoire</mat-error>
+</mat-form-field>
+
+<mat-dialog-actions>
+<button class="btn btn btn-primary" [disabled]="!entityvalidate.valid" [mat-dialog-close]="data">Add</button>
+  <div style="width: 10px"></div>
+  <button class="btn btn btn-primary" mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
+</form>

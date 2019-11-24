@@ -1,0 +1,69 @@
+<div class="header">
+  <nav class="navbar navbar-static-top navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" (click)="isCollapsed = !isCollapsed">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="glyphicon glyphicon-align-justify"></span>
+        </button>
+        <button type="button" class="navbar-toggle">
+          <span class="glyphicon glyphicon-user couleur-blanc medium" aria-hidden="true"></span>
+        </button>
+        <a class="navbar-brand" [routerLink]="['/']">UQO Annotator</a>
+      </div>
+
+      <div class="navbar-toggleable-xs navbar-collapse" id="bd-main-nav"
+        [attr.aria-expanded]="!isCollapsed" [ngClass]="{collapse: isCollapsed}">
+        <div class=" navbar-left">
+          <ul class="nav navbar-nav ml-auto">
+            <li *ngIf="isAdmin()" (click)="isCollapsed = true" routerLinkActive="active">
+              <a [routerLink]="['/createProject']" routerLinkActive="active">
+                <span class="{{''}}"></span>Create project</a>
+            </li>
+            <li (click)="isCollapsed = true" routerLinkActive="active">
+              <a class="navbar-left" [routerLink]="['/projectManager']">{{'Projects'}}</a>
+            </li>
+            <li *ngIf="isAnnotation()" (click)="isCollapsed = true" routerLinkActive="active_annotation">
+              <a class="navbar-left" [routerLink]="['/annotation']">{{'Annotation'}}</a>
+            </li>
+            <li *ngIf="isAdmin()" (click)="isCollapsed = true" routerLinkActive="active">
+             <button [matMenuTriggerFor]="adminMenu">Admin</button>
+             <mat-menu #adminMenu="matMenu">
+               <button mat-menu-item>
+                 <a class="navbar-left" [routerLink]="['/userManager']">{{'User management'}}</a>
+               </button>
+               <button mat-menu-item>
+                 <a class="navbar-left" [routerLink]="['/projectManager']">{{'Project management'}}</a>
+               </button>
+             </mat-menu>
+            </li>
+          </ul>
+        </div>
+        <div class="navbar-right">
+          <ul class="nav navbar-nav ml-auto">
+            <li *ngIf="!isUser()" (click)="isCollapsed = true" routerLinkActive="active">
+              <a [routerLink]="['/login']" routerLinkActive="active">
+                <span class="{{''}}"></span>Login</a>
+            </li>
+            <li *ngIf="!isUser()" (click)="isCollapsed = true" routerLinkActive="active">
+              <a [routerLink]="['/register']" routerLinkActive="active">
+                <span class="{{'glyphicon glyphicon-user'}}"></span>Sign Up</a>
+            </li>
+            <li *ngIf="isUser()" (click)="isCollapsed = false" routerLinkActive="active">
+              <a [routerLink]="['profile']" routerLinkActive="active">
+                <span class="{{''}}"></span><i class="fa fa-user">Hi {{staticCurrUsername}}!</i></a>
+            </li>
+            <li *ngIf="isUser()" (click)="logout();isCollapsed = true" routerLinkActive="active">
+              <a [routerLink]="['login']" routerLinkActive="active">
+                <span class="{{''}}"></span>Logout</a>
+            </li>
+            <!-- popups -->
+            <li (click)="isCollapsed = true" routerLinkActive="active" >
+              <a [routerLink]="[{ outlets: { popup: ['compose'] } }]" routerLinkActive="active">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>

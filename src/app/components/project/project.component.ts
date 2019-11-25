@@ -124,11 +124,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addCorpusDialogBox() {
     const dialogRef = this.dialog.open(AddCorpusComponent, {
       width: '250px',
-      data: { corpusTitle: undefined, corpusFile: undefined },
+      data: { corpusTitle: undefined, corpusFile: [] },
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
+      var i = 0;
+      var titles = result.corpusTitle.split(",");
+      for (const fileInfo of result.corpusFile) {
+        var data = { corpusTitle: titles[i], corpusFile: result.corpusFile[i] };
+        this.ps.addCorpus(data, this.currentProject.id);
+        i++
+      }
+      /*if (result !== undefined) {
         if (
           result.corpusTitle !== undefined &&
           result.corpusFile !== undefined
@@ -136,7 +143,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           // est-ce qu'il y a une validation ici a faire? (titre du fichier déjà existant?)
           this.ps.addCorpus(result, this.currentProject.id);
         }
-      }
+      }*/
     });
   }
 

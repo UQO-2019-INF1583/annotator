@@ -29,6 +29,7 @@ export class AddCorpusComponent implements OnInit {
   }
   public fileDropped(files: NgxFileDropEntry[]) {
     this.files = files;
+    var i = 0;
     for (const droppedFile of files) {
       // Is it a file?
       if (droppedFile.fileEntry.isFile) {
@@ -49,7 +50,8 @@ export class AddCorpusComponent implements OnInit {
             this.isNotValid = false;
             this.isExtValid = false;
           }
-          this.data.corpusFile = info;
+          this.data.corpusFile[i] = info;
+          i++;
         });
       } else {
         // It was a directory (empty directories are added, otherwise only files)

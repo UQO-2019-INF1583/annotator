@@ -1,9 +1,10 @@
 /* to do; mettre à jour cette classe */
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { NgxFileDropModule,
-         NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry
-       } from 'ngx-file-drop';
+import {
+  NgxFileDropModule,
+  NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry
+} from 'ngx-file-drop';
 
 @Component({
   selector: 'app-add-corpus',
@@ -66,4 +67,7 @@ export class AddCorpusComponent implements OnInit {
     // console.log(event);
   }
 
+  public validateNames() {
+
+  }
 }

@@ -10,25 +10,25 @@ describe('ResetPasswordComponent', () => {
   let component: ResetPasswordComponent;
   let fixture: ComponentFixture<ResetPasswordComponent>;
 
-  // Reset Object that represent valid combinations of entries
+  // Réinitialiser un objet représentant des combinaisons valides d'entrées
   const validTestCred = {
     email: 'hello@gmail.com',
     password: 'Test@1234'
   };
 
-  // Reset Object that represent invalid combinations of entries
+  // Réinitialiser un objet représentant des combinaisons d'entrées non valides
   const invalidTestCred = {
     email: 'xyz@gmail.com',
     password: 'Test@1234'
   };
 
-  // Function that triggers before any test
+  // Fonction qui se déclenche avant tout test
   beforeEach(() => {
     const authServiceStub = {
       resetPassword: email => ({ then: () => ({ catch: () => ({}) }) })
     };
-    // Declaration of the necessary components
-    // Declaration of providers (the services responsible for Firebase authentication)
+    // Déclaration des composants nécessaires
+    // Déclaration des providers (les services responsables de l'authentification Firebase)
 
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
@@ -92,7 +92,7 @@ describe('ResetPasswordComponent', () => {
       })
     ));
 
-    // must be called from within fakeAsync due to use of tick()
+    // doit être appelé depuis fakeAsync en raison de l'utilisation de tick ()
     function setInputValue(selector: string, value: string) {
       fixture.detectChanges();
     }

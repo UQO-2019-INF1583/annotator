@@ -74,6 +74,7 @@ export class AuthService {
             JSON.stringify(credentials.user.displayName)
           );
 
+          // Utiliser par la fonction isAdministrator()
           localStorage.setItem(
             'currentUserId',
             credentials.user.uid
@@ -150,6 +151,7 @@ export class AuthService {
             JSON.stringify(result.user.displayName)
           );
 
+          // Utilisé par la fonction isAdministrator()
           localStorage.setItem(
             'currentUserId',
             result.user.uid
@@ -188,8 +190,12 @@ export class AuthService {
     return currentUser != null;
   }
 
+  // Fonction asynchrone permettant de déterminer si l'utilisateur connecté est un 
+  // administrateur de système (role = 2)
   async isAdministrator(): Promise<boolean> {
     const userId = localStorage.getItem('currentUserId');
+
+    // Chercher le document de l'utilisateur dans la base de données
     const dbUser = await this.afs.collection('Users/').doc(userId).ref.get();
     const userRole = dbUser.data().role;
 

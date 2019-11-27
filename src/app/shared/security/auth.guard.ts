@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { HeaderComponent } from '../../shared/components/header/header.component';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -13,6 +14,8 @@ export class AuthGuard implements CanActivate {
   }*/
   constructor(private router: Router) { }
   canActivate() {
+    const url = this.router.parseUrl;
+
     if (localStorage.getItem('currentUser')) {
       // logged in so return true
       // HeaderComponent.isUserLoggedIn = true;

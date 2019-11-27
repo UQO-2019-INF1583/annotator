@@ -52,6 +52,7 @@ import { environment } from '../environments/environment';
 import { NgxFileDropModule } from 'ngx-file-drop';
 
 import { AppComponent } from './app.component';
+import { AdminGuardService } from './shared/security/admin-guard.service';
 import { AuthGuard } from './shared/security/auth.guard';
 import { AuthService } from './shared/security/auth.service';
 import { ProjectManagerService, UserManagerService } from './adm';
@@ -163,6 +164,7 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
   ],
   providers: [
     AngularFireDatabaseModule,
+    AdminGuardService,
     AuthGuard,
     AuthService,
     ProjectDataSource,

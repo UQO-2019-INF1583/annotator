@@ -73,9 +73,15 @@ export class AuthService {
             'currentUser',
             JSON.stringify(credentials.user.displayName)
           );
+
+          localStorage.setItem(
+            'currentUserId',
+            credentials.user.uid
+          );
+
           resolve();
         })
-        .catch(function(error: Error) {
+        .catch(function (error: Error) {
           reject(error);
         });
     });
@@ -85,6 +91,7 @@ export class AuthService {
     this.afAuth.auth.signOut();
     // clear token remove user from local storage to log user out
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUserId');
   }
 
   resetPassword(email: string) {
@@ -142,6 +149,12 @@ export class AuthService {
             'currentUser',
             JSON.stringify(result.user.displayName)
           );
+
+          localStorage.setItem(
+            'currentUserId',
+            result.user.uid
+          );
+
           resolve();
         })
         .catch(error => {
@@ -165,12 +178,25 @@ export class AuthService {
   }
 
   signOut() {
-    this.afAuth.auth.signOut().then(() => {});
+    this.afAuth.auth.signOut().then(() => { });
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUserId');
   }
 
   isConnected(): boolean {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     return currentUser != null;
+  }
+
+  async isAdministrator(): Promise<boolean> {
+    const userId = localStorage.getItem('currentUserId');
+    const dbUser = await this.afs.collection('Users/').doc(userId).ref.get();
+    const userRole = dbUser.data().role;
+
+    if (userRole == 2) {
+      return true;
+    }
+
+    return false;
   }
 }

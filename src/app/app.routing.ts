@@ -9,6 +9,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AnnotationComponent } from './annotation/index';
 import { AuthGuard } from './shared/security/auth.guard';
+import { AdminGuardService } from './shared/security/admin-guard.service';
 import { HomeComponent } from './home/home.component';
 import { HomeWelcomeComponent } from './home-welcome/home-welcome.component';
 // import { AdminComponent } from './adm';
@@ -48,7 +49,7 @@ const appRoutes: Routes = [
   {
     path: 'userManager',
     component: UserManagerComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AdminGuardService]
   },
   // otherwise page not found
   { path: '**', component: PageNotFoundComponent }

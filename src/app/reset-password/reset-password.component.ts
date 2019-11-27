@@ -12,7 +12,6 @@ export class ResetPasswordComponent implements OnInit {
   emailSent: boolean = false;
 
   ngOnInit() {
-
   }
   //Si l'utilistateur est enregistré
   resetPassword(email: string) {

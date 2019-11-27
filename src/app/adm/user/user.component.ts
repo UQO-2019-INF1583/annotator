@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+
 import 'rxjs/add/operator/map';
 
 import { Project } from '../../shared/project.model';
@@ -10,11 +9,9 @@ import { ProjectManagerService } from '../projectManager';
 import { ProjectDataSource } from '../../data-sources/projectDataSource';
 
 import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument
+  AngularFirestore
 } from '@angular/fire/firestore';
-import * as firebase from 'firebase';
+
 
 @Component({
   selector: 'app-user',
@@ -31,8 +28,7 @@ export class UserComponent implements OnInit {
   constructor(
     private projectService: ProjectManagerService,
     private route: ActivatedRoute,
-    private afs: AngularFirestore,
-    private router: Router) {
+    private afs: AngularFirestore) {
   }
 
   ngOnInit(): void {

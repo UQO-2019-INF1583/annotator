@@ -7,23 +7,26 @@ import { AuthService } from '../shared/security/auth.service';
 })
 export class ResetPasswordComponent implements OnInit {
   userInfo: any = {};
-  constructor(public auth: AuthService,) { }
+  constructor(public auth: AuthService, ) { }
   successMessage: String;
   emailSent: boolean = false;
 
   ngOnInit() {
-
   }
-
+  //Si l'utilistateur est enregistré
   resetPassword(email: string) {
-  this.emailSent = true;
+    this.emailSent = true;
     this.auth.resetPassword(this.userInfo.email)
-    .then(() => {
-      this.successMessage = "A password reset email has been sent.";
-  })
-  .catch(error => {
-      //TODO: Error handling
-    this.emailSent = false;
-    });
+      //Envoyer un URL à l'utilisateur
+      .then(() => {
+        // this.successMessage = "A password reset email has been sent.";
+        this.successMessage = "We sent you a message to this email.";
+      })
+      .catch(error => {
+        //TODO: Traitement des erreurs
+        this.emailSent = false;
+        // Afficher le message d'erreur.
+        this.successMessage = error.message;
+      });
   }
 }

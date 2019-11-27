@@ -93,7 +93,7 @@ export class LoginComponent implements OnInit {
 
   signInWithTwitterLogin() {
     this.authService.twitterLogin()
-     .then((data) => this.afterSignIn());
+      .then((data) => this.afterSignIn());
   }
 
   /// Shared

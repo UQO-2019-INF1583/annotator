@@ -19,6 +19,8 @@ import { RegisterComponent } from './register';
 import { UserComponent } from './adm';
 import { ProfileComponent } from './profile/profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ContactComponent } from './contact/contact.component';
+
 
 const appRoutes: Routes = [
   { path: '', component: HomeWelcomeComponent, pathMatch: 'full' },
@@ -45,6 +47,7 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'reset', component: ResetPasswordComponent },
+  { path: 'contact', component: ContactComponent },
   {
     path: 'userManager',
     component: UserManagerComponent,

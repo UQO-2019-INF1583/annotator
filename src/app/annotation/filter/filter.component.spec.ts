@@ -1,13 +1,10 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
-import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
+// Commande pour lancer les tests du composent
+// ng test --include src/app/annotation/filter/filter.component.spec.ts
+
+import { TestBed, async } from '@angular/core/testing';
+
 import { FilterComponent } from './filter.component';
 import { MOCK_FILTER } from './filter.service.MOCKDATA';
-
-// Initialise l'environnement de test d'Angular
-getTestBed().initTestEnvironment(
-    BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting()
-);
 
 //beforeEach() et afterEach() s'assurent que chaque test soit effectué avec un MOCK propre
 beforeEach(() => {
@@ -19,57 +16,84 @@ afterEach(function () {
     document.body.removeChild(document.getElementById('filterMockData'));
 });
 
-describe('FilterComponent', () => {
-  let component: FilterComponent;
+describe('AppComponent', () => {
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [
+                FilterComponent
+            ],
+        }).compileComponents();
+    }));
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    /**
+     * Ce test s'assure que le composent a été créé
+     */
+    it('Le composent devrait être créé', async () => {
+        const fixture = TestBed.createComponent(FilterComponent);
+        const app = fixture.debugElement.componentInstance;
 
-  /**
-  * Ce test s'assure que la fonction showFilter() identifie le bon
-  * nombre d'éléments
-  */
-    it('Le nombre d\'éléments filtrables', () => {
-        component.showFilter();
-        var num_elements = component.filterElements.size;
-        expect(num_elements).toBe(25);
+        expect(app).toBeTruthy();
     })
 
     /**
-  * Ce test s'assure que la fonction highlightFilter() change les éléments de filtre de la bonne couleur
-  */
-    it('Tableau de couleurs des annotations = Tableau de couleurs des filtres', () => {
-        component.highlightFilter();
-        var liHighlighted: HTMLCollectionOf<HTMLElement> = document.getElementsByClassName('filterOption') as HTMLCollectionOf<HTMLElement>;
-        for (var i = 0; i < liHighlighted.length; i++) {
-            expect(liHighlighted[i].getAttribute('style')).toBe('background-color:' + this.highLightColors[i]);
-        }
+    * Ce test s'assure que FilterComponent ai le bon nombre d'éléments filtrables 
+     */
+    it('Le bon nombre d\'éléments filtrables devrait être identifié', async () => {
+        const fixture = TestBed.createComponent(FilterComponent);
+        const app = fixture.debugElement.componentInstance;
+
+        expect(app.elements.length).toEqual(25);
     })
 
     /**
-  * Ce test s'assure que la fonction showElements change bien l'attribut 'Display' de ceux-ci
-  */
-    it('Attribut display des elements et des highlights = Block', () => {
-        component.showElements("a");
-        for (var i = 0; i < component.elements.length; i++) {
-            if (component.elements[i].textContent == name) {
-                expect(component.elements[i].style.display).toBe('Block');
-                expect(component.highlights[0].getElementsByTagName('rect')[i].style.display).toBe('Block');
-            }
-        }
+     * Ce test s'assure que FilterComponent ai le bon nombre d'highlights 
+     */
+    it('Le bon nombre d\'highlights devrait être identifié', async () => {
+        const fixture = TestBed.createComponent(FilterComponent);
+        const app = fixture.debugElement.componentInstance;
+
+        expect(app.highlights[0].getElementsByTagName('rect').length).toEqual(25);
     })
 
     /**
-  * Ce test s'assure que la fonction hideElements change bien l'attribut 'Display' de ceux-ci
-  */
-    it('Attribut display des elements et des highlights = None', () => {
-        component.hideElements("a");
-        for (var i = 0; i < component.elements.length; i++) {
-            if (component.elements[i].textContent == name) {
-                expect(component.elements[i].style.display).toBe('None');
-                expect(component.highlights[0].getElementsByTagName('rect')[i].style.display).toBe('None');
-            }
-        }
+    * Ce test s'assure que FilterComponent ai le bon nombre de couleurs
+     */
+    it('La fonction "highlightFilter" identifie le bon nombre de coleurs', async () => {
+        const fixture = TestBed.createComponent(FilterComponent);
+        const app = fixture.debugElement.componentInstance;
+
+        app.highlightFilter();
+
+        expect(app.highLightColors.length).toEqual(5);
     })
-});
+
+    /**
+    * Ce test s'assure que la fonction "showFilter()" ai le bon nombre d'éléments filtrables dans le tableau de filtres
+     */
+    it('La fonction "showFilter()" identifie le bon nombre de type d\'éléments filtrables dans le tableau de filtres', async () => {
+        const fixture = TestBed.createComponent(FilterComponent);
+        const app = fixture.debugElement.componentInstance;
+
+        app.showFilter();
+
+        expect(app.filterElements.size).toEqual(5);
+    })
+
+    /**
+     * Ce test s'assure que le tableau de filtres soit à jour à l'ajout d'une nouvelle annotation
+     */
+    it('Vérifie si le tableau de filtres est met à jour quand on ajoute une nouvelle annotation', async () => {
+        const fixture = TestBed.createComponent(FilterComponent);
+        const app = fixture.debugElement.componentInstance;
+
+        //Ajoute une nouvelle annotation
+        document.body.insertAdjacentHTML('afterbegin', "<g id=\"tmpAnnotation\" class=\"span\"><rect></rect><text>Disease</text><></path></g>");
+
+        app.showFilter();
+
+        expect(app.filterElements.size).toEqual(6);
+
+        //Retire l'annotation
+        document.body.removeChild(document.getElementById('tmpAnnotation'));
+    })
+})

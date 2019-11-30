@@ -11,12 +11,10 @@ export class FilterComponent implements OnInit {
   constructor(private fs: FilterService) { }
 
   ngOnInit() {
-    setTimeout(() => {
+    setInterval(() => {
       this.showFilter();
-    }, 3000);
-    setTimeout(() => {
       this.highlightFilter();
-    }, 3000);
+    }, 100)
   }
 
   elements: HTMLCollectionOf<HTMLElement> = this.fs.getFiltrableElements();

@@ -82,8 +82,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
         if (this.isConnected) {
           this.users = this.ps.getUsers();
-          this.getAnnotatorEmail();
-          this.getAdminEmail();
+          //this.getAnnotatorEmail();
+          //this.getAdminEmail();
         }
       });
     });

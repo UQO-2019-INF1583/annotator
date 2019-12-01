@@ -77,6 +77,7 @@ export class AnnotatorsComponent implements OnInit {
         x.forEach((u, j) => {
           if (u.uid === uid) {
             this.annotators.push({ email: u.email, uid: u.uid });
+            //console.log(this.annotators[1].email);  
           }
         });
       });
@@ -90,6 +91,7 @@ export class AnnotatorsComponent implements OnInit {
         x.forEach((u, j) => {
           if (u.uid === uid) {
             this.admin.push({ email: u.email, uid: u.uid });
+            //console.log(this.admin[1].email);
           }
         });
       });

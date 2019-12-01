@@ -22,26 +22,54 @@ import { User } from '../../shared/user.model';
 
 export class UserManagerComponent implements OnInit {
 
-  displayedColumns = ['email', 'firstname', 'lastname', 'modify'];
+  displayedColumns = ['email', 'firstname', 'lastname', 'role', 'modify'];
+  // Sert à dire au composant HTML le colonnes à afficher.
+  // Voir https://v7.material.angular.io/components/table/overview#3-define-the-row-templates pour plus de detail
   dataSource: UserDataSource | null;
 
   constructor(public router: Router,
-			  private afs: AngularFirestore,
-			  private um: UserManagerService,
-			  public dialog: MatDialog) { }
+    private afs: AngularFirestore,
+    private um: UserManagerService,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
     this.dataSource = new UserDataSource(this.afs);
   }
-/*
-  modifyUser(user: any) {
-    this.router.navigate(['/user', user]);
-  }
-*/
+  /*
+    modifyUser(user: any) {
+      this.router.navigate(['/user', user]);
+    }
+  */
 
   // Modification des informations d'un utilisateur
   modifyUser(user: any) {
     // ajouter un pop up pour la modification
+    let roleString: string; /* Variable qui va retenir la représentation textuelle du role
+    Puisque le rôle de l'utilisateur est représenté comme entier de tel manière que :
+     0 -> Visiteur
+     1 -> Membre
+     2 -> Administrateur
+     Alors il suffit de tester user.role et d'affecter la représentation correspondante
+     J'utilise un switch parceque c'est plus intuitif.
+
+     Le but de la création de cette variable est de pouvoir la passer au constructeur
+     de EditUserComponent pour que, quand il s'instanciera il affichera le rôle de l'utilisateur.
+     */
+    switch (user.role) {
+      case 0: {
+        roleString = 'Visiteur';
+        break;
+      }
+      case 1: {
+        roleString = 'Membre';
+        break;
+      }
+      case 2: {
+        roleString = 'Administrateur';
+        break;
+      }
+
+    }
     const dialogRef = this.dialog.open(EditUserComponent, {
       width: '600px',
       height: '400px',
@@ -50,10 +78,11 @@ export class UserManagerComponent implements OnInit {
         lastname: user.lastname,
         email: user.email,
         role: user.role,
+        roleRepresent: roleString, // <-- On la passe comme attribut de l'objet temporaire data
         roles: [
-          { valeur: 1, viewValue: 'Member' },
-          { valeur: 2, viewValue: 'Administrator' },
-          { valeur: 0, viewValue: 'Visitor' }
+          { valeur: 1, viewValue: 'Membre' },
+          { valeur: 2, viewValue: 'Administrateur' },
+          { valeur: 0, viewValue: 'Visiteur' }
         ]
       },
     });
@@ -65,7 +94,7 @@ export class UserManagerComponent implements OnInit {
           result.lastname !== undefined &&
           result.email !== undefined &&
           result.role !== undefined) {
-            const upd = this.um.modifyUser({
+          const upd = this.um.modifyUser({
             'firstname': result.firstname,
             'lastname': result.lastname,
             'email': result.email,
@@ -76,7 +105,7 @@ export class UserManagerComponent implements OnInit {
       }
     });
   }
-	
+
   deleteUser(user: any) {
     // un pop up qui demande si l'administrateur veut vraiment supprimer l'utilisateur
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
@@ -91,7 +120,7 @@ export class UserManagerComponent implements OnInit {
       if (result.response === true) {
         this.um.deleteUser(user.uid);
       }
-    });	  
+    });
   }
 
 }

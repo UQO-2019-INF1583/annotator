@@ -17,6 +17,18 @@
       <mat-header-cell *matHeaderCellDef> Last name </mat-header-cell>
       <mat-cell *matCellDef="let user"> {{user.lastname}} </mat-cell>
     </ng-container>
+    <!-- Ajout du <ng-container> qui affiche le rôle correspondant-->
+    <ng-container matColumnDef="role">
+      <mat-header-cell *matHeaderCellDef> Role </mat-header-cell>
+      <mat-cell *matCellDef="let user">
+        <span [ngSwitch]="user.role">
+          <!-- Utilisation de la directive Angular Switch -->
+          <span *ngSwitchCase='0'>Visiteur</span>
+          <span *ngSwitchCase='1'>Membre</span>
+          <span *ngSwitchCase='2'>Administrateur</span>
+        </span>
+      </mat-cell>
+    </ng-container>
 
     <ng-container matColumnDef="modify">
       <mat-header-cell *matHeaderCellDef> Modify / Delete </mat-header-cell>

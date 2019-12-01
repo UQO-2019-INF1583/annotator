@@ -22,9 +22,9 @@
         <mat-label>{{data.roleRepresent}}</mat-label>
         <!-- Ajout de mat-label pour afficher le rôle de cet utilisateur -->
         <mat-select [(value)]="data.role" name="role">
-          <mat-option *ngFor="let role of data.roles" [value]="role.value">
-            {{role.viewValue}}
-          </mat-option>
+          <mat-option [value]="2">Administrateur</mat-option>
+          <mat-option [value]="1">Membre</mat-option>
+          <mat-option [value]="0">Visiteur</mat-option>
         </mat-select>
       </mat-form-field>
     </div>

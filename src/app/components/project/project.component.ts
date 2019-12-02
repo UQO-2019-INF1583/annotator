@@ -2,23 +2,23 @@
 // Dans le cas de ce module, il s'agit de permettre de visualiser les données du projet et de sauvegarder les
 // différents changements que l’utilisateur peut faire.
 
-import 'rxjs/Rx';
-import 'rxjs/add/operator/mergeMap';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { AddAdminComponent } from '../add-admin/add-admin.component';
-import { AddAnnotatorComponent } from '../add-annotator/add-annotator.component';
-import { AddAttributeComponent } from '../add-attribute/add-attribute.component';
-import { AddEntityComponent } from '../add-entity/add-entity.component';
-import { AddCorpusComponent } from '../add-corpus/add-corpus.component';
-import { AddEventComponent } from '../add-event/add-event.component';
-import { AddRelationComponent } from '../add-relation/add-relation.component';
-import { Attribute } from '../../shared/attribute.model';
-import { AuthService } from '../../shared/security/auth.service';
-import { Event } from '../../shared/event.model';
-import { Observable } from 'rxjs/Observable';
-import { Project, ProjectUtils } from '../../shared/project.model';
+import "rxjs/Rx";
+import "rxjs/add/operator/mergeMap";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material";
+import { AddAdminComponent } from "../add-admin/add-admin.component";
+import { AddAnnotatorComponent } from "../add-annotator/add-annotator.component";
+import { AddAttributeComponent } from "../add-attribute/add-attribute.component";
+import { AddEntityComponent } from "../add-entity/add-entity.component";
+import { AddCorpusComponent } from "../add-corpus/add-corpus.component";
+import { AddEventComponent } from "../add-event/add-event.component";
+import { AddRelationComponent } from "../add-relation/add-relation.component";
+import { Attribute } from "../../shared/attribute.model";
+import { AuthService } from "../../shared/security/auth.service";
+import { Event } from "../../shared/event.model";
+import { Observable } from "rxjs/Observable";
+import { Project, ProjectUtils } from "../../shared/project.model";
 import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';

@@ -25,6 +25,12 @@
           <mat-option [value]="2">Administrateur</mat-option>
           <mat-option [value]="1">Membre</mat-option>
           <mat-option [value]="0">Visiteur</mat-option>
+          <!--
+            <mat-option *ngFor="let role of data.roles" [value]="role.valeur">
+                {{role.viewValue}}
+            </mat-option>
+            Si on préfére l'approche dynamique
+          -->
         </mat-select>
       </mat-form-field>
     </div>

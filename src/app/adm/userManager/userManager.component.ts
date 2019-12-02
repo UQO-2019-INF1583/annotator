@@ -82,7 +82,8 @@ export class UserManagerComponent implements OnInit {
         roles: [
           { valeur: 1, viewValue: 'Membre' },
           { valeur: 2, viewValue: 'Administrateur' },
-          { valeur: 0, viewValue: 'Visiteur' }
+          { valeur: 0, viewValue: 'Visiteur' } // Pour le moment, cet objet (data.roles) n'est pas nécessaire, mais au cas où
+          // On décide d'implémenter une d'autres rôles, ça pourrait aider.
         ]
       },
     });

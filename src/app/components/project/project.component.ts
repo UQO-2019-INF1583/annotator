@@ -128,24 +128,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      //Après que la boîte de dialogue pour l'ajout d'un fichier soit fermer
       var i = 0;
+      /*Split the title string by using coma like seperator to obtain an array that should match
+        the length of the number of file to be added
+      */
       var titles = result.corpusTitle.split(",");
       for (const fileInfo of result.corpusFile) {
         var data = { corpusTitle: titles[i], corpusFile: result.corpusFile[i] };
         this.ps.addCorpus(data, this.currentProject.id);
         i++
       }
-      /*if (result !== undefined) {
-        if (
-          result.corpusTitle !== undefined &&
-          result.corpusFile !== undefined
-        ) {
-          // est-ce qu'il y a une validation ici a faire? (titre du fichier déjà existant?)
-          this.ps.addCorpus(result, this.currentProject.id);
-        }
-      }*/
     });
   }
+
+
 
   // ouvre la boîte de dialogue pour ajouter une catégorie
   addEntityDialogBox() {

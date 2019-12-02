@@ -5,6 +5,7 @@ import {
   NgxFileDropModule,
   NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry
 } from 'ngx-file-drop';
+import undefined = require('firebase/empty-import');
 
 @Component({
   selector: 'app-add-corpus',
@@ -17,6 +18,9 @@ export class AddCorpusComponent implements OnInit {
   isExtValid = false;	//Is it used?
   isSizeValid = false;	//Is it used?
   isNotValid: boolean;	//Is it used?
+  titlesSize: number;//number of titles
+  filesSize: number;//number of files
+  notEnoughtArgument = true;
   progress: boolean;
 
   constructor(
@@ -27,6 +31,27 @@ export class AddCorpusComponent implements OnInit {
     this.isNotValid = true;
     this.progress = false;
   }
+
+  public onChange(value) {
+    var titles = value.split(",");
+    this.titlesSize = titles.length;
+    this.filesSize = this.data.corpusFile.length;
+    console.log(this.titlesSize);
+    console.log(this.data.corpusFile.length);
+    if (this.titlesSize == this.filesSize) {
+      for (var i = 0; i < this.titlesSize; i++) {
+        if (titles[i] == "") {
+          this.notEnoughtArgument = true;
+          break;
+        }
+        this.notEnoughtArgument = false;
+      }
+    } else {
+      console.log("error");
+      this.notEnoughtArgument = true;
+    }
+  }
+
   public fileDropped(files: NgxFileDropEntry[]) {
     this.files = files;
     var i = 0;
@@ -70,6 +95,13 @@ export class AddCorpusComponent implements OnInit {
   }
 
   public validateNames() {
-
+    var titles = this.data.corpusTitle.split(",");
+    if (titles.size == this.data.corpusFile.size) {
+      this.isNotValid = false;
+      return false;
+    } else {
+      this.isNotValid = true;
+      return true;
+    }
   }
 }

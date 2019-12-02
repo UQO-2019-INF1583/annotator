@@ -27,13 +27,14 @@
 </mat-dialog-content>
 
 <mat-form-field>
-  <input matInput placeholder="Titre" [(ngModel)]="data.corpusTitle" name="titre" #titre="ngModel" required
-    ng-blur="validateNames()" />
-  <mat-error *ngIf="titre.value == '' || titre.value == null">Titre obligatoire</mat-error>
+  <input matInput placeholder="Titre" [(ngModel)]="data.corpusTitle" (ngModelChange)="onChange($event)" name="titre"
+    #titre="ngModel" required />
+  <mat-error *ngIf="titre.value == '' || titre.value == null || this.notEnoughtArgument">Titre obligatoire</mat-error>
 </mat-form-field>
 
 <mat-dialog-actions>
-  <button class="btn btn-primary" [mat-dialog-close]="data" [disabled]="isNotValid">Ajouter</button>
+  <button class="btn btn-primary" [mat-dialog-close]="data"
+    [disabled]="this.isNotValid || this.notEnoughtArgument">Ajouter</button>
   <div style="width: 10px"></div>
   <button class="btn btn btn-primary" mat-dialog-close>Annuler</button>
 </mat-dialog-actions>

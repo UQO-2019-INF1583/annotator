@@ -4,6 +4,9 @@
  * @param color c'est la couleur
  * @param name c'est le titre ou nom
  */
+
+import { ProjectService} from "../services/project/project.service";
+
 export class Relation {
   type: string;
   labels: string[];
@@ -13,10 +16,13 @@ export class Relation {
   args: any[];
 
   constructor() {
+
+    let colors = ProjectService.getRandomLightAndDarkColor();
+
     this.type = "";
-    this.labels = [];
-    this.dashArray = "";
-    this.color = "";
+    this.labels = [""];
+    this.dashArray = "3,3";
+    this.color = colors.light;
     this.attributes = [];
     this.args = [];
 

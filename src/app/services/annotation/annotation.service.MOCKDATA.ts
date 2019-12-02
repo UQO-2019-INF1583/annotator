@@ -24,7 +24,7 @@ export const MOCK_ENTITIES = [
 ];
 
 export const ENTITIES: Entity[] = [
-  new Entity("Sentence", "vocabulary", [], "green"),
-  new Entity("AnatomicalSiteMention", "medical", [], "yellow"),
-  new Entity("SignSymptomMention", "medical", [], "blue")
+  new Entity("Sentence", "vocabulary", []),
+  new Entity("AnatomicalSiteMention", "medical", []),
+  new Entity("SignSymptomMention", "medical", [])
 ];

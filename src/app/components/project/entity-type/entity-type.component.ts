@@ -10,7 +10,7 @@ import { ProjectService } from "../../../services/project/project.service";
 import { Entity } from "../../../models/entity.model";
 
 /**************************************************************************************
- *    Main :
+ *    Entity types
  * ***********************************************************************************/
 @Component({
   selector: "entity-type",
@@ -31,15 +31,18 @@ export class EntityTypeComponent implements OnInit {
 
   // Create New Entity
   newEntity: Entity = new Entity();
-  newLabel: String = "";
+
+  // Data structure used by the DOM
   entityData: EntityData = {
     error: true,
     message: "*Warning!",
-    label: "",
     delete: true
   };
   entitiesData: EntityData[] = [];
 
+  /**************************************************************************************
+   *    Constructor and initialisation :
+   * ***********************************************************************************/
   constructor(
     private authService: AuthService,
     private activeRouter: ActivatedRoute,
@@ -61,7 +64,6 @@ export class EntityTypeComponent implements OnInit {
             this.entitiesData.push({
               error: true,
               message: "*Warning!",
-              label: "",
               delete: true
             });
           }
@@ -72,14 +74,20 @@ export class EntityTypeComponent implements OnInit {
     this.sub.unsubscribe();
   }
 
+  // used by for loop in html
+  trackBy(index, label) {
+    return index;
+  }
+
   /**************************************************************************************
-   *    Entity functions :
+   *    Entity methods :
    * ***********************************************************************************/
 
-  create() {
+   // Create a new Entity
+  create() : void {
     this.ps.getProject(this.projectId).then(project => {
       // Save Project
-      this.project.entities.push(JSON.parse(
+      this.project.entities.unshift(JSON.parse(
         JSON.stringify(this.newEntity)
       ) as Entity);
       this.ps.saveProject(this.project);
@@ -88,7 +96,6 @@ export class EntityTypeComponent implements OnInit {
       this.entityData = {
         error: true,
         message: "*Warning!",
-        label: "",
         delete: true
       };
 
@@ -96,13 +103,13 @@ export class EntityTypeComponent implements OnInit {
       this.entitiesData.push({
         error: true,
         message: "*Warning!",
-        label: "",
         delete: true
       });
     });
   }
 
-  save(index: number) {
+  // Save all entity modifications
+  save(index: number) : void {
     this.ps.getProject(this.projectId).then(project => {
       for (let i = 0; i < project.entities; i++) {
         if (i != index) {
@@ -113,7 +120,8 @@ export class EntityTypeComponent implements OnInit {
     });
   }
 
-  remove(index: number) {
+  // Delete an Entity
+  remove(index: number) : void {
     if (
       this.project.entities.length >= 0 ||
       index < this.project.entities.length
@@ -123,7 +131,8 @@ export class EntityTypeComponent implements OnInit {
     this.ps.saveProject(this.project);
   }
 
-  reset() {
+  // Reset all entities to their database state
+  reset() : void {
     this.ps
       .getProjectDocument(this.projectId)
       .valueChanges()
@@ -134,57 +143,14 @@ export class EntityTypeComponent implements OnInit {
           this.entitiesData.push({
             error: true,
             message: "*Warning!",
-            label: "",
             delete: true
           });
         }
       });
   }
 
-  addLabel(entity: Entity, data: EntityData): void {
-    entity.labels.push(data.label);
-    data.label = "";
-  }
-
-  removeLabel(entity: Entity, index: number): void {
-    entity.labels.splice(index, 1);
-  }
-
-  trackBy(index, label) {
-    return index;
-  }
-
-  isInvalidLabel(data: EntityData): boolean {
-    if (data != null) {
-      if (data.label === "" || data.label === null) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return true;
-    }
-  }
-
-  isRelated(entity: Entity, data: EntityData): boolean {
-    // check if the entity is used by a relation
-    for (let i = 0; i < this.project.relations.length; i++) {
-      for (let j = 0; j < this.project.relations[i].args.length; j++) {
-        if (this.project.relations[i].args[j].targets[0] == entity.type) {
-          data.message = "*Entity is used in a relation";
-          data.delete = true;
-          return true;
-        }
-      }
-    }
-
-    // Check if entity is used by an event
-    data.message = "";
-    data.delete = false;
-    return false;
-  }
-
-  isValid(entity: Entity, data: EntityData, index: number): boolean {
+  // Checks if all entity's input are valid and send the corresponding message if not
+  validEntity(entity: Entity, data: EntityData, index: number): boolean {
     // Check if every entry is valid
     data.error = true;
     if (entity.type === "" || entity.type === null) {
@@ -248,11 +214,57 @@ export class EntityTypeComponent implements OnInit {
     data.error = false;
     return false;
   }
+
+   /**************************************************************************************
+   *    Label methods :
+   * ***********************************************************************************/
+
+  // Add a label to an entity
+  addLabel(entity: Entity): void {
+    entity.labels.unshift("");
+  }
+
+  // Remove a label from an entity
+  removeLabel(entity: Entity, index: number): void {
+    entity.labels.splice(index, 1);
+  }
+
+  // Checks if all the entity's labels are valid
+  validLabels(entity: Entity): boolean {
+    for(let i = 0; i < entity.labels.length; i++) {
+      if(entity.labels[i] === "" || entity.labels[i] === null) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+   /**************************************************************************************
+   *    Relation methods :
+   * ***********************************************************************************/
+
+  // Checks if an entity is used in a relation so as to not make it deletable
+  existInRelation(entity: Entity, data: EntityData): boolean {
+    // check if the entity is used by a relation
+    for (let i = 0; i < this.project.relations.length; i++) {
+      for (let j = 0; j < this.project.relations[i].args.length; j++) {
+        if (this.project.relations[i].args[j].targets[0] == entity.type) {
+          data.message = "*Entity is used in a relation";
+          data.delete = true;
+          return true;
+        }
+      }
+    }
+
+    // Check if entity is used by an event
+    data.message = "";
+    data.delete = false;
+    return false;
+  }
 }
 
 export interface EntityData {
   error: boolean;
   delete: boolean;
   message: string;
-  label: string;
 }

@@ -7,6 +7,7 @@
   <div class="col-xs-3"><label for="new-type">Type:</label></div>
   <div class="col-xs-3"><label for="new-type">Glyph:</label></div>
   <div class="col-xs-3"><label for="new-type">Entity:</label></div>
+  <div class="col-xs-12" style="border-top: 1px solid darkgrey; margin-bottom: 15px;"></div>
 </div>
 
 <!-- Input -->
@@ -14,6 +15,14 @@
   <form class="row">
     <!-- Actions -->
     <div class="form-group col-xs-2">
+        <button
+        type="submit"
+        class="btn btn-success"
+        (click)="create()"
+        [disabled]="attributeData.error"
+      >
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
       <button
         type="submit"
         class="btn btn-warning"
@@ -21,14 +30,6 @@
         style="margin-right: 2px;"
       >
         <span class="glyphicon glyphicon-refresh"></span>
-      </button>
-      <button
-        type="submit"
-        class="btn btn-success"
-        (click)="create()"
-        [disabled]="attributeData.error"
-      >
-        <span class="glyphicon glyphicon-plus"></span>
       </button>
       <br />
       <small
@@ -59,61 +60,56 @@
     <div class="form-group col-xs-3">
       <div>
         <table style="width: 100%;">
-          <!-- Defined glyph -->
-          <tr
-            *ngFor="
-              let glyph of newAttribute.values;
-              let i = index;
-              trackBy: trackBy
-            "
+          <tr *ngFor="
+          let glyph of newAttribute.values;
+          let i = index;
+          trackBy: trackBy
+        ">
+        <td>
+            <button
+            *ngIf="i == 0"
+            type="submit"
+            class="btn btn-success"
+            (click)="addGlyph(newAttribute)"
+            [disabled]="glyph.glyph === '' || glyph.glyph === null"
           >
-            <td>
-              <button
-                type="submit"
-                class="btn btn-danger"
-                (click)="removeGlyph(newAttribute, i)"
-              >
-                <span class="glyphicon glyphicon-minus"></span>
-              </button>
-            </td>
-            <td>
-              <input
-                class="form-control"
-                placeholder="Glyph (ex : ★)"
-                [(ngModel)]="glyph.glyph"
-                name="glyph[{{ i }}]"
-                #type="ngModel"
-                required="true"
-              />
-            </td>
-          </tr>
-          <!-- New glyph -->
-          <tr>
-            <td>
-              <button
-                type="submit"
-                class="btn btn-success"
-                (click)="addGlyph(newAttribute, attributeData)"
-                [disabled]="isInvalidGlyph(attributeData)"
-              >
-                <span class="glyphicon glyphicon-plus"></span>
-              </button>
-            </td>
-            <td>
-              <input
-                class="form-control"
-                placeholder="Glyph (ex : ★)"
-                [(ngModel)]="attributeData.glyph"
-                name="glyph"
-                #type="ngModel"
-                required="true"
-              />
-            </td>
-          </tr>
+            <span class="glyphicon glyphicon-plus"></span>
+          </button>
+            <button
+            *ngIf="i > 0"
+              type="submit"
+              class="btn btn-danger"
+              (click)="removeGlyph(newAttribute, i)"
+            >
+              <span class="glyphicon glyphicon-minus"></span>
+            </button>
+          </td>
+          <td>
+            <select
+            class="form-control"
+            placeholder="Glyph (ex : ★)"
+            [(ngModel)]="newAttribute.values[i].glyph"
+            name="glyph[{{ i }}]"
+            #type="ngModel"
+            required="true"
+          >
+          <option value="" disabled selected hidden>Glyph (ex : ★)</option>
+            <option
+              *ngFor="
+                let glyph of glyphs;
+                let j = index;
+                trackBy: trackBy
+              "
+              value="{{ glyph }}"
+              style="font-size:x-large"
+              >{{ glyph }}</option
+            >
+          </select>
+        </td>
+        </tr>
         </table>
-
         <small
-          *ngIf="newAttribute.glyph == '' || newAttribute.glyph == null"
+          *ngIf="invalidGlyphs(newAttribute)"
           class="form-text text-muted text-danger"
           >*Glyphs are obligatory</small
         >
@@ -124,7 +120,6 @@
     <div class="form-group col-xs-3">
       <div>
         <table style="width: 100%;">
-          <!-- Defined entity -->
           <tr
             *ngFor="
               let entity of newAttribute.entities;
@@ -133,23 +128,30 @@
             "
           >
             <td>
+                <button
+                *ngIf="i == 0"
+                type="submit"
+                class="btn btn-success"
+                (click)="addEntity(newAttribute)"
+                [disabled]="invalidEntities(newAttribute)"
+              ><span class="glyphicon glyphicon-plus"></span>
+              </button>
               <button
+              *ngIf="i > 0"
                 type="submit"
                 class="btn btn-danger"
                 (click)="removeEntity(newAttribute, i)"
-              >
-                <span class="glyphicon glyphicon-minus"></span>
+              ><span class="glyphicon glyphicon-minus"></span>
               </button>
             </td>
             <td>
               <select
                 class="form-control"
-                placeholder="ex : Person"
+                placeholder=""
                 [(ngModel)]="newAttribute.entities[i]"
                 name="new entity[{{ i }}]"
                 #type="ngModel"
                 required="true"
-                (ngModelChange)="getEntitiesWithSelf(newAttribute, i)"
               >
                 <option
                   *ngFor="
@@ -160,49 +162,15 @@
                   value="{{ ent }}"
                   >{{ ent }}</option
                 >
-              </select>
-            </td>
-          </tr>
-          <!-- New entity -->
-          <tr>
-            <td>
-              <button
-                type="submit"
-                class="btn btn-success"
-                (click)="addEntity(newAttribute, attributeData)"
-                [disabled]="isInvalidEntity(newAttribute, attributeData)"
-              >
-                <span class="glyphicon glyphicon-plus"></span>
-              </button>
-            </td>
-            <td>
-              <select
-                class="form-control"
-                placeholder="ex : Person"
-                [(ngModel)]="attributeData.entity"
-                name="new-entity"
-                #type="ngModel"
-                required="true"
-                (ngModelChange)="getEntities(newAttribute, i)"
-              >
-                <option
-                  *ngFor="
-                    let ent of getEntities(newAttribute);
-                    let i = index;
-                    trackBy: trackBy
-                  "
-                  value="{{ ent }}"
-                  >{{ ent }}</option
-                ><option value="" disabled selected hidden>ex : Person</option>
+                <option value="" disabled selected hidden>ex : Person</option>
               </select>
             </td>
           </tr>
         </table>
-
         <small
-          *ngIf="newAttribute.glyph == '' || newAttribute.glyph == null"
+          *ngIf="invalidEntities(newAttribute)"
           class="form-text text-muted text-danger"
-          >*Glyphs are obligatory</small
+          >*Entities are obligatory</small
         >
       </div>
     </div>
@@ -214,6 +182,7 @@
   class="container-fluid"
   *ngFor="let attribute of project.attributes; let i = index; trackBy: trackBy"
 >
+  <div class="col-xs-12" style="border-top: 1px solid darkgrey; margin-bottom: 15px;"></div>
   <form class="row entity-row">
     <!-- Actions -->
     <div class="form-group col-xs-2">
@@ -265,59 +234,55 @@
               trackBy: trackBy
             "
           >
-            <!-- Created Glyphs -->
             <td>
-              <button
-                type="submit"
-                class="btn btn-danger"
-                (click)="removeGlyph(attribute, j)"
-              >
-                <span class="glyphicon glyphicon-minus"></span>
-              </button>
-            </td>
-            <td>
-              <input
-                class="form-control"
-                placeholder="Glyph (ex : ★)"
-                [(ngModel)]="attribute.values[j].glyph"
-                name="glyph[{{ j }}]"
-                #type="ngModel"
-                required="true"
-              />
-            </td>
-          </tr>
-          <!-- New Glyph -->
-          <tr>
-            <td>
-              <button
+                <button
+                *ngIf="j == 0"
                 type="submit"
                 class="btn btn-success"
-                (click)="addGlyph(attribute, attributesData[i])"
-                [disabled]="isInvalidGlyph(attributesData[i])"
-                name="invalid-btn"
+                (click)="addGlyph(attribute)"
+                [disabled]="glyph.glyph === '' || glyph.glyph === null"
               >
                 <span class="glyphicon glyphicon-plus"></span>
               </button>
+                <button
+                *ngIf="j > 0"
+                  type="submit"
+                  class="btn btn-danger"
+                  (click)="removeGlyph(attribute, j)"
+                >
+                  <span class="glyphicon glyphicon-minus"></span>
+                </button>
             </td>
             <td>
-              <input
+
+                <select
                 class="form-control"
                 placeholder="Glyph (ex : ★)"
-                [(ngModel)]="attributesData[i].glyph"
-                name="newLabel"
+                [(ngModel)]="attribute.values[j].glyph"
+                name="glyph[{{i}}][{{ j }}]"
                 #type="ngModel"
                 required="true"
-              />
+              >
+              <option value="" disabled selected hidden>Glyph (ex : ★)</option>
+                <option
+                  *ngFor="
+                    let glyph of glyphs;
+                    let k = index;
+                    trackBy: trackBy
+                  "
+                  value="{{ glyph }}"
+                  style="font-size:x-large"
+                  >{{ glyph }}</option
+                >
+              </select>
             </td>
           </tr>
         </table>
 
         <small
-          *ngIf="
-            attributesData[i].glyph == '' || attributesData[i].glyph == null
-          "
+          *ngIf="invalidGlyphs(attribute)"
           class="form-text text-muted text-danger"
-          >*Glyphs is obligatory</small
+          >*Glyphs are obligatory</small
         >
       </div>
     </div>
@@ -326,7 +291,6 @@
     <div class="form-group col-xs-3">
       <div>
         <table style="width: 100%;">
-          <!-- Defined entity -->
           <tr
             *ngFor="
               let entity of attribute.entities;
@@ -335,7 +299,17 @@
             "
           >
             <td>
+                <button
+                *ngIf="j == 0"
+                type="submit"
+                class="btn btn-success"
+                (click)="addEntity(attribute)"
+                [disabled]="invalidEntities(attribute)"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
               <button
+                *ngIf="j > 0"
                 type="submit"
                 class="btn btn-danger"
                 (click)="removeEntity(attribute, j)"
@@ -351,7 +325,6 @@
                 name="new entity[{{ j }}]"
                 #type="ngModel"
                 required="true"
-                (ngModelChange)="getEntitiesWithSelf(attribute, j)"
               >
                 <option
                   *ngFor="
@@ -362,44 +335,16 @@
                   value="{{ ent }}"
                   >{{ ent }}</option
                 >
-              </select>
-            </td>
-          </tr>
-          <!-- New entity -->
-          <tr>
-            <td>
-              <button
-                type="submit"
-                class="btn btn-success"
-                (click)="addEntity(attribute, attributesData[i])"
-                [disabled]="isInvalidEntity(attribute, attributesData[i])"
-              >
-                <span class="glyphicon glyphicon-plus"></span>
-              </button>
-            </td>
-            <td>
-              <select
-                class="form-control"
-                placeholder="ex : Person"
-                [(ngModel)]="attributesData[i].entity"
-                name="new-entity"
-                #type="ngModel"
-                required="true"
-                (ngModelChange)="getEntities(attribute, i)"
-              >
-                <option
-                  *ngFor="
-                    let ent of getEntities(attribute);
-                    let k = index;
-                    trackBy: trackBy
-                  "
-                  value="{{ ent }}"
-                  >{{ ent }}</option
-                ><option value="" disabled selected hidden>ex : Person</option>
+                <option value="" disabled selected hidden>ex : Person</option>
               </select>
             </td>
           </tr>
         </table>
+        <small
+          *ngIf="invalidEntities(attribute)"
+          class="form-text text-muted text-danger"
+          >*Entities are obligatory</small
+        >
       </div>
     </div>
   </form>

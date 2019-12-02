@@ -6,10 +6,12 @@
   <div class="row">
     <div class="col-xs-2"><label for="new-type">Action:</label></div>
     <div class="col-xs-2"><label for="new-type">Type:</label></div>
-    <div class="col-xs-3"><label for="new-type">Labels:</label></div>
+    <div class="col-xs-2"><label for="new-type">Labels:</label></div>
     <div class="col-xs-1"><label for="new-type">DashArray:</label></div>
+    <div class="col-xs-1"><label for="new-type">Color:</label></div>
     <div class="col-xs-2"><label for="new-type">Role:</label></div>
     <div class="col-xs-2"><label for="new-type">Target:</label></div>
+    <div class="col-xs-12" style="border-top: 1px solid darkgrey; margin-bottom: 15px;"></div>
   </div>
 </div>
 
@@ -18,6 +20,14 @@
   <form class="row">
     <!-- Actions -->
     <div class="form-group col-xs-2">
+        <button
+        type="submit"
+        class="btn btn-success"
+        (click)="create()"
+        [disabled]="relationData.error"
+      >
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
       <button
         type="submit"
         class="btn btn-warning"
@@ -25,14 +35,6 @@
         style="margin-right: 2px;"
       >
         <span class="glyphicon glyphicon-refresh"></span>
-      </button>
-      <button
-        type="submit"
-        class="btn btn-success"
-        (click)="create()"
-        [disabled]="relationData.error"
-      >
-        <span class="glyphicon glyphicon-plus"></span>
       </button>
       <br />
       <small
@@ -60,10 +62,9 @@
     </div>
 
     <!-- Labels -->
-    <div class="form-group col-xs-3">
+    <div class="form-group col-xs-2">
       <div>
         <table style="width: 100%;">
-          <!-- Defined Labels -->
           <tr
             *ngFor="
               let label of newRelation.labels;
@@ -72,7 +73,17 @@
             "
           >
             <td>
+                <button
+                *ngIf="i == 0"
+                type="submit"
+                class="btn btn-success"
+                (click)="addLabel(newRelation)"
+                [disabled]="label == '' || label == null"
+              >
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
               <button
+              *ngIf="i > 0"
                 type="submit"
                 class="btn btn-danger"
                 (click)="removeLabel(newRelation, i)"
@@ -84,40 +95,16 @@
               <input
                 class="form-control"
                 placeholder="ex : Anaphora, Ana"
-                [(ngModel)]="label"
+                [(ngModel)]="newRelation.labels[i]"
                 name="label[{{ i }}]"
                 #type="ngModel"
                 required="true"
               />
             </td>
           </tr>
-          <!-- New Label -->
-          <tr>
-            <td>
-              <button
-                type="submit"
-                class="btn btn-success"
-                (click)="addLabel(newRelation, relationData)"
-                [disabled]="isInvalidLabel(relationData)"
-              >
-                <span class="glyphicon glyphicon-plus"></span>
-              </button>
-            </td>
-            <td>
-              <input
-                class="form-control"
-                placeholder="ex : Anaphora, Ana"
-                [(ngModel)]="relationData.label"
-                name="newlabel"
-                #type="ngModel"
-                required="true"
-              />
-            </td>
-          </tr>
         </table>
-
         <small
-          *ngIf="newRelation.labels == '' || newRelation.labels == null"
+          *ngIf="invalidLabels(newRelation)"
           class="form-text text-muted text-danger"
           >*Labels are obligatory</small
         >
@@ -145,6 +132,23 @@
       >
     </div>
 
+    <!-- Color -->
+    <div class="form-group col-xs-1">
+      <input
+        class="form-control form-color"
+        type="color"
+        [(ngModel)]="newRelation.color"
+        name="bgColor"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="newRelation.color == '' || newRelation.color == null"
+        class="form-text text-muted text-danger"
+        >*Color is obligatory</small
+      >
+    </div>
+
     <!-- Args : Role -->
     <div class="form-group col-xs-2">
       <input
@@ -155,14 +159,7 @@
         #type="ngModel"
         required="true"
       />
-      <small
-        *ngIf="
-          newRelation.args[0].role == '' || newRelation.args[0].role == null
-        "
-        class="form-text text-muted text-danger"
-        >*Role is obligatory</small
-      >
-      <br />
+
       <input
         class="form-control"
         placeholder="ex : Entity"
@@ -173,7 +170,7 @@
       />
       <small
         *ngIf="
-          newRelation.args[1].role == '' || newRelation.args[1].role == null
+        newRelation.args[0].role == '' || newRelation.args[0].role == null || newRelation.args[1].role == '' || newRelation.args[1].role == null
         "
         class="form-text text-muted text-danger"
         >*Role is obligatory</small
@@ -200,15 +197,6 @@
           >{{ entity.type }}</option
         ><option value="" disabled selected hidden>ex : Person</option>
       </select>
-      <small
-        *ngIf="
-          newRelation.args[0].targets[0] == '' ||
-          newRelation.args[0].targets == null
-        "
-        class="form-text text-muted text-danger"
-        >*Target is obligatory</small
-      >
-      <br />
       <select
         class="form-control"
         placeholder="ex : Person"
@@ -229,7 +217,8 @@
       </select>
       <small
         *ngIf="
-          newRelation.args[1].targets[0] == '' ||
+        newRelation.args[0].targets[0] == '' ||
+        newRelation.args[0].targets == null || newRelation.args[1].targets[0] == '' ||
           newRelation.args[1].targets == null
         "
         class="form-text text-muted text-danger"
@@ -244,6 +233,7 @@
   class="container-fluid"
   *ngFor="let relation of project.relations; let i = index"
 >
+  <div class="col-xs-12" style="border-top: 1px solid darkgrey; margin-bottom: 15px;"></div>
   <form class="row entity-row">
     <!-- Actions -->
     <div class="form-group col-xs-2">
@@ -285,7 +275,7 @@
     </div>
 
     <!-- Labels -->
-    <div class="form-group col-xs-3">
+    <div class="form-group col-xs-2">
       <div>
         <table style="width: 100%;">
           <tr
@@ -295,9 +285,18 @@
               trackBy: trackBy
             "
           >
-            <!-- Created Labels -->
             <td>
+                <button
+                *ngIf="j == 0"
+                type="submit"
+                class="btn btn-success"
+                (click)="addLabel(relation)"
+                [disabled]="label == '' || label == null"
+              >
+              <span class="glyphicon glyphicon-plus"></span>
+              </button>
               <button
+              *ngIf="j > 0"
                 type="submit"
                 class="btn btn-danger"
                 (click)="removeLabel(relation, j)"
@@ -308,33 +307,9 @@
             <td>
               <input
                 class="form-control"
-                placeholder="Labels (ex : Anaphora)"
+                placeholder="ex : Anaphora, Ana"
                 [(ngModel)]="relation.labels[j]"
                 name="label[{{ j }}]"
-                #type="ngModel"
-                required="true"
-              />
-            </td>
-          </tr>
-          <!-- New Label -->
-          <tr>
-            <td>
-              <button
-                type="submit"
-                class="btn btn-success"
-                (click)="addLabel(relation, relationsData[i])"
-                [disabled]="isInvalidLabel(relationsData[i])"
-                name="invalid-btn"
-              >
-                <span class="glyphicon glyphicon-plus"></span>
-              </button>
-            </td>
-            <td>
-              <input
-                class="form-control"
-                placeholder="Labels (ex : Anaphora)"
-                [(ngModel)]="relationsData[i].label"
-                name="newLabel"
                 #type="ngModel"
                 required="true"
               />
@@ -343,7 +318,7 @@
         </table>
 
         <small
-          *ngIf="relationsData[i].label == '' || relationsData[i].label == null"
+          *ngIf="invalidLabels(relation)"
           class="form-text text-muted text-danger"
           >*Labels are obligatory</small
         >
@@ -371,6 +346,23 @@
       >
     </div>
 
+    <!-- Color -->
+    <div class="form-group col-xs-1">
+      <input
+        class="form-control form-color"
+        type="color"
+        [(ngModel)]="relation.color"
+        name="bgColor"
+        #type="ngModel"
+        required="true"
+      />
+      <small
+        *ngIf="relation.color == '' || relation.color == null"
+        class="form-text text-muted text-danger"
+        >*Color is obligatory</small
+      >
+    </div>
+
     <!-- Args : Role -->
     <div class="form-group col-xs-2">
       <input
@@ -381,12 +373,6 @@
         #type="ngModel"
         required="true"
       />
-      <small
-        *ngIf="relation.args[0].role == '' || relation.args[0].role == null"
-        class="form-text text-muted text-danger"
-        >*Role is obligatory</small
-      >
-      <br />
       <input
         class="form-control"
         placeholder="ex : Entity"
@@ -396,7 +382,7 @@
         required="true"
       />
       <small
-        *ngIf="relation.args[1].role == '' || relation.args[1].role == null"
+        *ngIf="relation.args[0].role == '' || relation.args[0].role == null || relation.args[1].role == '' || relation.args[1].role == null"
         class="form-text text-muted text-danger"
         >*Role is obligatory</small
       >
@@ -415,21 +401,12 @@
         <option
           *ngFor="
             let entity of project.entities;
-            let i = index;
             trackBy: trackBy
           "
           value="{{ entity.type }}"
           >{{ entity.type }}</option
         ><option value="" disabled selected hidden>ex : Person</option>
       </select>
-      <small
-        *ngIf="
-          relation.args[0].targets[0] == '' || relation.args[0].targets == null
-        "
-        class="form-text text-muted text-danger"
-        >*Target is obligatory</small
-      >
-      <br />
       <select
         class="form-control"
         placeholder="ex : Person"
@@ -441,7 +418,6 @@
         <option
           *ngFor="
             let entity of project.entities;
-            let i = index;
             trackBy: trackBy
           "
           value="{{ entity.type }}"
@@ -450,7 +426,7 @@
       </select>
       <small
         *ngIf="
-          relation.args[1].targets[0] == '' || relation.args[1].targets == null
+        relation.args[0].targets[0] == '' || relation.args[0].targets == null || relation.args[1].targets[0] == '' || relation.args[1].targets == null
         "
         class="form-text text-muted text-danger"
         >*Target is obligatory</small

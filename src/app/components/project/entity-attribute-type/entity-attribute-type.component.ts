@@ -35,15 +35,18 @@ export class EntityAttributeTypeComponent implements OnInit {
   // Create New Entity
   newAttribute: EntityAttributeTypes = new EntityAttributeTypes();
   newGlyph: String = "";
+  glyphs = ProjectService.getAllGlyphs();
   attributeData: AttributeData = {
     error: true,
     message: "*Warning!",
-    glyph: "",
     entity: "",
     oldName: ""
   };
   attributesData: AttributeData[] = [];
 
+  /**************************************************************************************
+   *    Constructor and initialisation :
+   * ***********************************************************************************/
   constructor(
     private authService: AuthService,
     private activeRouter: ActivatedRoute,
@@ -65,7 +68,6 @@ export class EntityAttributeTypeComponent implements OnInit {
             this.attributesData.push({
               error: true,
               message: "*Warning!",
-              glyph: "",
               entity: "",
               oldName: this.project.attributes[i].type
             });
@@ -77,20 +79,25 @@ export class EntityAttributeTypeComponent implements OnInit {
     this.sub.unsubscribe();
   }
 
+  trackBy(index, label) {
+    return index;
+  }
+
   /**************************************************************************************
    *    Attribute functions :
    * ***********************************************************************************/
 
+   // Create a new Attribute
   create() {
     this.ps.getProject(this.projectId).then(project => {
       // Save Project
       this.newAttribute.bool = this.newAttribute.type;
-      this.project.attributes.push(JSON.parse(
+      this.project.attributes.unshift(JSON.parse(
         JSON.stringify(this.newAttribute)
       ) as EntityAttributeTypes);
 
       // Add Entities
-      this.addAttributeToProject(this.newAttribute, this.attributeData.oldName);
+      this.addAttributeToEntity(this.newAttribute, this.attributeData.oldName);
 
       this.ps.saveProject(this.project);
 
@@ -98,7 +105,6 @@ export class EntityAttributeTypeComponent implements OnInit {
       this.attributesData.push({
         error: true,
         message: "*Warning!",
-        glyph: "",
         entity: "",
         oldName: this.newAttribute.type
       });
@@ -107,13 +113,13 @@ export class EntityAttributeTypeComponent implements OnInit {
       this.attributeData = {
         error: true,
         message: "*Warning!",
-        glyph: "",
         entity: "",
         oldName: ""
       };
     });
   }
 
+  // Save modifications made to an Attribute
   save(index: number) {
     this.ps.getProject(this.projectId).then(project => {
       for (let i = 0; i < project.attributes; i++) {
@@ -125,10 +131,10 @@ export class EntityAttributeTypeComponent implements OnInit {
       }
 
       // Remove Entities
-      this.removeAttributeToProject(this.project.attributes[index], index);
+      this.removeAttributeFromEntity(this.project.attributes[index], index);
 
       // Add Entities
-      this.addAttributeToProject(
+      this.addAttributeToEntity(
         this.project.attributes[index],
         this.attributesData[index].oldName
       );
@@ -139,9 +145,10 @@ export class EntityAttributeTypeComponent implements OnInit {
     });
   }
 
+  // remove an Attribute
   remove(index: number) {
     // Remove Entities
-    this.removeAllAttributeToProject(this.project.attributes[index], index);
+    this.removeAllAttributeFromEntity(this.project.attributes[index], index);
 
     if (
       this.project.attributes.length >= 0 ||
@@ -154,7 +161,91 @@ export class EntityAttributeTypeComponent implements OnInit {
     this.ps.saveProject(this.project);
   }
 
-  addAttributeToProject(
+  reset() {
+    this.ps
+      .getProjectDocument(this.projectId)
+      .valueChanges()
+      .subscribe(data => {
+        this.project = data;
+        this.attributesData = [];
+        for (let i = 0; i < this.project.attributes.length; i++) {
+          this.attributesData.push({
+            error: true,
+            message: "*Warning!",
+            entity: "",
+            oldName: this.project.attributes[i].type
+          });
+        }
+      });
+  }
+
+  // Check if Attribute is valid
+  isValid(
+    attribute: EntityAttributeTypes,
+    data: AttributeData,
+    index: number
+  ): boolean {
+    // Check if every entry is valid
+
+    data.error = true;
+    if (attribute.type === "" || attribute.type === null) {
+      data.message = "*Missing Type";
+      return true;
+    } else if (attribute.values.length === 0) {
+      data.message = "*Missing Glyphs";
+      return true;
+    } else if (attribute.values.length > 0) {
+      for (let i = 0; i < attribute.values.length; i++) {
+        if (
+          attribute.values[i].glyph === "" ||
+          attribute.values[i].glyph === null
+        ) {
+          data.message = "*Invalid Glyphs";
+          return true;
+        }
+      }
+    } else if (attribute.entities.length == 0 || attribute.entities == null) {
+      data.message = "*Invalid Entities";
+      return true;
+    }
+    if (attribute.entities.length > 0) {
+      for (let i = 0; i < attribute.entities.length; i++) {
+        if (
+          attribute.entities[i] === "" ||
+          attribute.entities[i] === null
+        ) {
+          data.message = "*Invalid Entities";
+          return true;
+        }
+      }
+    }
+
+    // Check for duplicates except for itself
+    if (index >= 0) {
+      for (let i = 0; i < this.project.attributes.length; i++) {
+        if (i != index) {
+          if (attribute.type === this.project.attributes[i].type) {
+            data.message = "*Type already exist";
+            return true;
+          }
+        }
+      }
+    } else {
+      for (let i = 0; i < this.project.attributes.length; i++) {
+        if (attribute.type === this.project.attributes[i].type) {
+          data.message = "*Type already exist";
+          return true;
+        }
+      }
+    }
+
+    data.message = "";
+    data.error = false;
+    return false;
+  }
+
+  // Set Attribute to Entities
+  addAttributeToEntity(
     attribute: EntityAttributeTypes,
     oldName: string
   ): void {
@@ -180,7 +271,8 @@ export class EntityAttributeTypeComponent implements OnInit {
     }
   }
 
-  removeAttributeToProject(
+  // Remove non-existant Attribute in Entities
+  removeAttributeFromEntity(
     attribute: EntityAttributeTypes,
     index: number
   ): void {
@@ -213,7 +305,8 @@ export class EntityAttributeTypeComponent implements OnInit {
     }
   }
 
-  removeAllAttributeToProject(
+  // Remove all Attributes in Project Entities
+  removeAllAttributeFromEntity(
     attribute: EntityAttributeTypes,
     index: number
   ): void {
@@ -226,47 +319,35 @@ export class EntityAttributeTypeComponent implements OnInit {
           this.project.entities[j].attributes.splice(k, 1);
   }
 
-  reset() {
-    this.ps
-      .getProjectDocument(this.projectId)
-      .valueChanges()
-      .subscribe(data => {
-        this.project = data;
-        this.attributesData = [];
-        for (let i = 0; i < this.project.attributes.length; i++) {
-          this.attributesData.push({
-            error: true,
-            message: "*Warning!",
-            glyph: "",
-            entity: "",
-            oldName: this.project.attributes[i].type
-          });
-        }
-      });
+  /**************************************************************************************
+   *    Glyphs methods :
+   * ***********************************************************************************/
+
+   // add a Glyph
+  addGlyph(attribute: EntityAttributeTypes): void {
+    attribute.values.unshift(new EntityAttributeValues());
   }
 
-  addGlyph(attribute: EntityAttributeTypes, data: AttributeData): void {
-    let g: EntityAttributeValues = new EntityAttributeValues();
-    g.glyph = data.glyph;
-
-    attribute.values.push(JSON.parse(JSON.stringify(g)));
-    data.glyph = "";
-  }
-
+  // remove a glyph
   removeGlyph(attribute: EntityAttributeTypes, index: number): void {
     attribute.values.splice(index, 1);
   }
 
-  getEntities(attribute: EntityAttributeTypes) {
-    let entities: string[] = [];
-
-    for (let i = 0; i < this.project.entities.length; i++)
-      if (!attribute.entities.includes(this.project.entities[i].type))
-        entities.push(this.project.entities[i].type);
-
-    return entities;
+   // Checks if all the attribute's glyphs are valid
+ invalidGlyphs(attribute: EntityAttributeTypes): boolean {
+    for(let i = 0; i < attribute.values.length; i++) {
+      if(attribute.values[i].glyph === "" || attribute.values[i].glyph === null) {
+        return true;
+      }
+    }
+    return false;
   }
 
+  /**************************************************************************************
+   *    Entities methods :
+   * ***********************************************************************************/
+  
+   // Get list of all valid Entities
   getEntitiesWithSelf(attribute: EntityAttributeTypes, index: number) {
     let entities: string[] = [];
 
@@ -274,10 +355,12 @@ export class EntityAttributeTypeComponent implements OnInit {
       if (!attribute.entities.includes(this.project.entities[i].type))
         entities.push(this.project.entities[i].type);
 
-    entities.push(attribute.entities[index]);
+    if(!(attribute.entities[index] === "" || attribute.entities[index] === null))
+      entities.push(attribute.entities[index]);
     return entities;
   }
 
+  // check if an Entity is invalid
   isInvalidEntity(
     attribute: EntityAttributeTypes,
     data: AttributeData
@@ -292,80 +375,23 @@ export class EntityAttributeTypeComponent implements OnInit {
     else return false;
   }
 
-  addEntity(attribute: EntityAttributeTypes, data: AttributeData): void {
-    attribute.entities.push(data.entity);
-    data.entity = "";
+  // Add an Entity property
+  addEntity(attribute: EntityAttributeTypes): void {
+    attribute.entities.unshift("");
   }
 
+  // remove an Entity property
   removeEntity(attribute: EntityAttributeTypes, index: number): void {
     attribute.entities.splice(index, 1);
   }
 
-  trackBy(index, label) {
-    return index;
-  }
-
-  isInvalidGlyph(data: AttributeData): boolean {
-    if (data != null) {
-      if (data.glyph === "" || data.glyph === null) {
+  // Checks if all the attribute's glyphs are valid
+ invalidEntities(attribute: EntityAttributeTypes): boolean {
+    for(let i = 0; i < attribute.entities.length; i++) {
+      if(attribute.entities[i] === "" || attribute.entities[i] === null) {
         return true;
-      } else {
-        return false;
-      }
-    } else {
-      return true;
-    }
-  }
-
-  isValid(
-    attribute: EntityAttributeTypes,
-    data: AttributeData,
-    index: number
-  ): boolean {
-    // Check if every entry is valid
-    data.error = true;
-    if (attribute.type === "" || attribute.type === null) {
-      data.message = "*Missing Type";
-      return true;
-    } else if (attribute.values.length === 0) {
-      data.message = "*Missing Glyphs";
-      return true;
-    } else if (attribute.values.length > 0) {
-      for (let i = 0; i < attribute.values.length; i++) {
-        if (
-          attribute.values[i].glyph === "" ||
-          attribute.values[i].glyph === null
-        ) {
-          data.message = "*Invalid Glyphs";
-          return true;
-        }
-      }
-    } else if (attribute.entities.length == 0 || attribute.entities == null) {
-      data.message = "*Invalid Entities";
-      return true;
-    }
-
-    // Check for duplicates except for itself
-    if (index >= 0) {
-      for (let i = 0; i < this.project.attributes.length; i++) {
-        if (i != index) {
-          if (attribute.type === this.project.attributes[i].type) {
-            data.message = "*Type already exist";
-            return true;
-          }
-        }
-      }
-    } else {
-      for (let i = 0; i < this.project.attributes.length; i++) {
-        if (attribute.type === this.project.attributes[i].type) {
-          data.message = "*Type already exist";
-          return true;
-        }
       }
     }
-
-    data.message = "";
-    data.error = false;
     return false;
   }
 }
@@ -374,6 +400,5 @@ export interface AttributeData {
   oldName: string;
   error: boolean;
   message: string;
-  glyph: string;
   entity: string;
 }

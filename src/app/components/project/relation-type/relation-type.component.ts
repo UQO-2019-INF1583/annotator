@@ -43,6 +43,9 @@ export class RelationTypeComponent implements OnInit {
   };
   relationsData: RelationData[] = [];
 
+   /**************************************************************************************
+   *    Constructor and initialisation :
+   * ***********************************************************************************/
   constructor(
     private authService: AuthService,
     private activeRouter: ActivatedRoute,
@@ -79,10 +82,15 @@ export class RelationTypeComponent implements OnInit {
     this.sub.unsubscribe();
   }
 
+  trackBy(index, label) {
+    return index;
+  }
+
   /**************************************************************************************
    *    Relation functions :
    * ***********************************************************************************/
 
+   // Create a new Relation in a project
   create() {
     this.ps.getProject(this.projectId).then(project => {
       // Save Project
@@ -118,6 +126,7 @@ export class RelationTypeComponent implements OnInit {
     });
   }
 
+  // Save all modification made to a Relation
   save(index: number) {
     this.ps
       .getProjectDocument(this.projectId)
@@ -136,6 +145,7 @@ export class RelationTypeComponent implements OnInit {
       });
   }
 
+  // Remove a relation
   remove(index: number) {
     if (
       this.project.relations.length >= 0 ||
@@ -149,6 +159,7 @@ export class RelationTypeComponent implements OnInit {
     this.ps.saveProject(this.project);
   }
 
+  // reset all relations to their database state
   reset() {
     this.ps
       .getProjectDocument(this.projectId)
@@ -171,96 +182,7 @@ export class RelationTypeComponent implements OnInit {
       });
   }
 
-  // Add the relations arguments to theirs respective entity's arcs
-  setRelationsToEntities() {
-
-    // Remove all arcs
-    for (let i = 0; i < this.project.entities.length; i++) {
-      for (let j = this.project.entities[i].arcs.length - 1; j >= 0; j--) {
-        this.project.entities[i].arcs.splice(j, 1);
-      }
-    }
-
-    // Add all arcs
-    for (let i = 0; i < this.project.relations.length; i++) {
-      for (let j = 0; j < this.project.entities.length; j++) {
-        if (
-          this.project.relations[i].args[0].targets[0] !=
-          this.project.relations[i].args[1].targets[0]
-        ) {
-          for (let k = 0; k < this.project.relations[i].args.length; k++) {
-            if (
-              this.project.relations[i].args[k].targets[0] ===
-              this.project.entities[j].type
-            ) {
-              let arc = new Arc();
-              arc = {
-                arrowHead: "triangle,5",
-                color: "black",
-                labels: this.project.relations[i].labels,
-                dashArray: ",",
-                hotkey: "T",
-                type: this.project.relations[i].type,
-                targets: [this.project.relations[i].args[k].targets[0]]
-              };
-              this.project.entities[j].arcs.push(arc);
-            }
-          }
-        } else {
-          if (
-            this.project.relations[i].args[0].targets[0] ===
-            this.project.entities[j].type
-          ) {
-            let arc = new Arc();
-            arc = {
-              arrowHead: "triangle,5",
-              color: "black",
-              labels: this.project.relations[i].labels,
-              dashArray: ",",
-              hotkey: "T",
-              type: this.project.relations[i].type,
-              targets: [this.project.relations[i].args[0].targets[0]]
-            };
-            this.project.entities[j].arcs.push(arc);
-          }
-        }
-      }
-    }
-  }
-
-  addLabel(relation: Relation, data: RelationData): void {
-    relation.labels.push(data.label);
-    data.label = "";
-  }
-
-  removeLabel(relation: Relation, index: number): void {
-    relation.labels.splice(index, 1);
-  }
-
-  trackBy(index, label) {
-    return index;
-  }
-
-  isInvalidLabel(data: RelationData): boolean {
-    if (data != null) {
-      if (data.label === "" || data.label === null) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return true;
-    }
-  }
-
-  isValidDashArray(dasharray: string): boolean {
-    let regex = new RegExp("^[0-9],[0-9]$");
-
-    if (regex.test(dasharray)) {
-      return true;
-    } else return false;
-  }
-
+  // check if valid Relation
   isValid(relation: Relation, data: RelationData, index: number): boolean {
     // Check if every entry is valid
 
@@ -325,6 +247,117 @@ export class RelationTypeComponent implements OnInit {
     data.message = "";
     data.error = false;
     return false;
+  }
+
+    /**************************************************************************************
+   *    Entities Methods :
+   * ***********************************************************************************/
+
+  // Add the relations arguments to theirs respective entity's arcs
+  setRelationsToEntities() : void {
+
+    // Remove all arcs
+    for (let i = 0; i < this.project.entities.length; i++) {
+      for (let j = this.project.entities[i].arcs.length - 1; j >= 0; j--) {
+        this.project.entities[i].arcs.splice(j, 1);
+      }
+    }
+
+    // Add all arcs
+    for (let i = 0; i < this.project.relations.length; i++) {
+      for (let j = 0; j < this.project.entities.length; j++) {
+        if (
+          this.project.relations[i].args[0].targets[0] !=
+          this.project.relations[i].args[1].targets[0]
+        ) {
+          for (let k = 0; k < this.project.relations[i].args.length; k++) {
+            if (
+              this.project.relations[i].args[k].targets[0] ===
+              this.project.entities[j].type
+            ) {
+              let arc = new Arc();
+              arc = {
+                arrowHead: "triangle,5",
+                color: "black",
+                labels: this.project.relations[i].labels,
+                dashArray: ",",
+                hotkey: "T",
+                type: this.project.relations[i].type,
+                targets: [this.project.relations[i].args[k].targets[0]]
+              };
+              this.project.entities[j].arcs.push(arc);
+            }
+          }
+        } else {
+          if (
+            this.project.relations[i].args[0].targets[0] ===
+            this.project.entities[j].type
+          ) {
+            let arc = new Arc();
+            arc = {
+              arrowHead: "triangle,5",
+              color: "black",
+              labels: this.project.relations[i].labels,
+              dashArray: ",",
+              hotkey: "T",
+              type: this.project.relations[i].type,
+              targets: [this.project.relations[i].args[0].targets[0]]
+            };
+            this.project.entities[j].arcs.push(arc);
+          }
+        }
+      }
+    }
+  }
+
+  /**************************************************************************************
+   *    Labels Methods :
+   * ***********************************************************************************/
+
+   // Add a new Label
+  addLabel(relation: Relation): void {
+    relation.labels.unshift("");
+  }
+
+  // Remove a label from a Relation
+  removeLabel(relation: Relation, index: number): void {
+    relation.labels.splice(index, 1);
+  }
+
+  // Checks if all the entity's labels are valid
+  invalidLabels(relation: Relation): boolean {
+    for(let i = 0; i < relation.labels.length; i++) {
+      if(relation.labels[i] === "" || relation.labels[i] === null) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Check if a label is valid
+  isInvalidLabel(data: RelationData): boolean {
+    if (data != null) {
+      if (data.label === "" || data.label === null) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  /**************************************************************************************
+   *    Other Methods :
+   * ***********************************************************************************/
+
+  // Regex function to check valid Dash array
+  isValidDashArray(dasharray: string): boolean {
+    let regex = new RegExp("^[0-9],[0-9]$");
+
+    if (regex.test(dasharray)) {
+      return true;
+    } else return false;
   }
 }
 

@@ -11,9 +11,9 @@ export class EntityAttributeTypes {
     name: string = "",
     type: string = "",
     valueString: string = "",
-    values: EntityAttributeValues[] = [],
+    values: EntityAttributeValues[] = [new EntityAttributeValues()],
     bool: string = "",
-    entities: string[] = []
+    entities: string[] = [""]
   ) {
     this.name = name;
     this.type = type;
@@ -34,7 +34,7 @@ export class EntityAttributeValues {
   constructor(
     name: string = "",
     box: string = "none",
-    glyph: string = "glyph",
+    glyph: string = "",
     dashArray: string = "1,2"
   ) {
     this.box = box;

@@ -7,7 +7,6 @@ export const enum Role {
 }
 
 export class User {
-
   uid: string;
   email: string;
   displayName?: string;
@@ -18,7 +17,25 @@ export class User {
   firstname?: string;
   lastname?: string;
 
-  constructor() {
-  }
+  constructor(
+    uid: string = "",
+    email: string = "",
+    displayName: string = "",
+    password: string = "",
+    role: Role = Role.Visitor,
 
+    username: string = "",
+    firstname: string = "",
+    lastname: string = ""
+  ) {
+    this.uid = uid;
+    this.email = email;
+    this.displayName = displayName;
+    this.password = password;
+    this.role = Role.Visitor;
+
+    this.username = username;
+    this.firstname = firstname;
+    this.lastname = lastname;
+  }
 }

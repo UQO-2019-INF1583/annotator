@@ -2,14 +2,15 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 
 import {
-  AngularFirestore
-  //AngularFirestoreCollection,
-  //AngularFirestoreDocument
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument
 } from "@angular/fire/firestore";
 import * as firebase from "firebase/app";
 import { environment } from "../../../environments/environment";
 import { User } from "../../models/user.model";
 import { AuthService } from "../../tools/security/auth.service";
+import { reject } from "q";
 
 // secret de la classe: structure de données utilisée pour représenter l'ensemble des utilisateurs
 
@@ -18,8 +19,21 @@ export class UserService {
   user: Observable<User>;
   currentUser: any;
 
+  userCollection: AngularFirestoreCollection<User>;
+  userDoc: AngularFirestoreDocument<User>;
+  users: Observable<User[]>;
+
   constructor(private authService: AuthService, private afs: AngularFirestore) {
     this.user = this.authService.user != null ? this.authService.user : null;
+
+    this.userCollection = this.afs.collection("Users/");
+    this.users = this.afs.collection("Users/").valueChanges() as Observable<
+      User[]
+    >;
+  }
+
+  getUsers() {
+    return this.users;
   }
 
   displayName(): string {

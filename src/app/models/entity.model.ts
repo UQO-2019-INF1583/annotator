@@ -1,4 +1,5 @@
 import { Arc } from "./arc.model";
+import { ProjectService} from "../services/project/project.service";
 
 export class Entity {
   name: string;
@@ -14,22 +15,23 @@ export class Entity {
   constructor(
     name: string = "",
     type: string = "",
-    labels: string[] = [],
-    bgColor: string = "",
-    borderColor: string = "",
+    labels: string[] = [""],
     unused: boolean = false,
     arcs: Arc[] = [],
     children: Entity[] = [],
     attributes: string[] = []
   ) {
+
+    let colors = ProjectService.getRandomLightAndDarkColor();
+
     this.name = name;
     this.type = type;
     this.labels = labels;
-    this.bgColor = bgColor;
+    this.bgColor = colors.light;
     this.arcs = arcs;
     this.children = children;
     this.unused = unused;
-    this.borderColor = borderColor;
+    this.borderColor = colors.dark;
     this.attributes = attributes;
   }
 }

@@ -42,6 +42,9 @@ export class EventTypeComponent implements OnInit {
   };
   eventsData: EventData[] = [];
 
+  /**************************************************************************************
+   *    Constructor and initialisation :
+   * ***********************************************************************************/
   constructor(
     private authService: AuthService,
     private activeRouter: ActivatedRoute,
@@ -80,10 +83,15 @@ export class EventTypeComponent implements OnInit {
     this.sub.unsubscribe();
   }
 
+  trackBy(index, label) {
+    return index;
+  }
+
   /**************************************************************************************
    *    Event functions :
    * ***********************************************************************************/
 
+   // Create a new Event
   create() {
     this.ps.getProject(this.projectId).then(project => {
       // Save Project
@@ -121,17 +129,23 @@ export class EventTypeComponent implements OnInit {
     });
   }
 
+  // Save all modification made to an Event
   save(index: number) {
     this.ps.getProject(this.projectId).then(project => {
       for (let i = 0; i < project.events; i++) {
         if (i != index) {
           this.project.events[i] = project.events[i];
+        } else {
+          this.project.events[i] = JSON.parse(
+            JSON.stringify(this.project.events[i])
+          ) as Event;
         }
       }
       this.ps.saveProject(this.project);
     });
   }
 
+  // Remove an Event from the project
   remove(index: number) {
     if (this.project.events.length >= 0 || index < this.project.events.length) {
       this.project.events.splice(index, 1);
@@ -139,6 +153,7 @@ export class EventTypeComponent implements OnInit {
     this.ps.saveProject(this.project);
   }
 
+  // Reset all modifications made to Events to their database state
   reset() {
     this.ps
       .getProjectDocument(this.projectId)
@@ -164,69 +179,7 @@ export class EventTypeComponent implements OnInit {
       });
   }
 
-  // Labels
-  addLabel(event: Event, data: EventData): void {
-    event.labels.push(data.label);
-    data.label = "";
-  }
-
-  removeLabel(event: Event, index: number): void {
-    event.labels.splice(index, 1);
-  }
-
-  isInvalidLabel(data: EventData): boolean {
-    if (data != null) {
-      if (data.label === "" || data.label === null) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return true;
-    }
-  }
-
-  // Arc
-  addArc(event: Event, data: EventData): void {
-    event.arcs.push(data.newArc);
-    data.newArc = new Arc();
-  }
-
-  removeArc(event: Event, index: number): void {
-    event.arcs.splice(index, 1);
-  }
-
-  isInvalidArc(arc: Arc): boolean {
-    if (arc != null) {
-      if (arc.type === "" || arc.type === null) return true;
-      else if (arc.color === "" || arc.color === null) return true;
-      else if (arc.labels === null) return true;
-      else if (arc.labels.length === 0) return true;
-      for (let i = 0; i < arc.labels.length; i++)
-        if (arc.labels[i] === "" || arc.labels[i] === null) return true;
-
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  // Arc Labels
-  addArcLabel(arc: Arc, data: EventData, index: number): void {
-    arc.labels.push(data.arcLabels[index]);
-    data.arcLabels[index] = "";
-  }
-
-  addArcNewLabel(data: EventData): void {
-    data.newArc.labels.push(data.newLabel);
-    data.newLabel = "";
-  }
-
-  removeArcLabel(arc: Arc, data: EventData, index: number): void {
-    arc.labels.splice(index, 1);
-    data.arcLabels.splice(index, 1);
-  }
-
+  // check if an Event if valid
   isValid(event: Event, data: EventData, index: number): boolean {
     // Check if every entry is valid
 
@@ -275,35 +228,97 @@ export class EventTypeComponent implements OnInit {
         }
       }
     }
-
-    // Check for duplicates except for itself
-    /*
-    if (index >= 0) {
-      for (let i = 0; i < this.project.events.length; i++) {
-        if (i != index) {
-          if (relation.type === this.project.events[i].type) {
-            data.message = "*Type already exist";
-            return true;
-          }
-        }
-      }
-    } else {
-      for (let i = 0; i < this.project.events.length; i++) {
-        if (relation.type === this.project.events[i].type) {
-          data.message = "*Type already exist";
-          return true;
-        }
-      }
-    }
-    */
-
     data.message = "";
     data.error = false;
     return false;
   }
+  
 
-  trackBy(index, label) {
-    return index;
+   /**************************************************************************************
+   *    Label methods :
+   * ***********************************************************************************/
+
+  // add a new Label to an Event
+  addLabel(event: Event): void {
+    console.log(event);
+    event.labels.unshift("");
+  }
+
+  // Remove a label from an Event
+  removeLabel(event: Event, index: number): void {
+    event.labels.splice(index, 1);
+  }
+
+  // Checks if all the entity's labels are valid
+  invalidLabels(event: Event): boolean {
+    for(let i = 0; i < event.labels.length; i++) {
+      if(event.labels[i] === "" || event.labels[i] === null) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**************************************************************************************
+   *    Arcs methods :
+   * ***********************************************************************************/
+
+  // add a new Arc to an Event
+  addArc(event: Event): void {
+    event.arcs.unshift(JSON.parse(JSON.stringify(new Arc())));
+  }
+
+  // Remove an Arc from an Event
+  removeArc(event: Event, index: number): void {
+    event.arcs.splice(index, 1);
+  }
+
+  // check if the Arc is valid
+  isInvalidArc(arc: Arc): boolean {
+    if (arc != null) {
+      if (arc.type === "" || arc.type === null) return true;
+      else if (arc.color === "" || arc.color === null) return true;
+      else if (arc.labels === null) return true;
+      else if (arc.labels.length === 0) return true;
+      for (let i = 0; i < arc.labels.length; i++)
+        if (arc.labels[i] === "" || arc.labels[i] === null) return true;
+
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**************************************************************************************
+   *    Arc Labels methods :
+   * ***********************************************************************************/
+
+  // add a label to an Arc
+  addArcLabel(arc: Arc): void {
+    arc.labels.unshift("");
+  }
+
+  // remove a label from an Arc
+  removeArcLabel(arc: Arc, index: number): void {
+    arc.labels.splice(index, 1);
+  }
+
+  // check if arc is valid
+  isInvalidArcs(event: Event): boolean {
+
+    if(event.arcs == null || event.arcs.length == 0)
+      return true;
+    else{
+      for(let i = 0; i < event.arcs.length; i++) {
+        if (event.arcs[i].type === "" || event.arcs[i].type === null) return true;
+        else if (event.arcs[i].color === "" || event.arcs[i].color === null) return true;
+        else if (event.arcs[i].labels === null) return true;
+        else if (event.arcs[i].labels.length === 0) return true;
+        for (let j = 0; j < event.arcs[i].labels.length; j++)
+          if (event.arcs[i].labels[j] === "" || event.arcs[i].labels[j] === null) return true;
+      }
+    }
+    return false;
   }
 }
 

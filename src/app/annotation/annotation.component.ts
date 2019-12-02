@@ -15,6 +15,13 @@ import { HttpClient } from '@angular/common/http';
 import { AnnotatedDocument, AnnotatedDocumentUtils } from '../shared/annotated-document.model';
 import { Project, ProjectUtils } from '../shared/project.model';
 import { BratUtils } from './brat/brat-utils';
+//Referncement User, Role,
+import { User } from '../shared/user.model';
+import { Role } from '../shared/user.model';
+import {
+  AngularFirestore,
+  AngularFirestoreDocument
+} from '@angular/fire/firestore';
 
 declare var BratFrontendEditor: any;
 
@@ -39,10 +46,26 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   isConnected = false;
   projectId: string;
   isDataLoaded = false;
+  //isVisitor: variable bouleenne par défaut égal a false sinon true si utilisateur est un visiteur (voir la méthode userIsInRoleVisitor().
+  isVisitor = false;
   customCssHtml: string;
 
+  //Déclaration d'une instance d'objet User
+  user: User = {
+    uid: '',
+    email: '',
+    displayName: '',
+    password: '',
+    role: Role.Visitor,
+    username: '',
+    firstname: '',
+    lastname: '',
+  }
+  role: string = '';
+  email: string = '';
+
   constructor(private authService: AuthService, private activeRouter: ActivatedRoute,
-    private as: AnnotationService, private http: HttpClient) {
+    private as: AnnotationService, private http: HttpClient, private afs: AngularFirestore) {
 
   }
 
@@ -63,6 +86,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       this.currentProjectTitle = params.projectTitle;
       this.currentDoc = new Doc(params.id, params.title, params.projectId);
       this.projectId = params.projectId;
+
     });
 
     await this.as.getProject(this.projectId).then(p => this.project = p.data());
@@ -91,15 +115,52 @@ export class AnnotationComponent implements OnInit, OnDestroy {
       BratUtils.getDocDataFromAnnotatedDocument(this.annotatedDocument),
       options);
 
-	this.filterBrat = new FilterBrat();
-	this.filterOptions = FilterOptionsList;
+    this.filterBrat = new FilterBrat();
+    this.filterOptions = FilterOptionsList;
+    this.isDataLoaded = true
 
-	this.isDataLoaded = true;
+  }
+  /**
+    * Méthode qui récupère le role de l'utilisateur
+    * Assigne true si l'utilisateur est un visiteur ou false sinon (Admin ou membre)
+    */
+  userIsInRoleVisitor() {
+    //Recuperer le role de l'utilisateur authentifie 
+    const currentUserId = firebase.auth().currentUser.uid;
+    this.afs.collection('Users').ref.where('uid', '==', currentUserId).get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        this.user.email = doc.get('email');
+        this.email = this.user.email;
+        //Recuperer le rôle de l'utilisateur
+        if (doc.get('role') === 0) {
+          this.user.role = Role.Visitor;
+          this.role = 'Visitor';
+        }
+        else if (doc.get('role') === 1) {
+          this.user.role = Role.Member;
+          this.role = 'Member';
+        }
+        else if (doc.get('role') === 2) {
+          this.user.role = Role.Adm;
+          this.role = 'Administrator';
+        }
+      });
 
+      //Assigner false au boolean isVisitor dans le cas utilisateur est Admin ou Membre
+      //et a true si l'utiliteur est un visiteur.
+      if (this.role === 'Member' || this.role === 'Administrator') {
+        this.isVisitor = false;
+      }
+      else {
+        this.isVisitor = true;
+      }
+    });
   }
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
+    //Appel de cette methode pour récuperer le rôle de l'utilisateur et assigner la valeur bouleenne a isVisitor    
+    this.userIsInRoleVisitor();
 
     this.getInterfaceData();
   }
@@ -110,31 +171,37 @@ export class AnnotationComponent implements OnInit, OnDestroy {
   }
 
   saveTextModification() {
-    const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
-      this.brat.docData,
-      this.project,
-      AnnotatedDocumentUtils.fromDoc(this.currentDoc)
-    );
+    if (!this.isVisitor && this.isConnected) {
+      this.getInterfaceData();
+      console.log('Sauvegarde admin');
+      console.log('Role' + this.role);
+      const aDoc = BratUtils.getAnnotatedDocumentfromDocData(
+        this.brat.docData,
+        this.project,
+        AnnotatedDocumentUtils.fromDoc(this.currentDoc)
+      );
+      this.as.saveAnnotatedDocument(aDoc);
 
-    this.as.saveAnnotatedDocument(aDoc);
-
-    alert('Annotation saved');
+      alert('Annotation saved');
+    } else {
+      return false;
+    }
   }
 
-  customCSS () {
-	const head=document.getElementsByTagName('head')[0];
-	const oldFilter=document.getElementById("custom-css");
-	if (oldFilter){
-		head.removeChild(oldFilter);
-	}
-	const newFilter=document.createElement("style");
-	newFilter.type="text/css";
-	newFilter.id="custom-css";
+  customCSS() {
+    const head = document.getElementsByTagName('head')[0];
+    const oldFilter = document.getElementById("custom-css");
+    if (oldFilter) {
+      head.removeChild(oldFilter);
+    }
+    const newFilter = document.createElement("style");
+    newFilter.type = "text/css";
+    newFilter.id = "custom-css";
     this.customCssHtml = '';
-    this.customCssHtml += "#brat .span_"+this.filterBrat.value+"{";
+    this.customCssHtml += "#brat .span_" + this.filterBrat.value + "{";
     this.customCssHtml += "stroke-width: 3 !important;";
     this.customCssHtml += "}";
     newFilter.appendChild(document.createTextNode(this.customCssHtml));
-	head.appendChild(newFilter);
+    head.appendChild(newFilter);
   }
 }

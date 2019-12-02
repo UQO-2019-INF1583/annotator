@@ -25,15 +25,17 @@ fdescribe('Component: Login', () => {
     component = null;
   });
 
-
-  it('Loading to be true', () => {
+//1er test
+  it('Verification Loading pour etre a true', () => {
     service.authenticated = true;
-    expect(component.loading = true);
-  });
+    expect(component.loading=true ).toBe(true,true);
+  });//fin premier test
 
-  xit('canLogin returns false when the user is not authenticated', () => {
+// 2eme test
+  it('Verification ErrorMessage = "Email Required"', () => {
     service.authenticated = false;
     // @ts-ignore
-    expect(component.handleError().toBe('email required'));
-  });
+    expect(component.errorMessage='Email Required').toBe("Email Required");
+  });//fin 2eme test
+
 });

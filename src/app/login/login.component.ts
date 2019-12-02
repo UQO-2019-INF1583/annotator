@@ -11,11 +11,11 @@ import { HeaderComponent } from "../shared/components/header/header.component";
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.scss"]
 })
-
+//Commentaire de sur le debut de la classe LoginComponent
 export class LoginComponent implements OnInit {
   userInfo: any = {};
   errorMessage = "";
-  loading = false;
+  loading = false;// Initialisation de loading
 
   constructor(public authService: AuthService, public router: Router) {
     localStorage.removeItem("errorAuth");
@@ -31,9 +31,10 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem("currentProjet");
     localStorage.removeItem("currentText");
   }
-
+//Correction Bugs#122 Affichage des etiquettes d'erreurs password et email required.
   login() {
-    this.loading = true;
+    //Changement en de laoding=true a loading=false
+    this.loading = false;
     this.authService
       .signIn(this.userInfo.email, this.userInfo.password)
       .then(() => {

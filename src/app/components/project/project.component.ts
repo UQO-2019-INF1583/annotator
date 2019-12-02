@@ -40,14 +40,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
   annotators: any[] = []; // {uid: v1, email: v2}[]
   admin: any[] = []; // {uid: v1, email: v2}[]
   isConnected = false;
-
+  // isEdit permet de faire des interactions sur le button edit,save,cancel
+  // pour permettre à l'administrateur de modifier le titre du projet
+  isEdit: false; // initilizer à false pour empecher la modif par default
   constructor(
     private authService: AuthService,
     private activeRouter: ActivatedRoute,
     public dialog: MatDialog,
     private router: Router,
     private ps: ProjectService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
@@ -106,7 +108,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return a;
   }
 
-  // Sauvegarde les modifications apportées au projet.
+  /**
+   * Sauvegarde les modifications apportées au projet.
+   *
+   * @param currentProject contient le title et description du projet
+   * @param isEdit false pour activer le mode readonly apres modification
+   *               true desactive readonly et permettre la modification et
+   *               affiche le button save et cancel
+   */
   saveProjectModification() {
     if (
       this.currentProject.title != null &&
@@ -115,7 +124,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.currentProject.description !== ''
     ) {
       this.ps.saveProject(this.currentProject);
-
+      this.isEdit = false;
       alert('Modification sauvegardé');
     }
   }
@@ -124,7 +133,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addCorpusDialogBox() {
     const dialogRef = this.dialog.open(AddCorpusComponent, {
       width: '250px',
-      data: { corpusTitle: undefined, corpusFile: undefined },
+      data: { corpusTitle: undefined, corpusFile: undefined }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -148,7 +157,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         type: undefined,
         labels: [],
         bgColor: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe((result: Entity) => {
@@ -195,7 +204,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'entity',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -214,7 +223,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddAnnotatorComponent, {
       width: '600px',
       height: '600px',
-      data: { UserId: undefined },
+      data: { UserId: undefined }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -246,7 +255,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'Annotator',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -270,7 +279,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddAdminComponent, {
       width: '600px',
       height: '600px',
-      data: { UserId: undefined },
+      data: { UserId: undefined }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -302,7 +311,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'Administrator',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -331,7 +340,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         labels: [],
         unused: false,
         values: ''
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe((result: Attribute) => {
@@ -342,7 +351,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addAttributesAfterClosedHandler(result: Attribute) {
     let attributeExists = false;
     if (result !== undefined) {
-      if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
+      if (
+        result.name !== undefined &&
+        result.type !== undefined &&
+        result.labels !== undefined
+      ) {
         this.currentProject.attributes.forEach(item => {
           if (item.name === result.name) {
             attributeExists = true;
@@ -365,7 +378,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'Attribute',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -391,7 +404,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         color: undefined,
         attributes: [],
         arcs: []
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe((result: Relation) => {
@@ -403,9 +416,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
    * @param data la donnée à ajouter
    */
   public addRelation(data: Relation) {
-    if (data.type !== undefined &&
+    if (
+      data.type !== undefined &&
       data.labels !== [] &&
-      data.color !== undefined) {
+      data.color !== undefined
+    ) {
       if (!this.isExist(data)) {
         if (!this.relationColorAlreadyUsed(data)) {
           this.currentProject.relations.push(data);
@@ -458,7 +473,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'Relation',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -480,8 +495,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
         type: undefined,
         etiquettes: [],
         attributes: [],
-        color: undefined,
-      },
+        color: undefined
+      }
     });
 
     dialogRef.afterClosed().subscribe((result: Event) => {
@@ -491,12 +506,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   addEventAfterClosedHandler(result: Event) {
     if (result !== undefined) {
-      if (result.name !== undefined &&
+      if (
+        result.name !== undefined &&
         result.type !== undefined &&
         result.labels !== [] &&
         result.attributes !== [] &&
-        result.bgColor !== undefined) {
-
+        result.bgColor !== undefined
+      ) {
         if (!this.isEventExist(result)) {
           if (!this.eventColorAlreadyUsed(result)) {
             this.currentProject.events.push(this.mapValidResultToEvent(result));
@@ -561,7 +577,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'Event',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -588,7 +604,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         text: 'Corpus',
         response: undefined
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {

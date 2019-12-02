@@ -21573,22 +21573,44 @@
         };
 
         var deleteAnnotation = function (data) {
-          // delete the entity. TODO: also delete events etc
-          var entities = data.document.entities;
-          for (var i = 0; i < entities.length; i++) {
-            if (entities[i][0] === data.id) {  // entity format [id, type, offsets], e.g. ["N1", "Person", Array[2]]
-              entities.splice(i, 1);
+          //console.log(data);
+
+          var id_annotation = data.id; // Récupération de l'id de l'annotation
+          var fl = id_annotation.substr(0, 1); // Récupération du premier caractère de l'id
+          //console.log(id_annotation);
+          //console.log(fl);
+          // Traitement selon la valeur du premier caractère de l'id
+          switch(fl) {
+            case 'N':
+                var entities = data.document.entities; // 
+                for (var i = 0; i < entities.length; i++) {
+                  if (entities[i][0] === data.id) {
+                    entities.splice(i, 1);
+                    break;
+                  }
+                }
+                delete entities;
               break;
-            }
-          }
-          // delete relations containing the entity TODO: attributes etc?
-          var relations = data.document.relations;
-          for (var i = relations.length - 1; i >= 0; i--) {
-            // relation format: ["R1", "Friend", Array[2]]
-            var relation = relations[i][2];  // e.g. [['From', "N1"], ['To', 'N2']]
-            if (relation[0][1] === data.id || relation[1][1] === data.id) {
-              relations.splice(i, 1);
-            }
+            case 'E': // Pour le traitement de la suppression d'une annotation de type event
+                var events = data.document.events;
+                for (var j = 0; j < events.length; j++) {
+                  if (events[j][0] === data.id) {
+                    events.splice(j, 1);
+                    break;
+                  }
+                }
+                delete events;
+                break;
+             default:
+                var relations = data.document.relations;
+                for (var r = relations.length - 1; r >= 0; r--) { 
+                  var relation = relations[r][2];
+                  if (relation[0][1] === data.id || relation[1][1] === data.id) {
+                    relations.splice(r, 1);
+                  }
+                }
+                delete relations;
+              break;
           }
 
           return {

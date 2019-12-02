@@ -23,6 +23,8 @@ import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';
 import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
+import { AlertDialogBoxComponent } from '../../shared/components/alert-dialog-box/alert-dialog-box.component';
+import { Injectable } from '@angular/core';
 import { Entity } from '../../shared/entity.model';
 
 @Component({
@@ -30,15 +32,16 @@ import { Entity } from '../../shared/entity.model';
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss']
 })
+@Injectable()
 export class ProjectComponent implements OnInit, OnDestroy {
   currentProject: Project = ProjectUtils.generateEmpty();
   private sub: any;
   isDataLoaded = false;
-
+  isProjectModified = false;
   users: Observable<User[]>;
   corpus: Observable<any[]>;
-  annotators: any[] = []; // {uid: v1, email: v2}[]
-  admin: any[] = []; // {uid: v1, email: v2}[]
+  annotators: any[] = [];
+  admin: any[] = [];
   isConnected = false;
 
   constructor(
@@ -96,6 +99,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
+
+
+  // Verifie si l'utilisateur connecte est un admin
   isAdmin(): boolean {
     let a = false;
     this.admin.forEach((user, i) => {
@@ -114,10 +120,122 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.currentProject.description != null &&
       this.currentProject.description !== ''
     ) {
+      this.isProjectModified = false;
       this.ps.saveProject(this.currentProject);
 
-      alert('Modification sauvegardé');
+      this.alertDialogBox('Modification sauvegardé');
     }
+  }
+
+
+  // Vérifie qu'un event n'a pas déjà le même nom
+  isEventExist(data: Event): boolean {
+    let exist = false;
+    this.currentProject.events.forEach(event => {
+      if (event.name === data.name) {
+        exist = true;
+      }
+    });
+
+    return exist;
+  }
+
+  // Vérifie qu'un event n'a pas déjà la même couleur
+  eventColorAlreadyUsed(data: Event): boolean {
+    let exist = false;
+    this.currentProject.events.forEach(event => {
+      if (event.bgColor === data.bgColor) {
+        exist = true;
+      }
+    });
+
+    return exist;
+  }
+
+  mapValidResultToEvent(result: Event): Event {
+    return {
+      name: result.name,
+      type: result.type,
+      labels: result.labels[0].split(','),
+      attributes: result.attributes[0].split(','),
+      bgColor: result.bgColor,
+      arcs: [],
+      borderColor: 'darken',
+      children: [],
+      unused: false
+    };
+  }
+
+
+
+  /*
+  Permet de savoir s'il y a eu des modifications(Ajouts/Supressions) non sauvgarde
+  au elements tel que Entities/Relation/Attributs du projet
+  */
+  verificationEtatDuDocument(): boolean {
+    if (this.isProjectModified === true) {
+      // tslint:disable-next-line: max-line-length
+      this.alertDialogBox('Vous avez fait des modifications au projet. Vous devez sauvegarder les modifications afin de pouvoir accéder au corpus sélectionne');
+      return false;
+    } else {
+
+      const cpenl = this.currentProject.entities.length;        // Nombre d'elements de type Entites associe au project
+      const cpevl = this.currentProject.events.length;          // Nombre d'elements de type Events associe au project
+      const cprel = this.currentProject.relations.length;       // Nombre d'elements de type Relations associe au project
+      const cpatl = this.currentProject.attributes.length;      // Nombre d'elements de type Attributes associe au project
+
+      // Verifier si le projet contient au moins un attributes, entities, relations ou events afin de pouvoir faire des annotations
+      if (cpenl === 0 && cpevl === 0 && cprel === 0 && cpatl === 0) {
+        // tslint:disable-next-line: max-line-length
+        this.alertDialogBox('Vous ne pouvez pas annoter si vous n\'avez pas au moins un (Entities/Relation/Events/Attributs) associe au projet');
+        return false; // L'utilsateur ne pourra pas acceder au corpus avant d'ajouter un element
+      } else {
+        return true;  // L'utilisateur pourra acceder au corpus
+      }
+    }
+
+  }
+
+
+  // Dirige l'utilisateur au document/corpus selectionne apres avoir valide l'etat du document
+  documentSelected(doc: any) {
+    if (this.verificationEtatDuDocument()) {
+      doc.projectTitle = this.currentProject.title;
+      this.router.navigate(['/annotation', doc]);
+    }
+  }
+
+
+  // Methode utilise pour afficher des messages d'avertissement
+  alertDialogBox(texte: string): void {
+    const dialogRef = this.dialog.open(AlertDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: texte,
+        response: undefined
+      },
+    });
+  }
+
+
+
+
+
+  // Supprime un texte
+  deleteCorpus(corpus: any) {
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'Corpus',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.ps.deleteCorpus(corpus.id, corpus.title);
+      }
+    });
   }
 
   // ouvre la boîte de dialogue pour ajouter un corpus
@@ -140,74 +258,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ouvre la boîte de dialogue pour ajouter une catégorie
-  addEntityDialogBox() {
-    const dialogRef = this.dialog.open(AddEntityComponent, {
-      data: {
-        name: undefined,
-        type: undefined,
-        labels: [],
-        bgColor: undefined
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result: Entity) => {
-      this.addEntitiesAfterClosedHandler(result);
-    });
-  }
-
-  addEntitiesAfterClosedHandler(result: Entity) {
-    let entityExists = false;
-    if (result !== undefined) {
-      if (
-        result.name !== undefined &&
-        result.bgColor !== undefined &&
-        result.type !== undefined &&
-        result.labels !== undefined
-      ) {
-        this.currentProject.entities.forEach(item => {
-          if (item.name === result.name) {
-            entityExists = true;
-            if (item.bgColor === result.bgColor) {
-              alert('The entity already exists');
-            } else {
-              alert('Replacing color');
-              item.bgColor = result.bgColor;
-            }
-          } else if (item.bgColor === result.bgColor) {
-            entityExists = true;
-            alert('The chosen color is already used');
-          }
-        });
-
-        if (!entityExists) {
-          result.labels = result.labels[0].split(',');
-          this.currentProject.entities.push(result);
-        }
-      }
-    }
-  }
-
-  // Supprime la catégorie spécifiée dans l'écran du projet (pas de sauvegarde dans firestore).
-  deleteEntity(entityName: string) {
-    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
-      width: '250px',
-      data: {
-        text: 'entity',
-        response: undefined
-      },
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.response === true) {
-        this.currentProject.entities.forEach((item, index) => {
-          if (item.name === entityName) {
-            this.currentProject.entities.splice(index, 1);
-          }
-        });
-      }
-    });
-  }
 
   // ouvre la boîte de dialogue pour ajouter un annotateur
   addAnnotatorDialogBox() {
@@ -234,7 +284,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.currentProject.annotators.push(result.uid);
         this.annotators.push({ uid: result.uid, email: result.email });
       } else {
-        alert('This annotator already exists');
+        this.alertDialogBox('This annotator already exists');
       }
     }
   }
@@ -290,7 +340,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.currentProject.admin.push(result.uid);
         this.admin.push({ uid: result.uid, email: result.email });
       } else {
-        alert('This admin already exists');
+        this.alertDialogBox('This admin already exists');
       }
     }
   }
@@ -321,6 +371,77 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
+  // ouvre la boîte de dialogue pour ajouter une catégorie
+  addEntityDialogBox() {
+    const dialogRef = this.dialog.open(AddEntityComponent, {
+      data: {
+        name: undefined,
+        type: undefined,
+        labels: [],
+        bgColor: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: Entity) => {
+      this.addEntitiesAfterClosedHandler(result);
+    });
+  }
+
+  addEntitiesAfterClosedHandler(result: Entity) {
+    this.isProjectModified = true;
+    let entityExists = false;
+    if (result !== undefined) {
+      if (
+        result.name !== undefined &&
+        result.bgColor !== undefined &&
+        result.type !== undefined &&
+        result.labels !== undefined
+      ) {
+        this.currentProject.entities.forEach(item => {
+          if (item.name === result.name) {
+            entityExists = true;
+            if (item.bgColor === result.bgColor) {
+              this.alertDialogBox('The entity already exists');
+            } else {
+              this.alertDialogBox('Replacing color');
+              item.bgColor = result.bgColor;
+            }
+          } else if (item.bgColor === result.bgColor) {
+            entityExists = true;
+            this.alertDialogBox('The chosen color is already used');
+          }
+        });
+
+        if (!entityExists) {
+          result.labels = result.labels[0].split(',');
+          this.currentProject.entities.push(result);
+        }
+      }
+    }
+  }
+
+  // Supprime la catégorie spécifiée dans l'écran du projet (pas de sauvegarde dans firestore).
+  deleteEntity(entityName: string) {
+    this.isProjectModified = true;
+    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+      width: '250px',
+      data: {
+        text: 'entity',
+        response: undefined
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.response === true) {
+        this.currentProject.entities.forEach((item, index) => {
+          if (item.name === entityName) {
+            this.currentProject.entities.splice(index, 1);
+          }
+        });
+      }
+    });
+  }
+
   // ouvre la boîte de dialogue pour ajouter un attribut
   addAttributesDialogBox() {
     const dialogRef = this.dialog.open(AddAttributeComponent, {
@@ -340,6 +461,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addAttributesAfterClosedHandler(result: Attribute) {
+    this.isProjectModified = true;
     let attributeExists = false;
     if (result !== undefined) {
       if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
@@ -352,7 +474,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           result.labels = result.labels[0].split(',');
           this.currentProject.attributes.push(result);
         } else {
-          alert('This attribute already exists');
+          this.alertDialogBox('This attribute already exists');
         }
       }
     }
@@ -360,6 +482,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAttribute(target: Attribute) {
+    this.isProjectModified = true;
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
       width: '250px',
       data: {
@@ -378,9 +501,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }
     });
   }
-  /**
-   * Boite de dialogue pour création de relation
-   */
+
+
+  // Boite de dialogue pour création de relation
   addRelationDialogBox() {
     const dialogRef = this.dialog.open(AddRelationComponent, {
       width: '400px',
@@ -398,11 +521,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.addRelation(result);
     });
   }
-  /**
-   *  Ajouter la donnée dans la liste de relation
-   * @param data la donnée à ajouter
-   */
+  // Ajouter la donnée dans la liste de relation
   public addRelation(data: Relation) {
+    this.isProjectModified = true;
     if (data.type !== undefined &&
       data.labels !== [] &&
       data.color !== undefined) {
@@ -410,10 +531,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
         if (!this.relationColorAlreadyUsed(data)) {
           this.currentProject.relations.push(data);
         } else {
-          alert('The chosen color is already used');
+          this.alertDialogBox('The chosen color is already used');
         }
       } else {
-        alert('This relation already exists');
+        this.alertDialogBox('This relation already exists');
       }
     }
   }
@@ -453,6 +574,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
    *  @param target
    * */
   deleteRelation(target: Relation) {
+    this.isProjectModified = true;
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
       width: '250px',
       data: {
@@ -472,6 +594,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
+
   addEventDialogBox() {
     const dialogRef = this.dialog.open(AddEventComponent, {
       width: '400px',
@@ -490,6 +613,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addEventAfterClosedHandler(result: Event) {
+    this.isProjectModified = true;
     if (result !== undefined) {
       if (result.name !== undefined &&
         result.type !== undefined &&
@@ -501,61 +625,19 @@ export class ProjectComponent implements OnInit, OnDestroy {
           if (!this.eventColorAlreadyUsed(result)) {
             this.currentProject.events.push(this.mapValidResultToEvent(result));
           } else {
-            alert('The chosen color is already used');
+            this.alertDialogBox('The chosen color is already used');
           }
         } else {
-          alert('This event already exists');
+          this.alertDialogBox('This event already exists');
         }
       }
     }
   }
 
-  /**
-   * Vérifie qu'un event n'a pas déjà le même nom
-   * @param data
-   */
-  isEventExist(data: Event): boolean {
-    let exist = false;
-    this.currentProject.events.forEach(event => {
-      if (event.name === data.name) {
-        exist = true;
-      }
-    });
-
-    return exist;
-  }
-
-  /**
-   * Vérifie qu'un event n'a pas déjà la même couleur
-   * @param data
-   */
-  eventColorAlreadyUsed(data: Event): boolean {
-    let exist = false;
-    this.currentProject.events.forEach(event => {
-      if (event.bgColor === data.bgColor) {
-        exist = true;
-      }
-    });
-
-    return exist;
-  }
-
-  mapValidResultToEvent(result: Event): Event {
-    return {
-      name: result.name,
-      type: result.type,
-      labels: result.labels[0].split(','),
-      attributes: result.attributes[0].split(','),
-      bgColor: result.bgColor,
-      arcs: [],
-      borderColor: 'darken',
-      children: [],
-      unused: false
-    };
-  }
 
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteEvent(target: Event) {
+    this.isProjectModified = true;
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
       width: '250px',
       data: {
@@ -571,29 +653,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
             this.currentProject.events.splice(index, 1);
           }
         });
-      }
-    });
-  }
-
-  // Événement lorsqu'un texte est sélectionné
-  documentSelected(doc: any) {
-    doc.projectTitle = this.currentProject.title;
-    this.router.navigate(['/annotation', doc]);
-  }
-
-  // Supprime un texte
-  deleteCorpus(corpus: any) {
-    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
-      width: '250px',
-      data: {
-        text: 'Corpus',
-        response: undefined
-      },
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.response === true) {
-        this.ps.deleteCorpus(corpus.id, corpus.title);
       }
     });
   }

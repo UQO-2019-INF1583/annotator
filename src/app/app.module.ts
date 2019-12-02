@@ -84,6 +84,7 @@ import { CreateProjectService } from './components/create-project/create-project
 import { ProfileComponent } from './profile/profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
+import { AlertDialogBoxComponent } from './shared/components/alert-dialog-box/alert-dialog-box.component';
 
 @NgModule({
   declarations: [
@@ -111,7 +112,8 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
     YesNoDialogBoxComponent,
     ProfileComponent,
     ResetPasswordComponent,
-    EditUserComponent
+    EditUserComponent,
+    AlertDialogBoxComponent
   ],
   entryComponents: [
     AddAdminComponent,
@@ -121,6 +123,7 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
     AddEventComponent,
     AddAttributeComponent,
     YesNoDialogBoxComponent,
+    AlertDialogBoxComponent,
     EditUserComponent
   ],
   imports: [

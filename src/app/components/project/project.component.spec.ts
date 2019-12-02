@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-  MatCardModule, MatDialog,
+  MatCardModule,
+  MatDialog,
   MatDialogModule,
   MatInputModule,
   MatListModule,
@@ -28,9 +29,7 @@ import { ProjectService } from './project.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import {Observable} from 'rxjs/Observable';
-
-/* trop d'erreurs
+import { Observable } from 'rxjs/Observable';
 describe('Projet', () => {
   let projectComponent: ProjectComponent;
   let projectFixture: ComponentFixture<ProjectComponent>;
@@ -47,34 +46,96 @@ describe('Projet', () => {
         MatDialogModule,
         BrowserAnimationsModule,
         BrowserDynamicTestingModule,
-        MatSelectModule,
+        MatSelectModule
       ],
       declarations: [ProjectComponent, YesNoDialogBoxComponent],
       providers: [
         { provide: AngularFirestore, useValue: projectMocks.angularFirestore },
         { provide: AuthService, useValue: projectMocks.authService },
         { provide: ProjectService, useValue: projectMocks.projectService },
-        { provide: ProjectManagerService, useValue: projectMocks.projectManagerService },
-        { provide: MatDialog, useClass : MatDialogMock}
-      ],
-    }).overrideModule(BrowserDynamicTestingModule, {
-      set: {
-        entryComponents: [ YesNoDialogBoxComponent ],
-      }
-    }).compileComponents();
+        {
+          provide: ProjectManagerService,
+          useValue: projectMocks.projectManagerService
+        },
+        { provide: MatDialog, useClass: MatDialogMock }
+      ]
+    })
+      .overrideModule(BrowserDynamicTestingModule, {
+        set: {
+          entryComponents: [YesNoDialogBoxComponent]
+        }
+      })
+      .compileComponents();
 
     projectFixture = TestBed.createComponent(ProjectComponent);
     projectFixture.detectChanges();
     projectComponent = projectFixture.componentInstance;
-    //import db from '../../../../firestore-export.json';
-    //const Projects = Object.values(db.Projects);
-    //let project = Projects.find(p => p.title === "Test");
-    //projectComponent.annotators = project.annotators;
-    //projectComponent.admin = project.admin;  });
+    // import db from '../../../../firestore-export.json';
+    // const Projects = Object.values(db.Projects);
+    // let project = Projects.find(p => p.title === "Test");
+    // projectComponent.annotators = project.annotators;
+    // projectComponent.admin = project.admin;  });
   });
 
   it('should create component', () => {
     expect(projectComponent).toBeDefined();
+  });
+
+  describe('Description project', () => {
+    it('visitor or annotator should not be see button edit', () => {
+      const spy = spyOn(projectComponent, 'isAdmin').and.returnValue(false);
+      projectFixture.detectChanges();
+      const buttonEdit = projectFixture.debugElement.nativeElement.querySelector(
+        '.btn-edit'
+      );
+      expect(buttonEdit).toBeNull();
+    });
+
+    it('admin should be see button edit', () => {
+      const spy = spyOn(projectComponent, 'isAdmin').and.returnValue(true);
+      projectFixture.detectChanges();
+      const buttonEdit = projectFixture.debugElement.nativeElement.querySelector(
+        '.btn-edit'
+      );
+      expect(buttonEdit).toBeDefined();
+    });
+
+    it('should be see button save and cancel if button edit is clicked', () => {
+      const spy = spyOn(projectComponent, 'isAdmin').and.returnValue(true);
+      projectFixture.detectChanges();
+      const buttonEdit = projectFixture.debugElement.nativeElement.querySelector(
+        '.btn-edit'
+      );
+      buttonEdit.click();
+      projectFixture.detectChanges();
+      const buttonSave = projectFixture.debugElement.nativeElement.querySelector(
+        '.btn-save'
+      );
+      const buttonCancel = projectFixture.debugElement.nativeElement.querySelector(
+        '.btn-cancel'
+      );
+      expect(projectComponent.isEdit).toBeTruthy();
+      expect(buttonSave).toBeDefined();
+      expect(buttonCancel).toBeDefined();
+    });
+
+    it('should be to edit title project and describe of project', () => {
+      const spy = spyOn(projectComponent, 'isAdmin').and.returnValue(true);
+      projectFixture.detectChanges();
+      const buttonEdit = projectFixture.debugElement.nativeElement.querySelector(
+        '.btn-edit'
+      );
+      buttonEdit.click();
+      projectFixture.detectChanges();
+      const projetDescribe = projectFixture.debugElement.nativeElement.querySelector(
+        '.area-describe-project'
+      );
+      const projetTitle = projectFixture.debugElement.nativeElement.querySelector(
+        '.projetTitle'
+      );
+      expect(projetDescribe.disabled).toBeFalsy();
+      expect(projetTitle.disabled).toBeFalsy();
+    });
   });
 
   describe('Entities', () => {
@@ -92,7 +153,7 @@ describe('Projet', () => {
       expect(window.alert).toHaveBeenCalledWith('The entity already exists');
     });
 
-    it('should alert the user when trying to add an entities using an already used color', () => {
+    xit('should alert the user when trying to add an entities using an already used color', () => {
       spyOn(window, 'alert');
       projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid1);
       projectComponent.addEntitiesAfterClosedHandler(entiteMock.valid3);
@@ -126,7 +187,7 @@ describe('Projet', () => {
     });
   });
 
-  describe('Attributs', () => {
+  xdescribe('Attributs', () => {
     it('should add the attribute to the current project\'s attributes if provided { with a valid } result', () => {
       projectComponent.addAttributesAfterClosedHandler(attributMock.valid1);
       expect(projectComponent.currentProject.attributes).toContain(
@@ -155,7 +216,7 @@ describe('Projet', () => {
     });
   });
 
-  describe('Relations', () => {
+  xdescribe('Relations', () => {
     it('should alert the user when trying to add a relation that already exists', () => {
       spyOn(window, 'alert');
       projectComponent.addRelation(relationMock.valid1);
@@ -165,7 +226,9 @@ describe('Projet', () => {
 
     it('should add the relation to the current project\'s relation', () => {
       projectComponent.addRelation(relationMock.valid1);
-      expect(projectComponent.currentProject.relations).toContain(relationMock.valid1);
+      expect(projectComponent.currentProject.relations).toContain(
+        relationMock.valid1
+      );
     });
 
     it('should be able to delete a relation', () => {
@@ -190,7 +253,7 @@ describe('Projet', () => {
     });
   });
 
-  describe('Events', () => {
+  xdescribe('Events', () => {
     it('should throw an error if the closing payload is null', () => {
       const closedHandlerPayload = null;
       expect(() => {
@@ -227,39 +290,53 @@ describe('Projet', () => {
     });
   });
 
-  describe('Annotators', () => {
+  xdescribe('Annotators', () => {
     it('should be able to add an annotator', () => {
-      projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
+      projectComponent.addAnnotatorAfterClosedHandler(
+        annotatorMock.result.valid1
+      );
       expect(projectComponent.currentProject.annotators).toContain(
         annotatorMock.result.valid1.uid
       );
-      expect(projectComponent.annotators).toContain(annotatorMock.result.valid1);
+      expect(projectComponent.annotators).toContain(
+        annotatorMock.result.valid1
+      );
     });
 
     it('should be able to delete an annotator', () => {
-      projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
+      projectComponent.addAnnotatorAfterClosedHandler(
+        annotatorMock.result.valid1
+      );
       expect(projectComponent.currentProject.annotators).toContain(
         annotatorMock.result.valid1.uid
       );
-      expect(projectComponent.annotators).toContain(annotatorMock.result.valid1);
+      expect(projectComponent.annotators).toContain(
+        annotatorMock.result.valid1
+      );
       projectComponent.deleteAnnotator(annotatorMock.result.valid1.uid);
       expect(projectComponent.currentProject.annotators).not.toContain(
         annotatorMock.result.valid1.uid
       );
-      expect(projectComponent.annotators).not.toContain(annotatorMock.result.valid1);
+      expect(projectComponent.annotators).not.toContain(
+        annotatorMock.result.valid1
+      );
     });
 
     it('should alert the user when trying to add an annotator that already exists', () => {
       spyOn(window, 'alert');
-      projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
-      projectComponent.addAnnotatorAfterClosedHandler(annotatorMock.result.valid1);
+      projectComponent.addAnnotatorAfterClosedHandler(
+        annotatorMock.result.valid1
+      );
+      projectComponent.addAnnotatorAfterClosedHandler(
+        annotatorMock.result.valid1
+      );
       expect(window.alert).toHaveBeenCalledWith(
         'This annotator already exists'
       );
     });
   });
 
-  describe('Administrators', () => {
+  xdescribe('Administrators', () => {
     it('should be able to add an admin', () => {
       projectComponent.addAdminAfterClosedHandler(adminMock.result.valid1);
       expect(projectComponent.currentProject.admin).toContain(
@@ -288,4 +365,4 @@ describe('Projet', () => {
       expect(window.alert).toHaveBeenCalledWith('This admin already exists');
     });
   });
-}); */
+});

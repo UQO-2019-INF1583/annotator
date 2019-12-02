@@ -21,8 +21,10 @@
     <ng-container matColumnDef="modify">
       <mat-header-cell *matHeaderCellDef> Modify / Delete </mat-header-cell>
       <mat-cell *matCellDef="let user">
-        <button class="btn btn-primary" (click)="modifyUser(user)">Modify</button>
-        <button class="btn btn-primary" (click)="deleteUser(user)">Delete</button>
+	  <!-- *ngIf compare si le role d'un utilisateur n'est pas Admin, et affiche les 
+	  boutons dans ce cas. Si l'utilisateur est Admin, aucun bouton sera affiché  -->
+        <button *ngIf="user.role!=2" class="btn btn-primary" (click)="modifyUser(user)">Modify</button>
+        <button *ngIf="user.role!=2" class="btn btn-primary" (click)="deleteUser(user)">Delete</button>
       </mat-cell>
     </ng-container>
 

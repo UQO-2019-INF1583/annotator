@@ -36,8 +36,6 @@ export class AddCorpusComponent implements OnInit {
     var titles = value.split(",");
     this.titlesSize = titles.length;
     this.filesSize = this.data.corpusFile.length;
-    console.log(this.titlesSize);
-    console.log(this.data.corpusFile.length);
     if (this.titlesSize == this.filesSize) {
       for (var i = 0; i < this.titlesSize; i++) {
         if (titles[i] == "") {
@@ -47,7 +45,6 @@ export class AddCorpusComponent implements OnInit {
         this.notEnoughtArgument = false;
       }
     } else {
-      console.log("error");
       this.notEnoughtArgument = true;
     }
   }

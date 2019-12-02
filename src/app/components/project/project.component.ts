@@ -2,33 +2,33 @@
 // Dans le cas de ce module, il s'agit de permettre de visualiser les données du projet et de sauvegarder les
 // différents changements que l’utilisateur peut faire.
 
-import "rxjs/Rx";
-import "rxjs/add/operator/mergeMap";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material";
-import { AddAdminComponent } from "../add-admin/add-admin.component";
-import { AddAnnotatorComponent } from "../add-annotator/add-annotator.component";
-import { AddAttributeComponent } from "../add-attribute/add-attribute.component";
-import { AddEntityComponent } from "../add-entity/add-entity.component";
-import { AddCorpusComponent } from "../add-corpus/add-corpus.component";
-import { AddEventComponent } from "../add-event/add-event.component";
-import { AddRelationComponent } from "../add-relation/add-relation.component";
-import { Attribute } from "../../shared/attribute.model";
-import { AuthService } from "../../shared/security/auth.service";
-import { Event } from "../../shared/event.model";
-import { Observable } from "rxjs/Observable";
-import { Project, ProjectUtils } from "../../shared/project.model";
-import { ProjectService } from "./project.service";
-import { Relation } from "../../shared/relation.model";
-import { User } from "./../../shared/user.model";
-import { YesNoDialogBoxComponent } from "../yes-no-dialog-box/yes-no-dialog-box.component";
-import { Entity } from "../../shared/entity.model";
+import 'rxjs/Rx';
+import 'rxjs/add/operator/mergeMap';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { AddAdminComponent } from '../add-admin/add-admin.component';
+import { AddAnnotatorComponent } from '../add-annotator/add-annotator.component';
+import { AddAttributeComponent } from '../add-attribute/add-attribute.component';
+import { AddEntityComponent } from '../add-entity/add-entity.component';
+import { AddCorpusComponent } from '../add-corpus/add-corpus.component';
+import { AddEventComponent } from '../add-event/add-event.component';
+import { AddRelationComponent } from '../add-relation/add-relation.component';
+import { Attribute } from '../../shared/attribute.model';
+import { AuthService } from '../../shared/security/auth.service';
+import { Event } from '../../shared/event.model';
+import { Observable } from 'rxjs/Observable';
+import { Project, ProjectUtils } from '../../shared/project.model';
+import { ProjectService } from './project.service';
+import { Relation } from '../../shared/relation.model';
+import { User } from './../../shared/user.model';
+import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
+import { Entity } from '../../shared/entity.model';
 
 @Component({
-  selector: "app-project",
-  templateUrl: "./project.component.html",
-  styleUrls: ["./project.component.scss"]
+  selector: 'app-project',
+  templateUrl: './project.component.html',
+  styleUrls: ['./project.component.scss']
 })
 export class ProjectComponent implements OnInit, OnDestroy {
   currentProject: Project = ProjectUtils.generateEmpty();
@@ -40,7 +40,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   annotators: any[] = []; // {uid: v1, email: v2}[]
   admin: any[] = []; // {uid: v1, email: v2}[]
   isConnected = false;
-  isEdit: false;
+  // isEdit permet de faire des interactions sur le button edit,save,cancel
+  // pour permettre à l'administrateur de modifier le titre du projet
+  isEdit: false; // initilizer à false pour empecher la modif par default
   constructor(
     private authService: AuthService,
     private activeRouter: ActivatedRoute,
@@ -106,24 +108,31 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return a;
   }
 
-  // Sauvegarde les modifications apportées au projet.
+  /**
+   * Sauvegarde les modifications apportées au projet.
+   *
+   * @param currentProject contient le title et description du projet
+   * @param isEdit false pour activer le mode readonly apres modification
+   *               true desactive readonly et permettre la modification et
+   *               affiche le button save et cancel
+   */
   saveProjectModification() {
     if (
       this.currentProject.title != null &&
-      this.currentProject.title !== "" &&
+      this.currentProject.title !== '' &&
       this.currentProject.description != null &&
-      this.currentProject.description !== ""
+      this.currentProject.description !== ''
     ) {
       this.ps.saveProject(this.currentProject);
       this.isEdit = false;
-      alert("Modification sauvegardé");
+      alert('Modification sauvegardé');
     }
   }
 
   // ouvre la boîte de dialogue pour ajouter un corpus
   addCorpusDialogBox() {
     const dialogRef = this.dialog.open(AddCorpusComponent, {
-      width: "250px",
+      width: '250px',
       data: { corpusTitle: undefined, corpusFile: undefined }
     });
 
@@ -169,19 +178,19 @@ export class ProjectComponent implements OnInit, OnDestroy {
           if (item.name === result.name) {
             entityExists = true;
             if (item.bgColor === result.bgColor) {
-              alert("The entity already exists");
+              alert('The entity already exists');
             } else {
-              alert("Replacing color");
+              alert('Replacing color');
               item.bgColor = result.bgColor;
             }
           } else if (item.bgColor === result.bgColor) {
             entityExists = true;
-            alert("The chosen color is already used");
+            alert('The chosen color is already used');
           }
         });
 
         if (!entityExists) {
-          result.labels = result.labels[0].split(",");
+          result.labels = result.labels[0].split(',');
           this.currentProject.entities.push(result);
         }
       }
@@ -191,9 +200,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // Supprime la catégorie spécifiée dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteEntity(entityName: string) {
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
-      width: "250px",
+      width: '250px',
       data: {
-        text: "entity",
+        text: 'entity',
         response: undefined
       }
     });
@@ -212,8 +221,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // ouvre la boîte de dialogue pour ajouter un annotateur
   addAnnotatorDialogBox() {
     const dialogRef = this.dialog.open(AddAnnotatorComponent, {
-      width: "600px",
-      height: "600px",
+      width: '600px',
+      height: '600px',
       data: { UserId: undefined }
     });
 
@@ -234,7 +243,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.currentProject.annotators.push(result.uid);
         this.annotators.push({ uid: result.uid, email: result.email });
       } else {
-        alert("This annotator already exists");
+        alert('This annotator already exists');
       }
     }
   }
@@ -242,9 +251,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // Supprime l'annotateur spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAnnotator(uid: string) {
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
-      width: "250px",
+      width: '250px',
       data: {
-        text: "Annotator",
+        text: 'Annotator',
         response: undefined
       }
     });
@@ -268,8 +277,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // ouvre la boîte de dialogue pour ajouter un administrateur
   addAdminDialogBox() {
     const dialogRef = this.dialog.open(AddAdminComponent, {
-      width: "600px",
-      height: "600px",
+      width: '600px',
+      height: '600px',
       data: { UserId: undefined }
     });
 
@@ -290,7 +299,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.currentProject.admin.push(result.uid);
         this.admin.push({ uid: result.uid, email: result.email });
       } else {
-        alert("This admin already exists");
+        alert('This admin already exists');
       }
     }
   }
@@ -298,9 +307,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // Supprime l'admin spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAdmin(uid: string) {
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
-      width: "250px",
+      width: '250px',
       data: {
-        text: "Administrator",
+        text: 'Administrator',
         response: undefined
       }
     });
@@ -324,13 +333,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // ouvre la boîte de dialogue pour ajouter un attribut
   addAttributesDialogBox() {
     const dialogRef = this.dialog.open(AddAttributeComponent, {
-      width: "400px",
+      width: '400px',
       data: {
         name: undefined,
         type: undefined,
         labels: [],
         unused: false,
-        values: ""
+        values: ''
       }
     });
 
@@ -353,10 +362,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         });
         if (!attributeExists) {
-          result.labels = result.labels[0].split(",");
+          result.labels = result.labels[0].split(',');
           this.currentProject.attributes.push(result);
         } else {
-          alert("This attribute already exists");
+          alert('This attribute already exists');
         }
       }
     }
@@ -365,9 +374,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAttribute(target: Attribute) {
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
-      width: "250px",
+      width: '250px',
       data: {
-        text: "Attribute",
+        text: 'Attribute',
         response: undefined
       }
     });
@@ -387,11 +396,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
    */
   addRelationDialogBox() {
     const dialogRef = this.dialog.open(AddRelationComponent, {
-      width: "400px",
+      width: '400px',
       data: {
         type: undefined,
         labels: [],
-        dashArray: "3,3",
+        dashArray: '3,3',
         color: undefined,
         attributes: [],
         arcs: []
@@ -416,10 +425,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
         if (!this.relationColorAlreadyUsed(data)) {
           this.currentProject.relations.push(data);
         } else {
-          alert("The chosen color is already used");
+          alert('The chosen color is already used');
         }
       } else {
-        alert("This relation already exists");
+        alert('This relation already exists');
       }
     }
   }
@@ -460,9 +469,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
    * */
   deleteRelation(target: Relation) {
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
-      width: "250px",
+      width: '250px',
       data: {
-        text: "Relation",
+        text: 'Relation',
         response: undefined
       }
     });
@@ -480,7 +489,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   addEventDialogBox() {
     const dialogRef = this.dialog.open(AddEventComponent, {
-      width: "400px",
+      width: '400px',
       data: {
         name: undefined,
         type: undefined,
@@ -508,10 +517,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
           if (!this.eventColorAlreadyUsed(result)) {
             this.currentProject.events.push(this.mapValidResultToEvent(result));
           } else {
-            alert("The chosen color is already used");
+            alert('The chosen color is already used');
           }
         } else {
-          alert("This event already exists");
+          alert('This event already exists');
         }
       }
     }
@@ -551,11 +560,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return {
       name: result.name,
       type: result.type,
-      labels: result.labels[0].split(","),
-      attributes: result.attributes[0].split(","),
+      labels: result.labels[0].split(','),
+      attributes: result.attributes[0].split(','),
       bgColor: result.bgColor,
       arcs: [],
-      borderColor: "darken",
+      borderColor: 'darken',
       children: [],
       unused: false
     };
@@ -564,9 +573,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // Supprime l'attribut spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteEvent(target: Event) {
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
-      width: "250px",
+      width: '250px',
       data: {
-        text: "Event",
+        text: 'Event',
         response: undefined
       }
     });
@@ -585,15 +594,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
   // Événement lorsqu'un texte est sélectionné
   documentSelected(doc: any) {
     doc.projectTitle = this.currentProject.title;
-    this.router.navigate(["/annotation", doc]);
+    this.router.navigate(['/annotation', doc]);
   }
 
   // Supprime un texte
   deleteCorpus(corpus: any) {
     const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
-      width: "250px",
+      width: '250px',
       data: {
-        text: "Corpus",
+        text: 'Corpus',
         response: undefined
       }
     });

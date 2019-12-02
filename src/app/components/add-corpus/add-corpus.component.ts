@@ -93,15 +93,4 @@ export class AddCorpusComponent implements OnInit {
   public fileLeave(event) {
     // console.log(event);
   }
-
-  public validateNames() {
-    var titles = this.data.corpusTitle.split(",");
-    if (titles.size == this.data.corpusFile.size) {
-      this.isNotValid = false;
-      return false;
-    } else {
-      this.isNotValid = true;
-      return true;
-    }
-  }
 }

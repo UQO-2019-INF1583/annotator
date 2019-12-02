@@ -71,8 +71,8 @@ export class UserManagerComponent implements OnInit {
 
     }
     const dialogRef = this.dialog.open(EditUserComponent, {
-      width: '600px',
-      height: '400px',
+      width: '400px',
+      height: '450px',
       data: {
         firstname: user.firstname,
         lastname: user.lastname,

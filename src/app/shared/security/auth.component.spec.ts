@@ -1,13 +1,14 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {AngularFirestore} from '@angular/fire/firestore';
-import {AngularFireAuth} from '@angular/fire/auth';
-import {Router} from '@angular/router';
-import {Role, User} from '../../shared/user.model';
-import {AuthService} from './auth.service';
-import {of} from 'rxjs/internal/observable/of';
-import {RouterTestingModule} from '@angular/router/testing';
-import {FormsModule} from '@angular/forms';
-import {project} from '../../annotation/brat/brat-utils.mock';
+/*
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
+import { Role, User } from '../../shared/user.model';
+import { AuthService } from './auth.service';
+import { of } from 'rxjs/internal/observable/of';
+import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule } from '@angular/forms';
+import { project } from '../../annotation/brat/brat-utils.mock';
 
 
 describe('AuthService', () => {
@@ -80,8 +81,10 @@ describe('AuthService', () => {
     component.user = user;
     expect(component.isAdmin).toBe(true)
   });
- /* it('should return false if user is not admin', () => {
-    component.isAdmin(project.proj1);
-    expect(component.isAdmin(project.proj1)).toEqual(false);
-  })*/
+  /* it('should return false if user is not admin', () => {
+     component.isAdmin(project.proj1);
+     expect(component.isAdmin(project.proj1)).toEqual(false);
+   })*/
+/*
 });
+*/

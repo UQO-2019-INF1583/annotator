@@ -998,7 +998,7 @@ export const MOCK_FILTER =
                 </g>
                 <g transform="translate(555.5, 0)">
                   <g></g>
-                  <g class="span">
+                  <g id="med" class="span">
                     <rect x="-10.5" y="-29.5" width="58" height="13" class="span_Intervention span_default" fill="blue"
                       stroke="#000066" rx="2" ry="1" data-span-id="N19" data-fragment-id="0"></rect><text x="18.5"
                       y="-19" fill="#000000">Medication</text>

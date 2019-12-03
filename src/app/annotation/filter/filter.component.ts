@@ -26,6 +26,7 @@ export class FilterComponent implements OnInit {
    * Cette fonction ajoute à "filterElements" les éléments qui peuvent être filtrer dans la page (e.g. Les entités, les événements, etc.)
    */
   showFilter(): void {
+    this.filterElements.clear();
     for (var i = 0; i < this.elements.length; i++) {
       this.filterElements.add(this.elements[i].children[1].innerHTML);
     }

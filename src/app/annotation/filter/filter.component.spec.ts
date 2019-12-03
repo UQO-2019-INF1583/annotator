@@ -96,4 +96,15 @@ describe('AppComponent', () => {
         //Retire l'annotation
         document.body.removeChild(document.getElementById('tmpAnnotation'));
     })
+    /* on vérifie si on a bien enlevé le filtre*/
+    it('Vérifie si le tableau de filtre ce met à jour quand on retire une annotation', async () => {
+        const fixture = TestBed.createComponent(FilterComponent);
+        const app = fixture.debugElement.componentInstance;
+
+        document.getElementById("med").remove();
+
+        app.showFilter();
+
+        expect(app.filterElements.size).toEqual(4);
+    })
 })

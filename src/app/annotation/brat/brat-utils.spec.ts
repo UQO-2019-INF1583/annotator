@@ -55,5 +55,25 @@ describe ('getAnnotatedDocumentfromDocData', () => {
   it('should create an annotated document', () => {
     expect(BratUtils.getAnnotatedDocumentfromDocData(docData.annotDocData, project.proj1, annotDoc.aDocInit)).toEqual(annotDoc.doc1);
   });
+
+});
+describe('getLineNumbersfromDocument', () => {
+  let bratUtil: BratUtils;
+
+  beforeEach(() => {
+    bratUtil = new BratUtils();
+    TestBed.configureTestingModule({
+
+    }).compileComponents();
+  });
+  it('should find element \'a\' and \'setnum\' in DOM ', () => {
+    //on cherche l'élément a dans le DOM
+    var element = document.getElementsByTagName('a');
+    var element2 = document.getElementsByName('setnum');
+    expect(element).toBeTruthy();
+    expect(element2).toBeTruthy();
+  })
+  xit('should verify if its a URL', () => {
+  })
 });
 

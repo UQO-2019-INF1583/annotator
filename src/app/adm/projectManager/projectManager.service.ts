@@ -1,140 +1,197 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs/Observable';
-import * as firebase from 'firebase';
-import { Project } from '../../shared/project.model';
+import { Injectable } from "@angular/core";
+import { AngularFirestore } from "@angular/fire/firestore";
+import { Observable } from "rxjs/Observable";
+import * as firebase from "firebase";
+import { Project } from "../../shared/project.model";
+import { Role } from "../../shared/user.model";
 
 // secret: structure de données utilisée pour représenter l'ensemble des projets
 // et en particulier, association entre projetId et l'emplacement du fichier correspondant
 
 @Injectable()
 export class ProjectManagerService {
-
-  constructor(private afs: AngularFirestore) { }
+  constructor(private afs: AngularFirestore) {}
 
   deleteProject(projectId: string) {
-    this.afs.collection('Corpus').ref.where('projectId', '==', projectId).get().then(querySnapshot => {
-      const batch = this.afs.firestore.batch();
+    this.afs
+      .collection("Corpus")
+      .ref.where("projectId", "==", projectId)
+      .get()
+      .then(querySnapshot => {
+        const batch = this.afs.firestore.batch();
 
-      querySnapshot.forEach(doc => {
-
-        batch.delete(doc.ref);
-        firebase.storage().ref().child('Projects/' + doc.data().id + '/' + doc.data().title).delete();
-
+        querySnapshot.forEach(doc => {
+          batch.delete(doc.ref);
+          firebase
+            .storage()
+            .ref()
+            .child("Projects/" + doc.data().id + "/" + doc.data().title)
+            .delete();
+        });
+        return batch.commit();
+      })
+      .then(() => {
+        console.log("Corpus supprimé");
       });
-      return batch.commit();
-    }).then(() => {
-      console.log('Corpus supprimé');
-    });
 
-    this.afs.collection('Projects').doc(projectId).delete();
+    this.afs
+      .collection("Projects")
+      .doc(projectId)
+      .delete();
   }
 
   // Modifie le titre du projet.
   modifyTitle(projectId: string, title: string): boolean {
-    this.afs.collection('Projects').doc(projectId).update({ 'title': title }).then(() => {
-      console.log('title updated');
-    },
-      (() => false));
+    this.afs
+      .collection("Projects")
+      .doc(projectId)
+      .update({ title: title })
+      .then(
+        () => {
+          console.log("title updated");
+        },
+        () => false
+      );
     return true;
   }
 
   // Ajoute un administrateur du projet.
   // Retourne false si adminId est déjà administrateur.
   addAdmin(projectId: string, adminId: string): boolean {
-    const projectRef = this.afs.collection('Projects').doc(projectId);
-    projectRef.ref.get().then((doc) => {
-      const admin = doc.get('admin');
-      if (admin.indexOf(adminId) === -1) {
-        admin.push(adminId);
-        projectRef.update({ 'admin': admin }).then(() => {
-          console.log('admin[] updated');
-          return true;
-        })
-      }
-    }).catch(function (error) {
-      console.log('Error getting project:', error);
-    });
+    const projectRef = this.afs.collection("Projects").doc(projectId);
+    projectRef.ref
+      .get()
+      .then(doc => {
+        const admin = doc.get("admin");
+
+        this.afs
+          .collection("Users")
+          .ref.where("uid", "==", adminId)
+          .get()
+          .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+              let role = doc.get("role");
+              if (admin.indexOf(adminId) === -1 && role != Role.Visitor) {
+                admin.push(adminId);
+                projectRef.update({ admin: admin }).then(() => {
+                  console.log("admin[] updated");
+                  return true;
+                });
+              }
+            });
+          });
+      })
+      .catch(function(error) {
+        console.log("Error getting project:", error);
+      });
     return false;
   }
 
   // Supprime un administrateur du projet.
   // Retourne false si adminId n'est pas administrateur.
   delAdmin(projectId: string, adminId: string): boolean {
-    const projectRef = this.afs.collection('Projects').doc(projectId);
-    projectRef.ref.get().then((doc) => {
-      const admin = doc.get('admin');
-      if (admin.indexOf(adminId) === -1) {
-        return false;
-      }
-      for (let i = admin.length - 1; i >= 0; i--) {
-        if (admin[i] === adminId) {
-          admin.splice(i, 1);
+    const projectRef = this.afs.collection("Projects").doc(projectId);
+    projectRef.ref
+      .get()
+      .then(doc => {
+        const admin = doc.get("admin");
+        if (admin.indexOf(adminId) === -1) {
+          return false;
         }
-      }
-      projectRef.update({ 'admin': admin }).then(() => {
-        console.log('admin[] updated');
-      },
-        (() => false));
-    }).catch(function (error) {
-      console.log('Error getting project:', error);
-    });
+        for (let i = admin.length - 1; i >= 0; i--) {
+          if (admin[i] === adminId) {
+            admin.splice(i, 1);
+          }
+        }
+        projectRef.update({ admin: admin }).then(
+          () => {
+            console.log("admin[] updated");
+          },
+          () => false
+        );
+      })
+      .catch(function(error) {
+        console.log("Error getting project:", error);
+      });
     return true;
   }
 
   // Ajoute un annotateur à un projet
   // Retourne false si projectId ou userId n'existe pas.
   addAnnotator(projectId: string, userId: string): boolean {
-    const projectRef = this.afs.collection('Projects').doc(projectId);
-    projectRef.ref.get().then((doc) => {
-      const annotators = doc.get('annotators');
-      if (annotators.indexOf(userId) === -1) {
-        annotators.push(userId);
-        projectRef.update({ 'annotators': annotators }).then(() => {
-          console.log('annotators[] updated');
-          return true;
-        })
-      }
-    }).catch(function (error) {
-      console.log('Error getting project:', error);
-    });
+    const projectRef = this.afs.collection("Projects").doc(projectId);
+    projectRef.ref
+      .get()
+      .then(doc => {
+        const annotators = doc.get("annotators");
+
+        this.afs
+          .collection("Users")
+          .ref.where("uid", "==", userId)
+          .get()
+          .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+              let role = doc.get("role");
+
+              if (annotators.indexOf(userId) === -1 && role != Role.Visitor) {
+                annotators.push(userId);
+                projectRef.update({ annotators: annotators }).then(() => {
+                  console.log("annotators[] updated");
+                  return true;
+                });
+              }
+            });
+          });
+      })
+      .catch(function(error) {
+        console.log("Error getting project:", error);
+      });
     return false;
   }
 
   // Supprime un annotateur du projet.
   // Retourne false si userId n'est pas annotateur.
   delAnnotator(projectId: string, userId: string): boolean {
-    const projectRef = this.afs.collection('Projects').doc(projectId);
-    projectRef.ref.get().then((doc) => {
-      const annotators = doc.get('annotators');
-      if (annotators.indexOf(userId) === -1) {
-        return false;
-      }
-      for (let i = annotators.length - 1; i >= 0; i--) {
-        if (annotators[i] === userId) {
-          annotators.splice(i, 1);
+    const projectRef = this.afs.collection("Projects").doc(projectId);
+    projectRef.ref
+      .get()
+      .then(doc => {
+        const annotators = doc.get("annotators");
+        if (annotators.indexOf(userId) === -1) {
+          return false;
         }
-      }
-      projectRef.update({ 'annotators': annotators }).then(() => {
-        console.log('annotators[] updated');
-      },
-        (() => false));
-    }).catch(function (error) {
-      console.log('Error getting project:', error);
-    });
+        for (let i = annotators.length - 1; i >= 0; i--) {
+          if (annotators[i] === userId) {
+            annotators.splice(i, 1);
+          }
+        }
+        projectRef.update({ annotators: annotators }).then(
+          () => {
+            console.log("annotators[] updated");
+          },
+          () => false
+        );
+      })
+      .catch(function(error) {
+        console.log("Error getting project:", error);
+      });
     return true;
   }
 
   getProject(projectId: string): Promise<any> {
-    return this.afs.collection('Projects/').doc(projectId).ref.get();
+    return this.afs
+      .collection("Projects/")
+      .doc(projectId)
+      .ref.get();
   }
-
 
   // Produit une liste des ids de tous les projets.
   getAll(projectId: string): Observable<Project>[] {
-    const projetCollection = this.afs.collection<Project>('Projects');
+    const projetCollection = this.afs.collection<Project>("Projects");
     let all;
-    projetCollection.valueChanges().subscribe((projs) => { all = projs; });
+    projetCollection.valueChanges().subscribe(projs => {
+      all = projs;
+    });
     return all;
   }
 
@@ -169,21 +226,23 @@ export class ProjectManagerService {
   */
   getCorpus() {
     return this.afs
-      .collection('Corpus', ref => ref
-        .where('titreProjet', '==', this.current().titreProjet))
+      .collection("Corpus", ref =>
+        ref.where("titreProjet", "==", this.current().titreProjet)
+      )
       .valueChanges();
   }
 
   getCategories() {
     return this.afs
-      .collection('Categories', ref => ref
-        .where('titreProjet', '==', this.current().titreProjet))
+      .collection("Categories", ref =>
+        ref.where("titreProjet", "==", this.current().titreProjet)
+      )
       .valueChanges();
   }
 
   // récupérer le titre du token du projet courant
   current() {
-    return JSON.parse(localStorage.getItem('currentProjet'));
+    return JSON.parse(localStorage.getItem("currentProjet"));
   }
 
   // Ajoute un nouveau document à un projet à partir d'un fichier texte.

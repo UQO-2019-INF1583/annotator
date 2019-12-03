@@ -1,31 +1,35 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, OnInit, Inject } from "@angular/core";
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from "@angular/material";
 import {
   AngularFirestore,
   AngularFirestoreCollection,
   AngularFirestoreDocument
-} from '@angular/fire/firestore';
-import * as firebase from 'firebase';
-import { Observable } from 'rxjs/Observable';
-import { UsersDataSource } from '../../data-sources/usersDataSource';
+} from "@angular/fire/firestore";
+import * as firebase from "firebase";
+import { Observable } from "rxjs/Observable";
+import { MembersDataSource } from "../../data-sources/membersDataSource";
 
 @Component({
-  selector: 'app-add-annotator',
-  templateUrl: './add-annotator.component.html',
-  styleUrls: ['./add-annotator.component.scss']
+  selector: "app-add-annotator",
+  templateUrl: "./add-annotator.component.html",
+  styleUrls: ["./add-annotator.component.scss"]
 })
-
 export class AddAnnotatorComponent implements OnInit {
-  displayedColumns = ['uid', 'email', 'firstname', 'lastname', 'add'];
-  datasource: UsersDataSource | null;
+  displayedColumns = ["uid", "email", "firstname", "lastname", "add"];
+  datasource: MembersDataSource | null;
 
   constructor(
     public dialogRef: MatDialogRef<AddAnnotatorComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private afs: AngularFirestore) { }
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private afs: AngularFirestore
+  ) {}
 
   ngOnInit() {
     // initialize la datasource pour la mat-table
-    this.datasource = new UsersDataSource(this.afs);
+    this.datasource = new MembersDataSource(this.afs);
   }
 }
-

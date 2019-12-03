@@ -24,6 +24,8 @@ import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';
 import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
 import { Entity } from '../../shared/entity.model';
+import {NoWhitespaceValidator} from '../../shared/validators/no-whitespace-validator/no-whitespace.validator';
+import {AbstractControl} from '@angular/forms';
 
 @Component({
   selector: 'app-project',
@@ -34,6 +36,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   currentProject: Project = ProjectUtils.generateEmpty();
   private sub: any;
   isDataLoaded = false;
+  nwv = NoWhitespaceValidator();
 
   users: Observable<User[]>;
   corpus: Observable<any[]>;
@@ -159,8 +162,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addEntitiesAfterClosedHandler(result: Entity) {
     let entityExists = false;
     if (result !== undefined) {
+      /* Validation de la valeur du nom avec le validateur NoWhitespaceValidator */
+      const nomValide = this.nwv({value : result.name} as AbstractControl) === null;
+      /* Si tous les champs sont valides, on continue le traitement */
       if (
-        result.name !== undefined &&
+        nomValide &&
         result.bgColor !== undefined &&
         result.type !== undefined &&
         result.labels !== undefined
@@ -183,6 +189,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
         if (!entityExists) {
           result.labels = result.labels[0].split(',');
           this.currentProject.entities.push(result);
+        }
+      } else {
+        /* Si on a essayé d'ajouter une entité avec un nom invalide, on reçoit un message d'erreur */
+        if (typeof (result) !== 'string' && !nomValide) {
+          alert('The name of the entity is invalid. Please type a name that is not empty and that is not only whitespaces.');
         }
       }
     }
@@ -342,7 +353,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addAttributesAfterClosedHandler(result: Attribute) {
     let attributeExists = false;
     if (result !== undefined) {
-      if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
+      /* Validation de la valeur du nom avec le validateur NoWhitespaceValidator */
+      const nomValide = this.nwv({value : result.name} as AbstractControl) === null;
+      /* Si tous les champs sont valides, on continue le traitement */
+      if (nomValide && result.type !== undefined && result.labels !== undefined) {
         this.currentProject.attributes.forEach(item => {
           if (item.name === result.name) {
             attributeExists = true;
@@ -353,6 +367,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
           this.currentProject.attributes.push(result);
         } else {
           alert('This attribute already exists');
+        }
+      } else {
+        /* Si on a essayé d'ajouter un attribut avec un nom invalide, on reçoit un message d'erreur */
+        if (typeof (result) !== 'string' && !nomValide) {
+          alert('The name of the attribute is invalid. Please type a name that is not empty and that is not only whitespaces.');
         }
       }
     }
@@ -491,7 +510,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   addEventAfterClosedHandler(result: Event) {
     if (result !== undefined) {
-      if (result.name !== undefined &&
+      /* Validation de la valeur du nom avec le validateur NoWhitespaceValidator */
+      const nomValide = this.nwv({value : result.name} as AbstractControl) === null;
+      /* Si tous les champs sont valides, on continue le traitement */
+      if (nomValide &&
         result.type !== undefined &&
         result.labels !== [] &&
         result.attributes !== [] &&
@@ -505,6 +527,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
           }
         } else {
           alert('This event already exists');
+        }
+      } else {
+        /* Si on a essayé d'ajouter un évènement avec un nom invalide, on reçoit un message d'erreur */
+        if (typeof (result) !== 'string' && !nomValide) {
+          alert('The name of the event is invalid. Please type a name that is not empty and that is not only whitespaces.');
         }
       }
     }

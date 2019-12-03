@@ -1,8 +1,10 @@
 <h2 mat-dialog-title>Nouvelle Entitée Brat</h2>
 <form #entityvalidate="ngForm">
 <mat-form-field>
-  <input matInput placeholder="Name" [(ngModel)]="data.name" name="name" #name="ngModel" required />
-  <mat-error *ngIf="name.value == '' || name.value == null">nom obligatoire</mat-error>
+  <!-- Ajout de l'attribut appNoSpacesOnly à l'input du champ type pour permettre la validation "pas d'espaces seulement" de la valeur du champ -->
+  <input matInput placeholder="Name" [(ngModel)]="data.name" name="name" #name="ngModel" required appNoSpacesOnly />
+  <!-- Lorsque la valeur du champ est vide ou composée d'espaces seulement, on affiche le message d'erreur -->
+  <mat-error *ngIf="name.hasError('whitespace')">Nom obligatoire</mat-error>
 </mat-form-field>
 
 <mat-form-field>

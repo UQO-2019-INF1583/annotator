@@ -49,7 +49,7 @@ export class AnnotatorsComponent implements OnInit {
     private activeRouter: ActivatedRoute,
     private ps: ProjectService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.isConnected = this.authService.isConnected();
@@ -107,6 +107,10 @@ export class AnnotatorsComponent implements OnInit {
       }
     });
     return a;
+  }
+
+  isOnlyAdmin(): boolean {
+    return this.admin.length > 1
   }
 
   // ouvre la boîte de dialogue pour ajouter un administrateur

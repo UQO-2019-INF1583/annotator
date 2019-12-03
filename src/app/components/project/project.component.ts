@@ -130,8 +130,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       //Après que la boîte de dialogue pour l'ajout d'un fichier soit fermer
       var i = 0;
-      /*Split the title string by using coma like seperator to obtain an array that should match
-        the length of the number of file to be added
+      /* Utilisation de la méthode split() pour créer un tableau avec comme élément les titres de
+        chacun des fichiers qui doivent être rajouter au corpus
       */
       var titles = result.corpusTitle.split(",");
       for (const fileInfo of result.corpusFile) {

@@ -16,7 +16,7 @@ import {
     FileSystemDirectoryEntry
 } from "ngx-file-drop";
 
-describe("AddCorpusComponent", () => {
+describe("CorpusComponent", () => {
     let corpusComponent: AddCorpusComponent;
     let fixture: ComponentFixture<AddCorpusComponent>;
 
@@ -44,11 +44,11 @@ describe("AddCorpusComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it("Corpus component should exist", () => {
         expect(corpusComponent).toBeTruthy();
     });
 
-    it("title change", () => {
+    it("Validation check on titles", () => {
         corpusComponent.filesSize = 4;
         var value = "name1,name2,name3,name4";
         var mockArray = [null, null, null, null];

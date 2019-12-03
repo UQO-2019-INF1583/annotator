@@ -32,27 +32,27 @@ export class AddCorpusComponent implements OnInit {
     this.progress = false;
   }
 
-  //method called when a changed is made on the titre input in the dialogRef
+  //Méthode de vérification pour le nombre d'argument
   public onChange(value) {
-    //create an array of string that contains the titles for the files
+    //Crée un tableau avec les titres de chaque fichiers
     var titles = value.split(",");
-    //get the size of the array
+    //taille du tableau de titres
     this.titlesSize = titles.length;
-    //get how many files is being added
+    //Nombre de fichiers à ajouter
     this.filesSize = this.data.corpusFile.length;
-    //if the number of title matches the number of file
+    //Si le nombre de titres égale le nombre de fichiers
     if (this.titlesSize == this.filesSize) {
       for (var i = 0; i < this.titlesSize; i++) {
         if (titles[i] == "") {
-          //if one argument is an empty string, the validation is not good
+          //Aucune string vide n'est acceptée
           this.notEnoughtArgument = true;
           break;
         }
-        //each file has a title that is not an empty string
+        //chacun fichier a un titre
         this.notEnoughtArgument = false;
       }
     } else {
-      //some file dont have a title
+      //certain fichier n'ont pas de titre au il y a trop de titre
       this.notEnoughtArgument = true;
     }
   }

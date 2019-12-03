@@ -109,7 +109,7 @@ export class AnnotatorsComponent implements OnInit {
     return a;
   }
 
-  isOnlyAdmin(): boolean {
+  hasManyAdmins(): boolean {
     return this.admin.length > 1
   }
 

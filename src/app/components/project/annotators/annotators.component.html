@@ -10,7 +10,7 @@
   <mat-list role="list" class="card-list-project">
     <mat-list-item class="matListItemHover" *ngFor="let item of annotators">
       <h4 mat-line>{{ item.email }}</h4>
-      <button *ngIf="isConnected && getAdmin()" class="btn btn-danger" (click)="deleteAnnotator(item.uid)">
+      <button *ngIf="isConnected" class="btn btn-danger" (click)="deleteAnnotator(item.uid)">
         Delete
       </button>
     </mat-list-item>
@@ -30,7 +30,7 @@
   <mat-list role="list" class="card-list-project">
     <mat-list-item class="matListItemHover" *ngFor="let item of admin">
       <h4 mat-line>{{ item.email }}</h4>
-      <button *ngIf="isConnected && getAdmin() && admin.length > 1" class="btn btn-danger"
+      <button *ngIf="isConnected && getAdmin() && hasManyAdmins()" class="btn btn-danger"
         (click)="deleteAdmin(item.uid)">
         Delete
       </button>

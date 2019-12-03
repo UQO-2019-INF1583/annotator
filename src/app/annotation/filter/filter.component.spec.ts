@@ -58,7 +58,7 @@ describe('AppComponent', () => {
     /**
     * Ce test s'assure que FilterComponent ai le bon nombre de couleurs
      */
-    it('La fonction "highlightFilter" identifie le bon nombre de coleurs', async () => {
+    it('La fonction "highlightFilter" identifie le bon nombre de couleurs', async () => {
         const fixture = TestBed.createComponent(FilterComponent);
         const app = fixture.debugElement.componentInstance;
 

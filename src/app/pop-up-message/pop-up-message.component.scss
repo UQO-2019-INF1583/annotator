@@ -1,0 +1,44 @@
+
+.popup-container {
+    display: flex;
+    justify-content: center;
+    
+  }
+
+mat-card {
+  width: 500px;
+  height: auto;
+   background-color:cornsilk;
+   border-radius: 15px;
+    border: 1px solid black;
+  }
+    
+  h2{
+    font: 14pt Verdana, Geneva, Arial, Helvetica,sans-serif;
+    font-weight: bold;
+    line-height: 20pt;
+  }
+
+
+span{
+font: 12pt Verdana, Geneva, Arial, Helvetica,sans-serif;
+color: red;
+font-weight: bold;
+}
+
+p{
+    font: 12pt Verdana, Geneva, Arial, Helvetica,sans-serif;
+    justify-content: center;
+    color: blue;
+    
+    }
+
+.btn {
+    margin-left: 10px;
+  }
+   
+.button-row {
+    //display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }

@@ -1,24 +1,19 @@
-import {
-  AddAnnotatorComponent,
-  AddEntityComponent,
-  AddCorpusComponent,
-  CreateProjectComponent
-} from './components';
-import { ProjectManagerComponent, UserManagerComponent } from './adm';
 import { RouterModule, Routes } from '@angular/router';
-
+import { ProjectManagerComponent, UserManagerComponent } from './adm';
 import { AnnotationComponent } from './annotation/index';
-import { AuthGuard } from './shared/security/auth.guard';
-import { HomeComponent } from './home/home.component';
+import { AddCorpusComponent, CreateProjectComponent } from './components';
+import { ProjectComponent } from './components/index';
 import { HomeWelcomeComponent } from './home-welcome/home-welcome.component';
+import { HomeComponent } from './home/home.component';
 // import { AdminComponent } from './adm';
 import { LoginComponent } from './login';
 import { PageNotFoundComponent } from './not-found/not-found.component';
-import { ProjectComponent } from './components/index';
-import { RegisterComponent } from './register';
-import { UserComponent } from './adm';
 import { ProfileComponent } from './profile/profile.component';
+import { RegisterComponent } from './register';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { AuthGuard } from './shared/security/auth.guard';
+import { PopUpMessageComponent } from './pop-up-message/pop-up-message.component';
+
 
 const appRoutes: Routes = [
   { path: '', component: HomeWelcomeComponent, pathMatch: 'full' },
@@ -50,6 +45,8 @@ const appRoutes: Routes = [
     component: UserManagerComponent,
     canActivate: [AuthGuard]
   },
+
+  { path: 'popup', component: PopUpMessageComponent },
   // otherwise page not found
   { path: '**', component: PageNotFoundComponent }
 ];

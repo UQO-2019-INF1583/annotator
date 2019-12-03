@@ -1,0 +1,23 @@
+<!--
+codde html pour le matdialog box 
+-->
+<div class="popup-container">
+  <mat-card>
+    <mat-card-content>
+      <form name="form" #f="ngForm">
+        <div class="container">
+          <h2>Utilisateur a été sauvegardé avec succès</h2>
+          <hr />
+          <p>Cliquer sur <span>Ok </span>pour se connecter<br />
+            <span> Cancel </span>pour se rediriger à la page principale.
+          </p>
+          <br />
+          <div class="button-row">
+            <button class="btn btn-primary" mat-raised-button color="primary" [routerLink]="['/login']"> Ok </button>
+            <button class="btn btn-link" mat-raised-button color="primary" [routerLink]="['/']">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -32,19 +32,27 @@ export class AddCorpusComponent implements OnInit {
     this.progress = false;
   }
 
+  //method called when a changed is made on the titre input in the dialogRef
   public onChange(value) {
+    //create an array of string that contains the titles for the files
     var titles = value.split(",");
+    //get the size of the array
     this.titlesSize = titles.length;
+    //get how many files is being added
     this.filesSize = this.data.corpusFile.length;
+    //if the number of title matches the number of file
     if (this.titlesSize == this.filesSize) {
       for (var i = 0; i < this.titlesSize; i++) {
         if (titles[i] == "") {
+          //if one argument is an empty string, the validation is not good
           this.notEnoughtArgument = true;
           break;
         }
+        //each file has a title that is not an empty string
         this.notEnoughtArgument = false;
       }
     } else {
+      //some file dont have a title
       this.notEnoughtArgument = true;
     }
   }
@@ -57,7 +65,6 @@ export class AddCorpusComponent implements OnInit {
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file(info => {
-          console.log(info);
           const fileName = droppedFile.relativePath;
           const fileExt = fileName.split(".").pop();
           //Vérification du dépôt de document text
@@ -72,6 +79,7 @@ export class AddCorpusComponent implements OnInit {
             this.isNotValid = false;
             this.isExtValid = false;
           }
+          //Pour chacun des fichiers, ajouter l'information dans un array
           this.data.corpusFile[i] = info;
           i++;
         });

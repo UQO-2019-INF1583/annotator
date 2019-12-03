@@ -16,8 +16,8 @@ import {
     FileSystemDirectoryEntry
 } from "ngx-file-drop";
 
-fdescribe("AddCorpusComponent", () => {
-    let component: AddCorpusComponent;
+describe("AddCorpusComponent", () => {
+    let corpusComponent: AddCorpusComponent;
     let fixture: ComponentFixture<AddCorpusComponent>;
 
     beforeEach(() => {
@@ -40,18 +40,20 @@ fdescribe("AddCorpusComponent", () => {
             ]
         }).compileComponents();
         fixture = TestBed.createComponent(AddCorpusComponent);
-        component = fixture.componentInstance;
+        corpusComponent = fixture.componentInstance;
         fixture.detectChanges();
     });
 
     it("should create", () => {
-        expect(component).toBeTruthy();
+        expect(corpusComponent).toBeTruthy();
     });
 
     it("title change", () => {
-        component.filesSize = 4;
-        var titles = "name1,name2,name3,name4";
-        component.onChange(titles);
-        expect(component.notEnoughtArgument).toBeFalsy();
+        corpusComponent.filesSize = 4;
+        var value = "name1,name2,name3,name4";
+        var mockArray = [null, null, null, null];
+        corpusComponent.data.corpusFile = mockArray;
+        corpusComponent.onChange(value);
+        expect(corpusComponent.notEnoughtArgument).toBeFalsy();
     });
 });

@@ -135,9 +135,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
       */
       var titles = result.corpusTitle.split(",");
       for (const fileInfo of result.corpusFile) {
-        var data = { corpusTitle: titles[i], corpusFile: result.corpusFile[i] };
-        this.ps.addCorpus(data, this.currentProject.id);
-        i++
+        if (titles[i] != undefined || result.corpusFile[i] != undefined) {
+          var data = { corpusTitle: titles[i], corpusFile: result.corpusFile[i] };
+          this.ps.addCorpus(data, this.currentProject.id);
+          i++
+        }
       }
     });
   }

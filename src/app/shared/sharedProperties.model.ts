@@ -1,3 +1,11 @@
+export const darkColors: string[] = [
+    'black',
+    'blue',
+    'red',
+    'darkblue',
+    'indigo',
+    'purple'
+]
 export const availableColorsList: string[] = [
     'aqua',
     'azure',

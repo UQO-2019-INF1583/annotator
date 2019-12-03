@@ -24,6 +24,7 @@ import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';
 import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
 import { Entity } from '../../shared/entity.model';
+import { darkColors } from '../../shared/sharedProperties.model';
 
 @Component({
   selector: 'app-project',
@@ -139,6 +140,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  // Permets de déterminer si la couleur sélectionne par l'utilisateur est une couleur foncée ou pas
+  choisirCouleurDeTexte(backgroundColor: string): boolean {
+    if (darkColors.includes(backgroundColor)) {
+      return true;  // Couleur du texte sera blanc
+    }
+    return false; // Couleur du texte sera noir
+  }
+
 
   // ouvre la boîte de dialogue pour ajouter une catégorie
   addEntityDialogBox() {

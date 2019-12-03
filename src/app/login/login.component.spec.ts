@@ -9,8 +9,14 @@ class MockAuthService {
   }
 }
 
-fdescribe('Component: Login', () => {
+class userInfo {
+  email:string;
+  password:string;
+  //static password: ;
+}
 
+fdescribe('Component: Login', () => {
+  let user: userInfo;
   let component: LoginComponent;
   let service: MockAuthService;
 
@@ -38,4 +44,11 @@ fdescribe('Component: Login', () => {
     expect(component.errorMessage='Email Required').toBe("Email Required");
   });//fin 2eme test
 
+  //3eme TEst
+ xit('Verification De la fonction login() avec email', () => {
+    service.authenticated = true;
+    // @ts-ignore
+    expect(login.signIn("abc@abc.com")).toBe('abc@abc.com');
+   // expect(component.login().signIn( userInfo.password).toBe('abc123'));
+  });//fin 3eme test
 });

@@ -397,7 +397,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addEntitiesAfterClosedHandler(result: Entity) {
-    this.isProjectModified = true;
     let entityExists = false;
     if (result !== undefined) {
       if (
@@ -424,6 +423,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         if (!entityExists) {
           result.labels = result.labels[0].split(',');
           this.currentProject.entities.push(result);
+          this.isProjectModified = true;
         }
       }
     }
@@ -470,7 +470,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addAttributesAfterClosedHandler(result: Attribute) {
-    this.isProjectModified = true;
     let attributeExists = false;
     if (result !== undefined) {
       if (result.name !== undefined && result.type !== undefined && result.labels !== undefined) {
@@ -482,6 +481,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         if (!attributeExists) {
           result.labels = result.labels[0].split(',');
           this.currentProject.attributes.push(result);
+          this.isProjectModified = true;
         } else {
           this.alertDialogBox('This attribute already exists');
         }
@@ -532,13 +532,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
   // Ajouter la donnée dans la liste de relation
   public addRelation(data: Relation) {
-    this.isProjectModified = true;
     if (data.type !== undefined &&
       data.labels !== [] &&
       data.color !== undefined) {
       if (!this.isExist(data)) {
         if (!this.relationColorAlreadyUsed(data)) {
           this.currentProject.relations.push(data);
+          this.isProjectModified = true;
         } else {
           this.alertDialogBox('The chosen color is already used');
         }
@@ -622,7 +622,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addEventAfterClosedHandler(result: Event) {
-    this.isProjectModified = true;
     if (result !== undefined) {
       if (result.name !== undefined &&
         result.type !== undefined &&
@@ -633,6 +632,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         if (!this.isEventExist(result)) {
           if (!this.eventColorAlreadyUsed(result)) {
             this.currentProject.events.push(this.mapValidResultToEvent(result));
+            this.isProjectModified = true;
           } else {
             this.alertDialogBox('The chosen color is already used');
           }

@@ -145,28 +145,31 @@ export class AnnotatorsComponent implements OnInit {
 
   // Supprime l'admin spécifié dans l'écran du projet (pas de sauvegarde dans firestore).
   deleteAdmin(uid: string) {
-    const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
-      width: "250px",
-      data: {
-        text: "Administrator",
-        response: undefined
-      }
-    });
+    if (this.hasManyAdmins()) {
+      const dialogRef = this.dialog.open(YesNoDialogBoxComponent, {
+        width: "250px",
+        data: {
+          text: "Administrator",
+          response: undefined
+        }
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.response === true) {
-        this.project.admin.forEach((item, index) => {
-          if (item === uid) {
-            this.project.admin.splice(index, 1);
-          }
-        });
-        this.admin.forEach((item, index) => {
-          if (item.uid === uid) {
-            this.admin.splice(index, 1);
-          }
-        });
-      }
-    });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result.response === true) {
+          this.project.admin.forEach((item, index) => {
+            if (item === uid) {
+              this.project.admin.splice(index, 1);
+            }
+          });
+          this.admin.forEach((item, index) => {
+            if (item.uid === uid) {
+              this.admin.splice(index, 1);
+            }
+          });
+        }
+      });
+    }
   }
 
   // ouvre la boîte de dialogue pour ajouter un annotateur

@@ -28,7 +28,7 @@ import { ProjectService } from './project.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 
 /* trop d'erreurs
 describe('Projet', () => {

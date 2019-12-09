@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { AngularFirestore,
-         //AngularFirestoreCollection,
-         //AngularFirestoreDocument
-       } from '@angular/fire/firestore';
+import {
+  AngularFirestore,
+  //AngularFirestoreCollection,
+  //AngularFirestoreDocument
+} from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { environment } from '../../../environments/environment';
 import { User } from '../../shared/user.model';
@@ -18,8 +19,8 @@ export class UserManagerService {
   currentUser: any;
 
   constructor(private authService: AuthService,
-              private afs : AngularFirestore) {
-    this.user = this.authService.user != null ? this.authService.user : null;
+    private afs: AngularFirestore) {
+
   }
 
   displayName(): string {
@@ -71,12 +72,14 @@ export class UserManagerService {
   modifyUser(user): boolean {
     console.log(user);
     this.afs.collection('Users').doc(user.uid)
-      .update({ 'email': user.email,
-                'firstname': user.firstname,
-                'lastname': user.lastname,
-                'role': user.role }).then(() => {
-      console.log(user);
-    }, (() => true));
+      .update({
+        'email': user.email,
+        'firstname': user.firstname,
+        'lastname': user.lastname,
+        'role': user.role
+      }).then(() => {
+        console.log(user);
+      }, (() => true));
     return false;
   }
 
@@ -85,14 +88,14 @@ export class UserManagerService {
     return false;
   }
 
-  his(){
+  his() {
     return JSON.parse(this.currentUser);
   }
 
-  getAll(){
+  getAll() {
     return this.afs
       .collection('User', ref => ref
-      .orderBy('displayName'))
+        .orderBy('displayName'))
       .valueChanges();
   }
 

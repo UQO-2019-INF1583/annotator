@@ -28,14 +28,15 @@ import { switchMap } from "rxjs/operators";
 
 import { Role, User } from "../user.model";
 import { Project } from "../project.model";
+import { project } from "../../annotation/brat/brat-utils.mock";
+import { ProjectComponent } from "../../components";
 
 @Injectable()
 export class AuthService {
-  user: Observable<User>;
+  user: Observable<User[]>;
   authState: any = null;
   currentUser: string = null;
   email: string;
-  private UserCollection: AngularFirestoreCollection<User>;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -46,7 +47,7 @@ export class AuthService {
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+          return this.afs.doc<User>(`user/${user.uid}`).valueChanges();
         } else {
           return Observable.of(null);
         }
@@ -126,12 +127,12 @@ export class AuthService {
         .then(result => {
           this.email = result.user.email;
           this.afs
-            .collection("Users")
+            .collection("user")
             .ref.where("email", "==", this.email)
             .get()
             .then(snapshot => {
               if (snapshot.size === 0) {
-                this.afs.collection("Users").ref.add({
+                this.afs.collection("user").ref.add({
                   id: firebase.auth().currentUser.uid,
                   email: this.email,
                   firstname: "?",
@@ -156,7 +157,7 @@ export class AuthService {
   private updateUserData(user) {
     // Sets user data to firestore on login
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
-      `users/${user.uid}`
+      `user/${user.uid}`
     );
     const data: User = {
       uid: user.uid,
@@ -179,11 +180,22 @@ export class AuthService {
     return currentUser != null;
   }
 
-  isAdmin(project: Project) {
+  isAdminProjet(project: Project): boolean {
     return (project.admin.indexOf(this.currentUserId) === -1) ? false : true;
   }
 
-  isAnnotator(project: Project) {
+  isAnnotator(project: Project): boolean {
     return (project.annotators.indexOf(this.currentUserId) === -1) ? false : true;
+  }
+
+  isAdminSysteme(): boolean {
+    let isAdmin = false;
+
+    if (this.getUser()['role'] === 2) {
+      isAdmin = true;
+    }
+
+    console.log('%s', isAdmin);
+    return isAdmin;
   }
 }

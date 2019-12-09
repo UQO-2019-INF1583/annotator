@@ -9,20 +9,20 @@
   <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
     <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
       <label for="email">E-mail</label>
-      <input [disabled]="loading" type="email" class="form-control" name="email"
-             [(ngModel)]="userInfo.email" #email="ngModel" required />
+      <input [disabled]="loading" type="email" class="form-control" name="email" [(ngModel)]="userInfo.email"
+        #email="ngModel" required />
       <div *ngIf="f.submitted && !email.valid" class="help-block">Email is required</div>
     </div>
     <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
       <label for="password">Password</label>
-      <input [disabled]="loading" type="password" class="form-control" name="password"
-             [(ngModel)]="userInfo.password" #password="ngModel" required />
+      <input [disabled]="loading" type="password" class="form-control" name="password" [(ngModel)]="userInfo.password"
+        #password="ngModel" required />
       <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
     </div>
     <div class="form-group">
       <button [disabled]="loading" class="btn btn-primary">Login</button>
       <a [routerLink]="['/register']" class="btn btn-link">Register</a>
-      <a [routerLink]="['/reset']" class="btn btn-link" id="reset">Reset</a>
+      <a [routerLink]="['/reset']" class="btn btn-link" id="reset">Reset Password</a>
     </div>
     <div *ngIf="errorMessage.length" class="login_error"> {{ errorMessage }}</div>
   </form>
@@ -37,7 +37,8 @@
     <a (click)="signInWithGoogle()" class="socialIcon" style="background-image:url(./assets/flat_googleplus32x32.png)">
       Google Plus
     </a>
-    <a (click)="signInWithTwitterLogin()" class="socialIcon" style="background-image:url(./assets/flat_twitter32x32.png)">
+    <a (click)="signInWithTwitterLogin()" class="socialIcon"
+      style="background-image:url(./assets/flat_twitter32x32.png)">
       Twitter
     </a>
     <a (click)="signInWithGithub()" class="socialIcon" style="background-image:url(./assets/flat_github32x32.png)">

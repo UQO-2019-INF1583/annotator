@@ -37,15 +37,15 @@ export class ProfileComponent implements OnInit {
         this.user.email = doc.get('email');
 
         if (doc.get('role') === 0) {
-          this.user.role = Role.Visitor;
+          this.user['role'] = Role.Visitor;
           this.role = 'Visitor';
         }
         else if (doc.get('role') === 1) {
-          this.user.role = Role.Member;
+          this.user['role'] = Role.Member;
           this.role = 'Member';
         }
         else if (doc.get('role') === 2) {
-          this.user.role = Role.Adm;
+          this.user['role'] = Role.Adm;
           this.role = 'Administrator';
         }
       });

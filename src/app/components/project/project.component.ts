@@ -18,12 +18,13 @@ import { Attribute } from '../../shared/attribute.model';
 import { AuthService } from '../../shared/security/auth.service';
 import { Event } from '../../shared/event.model';
 import { Observable } from 'rxjs/Observable';
-import { Project, ProjectUtils } from '../../shared/project.model';
+import { ProjectUtils } from '../../shared/project.model';
 import { ProjectService } from './project.service';
 import { Relation } from '../../shared/relation.model';
 import { User } from './../../shared/user.model';
 import { YesNoDialogBoxComponent } from '../yes-no-dialog-box/yes-no-dialog-box.component';
 import { Entity } from '../../shared/entity.model';
+import { Project } from '../../shared/project.model';
 
 @Component({
   selector: 'app-project',
@@ -40,6 +41,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   annotators: any[] = []; // {uid: v1, email: v2}[]
   admin: any[] = []; // {uid: v1, email: v2}[]
   isConnected = false;
+
 
   constructor(
     private authService: AuthService,
@@ -71,11 +73,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   getAnnotatorEmail() {
-    this.annotators = [];
-    this.currentProject.annotators.forEach((uid, i) => {
+    this.currentProject.annotators.forEach((uid) => {
       this.users.forEach(x => {
-        x.forEach((u, j) => {
+        x.forEach((u) => {
           if (u.uid === uid) {
+            this.annotators.push({ email: u.email, uid: u.uid });
+            return; // pour empecher les doublons
+          }
+          if (u['role'] === 2) {
             this.annotators.push({ email: u.email, uid: u.uid });
           }
         });
@@ -84,11 +89,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   getAdminEmail() {
-    this.admin = [];
-    this.currentProject.admin.forEach((uid, i) => {
+    this.currentProject.admin.forEach((uid) => {
       this.users.forEach(x => {
-        x.forEach((u, j) => {
+        x.forEach((u) => {
           if (u.uid === uid) {
+            this.admin.push({ email: u.email, uid: u.uid });
+            return; // pour empecher les doublons
+          }
+          if (u['role'] === 2) {
             this.admin.push({ email: u.email, uid: u.uid });
           }
         });
@@ -96,14 +104,19 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
+  // Cette methode retourne true si le user est un admin projet ou systeme.
   isAdmin(): boolean {
-    let a = false;
-    this.admin.forEach((user, i) => {
-      if (user.uid === this.authService.getUser().uid) {
-        a = true;
-      }
-    });
-    return a;
+    let isAdmin = false;
+
+    if (this.authService.isAdminProjet(this.currentProject)) {
+      isAdmin = true;
+    }
+
+    if (this.authService.isAdminSysteme()) {
+      isAdmin = true;
+    }
+
+    return isAdmin;
   }
 
   // Sauvegarde les modifications apportées au projet.

@@ -22,7 +22,8 @@
             <div style="display: flex;flex-wrap: nowrap;">
               <button *ngIf="isConnected" class="btn btn-primary" (click)="modifyProject(project)">View</button>
               <span *ngFor="let idAdmin of project.admin">
-                <button *ngIf="isConnected && idAdmin === idUser" id="delete" class="btn btn-danger" (click)="deleteProject(project)">Delete</button>
+                <button *ngIf="isConnected && idAdmin === idUser" id="delete" class="btn btn-danger"
+                  (click)="deleteProject(project)">Delete</button>
               </span>
             </div>
           </mat-cell>

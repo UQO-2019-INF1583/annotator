@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import 'rxjs/add/operator/map';
 
-import { Project } from '../../shared/project.model';
 import { User } from '../../shared/user.model';
 import { ProjectManagerService } from '../projectManager';
 import { ProjectDataSource } from '../../data-sources/projectDataSource';
@@ -43,14 +42,6 @@ export class UserComponent implements OnInit {
     this.afs.collection<User>('Users').ref.where('email', '==', email).get()
       .then(users => { users.forEach(u => { this.currentUser.uid = u.get('uid'); }) });
     // }, 300);
-  }
-
-  isAdmin(project: Project) {
-    return (project.admin.indexOf(this.currentUser.uid) === -1) ? false : true;
-  }
-
-  isAnnotator(project: Project) {
-    return (project.annotators.indexOf(this.currentUser.uid) === -1) ? false : true;
   }
 
   changeAdmin(projectId: string, adminId: string, checked: boolean) {

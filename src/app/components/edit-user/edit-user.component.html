@@ -15,13 +15,24 @@
       <label for="email">E-mail</label>
       <input type="email" class="form-control" name="email" [(ngModel)]="data.email" #email="ngModel" />
     </div>
-    <mat-form-field>
-      <mat-select [(value)]="data.role" name="role">
-        <mat-option *ngFor="let role of data.roles" [value]="role.value">
-          {{role.viewValue}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="form-group">
+      <label for="role">Rôle</label>
+      <mat-form-field>
+        <mat-label>{{data.roleRepresent}}</mat-label>
+        <!-- Ajout de mat-label pour afficher le rôle de cet utilisateur -->
+        <mat-select [(value)]="data.role" name="role">
+          <mat-option [value]="2">Administrateur</mat-option>
+          <mat-option [value]="1">Membre</mat-option>
+          <mat-option [value]="0">Visiteur</mat-option>
+          <!--
+            <mat-option *ngFor="let role of data.roles" [value]="role.valeur">
+                {{role.viewValue}}
+            </mat-option>
+            Si on préfére l'approche dynamique
+          -->
+        </mat-select>
+      </mat-form-field>
+    </div>
 
     <div class="form-group">
       <button [disabled]="loading" class="btn btn-primary" [mat-dialog-close]="data">Sauvegarder</button>

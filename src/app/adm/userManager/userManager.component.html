@@ -23,9 +23,9 @@
       <mat-cell *matCellDef="let user">
         <span [ngSwitch]="user.role">
           <!-- Utilisation de la directive Angular Switch -->
-          <span *ngSwitchCase='0'>Visiteur</span>
-          <span *ngSwitchCase='1'>Membre</span>
-          <span *ngSwitchCase='2'>Administrateur</span>
+          <span *ngSwitchCase='0'>Visitor</span>
+          <span *ngSwitchCase='1'>Member</span>
+          <span *ngSwitchCase='2'>Administrator</span>
         </span>
       </mat-cell>
     </ng-container>

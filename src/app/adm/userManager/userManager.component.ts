@@ -57,15 +57,15 @@ export class UserManagerComponent implements OnInit {
      */
     switch (user.role) {
       case 0: {
-        roleString = 'Visiteur';
+        roleString = 'Visitor';
         break;
       }
       case 1: {
-        roleString = 'Membre';
+        roleString = 'Member';
         break;
       }
       case 2: {
-        roleString = 'Administrateur';
+        roleString = 'Administrator';
         break;
       }
 
@@ -80,9 +80,9 @@ export class UserManagerComponent implements OnInit {
         role: user.role,
         roleRepresent: roleString, // <-- On la passe comme attribut de l'objet temporaire data
         roles: [
-          { valeur: 1, viewValue: 'Membre' },
-          { valeur: 2, viewValue: 'Administrateur' },
-          { valeur: 0, viewValue: 'Visiteur' } // Pour le moment, cet objet (data.roles) n'est pas nécessaire, mais au cas où
+          { valeur: 1, viewValue: 'Member' },
+          { valeur: 2, viewValue: 'Administrator' },
+          { valeur: 0, viewValue: 'Visitor' } // Pour le moment, cet objet (data.roles) n'est pas nécessaire, mais au cas où
           // On décide d'implémenter un autre rôle, ça pourrait aider.
         ]
       },

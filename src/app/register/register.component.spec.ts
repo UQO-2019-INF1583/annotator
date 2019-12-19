@@ -10,7 +10,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { By } from '@angular/platform-browser';
 
 
-fdescribe('RegisterComponent', () => {
+describe('RegisterComponent', () => {
     let comp: RegisterComponent;
     let fixture: ComponentFixture<RegisterComponent>;
 
@@ -25,7 +25,7 @@ fdescribe('RegisterComponent', () => {
         password: 'Test@1234'
     };
 
-    //Creation du tableau des FAKE profiles qui sont  enregistrés
+    // Creation du tableau des FAKE profiles qui sont  enregistrés
     const validTestCred = [
         {
             uid: 'test',
@@ -40,7 +40,7 @@ fdescribe('RegisterComponent', () => {
             password: 'Test@1234'
         }];
 
-    //Creation du tableau des FAKE profiles qui sont pas enregistrés
+    // Creation du tableau des FAKE profiles qui sont pas enregistrés
     const invalidTestCred = [
         {
             uid: 'test',
@@ -138,7 +138,7 @@ fdescribe('RegisterComponent', () => {
             const buttons = fixture.debugElement
                 .queryAll(By.css('button'));
             expect(buttons.length >= 1).toBeTruthy();
-        })
+        });
         it('The page should contain one "Register" button', () => {
             const buttons = fixture.debugElement
                 .queryAll(By.css('button'));
@@ -147,23 +147,23 @@ fdescribe('RegisterComponent', () => {
         });
     });
 
-    //Tester les deux cas possible de la fonction emailInvalid()
+    // Tester les deux cas possible de la fonction emailInvalid()
     describe('emailInvalid()', () => {
-        //Doit retourner True si le message d'erreur n'est pas vide
+        // Doit retourner True si le message d'erreur n'est pas vide
         it('should return true if error message is not empty', () => {
             comp.errorMessage = 'test message';
             expect(comp.errorMessage).toBeTruthy();
         });
-        //Doit retourner False si le message d'erreur est vide
+        // Doit retourner False si le message d'erreur est vide
         it('should return false if error message is empty', () => {
             comp.errorMessage = '';
             expect(comp.errorMessage).toBeFalsy();
         });
     });
 
-    //Tester si le code redirige l'utilisateur après l'enregistrement
+    // Tester si le code redirige l'utilisateur après l'enregistrement
     describe('redirectToLoginPage()', () => {
-        //Accéder à la page de connexion
+        // Accéder à la page de connexion
         it('should navigate to login page', () => {
             comp.redirectToLoginPage();
             expect(router.navigate).toHaveBeenCalledTimes(1);
@@ -171,9 +171,9 @@ fdescribe('RegisterComponent', () => {
         });
     });
 
-    //Tester is la mise à jour des informations utilisateur fonctionne correctement
+    // Tester is la mise à jour des informations utilisateur fonctionne correctement
     describe('updateUserInfo()', () => {
-        //Devrait mettre à jour les informations de l'utilisateur puis se déconnecter
+        // Devrait mettre à jour les informations de l'utilisateur puis se déconnecter
         it('should update the user info and then logout', () => {
             comp.updateUserInfo();
             expect(afs.collection).toHaveBeenCalledTimes(1);
@@ -182,7 +182,7 @@ fdescribe('RegisterComponent', () => {
         });
     });
 
-    //Teste pour chercher les messages d'erreur valides et non valides.
+    // Test pour chercher les messages d'erreur valides et non valides.
     describe('Check for emails', function () {
         beforeEach(() => {
             fixture = TestBed.createComponent(RegisterComponent);
@@ -191,7 +191,7 @@ fdescribe('RegisterComponent', () => {
 
         validTestCred.forEach((valid) => {
 
-            //Ne devrait pas montrer d'erreur pour Email
+            // Ne devrait pas montrer d'erreur pour Email
             it(`should not show error for Email - ${valid.email}`, <any>fakeAsync(() => {
                 const spy = jasmine.createSpy();
                 spyOn(firebase, 'auth').and.returnValue({
@@ -215,7 +215,7 @@ fdescribe('RegisterComponent', () => {
 
         invalidTestCred.forEach((inVal) => {
 
-            //Devrait montrer une erreur pour Email
+            // Devrait montrer une erreur pour Email
             it(`should show error for Email - ${inVal.email}`, <any>fakeAsync(() => {
                 const spy = jasmine.createSpy();
                 spyOn(firebase, 'auth').and.returnValue({
@@ -229,7 +229,7 @@ fdescribe('RegisterComponent', () => {
                 setInputValue('input[name="lastname"]', inVal.name);
                 setInputValue('input[name="email"]', inVal.email);
                 setInputValue('input[name="password"]', inVal.password);
-                fixture.debugElement.query(By.css('#btnSubmit')).nativeElement.click()
+                fixture.debugElement.query(By.css('#btnSubmit')).nativeElement.click();
                 fixture.detectChanges();
                 tick(20);
                 const validationMessage = fixture.debugElement.query(By.css('input[name="email"]')).nativeElement.validationMessage;
@@ -239,7 +239,7 @@ fdescribe('RegisterComponent', () => {
         });
 
 
-        //Doit être appelé depuis fakeAsync en raison de l'utilisation de tick ()
+        // Doit être appelé depuis fakeAsync en raison de l'utilisation de tick ()
         function setInputValue(selector: string, value: string) {
             fixture.detectChanges();
             tick();
@@ -250,10 +250,10 @@ fdescribe('RegisterComponent', () => {
         }
     });
 
-    //Test pour vérifier s que la fonction registre / inscription fonctionne correctement
+    // Test pour vérifier s que la fonction registre / inscription fonctionne correctement
     describe('registerWithEmailAndPassword()', () => {
 
-        //Devrait enregistrer l'utilisateur et mettre à jour le profil
+        // Devrait enregistrer l'utilisateur et mettre à jour le profil
         it('should register the user and update profile', async () => {
             const spy = jasmine.createSpy();
             comp.userInfo.firstname = 'Test User';
@@ -277,10 +277,10 @@ fdescribe('RegisterComponent', () => {
         });
     });
 
-    //Test pour vérifier que le registre de fonction fonctionne correctement
+    // Test pour vérifier que le registre de fonction fonctionne correctement
     describe('register()', () => {
 
-        //Devrait enregistrer l'utilisateur et accéder à la page de connexion
+        // Devrait enregistrer l'utilisateur et accéder à la page de connexion
         it('should register the user and navigate to login page', async () => {
             const registerWithEmailAndPasswordSpy = spyOn(comp, 'registerWithEmailAndPassword');
             const updateUserInfoSpy = spyOn(comp, 'updateUserInfo');
@@ -293,7 +293,7 @@ fdescribe('RegisterComponent', () => {
             expect(redirectToLoginPageSpy).toHaveBeenCalledTimes(1);
         });
 
-        //Devrait afficher le message d'erreur si firebase API échoue
+        // Devrait afficher le message d'erreur si firebase API échoue
         it('should show the error message if firebase api fails', async () => {
             const registerWithEmailAndPasswordSpy = spyOn(comp, 'registerWithEmailAndPassword').and.throwError('Test message 101');
             const updateUserInfoSpy = spyOn(comp, 'updateUserInfo');

@@ -1,3 +1,5 @@
+import { Arc } from './arc.model';
+
 export class Event {
   name: string;
   type: string;

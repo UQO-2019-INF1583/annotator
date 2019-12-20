@@ -1,23 +1,22 @@
 /* to do; mettre à jour cette classe */
-import { Component, OnInit, Inject } from "@angular/core";
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {
-  NgxFileDropModule,
   NgxFileDropEntry,
   FileSystemFileEntry,
   FileSystemDirectoryEntry
-} from "ngx-file-drop";
+} from 'ngx-file-drop';
 
 @Component({
-  selector: "app-add-corpus",
-  templateUrl: "./add-corpus.component.html",
-  styleUrls: ["./add-corpus.component.scss"]
+  selector: 'app-add-corpus',
+  templateUrl: './add-corpus.component.html',
+  styleUrls: ['./add-corpus.component.scss']
 })
 export class AddCorpusComponent implements OnInit {
   public files: NgxFileDropEntry[] = [];
-  isExtValid = false; //Is it used?
-  isSizeValid = false; //Is it used?
-  isNotValid: boolean; //Is it used?
+  isExtValid = false; // Is it used?
+  isSizeValid = false; // Is it used?
+  isNotValid: boolean; // Is it used?
   progress: boolean;
 
   constructor(
@@ -37,12 +36,12 @@ export class AddCorpusComponent implements OnInit {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file(info => {
           const fileName = droppedFile.relativePath;
-          const fileExt = fileName.split(".").pop();
-          //Vérification du dépôt de document text
-          if (fileExt != "txt") {
+          const fileExt = fileName.split('.').pop();
+          // Vérification du dépôt de document text
+          if (fileExt !== 'txt') {
             this.isExtValid = true;
             this.progress = false;
-          } else if (info.size == 0) {
+          } else if (info.size === 0) {
             this.progress = false;
             this.isSizeValid = true;
           } else {

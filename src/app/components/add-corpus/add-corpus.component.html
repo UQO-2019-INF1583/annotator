@@ -1,5 +1,5 @@
 <!-- to do: corriger le code de file-drop -->
-<h2 mat-dialog-title>Nouveau texte</h2>
+<h2 mat-dialog-title>Add new text file</h2>
 
 <mat-dialog-content>
   <form name="form" #f="ngForm">
@@ -13,7 +13,7 @@
           ngx-file-drop-content-tmp
           let-openFileSelector="openFileSelector"
         >
-          Déposer un fichier ici.
+          Drop file here.
           <button type="button" (click)="openFileSelector()">
             Browse Files
           </button>
@@ -23,7 +23,7 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Fichier</th>
+              <th>File</th>
             </tr>
           </thead>
           <tbody class="upload-name-style">
@@ -39,14 +39,13 @@
     <mat-form-field>
       <input
         matInput
-        placeholder="Titre"
+        placeholder="Title"
         [(ngModel)]="data.corpusTitle"
         name="titre"
         #titre="ngModel"
         required
       />
-      <mat-error *ngIf="titre.value == '' || titre.value == null"
-        >Titre obligatoire</mat-error
+      <mat-error *ngIf="titre.value == '' || titre.value == null">Please specify title</mat-error
       >
     </mat-form-field>
   </form>
@@ -58,11 +57,11 @@
     [mat-dialog-close]="data"
     [disabled]="!f.form.valid || files.length == 0"
   >
-    Ajouter
+    Add
   </button>
   <div style="width: 10px"></div>
-  <button class="btn btn btn-primary" mat-dialog-close>Annuler</button>
+  <button class="btn btn btn-primary" mat-dialog-close>Cancel</button>
 </mat-dialog-actions>
 <br />
 <mat-progress-bar *ngIf="progress" mode="indeterminate"></mat-progress-bar>
-<span *ngIf="progress" style="color:green">Validation du fichier en cours</span>
+<span *ngIf="progress" style="color:green">Validation in progress</span>

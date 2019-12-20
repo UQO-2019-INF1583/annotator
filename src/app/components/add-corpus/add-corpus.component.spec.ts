@@ -1,22 +1,21 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { AddCorpusComponent } from "./add-corpus.component";
-import { FormsModule } from "@angular/forms";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AddCorpusComponent } from './add-corpus.component';
+import { FormsModule } from '@angular/forms';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
   MatInputModule,
   MatDialogModule,
   MatProgressBarModule
-} from "@angular/material";
+} from '@angular/material';
 import {
   NgxFileDropModule,
   NgxFileDropEntry,
-  FileSystemFileEntry,
-  FileSystemDirectoryEntry
-} from "ngx-file-drop";
+  FileSystemFileEntry
+} from 'ngx-file-drop';
 
-describe("AddCorpusComponent", () => {
+describe('AddCorpusComponent', () => {
   let component: AddCorpusComponent;
   let fixture: ComponentFixture<AddCorpusComponent>;
 
@@ -44,11 +43,11 @@ describe("AddCorpusComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it("drop file", () => {
+  it('drop file', () => {
     component.fileDropped(mockFile);
     expect(component.data.corpusFile).toEqual(jasmine.objectContaining(file));
   });
@@ -57,11 +56,11 @@ describe("AddCorpusComponent", () => {
 // Mock data
 const mockFile: NgxFileDropEntry[] = [
   {
-    relativePath: "endo-1.txt",
+    relativePath: 'endo-1.txt',
     fileEntry: {
       isDirectory: false,
       isFile: true,
-      name: "endo-1",
+      name: 'endo-1',
       file: (callback: (files: File) => void) => {
         callback(file);
         return file;
@@ -72,8 +71,8 @@ const mockFile: NgxFileDropEntry[] = [
 
 const file: File = {
   lastModified: 1572726788132,
-  name: "travail2.txt",
+  name: 'travail2.txt',
   size: 158,
-  type: "text/plain",
+  type: 'text/plain',
   slice: null
 };

@@ -2,21 +2,20 @@
 // ng test --include src/app/annotation/filter/filter.component.spec.ts
 
 import { TestBed, async } from '@angular/core/testing';
-
 import { FilterComponent } from './filter.component';
 import { MOCK_FILTER } from './filter.service.MOCKDATA';
 
-//beforeEach() et afterEach() s'assurent que chaque test soit effectué avec un MOCK propre
-beforeEach(() => {
-    var filterMockData = MOCK_FILTER;
-    document.body.insertAdjacentHTML('afterbegin', filterMockData);
-})
-
-afterEach(function () {
-    document.body.removeChild(document.getElementById('filterMockData'));
-});
-
 describe('AppComponent', () => {
+  // beforeEach() et afterEach() s'assurent que chaque test soit effectué avec un MOCK propre
+  beforeEach(() => {
+    const filterMockData = MOCK_FILTER;
+    document.body.insertAdjacentHTML('afterbegin', filterMockData);
+  })
+
+  afterEach(function () {
+    document.body.removeChild(document.getElementById('filterMockData'));
+  });
+
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [
@@ -36,7 +35,7 @@ describe('AppComponent', () => {
     })
 
     /**
-    * Ce test s'assure que FilterComponent ai le bon nombre d'éléments filtrables 
+    * Ce test s'assure que FilterComponent ai le bon nombre d'éléments filtrables
      */
     it('Le bon nombre d\'éléments filtrables devrait être identifié', async () => {
         const fixture = TestBed.createComponent(FilterComponent);
@@ -46,7 +45,7 @@ describe('AppComponent', () => {
     })
 
     /**
-     * Ce test s'assure que FilterComponent ai le bon nombre d'highlights 
+     * Ce test s'assure que FilterComponent ai le bon nombre d'highlights
      */
     it('Le bon nombre d\'highlights devrait être identifié', async () => {
         const fixture = TestBed.createComponent(FilterComponent);
@@ -86,14 +85,14 @@ describe('AppComponent', () => {
         const fixture = TestBed.createComponent(FilterComponent);
         const app = fixture.debugElement.componentInstance;
 
-        //Ajoute une nouvelle annotation
-        document.body.insertAdjacentHTML('afterbegin', "<g id=\"tmpAnnotation\" class=\"span\"><rect></rect><text>Disease</text><></path></g>");
+        // Ajoute une nouvelle annotation
+        document.body.insertAdjacentHTML('afterbegin', '<g id="tmpAnnotation" class="span"><rect></rect><text>Disease</text><></path></g>');
 
         app.showFilter();
 
         expect(app.filterElements.size).toEqual(6);
 
-        //Retire l'annotation
+        // Retire l'annotation
         document.body.removeChild(document.getElementById('tmpAnnotation'));
     })
 })

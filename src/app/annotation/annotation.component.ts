@@ -70,7 +70,7 @@ export class AnnotationComponent implements OnInit, OnDestroy {
     this.currentDoc.text = await this.http.get(URL, { responseType: 'text' }).toPromise();
 
     await this.as.getAnnotatedDocument(this.currentDoc.documentId).then(d => {
-      const data = d.data()
+      const data = d.data();
 
       if (data === undefined) {
         this.annotatedDocument = AnnotatedDocumentUtils.fromDoc(this.currentDoc);

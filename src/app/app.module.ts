@@ -85,6 +85,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
 import {NoWhitespaceDirective} from './shared/validators/no-whitespace-validator/no-whitespace.directive';
+import { FilterComponent } from './annotation/filter/filter.component';
 
 @NgModule({
   declarations: [
@@ -113,7 +114,8 @@ import {NoWhitespaceDirective} from './shared/validators/no-whitespace-validator
     ProfileComponent,
     ResetPasswordComponent,
     EditUserComponent,
-    NoWhitespaceDirective
+    NoWhitespaceDirective,
+    FilterComponent
   ],
   entryComponents: [
     AddAdminComponent,

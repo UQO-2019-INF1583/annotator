@@ -20,12 +20,14 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const url: string = state.url;
     let active = false;
+
     if (localStorage.getItem('currentUser')) {
       // logged in so return true
       active = true;   /*
     } else if (this.checkLogin(url) || this.authService.authenticated) {
       active = true;  */
     }
+
     console.log(active, 'canAc');
     return active;
   }

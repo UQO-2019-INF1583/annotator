@@ -52,6 +52,7 @@ import { environment } from '../environments/environment';
 import { NgxFileDropModule } from 'ngx-file-drop';
 
 import { AppComponent } from './app.component';
+import { AdminGuardService } from './shared/security/admin-guard.service';
 import { AuthGuard } from './shared/security/auth.guard';
 import { AuthService } from './shared/security/auth.service';
 import { ProjectManagerService, UserManagerService } from './adm';
@@ -167,6 +168,7 @@ import { FilterComponent } from './annotation/filter/filter.component';
   ],
   providers: [
     AngularFireDatabaseModule,
+    AdminGuardService,
     AuthGuard,
     AuthService,
     ProjectDataSource,

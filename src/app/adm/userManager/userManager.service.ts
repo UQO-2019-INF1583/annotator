@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import {
-  AngularFirestore,
-  //AngularFirestoreCollection,
-  //AngularFirestoreDocument
+  AngularFirestore
 } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { environment } from '../../../environments/environment';
@@ -24,7 +22,7 @@ export class UserManagerService {
   }
 
   displayName(): string {
-    //this.user != null ? this.user.email : null;
+    // this.user != null ? this.user.email : null;
     return '';
   }
 
@@ -37,28 +35,15 @@ export class UserManagerService {
   // Affiche le profile de l'utilisateur
   setCurrentUser(user: firebase.User): boolean {
 
-    //this.currentUser.email = user.email;
+    // this.currentUser.email = user.email;
     return false;
   }
 
   // Affiche le profile de l'utilisateur
   displayUser(): boolean {
     firebase.initializeApp(environment.firebase, 'first');
-    var user = firebase.auth().currentUser;
-
-    if (user != null) {
-      user.providerData.forEach(function (profile) {
-        console.log("Sign-in provider: " + profile.providerId);
-        console.log("  Provider-specific UID: " + profile.uid);
-        console.log("  Name: " + profile.displayName);
-        console.log("  Email: " + profile.email);
-        console.log("  Photo URL: " + profile.photoURL);
-      });
-      return true;
-    }
-    else {
-      return false;
-    }
+    const user = firebase.auth().currentUser;
+    return user != null;
   }
 
   // Supprime un utilisateur.
@@ -78,7 +63,6 @@ export class UserManagerService {
         'lastname': user.lastname,
         'role': user.role
       }).then(() => {
-        console.log(user);
       }, (() => true));
     return false;
   }
